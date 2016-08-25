@@ -1,20 +1,20 @@
+local Psycho = require "classes.psycho"
 local Util = require "util"
 local Draw = require "draw"
-local Hsl  = require "classes.hsl"
 
 --MODULE FOR THE GAMESTATE: GAME--
 
---BUTTON FUNCTION--
+--BUTTON FUNCTIONS--
 
 local but1 = require "buttons.renato_button"
 
 local state = {}
-
+local p --Psycho
 function state:enter()
     local b
 
-    b = But(300, 300, 50, Hsl.orange(), but1, "psycho guy", my_font)
-    b:addElement(DRAW_TABLE.L1, "big_buttons", "renato_button")
+    p = Psy(100, 100)
+    p:addElement(DRAW_TABLE.L3)
 
 end
 
@@ -27,6 +27,7 @@ end
 
 function state:update(dt)
 
+    p:update(dt)
 
 end
 
@@ -37,10 +38,15 @@ function state:draw()
 end
 
 function state:keypressed(key)
-    local i
 
+    p:keypressed(key) --Key handling of psycho
     Util.defaultKeyPressed(key)
 
+end
+
+function state:keyreleased(key)
+
+    p:keyreleased(key) --Key handling of psycho
 
 end
 

@@ -3,6 +3,7 @@ Gamestate = require "hump.gamestate"
 Timer     = require "hump.timer"
 Class     = require "hump.class"
 Camera    = require "hump.camera"
+Vector    = require "hump.vector"
 
 
 --CLASSES

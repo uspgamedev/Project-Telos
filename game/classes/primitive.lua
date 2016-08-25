@@ -8,12 +8,12 @@ local primitive = {}
 
 --Element: has a type, subtype and id
 ELEMENT = Class{
-    init = function(self, _tp, _subtp, _id)
-        tp = _tp          --Type this element belongs to
-        subtp = _subtp    --Subtype this element belongs to, if any
-        id = _id          --Id of this element, if any
-        exception = false --If this object is not to be removed when clearing tables
-        invisible = false --If this object is not to be draw
+    init = function(self)
+        self.tp = nil --Type this element belongs to
+        self.subtp = nil --Subtype this element belongs to, if any
+        self.id = nil --Id of this element, if any
+        self.exception = false --If this object is not to be removed when clearing tables
+        self.invisible = false --If this object is not to be draw
     end,
 
     setId = function(self, _id) --Sets id for this element, and add it to a ID table for quick lookup
@@ -69,12 +69,11 @@ ELEMENT = Class{
 --Positionable: has a x and y position
 POS = Class{
     init = function(self, _x, _y) --Set position for object
-        self.x = _x or 0 --X position
-        self.y = _y or 0 --Y position
+        self.pos = Vector(_x or 0, _y or 0) --Position vector
     end,
 
     setPos = function(self, _x, _y) --Set position for object
-        self.x, self.y = _x, _y
+        self.pos.x, self.pos.y = _x, _y
     end
 }
 

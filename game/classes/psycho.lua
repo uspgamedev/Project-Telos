@@ -1,20 +1,101 @@
 require "classes.primitive"
-local Rgb = require "classes.rgb"
---BUTTON CLASS --
+local Hsl = require "classes.hsl"
+local Color = require "classes.color"
+local Util = require "util"
+--PSYCHO CLASS--
+--[[Our hero... or is it VILLAIN??!!]]
 
 local psycho = {}
 
---[[Square button with centralized text]]
+--MATH STUFF--
+local sqrt2 = math.sqrt(2)
 
-PSYCHO = Class{
+Psy = Class{
     __includes = {CIRC},
-    init = function(self, _x, _y, _r, _b_color, _func, _text, _font, _t_color)
-        self.tp = "button" --Type of this class
+    init = function(self, _x, _y)
+        self.tp = "psycho" --Type of this class
+        ELEMENT.setSubTp(self, "player")
+        ELEMENT.setId(self, "PSY")
 
-        CIRC.init(self, _x, _y, _r, _b_color, "fill") --Set atributes
+        self.r = 20 --Radius of psycho
+        self.color = Hsl.orange() --Color of psycho
+        self.speedv = 100
+        self.speed = Vector(0,0)
 
-        self.func  = _func  --Function to call when pressed
-
-        WTXT.init(self, _text, _font, _t_color) --Set text
+        CIRC.init(self, _x, _y, self.r, self.color, "fill") --Set atributes
     end
 }
+
+--LOCAL FUNCTIONS--
+
+local function updateSpeed(self)
+
+    p = self --Psycho
+    sp = p.speedv --Speed Value
+
+    p.speed = Vector(0,0)
+    --Movement
+    if love.keyboard.isDown 'w' then --move up
+      p.speed = p.speed + Vector(0,-1)
+    end
+    if love.keyboard.isDown 'a' then --move left
+      p.speed = p.speed + Vector(-1,0)
+    end
+    if love.keyboard.isDown 's' then --move down
+      p.speed = p.speed + Vector(0,1)
+    end
+    if love.keyboard.isDown'd' then --move right
+      p.speed = p.speed + Vector(1,0)
+    end
+
+    p.speed = p.speed:normalized() * sp
+
+end
+
+function Psy:draw()
+  local p
+
+  p = self
+
+  --Draws the circle
+  Color.set(p.color)
+  love.graphics.circle("fill", p.pos.x, p.pos.y, p.r)
+end
+
+function Psy:update(dt)
+  local p
+
+  p = self
+
+  p.pos = p.pos + dt*p.speed
+
+end
+
+function Psy:keypressed(key)
+  local p, sp
+
+  p = self --Psycho
+  sp = p.speedv --Speed Value
+
+  --Movement
+  if key == 'w' or key == 'a' or key == 's' or key == 'd' then
+      updateSpeed(self)
+  end
+
+end
+
+function Psy:keyreleased(key)
+
+  --Movement
+  if key == 'w' or key == 'a' or key == 's' or key == 'd' then
+      updateSpeed(self)
+  end
+
+end
+
+function psycho.get()
+  return Util.findId("PSY")
+end
+
+--return function
+return psycho
