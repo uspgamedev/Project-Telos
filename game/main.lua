@@ -9,6 +9,9 @@ Camera    = require "hump.camera"
 
 require "classes.primitive"
 require "classes.rgb"
+require "classes.hsl"
+require "classes.color"
+require "classes.psycho"
 Button = require "classes.button"
 
 --MY MODULES
@@ -39,7 +42,7 @@ end
 -----------------
 
 function love.mousepressed(x, y, button, istouch)
-    
+
     if button == 1 then  --Left mouse button
         Button.checkCollision(x,y)
     end

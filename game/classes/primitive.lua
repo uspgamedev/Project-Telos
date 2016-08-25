@@ -1,4 +1,4 @@
-local Rgb = require "classes.rgb"
+local Color = require "classes.color"
 
 --PRIMITIVE CLASS--
 
@@ -81,12 +81,12 @@ POS = Class{
 --Colorful: the object has a color
 CLR = Class{
     init = function(self, _c)
-        self.color = RGB() --This object main color
-        if _c then Rgb.copy(self.color, _c) end
+        self.color = HSL() --This object main color
+        if _c then Color.copy(self.color, _c) end
     end,
 
     setColor = function(self, _c) --Set object's color
-        Rgb.copy(self.color, _c)
+        Color.copy(self.color, _c)
     end
 }
 
@@ -95,12 +95,12 @@ WTXT = Class{
     init = function(self, _text, _font, _t_color) --Set circle's atributes
         self.text = _text or "sample" --This object text
         self.font = _font             --This object text font
-        self.t_color = RGB(0,0,0)     --This object text color
-        if _text_color then Rgb.copy(self.t_color, _t_color) end
+        self.t_color = _t_color or HSL(0,0,0) --This object text color
+        if _text_color then Color.copy(self.t_color, _t_color) end
     end,
 
     setTextColor = function(self, _c) --Set object's text color
-        Rgb.copy(self.t_color, _c)
+        Color.copy(self.t_color, _c)
     end
 }
 
@@ -114,8 +114,8 @@ RECT = Class{
     init = function(self, _x, _y, _w, _h, _c) --Set rectangle's atributes
         ELEMENT.init(self)
         POS.init(self, _x, _y)
-        self.w = _w or 10
-        self.h = _h or 10
+        self.w = _w or 10 --Width
+        self.h = _h or 10 --Height
         CLR.init(self, _c)
     end,
 
@@ -128,11 +128,12 @@ RECT = Class{
 
 --Circle: is a positionable and colorful object with radius
 CIRC = Class{
-    __includes = {POS, CLR},
-    init = function(self, _x, _y, _r, _c) --Set circle's atributes
+    __includes = {ELEMENT, POS, CLR},
+    init = function(self, _x, _y, _r, _c, _mode) --Set circle's atributes
         ELEMENT.init(self)
         POS.init(self, _x, _y)
-        self.r = _r or 10
+        self.r = _r or 10 --Radius
+        self.mode = _mode or "fill" --Circle draw mode
         CLR.init(self, _c)
     end,
 

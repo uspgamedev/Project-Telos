@@ -1,6 +1,6 @@
 local Util = require "util"
 local Draw = require "draw"
-local Rgb  = require "classes.rgb" 
+local Hsl  = require "classes.hsl"
 
 --MODULE FOR THE GAMESTATE: GAME--
 
@@ -13,7 +13,7 @@ local state = {}
 function state:enter()
     local b
 
-    b = But(10, 10, 200, 300, Rgb.orange(), but1, "FRANKIE SAYS RENATO", my_font)
+    b = But(300, 300, 50, Hsl.orange(), but1, "psycho guy", my_font)
     b:addElement(DRAW_TABLE.L1, "big_buttons", "renato_button")
 
 end
@@ -31,7 +31,7 @@ function state:update(dt)
 end
 
 function state:draw()
-    
+
     Draw.allTables()
 
 end
@@ -40,7 +40,7 @@ function state:keypressed(key)
     local i
 
     Util.defaultKeyPressed(key)
-    
+
 
 end
 
