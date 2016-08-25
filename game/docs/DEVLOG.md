@@ -5,11 +5,33 @@ GAME DESIGN DOCUMENT
 DEV LOG
 =======
 
-18/08/2016:
+#### 25/08/2016:
+
+Transfered STEAMING template to this repository!
+ - Started arranging documents (LICENSE, DEVLOG, CHANGELOG).
+ - Created issues on the repository based on previous discussion with the group
+
+#### 24/08/2016:
+
+Continued working on a level song. Should be ready in the next iteration working on it
+
+#### 23/08/2016:
+
+Used the day to start making music for the game. Started on some draft for a level song.
+
+#### 22/08/2016:
+
+Working on STEAMING documentation and implementation
+
+#### 21/08/2016:
+
+Started playing with [LMMS](https://lmms.io/) to create some music. Mainly it was for testing the software and imagining some good tunes
+
+#### 18/08/2016:
 
 Changed LoGaTe name to STEAMING (with LOVE), and started working on documentation.
 
-17/08/2016:
+#### 17/08/2016:
 @renatogeh, @yancouto
 
 Discussão sobre Telos com renato:
@@ -28,7 +50,7 @@ Discussão sobre Telos com renato:
                 createEnemy()   
                 createEnemy()
                 createEnemy()
-                ... 
+                ...
         ```
 
 IDEIA PARA FIM DE JOGO:
@@ -38,7 +60,7 @@ IDEIA PARA FIM DE JOGO:
 
 LoGaTe quase finalizado, faltando ainda metodos para adicionar/remover exceptions.
 
-16/08/2016:
+#### 16/08/2016:
 @yancouto
 
 Continuando trabalho no LoGaTe.
@@ -48,19 +70,19 @@ Ideias para estágios de desenvolvimento p/ telos por yan:
 
 - 1: bola que anda
 - 2: pause screen simples
-- 3: bola que atira 
+- 3: bola que atira
 - 4: inimigo simples: some quando atirado em
 - 5: menu screen simples (transições entre telas)
 - 6: deathscreen
 
-12/08/2016:
+#### 12/08/2016:
 
 Avançando no LoGaTe:
 - Analisando vários códigos que criei para o projeto TR0N0S, e utilizando a biblioteca de funções HUMP (http://hump.readthedocs.io/en/latest/),
 já tenho uma base para rodar os gamestates.
-- Testando deixar arquivos separados para cada gamestate, e pensando como simplificar o jeito de desenhar objetos. 
+- Testando deixar arquivos separados para cada gamestate, e pensando como simplificar o jeito de desenhar objetos.
 
-11/08/2016:
+#### 11/08/2016:
 
 Começando a trabalhar no LoGaTe (https://github.com/uspgamedev/LoGaTe), que servirá de game template para o Projeto Telos.
 
@@ -70,7 +92,7 @@ Utilizar de classes que terão seu próprio método de desenhar e funções pró
 Gamestates que rodam seu próprio laço de desenhar e processamentos gerais;
 Todos objetos a serem desenhados são colocados em tables hierárquicas, que vem da menor (desenhada primeiro, fica embaixa) até a maior (desenhada por última, fica em cima), que em cada laço tem todos seus objetos desenhados (chamando as funções respectivas para tal).
 
-10/08/2016:
+#### 10/08/2016:
 @renatogeh, @yancouto
 Sugestão de aproach para re-aproveitar código:
 - Olhar o código antigo por inteiro, fazendo um resuminho do que foram boas ideias/o que não foi bem implementado
@@ -94,11 +116,11 @@ THE PEOPLE HAS SPOKEN:
 - Música:mais músicas
 - Colocar efeitos sonoros (colisão, por exemplo)
 
-09/08/2016:
+#### 09/08/2016:
 @renatogeh, @yancouto
 Discussão e balanço do PsyChObALL original:
 - Ruim:
-    - Muito dificil, partes muito tensas de passar 
+    - Muito dificil, partes muito tensas de passar
     - Morrer te leva pro começo do jogo
     - Código confuso (rushamos muita coisa muito rápido)
     - Colisão não eficiente
