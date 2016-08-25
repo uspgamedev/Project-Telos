@@ -13,6 +13,7 @@ require "classes.rgb"
 require "classes.hsl"
 require "classes.color"
 require "classes.psycho"
+require "classes.bullet"
 Button = require "classes.button"
 
 --MY MODULES

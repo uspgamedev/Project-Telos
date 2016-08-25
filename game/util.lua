@@ -170,9 +170,30 @@ end
 
 --Removes invisible in all elements with a subtype st
 function util.rmvInvisibleSubtype(st)
+
   for o in pairs(SUBTP_TABLE[st]) do
     o.invisible = false
   end
+
+end
+
+--------------------
+--UPDATE FUNCTIONS
+--------------------
+
+--Update all objects in a table
+function util.updateTable(dt, t)
+
+    if not t then return end
+    for o in pairs(t) do
+        o:update(dt)
+    end
+
+end
+
+--Update all objects with a subtype sb
+function util.updateSubTp(dt, sb)
+    util.updateTable(dt, SUBTP_TABLE[sb])
 end
 
 --------------------
@@ -189,7 +210,7 @@ end
 --Pause program
 function util.pause()
 
-    if Gamestate.current() == GS_GAME and GAME_BEGIN then
+    if Gamestate.current() == GS_GAME then
         Gamestate.switch(GS_PAUSE)
     elseif Gamestate.current() == GS_PAUSE then
         Gamestate.switch(GS_GAME)

@@ -39,7 +39,7 @@ function setup.config()
     ID_TABLE = {} --Table with elements with Ids (for fast lookup)
 
     --WINDOW CONFIG--
-    success = love.window.setMode(500, 500, {borderless = not DEBUG})
+    success = love.window.setMode(800, 800, {borderless = not DEBUG})
 
     --FONT CONFIG--
     my_font = love.graphics.newFont("assets/fonts/vanadine_bold.ttf", 20)

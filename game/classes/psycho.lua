@@ -7,9 +7,6 @@ local Util = require "util"
 
 local psycho = {}
 
---MATH STUFF--
-local sqrt2 = math.sqrt(2)
-
 Psy = Class{
     __includes = {CIRC},
     init = function(self, _x, _y)
@@ -19,8 +16,8 @@ Psy = Class{
 
         self.r = 20 --Radius of psycho
         self.color = Hsl.orange() --Color of psycho
-        self.speedv = 100
-        self.speed = Vector(0,0)
+        self.speedv = 100 --Speed value
+        self.speed = Vector(0,0) --Speed vector
 
         CIRC.init(self, _x, _y, self.r, self.color, "fill") --Set atributes
     end
@@ -35,16 +32,16 @@ local function updateSpeed(self)
 
     p.speed = Vector(0,0)
     --Movement
-    if love.keyboard.isDown 'w' then --move up
+    if love.keyboard.isDown 'w' or love.keyboard.isDown 'up' then --move up
       p.speed = p.speed + Vector(0,-1)
     end
-    if love.keyboard.isDown 'a' then --move left
+    if love.keyboard.isDown 'a' or love.keyboard.isDown 'left' then --move left
       p.speed = p.speed + Vector(-1,0)
     end
-    if love.keyboard.isDown 's' then --move down
+    if love.keyboard.isDown 's' or love.keyboard.isDown 'down' then --move down
       p.speed = p.speed + Vector(0,1)
     end
-    if love.keyboard.isDown'd' then --move right
+    if love.keyboard.isDown'd' or love.keyboard.isDown 'right' then --move right
       p.speed = p.speed + Vector(1,0)
     end
 
@@ -52,42 +49,57 @@ local function updateSpeed(self)
 
 end
 
+--CLASS FUNCTIONS--
+
+function Psy:shoot(x,y)
+    local p, bullet, dir, c
+    p = self
+    c = Hsl.pink()
+    dir = Vector(x-p.pos.x, y-p.pos.y)
+    dir = dir:normalized()
+    bullet = Bullet(p.pos.x, p.pos.y, dir.x, dir.y, c)
+    bullet:addElement(DRAW_TABLE.L2, "playerbullet")
+
+end
+
 function Psy:draw()
-  local p
+    local p
 
-  p = self
+    p = self
 
-  --Draws the circle
-  Color.set(p.color)
-  love.graphics.circle("fill", p.pos.x, p.pos.y, p.r)
+    --Draws the circle
+    Color.set(p.color)
+    love.graphics.circle("fill", p.pos.x, p.pos.y, p.r)
 end
 
 function Psy:update(dt)
-  local p
+    local p
 
-  p = self
+    p = self
 
-  p.pos = p.pos + dt*p.speed
+    p.pos = p.pos + dt*p.speed
 
 end
 
 function Psy:keypressed(key)
-  local p, sp
+    local p, sp
 
-  p = self --Psycho
-  sp = p.speedv --Speed Value
+    p = self --Psycho
+    sp = p.speedv --Speed Value
 
-  --Movement
-  if key == 'w' or key == 'a' or key == 's' or key == 'd' then
-      updateSpeed(self)
-  end
+    --Movement
+    if key == 'w' or key == 'a' or key == 's' or key == 'd' or
+       key == 'up' or key == 'left' or key == 'down' or key == 'right' then
+        updateSpeed(self)
+    end
 
 end
 
 function Psy:keyreleased(key)
 
-  --Movement
-  if key == 'w' or key == 'a' or key == 's' or key == 'd' then
+    --Movement
+    if key == 'w' or key == 'a' or key == 's' or key == 'd' or
+       key == 'up' or key == 'left' or key == 'down' or key == 'right' then
       updateSpeed(self)
   end
 

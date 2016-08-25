@@ -6,10 +6,13 @@ DEV LOG
 =======
 
 #### 25/08/2016:
+@yancouto
 
 Transfered STEAMING template to this repository!
  - Started arranging documents (LICENSE, DEVLOG, CHANGELOG).
  - Created issues on the repository based on previous discussion with the group
+ - Made inicial steps for the game (creating player classes/adding HSL compatibility)
+ - Added player movement!
 
 #### 24/08/2016:
 

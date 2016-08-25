@@ -28,6 +28,7 @@ end
 function state:update(dt)
 
     p:update(dt)
+    Util.updateSubTp(dt, "playerbullet")
 
 end
 
@@ -48,6 +49,12 @@ function state:keyreleased(key)
 
     p:keyreleased(key) --Key handling of psycho
 
+end
+
+function state:mousepressed(x, y, button)
+    if button == 1 then
+        p:shoot(x, y)
+    end
 end
 
 --Return state functions
