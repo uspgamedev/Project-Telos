@@ -45,7 +45,6 @@ function Bullet:update(dt)
        b.pos.x < 0 or
        b.pos.y > WINDOW_HEIGHT or
        b.pos.y < 0) then
-           print("marked for death")
            b.death = true
     end
 end

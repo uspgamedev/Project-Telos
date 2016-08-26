@@ -33,7 +33,7 @@ end
 --  else, just apply exceptions normally and keep them as they are
 function util.clearAllTables(mode)
 
-    for i, t in ipairs(DRAW_TABLE) do
+    for _, t in pairs(DRAW_TABLE) do
         util.clearTable(t, mode)
     end
 
@@ -84,19 +84,22 @@ end
 
 --Adds exceptions to an element with a given id
 function util.addExceptionId(id)
-  for o in pairs(ID_TABLE) do
-    if o.id == id then
-      o.exception = true
-      return
+
+    if ID_TABLE[id] then
+        ID_TABLE[id].exception = true
+    else
+        print ("Id not found")
     end
-  end
+
 end
 
 --Adds exceptions to all elements with a subtype st
 function util.addExceptionSubtype(st)
-  for o in pairs(SUBTP_TABLE[st]) do
-    o.exception = true
-  end
+    if SUBTP_TABLE[st] then
+        for o in pairs(SUBTP_TABLE[st]) do
+            o.exception = true
+        end
+    end
 end
 
 --Removes exception in all elements in a given table
@@ -225,10 +228,10 @@ end
 --Pause program
 function util.pause()
 
-    if Gamestate.current() == GS_GAME then
-        Gamestate.switch(GS_PAUSE)
-    elseif Gamestate.current() == GS_PAUSE then
-        Gamestate.switch(GS_GAME)
+    if Gamestate.current() == GS.GAME then
+        SWITCH = "PAUSE"
+    elseif Gamestate.current() == GS.PAUSE then
+        SWITCH = "GAME"
     end
 
 end
@@ -256,10 +259,6 @@ function util.defaultKeyPressed(key)
 
     if key == 'escape' or key == 'x' then
         util.quit()
-    elseif key == 'b' then
-        util.goBack()
-    elseif key == 'insert' then
-        util.toggleDebug()
     elseif key == 'p' then
         util.pause()
     end

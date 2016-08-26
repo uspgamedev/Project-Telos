@@ -1,42 +1,42 @@
+local Button = require "classes.button"
 local Psycho = require "classes.psycho"
 local Util = require "util"
 local Draw = require "draw"
 
---MODULE FOR THE GAMESTATE: GAME--
+
+--MODULE FOR THE GAMESTATE: PAUSE--
 
 --BUTTON FUNCTIONS--
+
+local but1 = require "buttons.renato_button"
 
 --------------------
 
 local state = {}
-
-local p --Psycho
 local switch = nil --What state to go next
 
 function state:enter()
 
-    p = Psy(100, 100)
-    p:addElement(DRAW_TABLE.L3)
+    --Add exception to not remove this elements:
+    Util.addExceptionSubtype("player_bullet")
+    Util.addExceptionId("PSY")
 
 end
 
 function state:leave()
 
-    Util.clearAllTables()
+    Psycho.updateSpeed(Psycho.get())
+    Util.clearAllTables("remove")
+
 
 end
 
 
 function state:update(dt)
 
-    p:update(dt)
-    Util.updateSubTp(dt, "player_bullet")
-
-    Util.killSubTp("player_bullet")
-
-    if SWITCH == "PAUSE" then
+    if SWITCH == "GAME" then
         SWITCH = nil
-        Gamestate.push(GS.PAUSE)
+        Gamestate.pop()
     end
 
 end
@@ -49,21 +49,16 @@ end
 
 function state:keypressed(key)
 
-    p:keypressed(key) --Key handling of psycho
     Util.defaultKeyPressed(key)
 
 end
 
-function state:keyreleased(key)
-
-    p:keyreleased(key) --Key handling of psycho
-
-end
-
 function state:mousepressed(x, y, button)
-    if button == 1 then
-        p:shoot(x, y)
+
+    if button == 1 then  --Left mouse button
+        Button.checkCollision(x,y)
     end
+
 end
 
 --Return state functions

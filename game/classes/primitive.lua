@@ -50,7 +50,6 @@ ELEMENT = Class{
             for _,tb in pairs(DRAW_TABLE) do--Iterates in all drawable tables and removes element
                 if tb[self] then
                     tb[self] = nil
-                    print("I WAS KILLED")
                     return
                 end
             end

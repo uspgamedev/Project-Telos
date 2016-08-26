@@ -25,7 +25,7 @@ Psy = Class{
 
 --LOCAL FUNCTIONS--
 
-local function updateSpeed(self)
+function psycho.updateSpeed(self)
 
     p = self --Psycho
     sp = p.speedv --Speed Value
@@ -58,7 +58,7 @@ function Psy:shoot(x,y)
     dir = Vector(x-p.pos.x, y-p.pos.y)
     dir = dir:normalized()
     bullet = Bullet(p.pos.x, p.pos.y, dir.x, dir.y, c)
-    bullet:addElement(DRAW_TABLE.L2, "playerbullet")
+    bullet:addElement(DRAW_TABLE.L2, "player_bullet")
 
 end
 
@@ -90,7 +90,7 @@ function Psy:keypressed(key)
     --Movement
     if key == 'w' or key == 'a' or key == 's' or key == 'd' or
        key == 'up' or key == 'left' or key == 'down' or key == 'right' then
-        updateSpeed(self)
+        psycho.updateSpeed(self)
     end
 
 end
@@ -100,7 +100,7 @@ function Psy:keyreleased(key)
     --Movement
     if key == 'w' or key == 'a' or key == 's' or key == 'd' or
        key == 'up' or key == 'left' or key == 'down' or key == 'right' then
-      updateSpeed(self)
+      psycho.updateSpeed(self)
   end
 
 end

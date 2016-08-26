@@ -26,7 +26,7 @@ local Setup     = require "setup"
 GS = {
 --MENU     = require "gamestate.menu",     --Menu Gamestate
 GAME     = require "gamestates.game",     --Game Gamestate
---PAUSE    = require "gamestate.pause",    --Pause Gamestate
+PAUSE    = require "gamestates.pause",    --Pause Gamestate
 --GAMEOVER = require "gamestate.gameover"  --Gameover Gamestate
 }
 
@@ -36,17 +36,5 @@ function love.load()
 
     Gamestate.registerEvents() --Overwrites love callbacks to call Gamestate as well
     Gamestate.switch(GS.GAME) --Jump to the inicial state
-
-end
-
------------------
---MOUSE FUNCTIONS
------------------
-
-function love.mousepressed(x, y, button, istouch)
-
-    if button == 1 then  --Left mouse button
-        Button.checkCollision(x,y)
-    end
 
 end

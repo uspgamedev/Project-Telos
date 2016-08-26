@@ -21,6 +21,7 @@ function setup.config()
     BUTTON_LOCK = false --Blocks buttons to be pressed
     WINDOW_WIDTH = 800 --Width of the game window
     WINDOW_HEIGHT = 800 --Height of the game window
+    SWITCH = nil --Which gamestate to switch next
 
     --TIMERS--
     Game_Timer = Timer.new()  --Timer for all game-related timing stuff
