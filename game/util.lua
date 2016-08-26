@@ -225,28 +225,6 @@ function util.quit()
 
 end
 
---Pause program
-function util.pause()
-
-    if Gamestate.current() == GS.GAME then
-        SWITCH = "PAUSE"
-    elseif Gamestate.current() == GS.PAUSE then
-        SWITCH = "GAME"
-    end
-
-end
-
---Go back to menu screen
-function util.goBack()
-
-    if Gamestate.current() ~= GS_PAUSE and Gamestate.current() ~= GS_GAMEOVER then
-        return
-    end
-
-    Gamestate.switch(GS_MENU)
-
-end
-
 --Toggles DEBUG
 function util.toggleDebug()
 
@@ -259,8 +237,8 @@ function util.defaultKeyPressed(key)
 
     if key == 'escape' or key == 'x' then
         util.quit()
-    elseif key == 'p' then
-        util.pause()
+    elseif key == 'b' then
+        util.toggleDebug()
     end
 
 end

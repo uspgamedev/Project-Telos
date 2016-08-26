@@ -10,16 +10,16 @@ local bullet = {}
 Bullet = Class{
     __includes = {CIRC},
     init = function(self, _x, _y, _dx, _dy,_c)
-        self.tp = "bullet" --Type of this class
 
         self.r = 5 --Radius of bullet
         self.color = _c or Hsl.blue()--Color of bullet
 
-        self.speedv = 300 --Speed value
+        self.speedv = 400 --Speed value
         self.speed = Vector(_dx*self.speedv or 0, _dy*self.speedv or 0) --Speed vector
 
         CIRC.init(self, _x, _y, self.r, self.color, "fill") --Set atributes
 
+        self.tp = "bullet" --Type of this class
     end
 }
 

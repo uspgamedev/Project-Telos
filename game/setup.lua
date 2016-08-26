@@ -19,9 +19,9 @@ function setup.config()
     --GLOBAL VARIABLES--
     DEBUG = true --DEBUG mode status
     BUTTON_LOCK = false --Blocks buttons to be pressed
-    WINDOW_WIDTH = 800 --Width of the game window
-    WINDOW_HEIGHT = 800 --Height of the game window
     SWITCH = nil --Which gamestate to switch next
+    WINDOW_WIDTH = love.graphics.getWidth() --Width of the game window
+    WINDOW_HEIGHT = love.graphics.getHeight() --Height of the game window
 
     --TIMERS--
     Game_Timer = Timer.new()  --Timer for all game-related timing stuff
@@ -29,12 +29,12 @@ function setup.config()
     --INITIALIZING TABLES--
     --Drawing Tables
     DRAW_TABLE = {
-    L1 = {}, --Layer 1 (bottom layer, first to draw)
+    BG = {}, --Layer 1 (bottom layer, first to draw)
     L2 = {}, --Layer 2
     L3 = {}, --Layer 3
     L4 = {}, --Layer 4
     L5 = {}, --Layer 5
-    L6 = {}  --Layer 6 (top layer, last to draw)
+    GUI = {}  --Layer 6 (top layer, last to draw)
     }
 
     --Other Tables
@@ -45,7 +45,8 @@ function setup.config()
     success = love.window.setMode(WINDOW_WIDTH, WINDOW_HEIGHT, {borderless = not DEBUG})
 
     --FONT CONFIG--
-    my_font = love.graphics.newFont("assets/fonts/vanadine_bold.ttf", 20)
+    GUI_BIG = love.graphics.newFont("assets/fonts/vanadine_bold.ttf", 60)
+    GUI_MED = love.graphics.newFont("assets/fonts/Nevis.ttf", 40)
 
     --CAMERA--
     CAM = Camera(love.graphics.getWidth()/2, love.graphics.getHeight()/2) --Set camera position to center of screen

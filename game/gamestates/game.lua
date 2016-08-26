@@ -16,7 +16,7 @@ local switch = nil --What state to go next
 function state:enter()
 
     p = Psy(100, 100)
-    p:addElement(DRAW_TABLE.L3)
+    p:addElement(DRAW_TABLE.L4)
 
 end
 
@@ -50,7 +50,12 @@ end
 function state:keypressed(key)
 
     p:keypressed(key) --Key handling of psycho
-    Util.defaultKeyPressed(key)
+
+    if key == 'p' then --Pause game
+        SWITCH = "PAUSE"
+    else
+        Util.defaultKeyPressed(key)
+    end
 
 end
 

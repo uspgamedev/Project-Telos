@@ -1,5 +1,6 @@
 local Button = require "classes.button"
 local Psycho = require "classes.psycho"
+local Hsl  = require "classes.hsl"
 local Util = require "util"
 local Draw = require "draw"
 
@@ -16,6 +17,14 @@ local state = {}
 local switch = nil --What state to go next
 
 function state:enter()
+    local b
+
+    b = Inv_Button(440, 300,
+        function()
+            SWITCH = "GAME"
+        end,
+        "Pause", GUI_BIG, Hsl.orange())
+    b:addElement(DRAW_TABLE.GUI, "gui")
 
     --Add exception to not remove this elements:
     Util.addExceptionSubtype("player_bullet")
@@ -27,7 +36,6 @@ function state:leave()
 
     Psycho.updateSpeed(Psycho.get())
     Util.clearAllTables("remove")
-
 
 end
 
@@ -49,7 +57,11 @@ end
 
 function state:keypressed(key)
 
-    Util.defaultKeyPressed(key)
+    if key == 'p' then
+        SWITCH = "GAME" --Unpause game
+    else
+        Util.defaultKeyPressed(key)
+    end
 
 end
 

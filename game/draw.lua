@@ -11,11 +11,11 @@ local draw = {}
 --Draws every drawable object from all tables
 function draw.allTables()
 
-    DrawTable(DRAW_TABLE.L1)
+    DrawTable(DRAW_TABLE.GUI)
 
     DrawTable(DRAW_TABLE.L2)
 
-    CAM:attach() --Start tracking camera
+    --CAM:attach() --Start tracking camera
 
     DrawTable(DRAW_TABLE.L3)
 
@@ -23,9 +23,9 @@ function draw.allTables()
 
     DrawTable(DRAW_TABLE.L5)
 
-    CAM:detach() --Stop tracking camera
+    --CAM:detach() --Stop tracking camera
 
-    DrawTable(DRAW_TABLE.L6)
+    DrawTable(DRAW_TABLE.GUI)
 
 end
 

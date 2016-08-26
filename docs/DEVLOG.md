@@ -5,6 +5,11 @@ GAME DESIGN DOCUMENT
 DEV LOG
 =======
 
+#### 26/08/2016:
+@renatogeh
+
+Working on pause screen and changes on some fonts.
+
 #### 25/08/2016:
 @yancouto
 
