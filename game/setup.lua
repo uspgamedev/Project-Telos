@@ -19,6 +19,8 @@ function setup.config()
     --GLOBAL VARIABLES--
     DEBUG = true --DEBUG mode status
     BUTTON_LOCK = false --Blocks buttons to be pressed
+    WINDOW_WIDTH = 800 --Width of the game window
+    WINDOW_HEIGHT = 800 --Height of the game window
 
     --TIMERS--
     Game_Timer = Timer.new()  --Timer for all game-related timing stuff
@@ -39,7 +41,7 @@ function setup.config()
     ID_TABLE = {} --Table with elements with Ids (for fast lookup)
 
     --WINDOW CONFIG--
-    success = love.window.setMode(800, 800, {borderless = not DEBUG})
+    success = love.window.setMode(WINDOW_WIDTH, WINDOW_HEIGHT, {borderless = not DEBUG})
 
     --FONT CONFIG--
     my_font = love.graphics.newFont("assets/fonts/vanadine_bold.ttf", 20)

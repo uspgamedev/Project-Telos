@@ -14,6 +14,7 @@ ELEMENT = Class{
         self.id = nil --Id of this element, if any
         self.exception = false --If this object is not to be removed when clearing tables
         self.invisible = false --If this object is not to be draw
+        self.death = false --If true, the object will be deleted next update
     end,
 
     setId = function(self, _id) --Sets id for this element, and add it to a ID table for quick lookup
@@ -28,7 +29,7 @@ ELEMENT = Class{
     setSubTp = function(self, _subtp) --Sets subtype for this element, and add it to respective subtype table for quick lookup
         if self.subtp then
             SUBTP_TABLE[self.subtp][self] = nil --Delete previous subtype this element had
-            if #SUBTP_TABLE[self.subtp] == 0 then
+            if not next(SUBTP_TABLE[self.subtp]) then
                 SUBTP_TABLE[self.subtp] = nil   --If no more elements of this subtype, delete the table
             end
         end
@@ -41,14 +42,15 @@ ELEMENT = Class{
     end,
 
     destroy = function(self, t) --Destroy this element from all tables (quicker if you send his drawable table, if he has one)
-        setSubTp(self, nil) --Removes from Id table, if its in one
-        setId(self, nil) --Removes from Subtype table, if its in one
+        self:setSubTp(nil) --Removes from Subtype table, if its in one
+        self:setId(nil) --Removes from Id table, if its in one
         if t then
             t[self] = nil --If you provide the  drawable table, removes from it quicker
         else
             for _,tb in pairs(DRAW_TABLE) do--Iterates in all drawable tables and removes element
                 if tb[self] then
                     tb[self] = nil
+                    print("I WAS KILLED")
                     return
                 end
             end

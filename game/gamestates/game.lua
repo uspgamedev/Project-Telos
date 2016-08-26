@@ -30,6 +30,8 @@ function state:update(dt)
     p:update(dt)
     Util.updateSubTp(dt, "playerbullet")
 
+    Util.killSubTp("playerbullet")
+
 end
 
 function state:draw()

@@ -196,6 +196,21 @@ function util.updateSubTp(dt, sb)
     util.updateTable(dt, SUBTP_TABLE[sb])
 end
 
+--Iterate through a table and destroy any element with the death flag on
+function util.killTable(t)
+
+    if not t then return end
+    for o in pairs(t) do
+        if o.death then o:destroy() end
+    end
+
+end
+
+--Iterate through all elements with a subtype sb and destroy anything with the death flag on
+function util.killSubTp(sb)
+    util.killTable(SUBTP_TABLE[sb])
+end
+
 --------------------
 --GLOBAL FUNCTIONS
 --------------------

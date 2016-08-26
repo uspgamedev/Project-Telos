@@ -19,6 +19,7 @@ Bullet = Class{
         self.speed = Vector(_dx*self.speedv or 0, _dy*self.speedv or 0) --Speed vector
 
         CIRC.init(self, _x, _y, self.r, self.color, "fill") --Set atributes
+
     end
 }
 
@@ -38,6 +39,15 @@ function Bullet:update(dt)
     b = self
 
     b.pos = b.pos + dt*b.speed
+
+    if not b.death and
+       (b.pos.x > WINDOW_WIDTH or
+       b.pos.x < 0 or
+       b.pos.y > WINDOW_HEIGHT or
+       b.pos.y < 0) then
+           print("marked for death")
+           b.death = true
+    end
 end
 
 --Return functions
