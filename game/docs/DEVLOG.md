@@ -13,6 +13,7 @@ Transfered STEAMING template to this repository!
  - Created issues on the repository based on previous discussion with the group
  - Made inicial steps for the game (creating player classes/adding HSL compatibility)
  - Added player movement!
+ - Added bullets that are removed when leaving the screen!
 
 #### 24/08/2016:
 
