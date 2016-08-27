@@ -27,32 +27,6 @@ Psy = Class{
     end
 }
 
---LOCAL FUNCTIONS--
-
-function psycho.updateSpeed(self)
-
-    p = self --Psycho
-    sp = p.speedv --Speed Value
-
-    p.speed = Vector(0,0)
-    --Movement
-    if love.keyboard.isDown 'w' or love.keyboard.isDown 'up' then --move up
-      p.speed = p.speed + Vector(0,-1)
-    end
-    if love.keyboard.isDown 'a' or love.keyboard.isDown 'left' then --move left
-      p.speed = p.speed + Vector(-1,0)
-    end
-    if love.keyboard.isDown 's' or love.keyboard.isDown 'down' then --move down
-      p.speed = p.speed + Vector(0,1)
-    end
-    if love.keyboard.isDown'd' or love.keyboard.isDown 'right' then --move right
-      p.speed = p.speed + Vector(1,0)
-    end
-
-    p.speed = p.speed:normalized() * sp
-
-end
-
 --CLASS FUNCTIONS--
 
 function Psy:shoot(x,y)
@@ -83,6 +57,8 @@ function Psy:update(dt)
 
     --Update movement
     p.pos = p.pos + dt*p.speed
+    --Fixes if psycho leaves screen
+    p.pos = p.pos + dt*p.speedv*isOutside(p)
 
     --Update shooting
     p.shoot_tick = p.shoot_tick - dt
@@ -135,6 +111,54 @@ end
 
 function psycho.get()
   return Util.findId("PSY")
+end
+
+--LOCAL FUNCTIONS--
+
+function psycho.updateSpeed(self)
+
+    p = self --Psycho
+    sp = p.speedv --Speed Value
+
+    p.speed = Vector(0,0)
+    --Movement
+    if love.keyboard.isDown 'w' or love.keyboard.isDown 'up' then --move up
+        p.speed = p.speed + Vector(0,-1)
+    end
+    if love.keyboard.isDown 'a' or love.keyboard.isDown 'left' then --move left
+        p.speed = p.speed + Vector(-1,0)
+    end
+    if love.keyboard.isDown 's' or love.keyboard.isDown 'down' then --move down
+        p.speed = p.speed + Vector(0,1)
+    end
+    if love.keyboard.isDown'd' or love.keyboard.isDown 'right' then --move right
+        p.speed = p.speed + Vector(1,0)
+    end
+
+    p.speed = p.speed:normalized() * sp
+
+end
+
+--Checks if psycho has leaved (even if partially) the game screen and returns correction vector
+function isOutside(o)
+    local v
+
+    v = Vector(0,0)
+
+    --X position
+    if     o.pos.x - o.r <= 0 then
+        v = v + Vector(1,0)
+    elseif o.pos.x + o.r >= WINDOW_WIDTH then
+        v = v + Vector(-1,0)
+    end
+    --Y position
+    if o.pos.y - o.r <= 0 then
+        v = v + Vector(0,1)
+    elseif o.pos.y + o.r >= WINDOW_HEIGHT then
+        v = v + Vector(0,-1)
+    end
+
+    return v:normalized()
 end
 
 --return function
