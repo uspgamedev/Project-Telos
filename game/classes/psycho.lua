@@ -18,8 +18,11 @@ Psy = Class{
         self.speedv = 200 --Speed value
         self.speed = Vector(0,0) --Speed vector
 
+        self.shoot_tick = 0
+        self.shoot_fps = .2
+
         CIRC.init(self, _x, _y, self.r, self.color, "fill") --Set atributes
-        
+
         self.tp = "psycho" --Type of this class
     end
 }
@@ -78,7 +81,20 @@ function Psy:update(dt)
 
     p = self
 
+    --Update movement
     p.pos = p.pos + dt*p.speed
+
+    --Update shooting
+    p.shoot_tick = p.shoot_tick - dt
+    if love.mouse.isDown(1) then
+        if p.shoot_tick <= 0 then
+            p.shoot_tick = p.shoot_tick + p.shoot_fps
+            p:shoot(love.mouse.getPosition())
+        end
+    end
+    if p.shoot_tick < 0 then
+        p.shoot_tick = 0
+    end
 
 end
 

@@ -65,11 +65,5 @@ function state:keyreleased(key)
 
 end
 
-function state:mousepressed(x, y, button)
-    if button == 1 then
-        p:shoot(x, y)
-    end
-end
-
 --Return state functions
 return state

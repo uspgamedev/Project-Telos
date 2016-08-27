@@ -14,7 +14,7 @@ Bullet = Class{
         self.r = 5 --Radius of bullet
         self.color = _c or Hsl.blue()--Color of bullet
 
-        self.speedv = 400 --Speed value
+        self.speedv = 450 --Speed value
         self.speed = Vector(_dx*self.speedv or 0, _dy*self.speedv or 0) --Speed vector
 
         CIRC.init(self, _x, _y, self.r, self.color, "fill") --Set atributes
