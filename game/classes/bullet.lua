@@ -1,6 +1,5 @@
 require "classes.primitive"
-local Hsl = require "classes.hsl"
-local Color = require "classes.color"
+local Color = require "classes.color.color"
 local Util = require "util"
 --BULLET CLASS--
 --[[Bullet projectile]]
@@ -12,7 +11,7 @@ Bullet = Class{
     init = function(self, _x, _y, _dx, _dy,_c)
 
         self.r = 5 --Radius of bullet
-        self.color = _c or Hsl.blue()--Color of bullet
+        self.color = _c or Color.blue()--Color of bullet
 
         self.speedv = 450 --Speed value
         self.speed = Vector(_dx*self.speedv or 0, _dy*self.speedv or 0) --Speed vector

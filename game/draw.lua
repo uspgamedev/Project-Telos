@@ -1,5 +1,3 @@
-local Rgb = require "classes/rgb"
-
 --MODULE FOR DRAWING STUFF--
 
 local draw = {}

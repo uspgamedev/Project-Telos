@@ -6,20 +6,26 @@ Camera    = require "hump.camera"
 Vector    = require "hump.vector"
 
 
---CLASSES
+--CLASSES--
 
+--color
+require "classes.color.color"
+require "classes.color.rgb"
+require "classes.color.hsl"
+
+--enemies
+require "classes.enemies.simple_ball"
+
+--other
 require "classes.primitive"
-require "classes.rgb"
-require "classes.hsl"
-require "classes.color"
 require "classes.psycho"
 require "classes.bullet"
 Button = require "classes.button"
 
 --MY MODULES
-local Util      = require "util"
-local Draw      = require "draw"
-local Setup     = require "setup"
+require "util"
+require "draw"
+local Setup = require "setup"
 
 
 --GAMESTATES

@@ -1,6 +1,5 @@
 require "classes.primitive"
-local Hsl = require "classes.hsl"
-local Color = require "classes.color"
+local Color = require "classes.color.color"
 local Util = require "util"
 --PSYCHO CLASS--
 --[[Our hero... or is it VILLAIN??!!]]
@@ -10,20 +9,21 @@ local psycho = {}
 Psy = Class{
     __includes = {CIRC},
     init = function(self, _x, _y)
+        CIRC.init(self, _x, _y, self.r, self.color, "fill") --Set atributes
+
         ELEMENT.setSubTp(self, "player")
         ELEMENT.setId(self, "PSY")
+        self.tp = "psycho" --Type of this class
 
         self.r = 20 --Radius of psycho
-        self.color = Hsl.orange() --Color of psycho
+        self.color = Color.orange() --Color of psycho
         self.speedv = 200 --Speed value
         self.speed = Vector(0,0) --Speed vector
 
         self.shoot_tick = 0
         self.shoot_fps = .2
 
-        CIRC.init(self, _x, _y, self.r, self.color, "fill") --Set atributes
 
-        self.tp = "psycho" --Type of this class
     end
 }
 
@@ -58,7 +58,7 @@ end
 function Psy:shoot(x,y)
     local p, bullet, dir, c
     p = self
-    c = Hsl.pink()
+    c = Color.pink()
     dir = Vector(x-p.pos.x, y-p.pos.y)
     dir = dir:normalized()
     bullet = Bullet(p.pos.x, p.pos.y, dir.x, dir.y, c)
@@ -120,6 +120,17 @@ function Psy:keyreleased(key)
       psycho.updateSpeed(self)
   end
 
+end
+
+--UTILITY FUNCTIONS--
+
+function psycho.create(x, y)
+    local p
+
+    p = Psy(x, y)
+    p:addElement(DRAW_TABLE.L4)
+
+    return p
 end
 
 function psycho.get()

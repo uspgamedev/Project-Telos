@@ -1,6 +1,6 @@
 local Button = require "classes.button"
 local Psycho = require "classes.psycho"
-local Hsl  = require "classes.hsl"
+local Color  = require "classes.color.color"
 local Util = require "util"
 local Draw = require "draw"
 
@@ -23,11 +23,12 @@ function state:enter()
         function()
             SWITCH = "GAME"
         end,
-        "Pause", GUI_BIG, Hsl.orange())
+        "Pause", GUI_BIG, Color.orange())
     b:addElement(DRAW_TABLE.GUI, "gui")
 
     --Add exception to not remove this elements:
     Util.addExceptionSubtype("player_bullet")
+    Util.addExceptionSubtype("enemies")
     Util.addExceptionId("PSY")
 
 end

@@ -1,4 +1,4 @@
-local Rgb = require "classes.rgb"
+local Rgb = require "classes.color.rgb"
 
 --FUNCTION FOR RENATO_BUTTON--
 

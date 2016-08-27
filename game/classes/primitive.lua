@@ -1,4 +1,4 @@
-local Color = require "classes.color"
+local Color = require "classes.color.color"
 
 --PRIMITIVE CLASS--
 

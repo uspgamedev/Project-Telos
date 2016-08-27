@@ -1,6 +1,5 @@
 require "classes.primitive"
-local Color = require "classes.color"
-local Hsl   = require "classes.hsl"
+local Color = require "classes.color.color"
 --BUTTON CLASS --
 
 local button = {}
@@ -62,7 +61,7 @@ Inv_Button = Class{
         w = _font:getWidth(_text)
         h = _font:getHeight(_text)
 
-        RECT.init(self, _x, _y, w, h, Hsl.transp(), "fill") --Set atributes
+        RECT.init(self, _x, _y, w, h, Color.transp(), "fill") --Set atributes
 
         self.func  = _func  --Function to call when pressed
 
