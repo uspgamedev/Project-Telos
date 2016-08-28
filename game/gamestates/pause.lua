@@ -19,10 +19,14 @@ local switch = nil --What state to go next
 function state:enter()
     local t, b
 
+    --GUI--
+
+    --Main pause text
     t = Text(440, 300, "Pause", GUI_BIG, Color.orange())
     t:addElement(DRAW_TABLE.GUI, "gui")
 
-    b = Inv_Button(440, 600,
+    --Unpause button
+    b = Inv_Button(140, 650,
         function()
             SWITCH = "GAME"
         end,

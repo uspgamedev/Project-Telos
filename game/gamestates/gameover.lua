@@ -17,9 +17,19 @@ local state = {}
 local switch = nil --What state to go next
 
 function state:enter()
-    local b
+    local t, b
 
+    --Main gameover text
+    t = Text(400, 300, "GAMEOVER", GUI_BIG, Color.orange())
+    t:addElement(DRAW_TABLE.GUI, "gui")
 
+    --Restart button
+    b = Inv_Button(140, 650,
+        function()
+            SWITCH = "GAME"
+        end,
+        "(r)estart", GUI_MED, Color.orange())
+    b:addElement(DRAW_TABLE.GUI, "gui")
 
 end
 
@@ -34,7 +44,7 @@ function state:update(dt)
 
     if SWITCH == "GAME" then
         SWITCH = nil
-        Gamestate.switch(GS.GAMEOVER)
+        Gamestate.switch(GS.GAME)
     end
 
 end
@@ -47,7 +57,11 @@ end
 
 function state:keypressed(key)
 
-    Util.defaultKeyPressed(key)
+    if key == 'r' then
+        SWITCH = "GAME"
+    else
+        Util.defaultKeyPressed(key)
+    end
 
 end
 

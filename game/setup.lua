@@ -46,7 +46,7 @@ function setup.config()
 
     --FONT CONFIG--
     GUI_BIG = love.graphics.newFont("assets/fonts/vanadine_bold.ttf", 60)
-    GUI_MED = love.graphics.newFont("assets/fonts/Nevis.ttf", 40)
+    GUI_MED = love.graphics.newFont("assets/fonts/Nevis.ttf", 20)
 
     --CAMERA--
     CAM = Camera(love.graphics.getWidth()/2, love.graphics.getHeight()/2) --Set camera position to center of screen
