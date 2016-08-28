@@ -20,6 +20,7 @@ require "classes.enemies.simple_ball"
 require "classes.primitive"
 require "classes.psycho"
 require "classes.bullet"
+require "classes.text"
 Button = require "classes.button"
 
 --MY MODULES
@@ -30,10 +31,10 @@ local Setup = require "setup"
 
 --GAMESTATES
 GS = {
---MENU     = require "gamestate.menu",     --Menu Gamestate
+--MENU     = require "gamestates.menu",     --Menu Gamestate
 GAME     = require "gamestates.game",     --Game Gamestate
 PAUSE    = require "gamestates.pause",    --Pause Gamestate
---GAMEOVER = require "gamestate.gameover"  --Gameover Gamestate
+GAMEOVER = require "gamestates.gameover"  --Gameover Gamestate
 }
 
 function love.load()

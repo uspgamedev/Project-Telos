@@ -18,6 +18,7 @@ local switch = nil --What state to go next
 function state:enter()
 
     p = Psycho.create(100,100)
+    GAMEOVER = false
 
 end
 
@@ -34,6 +35,10 @@ function state:update(dt)
     if SWITCH == "PAUSE" then
         SWITCH = nil
         Gamestate.push(GS.PAUSE)
+    elseif SWITCH == "GAMEOVER" then
+        SWITCH = nil
+        Util.gameElementException("GAMEOVER")
+        Gamestate.switch(GS.GAMEOVER)
     end
 
     --Update psycho
@@ -42,9 +47,12 @@ function state:update(dt)
     Util.updateSubTp(dt, "player_bullet")
     Util.updateSubTp(dt, "enemies")
 
-    --Delete dead objects
+    checkCollision()
+
+    --Kill dead objects
     Util.killSubTp("player_bullet")
     Util.killSubTp("enemies")
+    Util.killId("psycho")
 
 
 end
@@ -74,6 +82,33 @@ end
 function state:keyreleased(key)
 
     p:keyreleased(key) --Key handling of psycho
+
+end
+
+--Makes all collisions
+function checkCollision()
+
+    if SUBTP_TABLE["enemies"] then
+
+        for e in pairs(SUBTP_TABLE["enemies"]) do
+
+            --Checking player bullet collision
+            if SUBTP_TABLE["player_bullet"] then
+                for bullet in pairs(SUBTP_TABLE["player_bullet"]) do
+                    if e:collides(bullet) then
+                        e:kill()
+                        bullet:kill()
+                    end
+                end
+            end
+
+            --Colliding with psycho
+            if e:collides(p) then
+                p:kill()
+            end
+
+        end
+    end
 
 end
 

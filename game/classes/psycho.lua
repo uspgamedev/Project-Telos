@@ -12,7 +12,7 @@ Psy = Class{
         CIRC.init(self, _x, _y, self.r, self.color, "fill") --Set atributes
 
         ELEMENT.setSubTp(self, "player")
-        ELEMENT.setId(self, "PSY")
+        ELEMENT.setId(self, "psycho")
         self.tp = "psycho" --Type of this class
 
         self.r = 20 --Radius of psycho
@@ -74,6 +74,16 @@ function Psy:update(dt)
 
 end
 
+function Psy:kill()
+    local p
+
+    p = self
+
+    p.death = true
+    SWITCH = "GAMEOVER"
+
+end
+
 function Psy:keypressed(key)
     local p, sp
 
@@ -110,7 +120,7 @@ function psycho.create(x, y)
 end
 
 function psycho.get()
-  return Util.findId("PSY")
+  return Util.findId("psycho")
 end
 
 --LOCAL FUNCTIONS--

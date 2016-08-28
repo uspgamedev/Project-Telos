@@ -60,6 +60,27 @@ ELEMENT = Class{
         if subtp then self:setSubTp(subtp) end
         if id then self:setId(id) end
         t[self] = true
+    end,
+
+    --Kill this object
+    kill = function(self)
+
+        if self.death then return end
+        self.death = true
+
+    end,
+
+    --Checks if an circular object o collides with this enemy
+    collides = function (self, o)
+        local e , dx, dy, dr
+
+        e = self
+        dx = e.pos.x - o.pos.x
+        dy = e.pos.y - o.pos.y
+        dr = e.r + o.r
+
+        return (dx*dx + dy*dy) < dr*dr
+
     end
 }
 

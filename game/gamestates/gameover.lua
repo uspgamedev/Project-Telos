@@ -17,25 +17,14 @@ local state = {}
 local switch = nil --What state to go next
 
 function state:enter()
-    local t, b
+    local b
 
-    t = Text(440, 300, "Pause", GUI_BIG, Color.orange())
-    t:addElement(DRAW_TABLE.GUI, "gui")
 
-    b = Inv_Button(440, 600,
-        function()
-            SWITCH = "GAME"
-        end,
-        "un(p)ause", GUI_MED, Color.orange())
-    b:addElement(DRAW_TABLE.GUI, "gui")
-
-    Util.gameElementException()
 
 end
 
 function state:leave()
 
-    Psycho.updateSpeed(Psycho.get())
     Util.clearAllTables("remove")
 
 end
@@ -45,7 +34,7 @@ function state:update(dt)
 
     if SWITCH == "GAME" then
         SWITCH = nil
-        Gamestate.pop()
+        Gamestate.switch(GS.GAMEOVER)
     end
 
 end
@@ -58,11 +47,7 @@ end
 
 function state:keypressed(key)
 
-    if key == 'p' then
-        SWITCH = "GAME" --Unpause game
-    else
-        Util.defaultKeyPressed(key)
-    end
+    Util.defaultKeyPressed(key)
 
 end
 

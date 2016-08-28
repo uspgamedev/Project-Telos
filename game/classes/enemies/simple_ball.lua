@@ -30,6 +30,7 @@ Simple_Ball = Class{
 
 --CLASS FUNCTIONS--
 
+--Draw this enemy
 function Simple_Ball:draw()
     local p
 
@@ -40,6 +41,7 @@ function Simple_Ball:draw()
     love.graphics.circle("fill", p.pos.x, p.pos.y, p.r)
 end
 
+--Update this enemy
 function Simple_Ball:update(dt)
     local o
 

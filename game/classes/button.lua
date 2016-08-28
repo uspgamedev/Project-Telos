@@ -44,7 +44,7 @@ function Circle_Button:draw()
     --Draws button text
     Color.set(b.t_color)
     love.graphics.setFont(b.font)
-    love.graphics.print(b.text, b.x - tx , b.y - ty)
+    love.graphics.print(b.text, b.pos.x - tx , b.pos.y - ty)
 
 end
 

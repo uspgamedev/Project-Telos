@@ -49,7 +49,7 @@ function util.findId(id)
 end
 
 --Find a set of objects based on a subtype
-function util.findSubtype(subtp)
+function util.findSbTp(subtp)
     return SUBTP_TABLE[subtp]
 end
 
@@ -88,7 +88,7 @@ function util.addExceptionId(id)
     if ID_TABLE[id] then
         ID_TABLE[id].exception = true
     else
-        print ("Id not found")
+        print ("Id not found:",id)
     end
 
 end
@@ -124,6 +124,17 @@ function util.rmvExceptionSubtype(st)
   for o in pairs(SUBTP_TABLE[st]) do
     o.exception = false
   end
+end
+
+--Add exception to not remove game elements:
+function util.gameElementException(mode)
+
+    util.addExceptionSubtype("player_bullet")
+    util.addExceptionSubtype("enemies")
+    if mode ~= "GAMEOVER" then
+        util.addExceptionId("psycho")
+    end
+
 end
 
 ---------------------------
@@ -199,7 +210,7 @@ function util.updateSubTp(dt, sb)
     util.updateTable(dt, SUBTP_TABLE[sb])
 end
 
---Iterate through a table and destroy any element with the death flag on
+--Iterate through a table and destroys any element with the death flag on
 function util.killTable(t)
 
     if not t then return end
@@ -211,7 +222,20 @@ end
 
 --Iterate through all elements with a subtype sb and destroy anything with the death flag on
 function util.killSubTp(sb)
+
     util.killTable(SUBTP_TABLE[sb])
+
+end
+
+--Destroys a single element if his death flag is on
+function util.killId(id)
+    local o
+
+    o = ID_TABLE[id]
+    if o and o.death then
+         o:destroy()
+    end
+
 end
 
 --------------------
