@@ -5,6 +5,16 @@ GAME DESIGN DOCUMENT
 DEV LOG
 =======
 
+#### 28/08/2016:
+
+Cleared almost all issues for ver 0.0.0.1!
+Now a simple version of 3 gamestates are made (still needs main menu)!
+Check the commits for full changes
+
+#### 27/08/2016:
+
+Trying to clear all issues this weekend. Full activities tomorrow.
+
 #### 26/08/2016:
 @renatogeh
 

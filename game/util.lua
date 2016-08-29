@@ -13,15 +13,14 @@ local util = {}
 --  else, just apply exceptions normally and keep them as they are
 function util.clearTable(T, mode)
     local exc --Element exception
-
     if not T then return end --If table is empty
-
     --Clear T table
     for o in pairs (T) do
-        exc = o.exception
-        if mode == "force" or not exc then --Don't erase exceptions
-        	if exc ~= nil and mode == "remove" then exc = false end
+        if mode == "force" or not o.exception then --Don't erase exceptions
             o:destroy()
+        end
+        if o and o.exception and mode == "remove" then
+            o.exception = false
         end
     end
 
@@ -99,6 +98,8 @@ function util.addExceptionSubtype(st)
         for o in pairs(SUBTP_TABLE[st]) do
             o.exception = true
         end
+    else
+        print("Subtype not found", st)
     end
 end
 
@@ -129,8 +130,14 @@ end
 --Add exception to not remove game elements:
 function util.gameElementException(mode)
 
-    util.addExceptionSubtype("player_bullet")
-    util.addExceptionSubtype("enemies")
+    if util.findSbTp("player_bullet") then
+        util.addExceptionSubtype("player_bullet")
+    end
+
+    if util.findSbTp("enemies") then
+        util.addExceptionSubtype("enemies")
+    end
+
     if mode ~= "GAMEOVER" then
         util.addExceptionId("psycho")
     end

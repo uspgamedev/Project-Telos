@@ -17,7 +17,8 @@ ELEMENT = Class{
         self.death = false --If true, the object will be deleted next update
     end,
 
-    setId = function(self, _id) --Sets id for this element, and add it to a ID table for quick lookup
+    --Sets id for this element, and add it to a ID table for quick lookup
+    setId = function(self, _id)
         if self.id then
             ID_TABLE[self.id] = nil --Delete previous Id element
         end
@@ -25,8 +26,8 @@ ELEMENT = Class{
         if not _id then return end --If nil, just remove
         ID_TABLE[_id] = self
     end,
-
-    setSubTp = function(self, _subtp) --Sets subtype for this element, and add it to respective subtype table for quick lookup
+    --Sets subtype for this element, and add it to respective subtype table for quick lookup
+    setSubTp = function(self, _subtp)
         if self.subtp then
             SUBTP_TABLE[self.subtp][self] = nil --Delete previous subtype this element had
             if not next(SUBTP_TABLE[self.subtp]) then

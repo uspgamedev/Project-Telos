@@ -9,7 +9,7 @@ local draw = {}
 --Draws every drawable object from all tables
 function draw.allTables()
 
-    DrawTable(DRAW_TABLE.GUI)
+    DrawTable(DRAW_TABLE.BG)
 
     DrawTable(DRAW_TABLE.L2)
 

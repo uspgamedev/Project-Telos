@@ -17,14 +17,13 @@ local switch = nil --What state to go next
 
 function state:enter()
 
-    p = Psycho.create(100,100)
-    GAMEOVER = false
+    p = Psycho.create(400,400)
 
 end
 
 function state:leave()
 
-    Util.clearAllTables()
+    Util.clearAllTables("remove")
 
 end
 

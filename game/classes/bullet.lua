@@ -22,6 +22,8 @@ Bullet = Class{
     end
 }
 
+--CLASS FUNCTIONS--
+
 function Bullet:draw()
     local b
 
@@ -46,6 +48,20 @@ function Bullet:update(dt)
        b.pos.y < 0) then
            b.death = true
     end
+end
+
+--UTILITY FUNCTIONS--
+
+--Create a bullet in the (x,y) position, direction dir, color c and subtype st
+function bullet.create(x, y, dir, c, st)
+    local bullet, subtype
+
+    subtype = st or "player_bullet"
+
+    bullet = Bullet(x, y, dir.x, dir.y, c)
+    bullet:addElement(DRAW_TABLE.L3, subtype)
+
+    return bullet
 end
 
 --Return functions

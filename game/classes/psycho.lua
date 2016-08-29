@@ -1,4 +1,5 @@
 require "classes.primitive"
+local Bullet = require "classes.bullet"
 local Color = require "classes.color.color"
 local Util = require "util"
 --PSYCHO CLASS--
@@ -32,11 +33,11 @@ Psy = Class{
 function Psy:shoot(x,y)
     local p, bullet, dir, c
     p = self
+
     c = Color.pink()
     dir = Vector(x-p.pos.x, y-p.pos.y)
     dir = dir:normalized()
-    bullet = Bullet(p.pos.x, p.pos.y, dir.x, dir.y, c)
-    bullet:addElement(DRAW_TABLE.L3, "player_bullet")
+    Bullet.create(p.pos.x, p.pos.y, dir, c, "player_bullet")
 
 end
 
