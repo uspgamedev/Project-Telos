@@ -14,7 +14,6 @@ local but1 = require "buttons.renato_button"
 --------------------
 
 local state = {}
-local switch = nil --What state to go next
 
 function state:enter()
     local t, b
@@ -31,6 +30,14 @@ function state:enter()
         "(r)estart", GUI_MED, Color.orange())
     b:addElement(DRAW_TABLE.GUI, "gui")
 
+    --Back to menu button
+    b = Inv_Button(340, 650,
+        function()
+            SWITCH = "MENU"
+        end,
+        "go (b)ack", GUI_MED, Color.orange())
+    b:addElement(DRAW_TABLE.GUI, "gui")
+
 end
 
 function state:leave()
@@ -45,6 +52,9 @@ function state:update(dt)
     if SWITCH == "GAME" then
         SWITCH = nil
         Gamestate.switch(GS.GAME)
+    elseif SWITCH == "MENU" then
+        SWITCH = nil
+        Gamestate.switch(GS.MENU)
     end
 
 end
@@ -57,8 +67,10 @@ end
 
 function state:keypressed(key)
 
-    if key == 'r' then
+    if     key == 'r' then
         SWITCH = "GAME"
+    elseif key == 'b' then
+        SWITCH = "MENU"
     else
         Util.defaultKeyPressed(key)
     end

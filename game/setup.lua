@@ -22,6 +22,7 @@ function setup.config()
     SWITCH = nil --Which gamestate to switch next
     WINDOW_WIDTH = love.graphics.getWidth() --Width of the game window
     WINDOW_HEIGHT = love.graphics.getHeight() --Height of the game window
+    SWITCH = nil --What state to go next
 
     --TIMERS--
     Game_Timer = Timer.new()  --Timer for all game-related timing stuff

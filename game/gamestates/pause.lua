@@ -14,7 +14,6 @@ local but1 = require "buttons.renato_button"
 --------------------
 
 local state = {}
-local switch = nil --What state to go next
 
 function state:enter()
     local t, b
@@ -31,6 +30,14 @@ function state:enter()
             SWITCH = "GAME"
         end,
         "un(p)ause", GUI_MED, Color.orange())
+    b:addElement(DRAW_TABLE.GUI, "gui")
+
+    --"Go back" button
+    b = Inv_Button(340, 650,
+        function()
+            SWITCH = "MENU"
+        end,
+        "go (b)ack", GUI_MED, Color.orange())
     b:addElement(DRAW_TABLE.GUI, "gui")
 
     Util.gameElementException()
@@ -50,6 +57,10 @@ function state:update(dt)
     if SWITCH == "GAME" then
         SWITCH = nil
         Gamestate.pop()
+    elseif SWITCH == "MENU" then
+        SWITCH = nil
+        Gamestate.pop()
+        Gamestate.switch(GS.MENU)
     end
 
 end
@@ -62,8 +73,10 @@ end
 
 function state:keypressed(key)
 
-    if key == 'p' then
+    if     key == 'p' then
         SWITCH = "GAME" --Unpause game
+    elseif key == 'b' then
+        SWITCH = "MENU" --Go back to menu
     else
         Util.defaultKeyPressed(key)
     end

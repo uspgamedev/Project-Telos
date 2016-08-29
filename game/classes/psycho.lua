@@ -17,7 +17,7 @@ Psy = Class{
         self.tp = "psycho" --Type of this class
 
         self.r = 20 --Radius of psycho
-        self.color = Color.orange() --Color of psycho
+        self.color = Color.red() --Color of psycho
         self.speedv = 200 --Speed value
         self.speed = Vector(0,0) --Speed vector
 
@@ -81,8 +81,8 @@ function Psy:kill()
     p = self
 
     p.death = true
-    SWITCH = "GAMEOVER"
 
+    SWITCH =  "GAMEOVER"
 end
 
 function Psy:keypressed(key)

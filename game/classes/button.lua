@@ -34,7 +34,7 @@ function Circle_Button:draw()
     --Draws button box
 
     Color.set(b.color)
-    love.graphics.circle("fill", b.x, b.y, b.r)
+    love.graphics.circle("fill", b.pos.x, b.pos.y, b.r)
 
     fwidth  = b.font:getWidth(b.text)  --Width of font
     fheight = b.font:getHeight(b.text) --Height of font

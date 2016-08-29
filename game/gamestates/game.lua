@@ -13,7 +13,6 @@ local SB = require "classes.enemies.simple_ball"
 local state = {}
 
 local p --Psycho
-local switch = nil --What state to go next
 
 function state:enter()
 

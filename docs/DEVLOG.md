@@ -5,6 +5,10 @@ GAME DESIGN DOCUMENT
 DEV LOG
 =======
 
+#### 29/08/2016:
+
+
+
 #### 28/08/2016:
 
 Cleared almost all issues for ver 0.0.0.1!

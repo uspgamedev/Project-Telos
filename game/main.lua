@@ -31,7 +31,7 @@ local Setup = require "setup"
 
 --GAMESTATES
 GS = {
---MENU     = require "gamestates.menu",     --Menu Gamestate
+MENU     = require "gamestates.menu",     --Menu Gamestate
 GAME     = require "gamestates.game",     --Game Gamestate
 PAUSE    = require "gamestates.pause",    --Pause Gamestate
 GAMEOVER = require "gamestates.gameover"  --Gameover Gamestate
@@ -42,6 +42,6 @@ function love.load()
     Setup.config() --Configure your game
 
     Gamestate.registerEvents() --Overwrites love callbacks to call Gamestate as well
-    Gamestate.switch(GS.GAME) --Jump to the inicial state
+    Gamestate.switch(GS.MENU) --Jump to the inicial state
 
 end
