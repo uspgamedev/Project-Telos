@@ -8,15 +8,16 @@ local bullet = {}
 --_dx and _dy are normalized
 Bullet = Class{
     __includes = {CIRC},
-    init = function(self, _x, _y, _dx, _dy,_c)
+    init = function(self, _x, _y, _dx, _dy, _c, _color_table)
+        local r, color
 
-        self.r = 5 --Radius of bullet
-        self.color = _c or Color.blue()--Color of bullet
+        r = 5 --Radius of bullet
+        color = _c or Color.blue()--Color of bullet
+
+        CIRC.init(self, _x, _y, r, color, _color_table, "fill") --Set atributes
 
         self.speedv = 450 --Speed value
         self.speed = Vector(_dx*self.speedv or 0, _dy*self.speedv or 0) --Speed vector
-
-        CIRC.init(self, _x, _y, self.r, self.color, "fill") --Set atributes
 
         self.tp = "bullet" --Type of this class
     end
@@ -53,13 +54,15 @@ end
 --UTILITY FUNCTIONS--
 
 --Create a bullet in the (x,y) position, direction dir, color c and subtype st
-function bullet.create(x, y, dir, c, st)
-    local bullet, subtype
+function bullet.create(x, y, dir, c, color_table, st)
+    local bullet
 
-    subtype = st or "player_bullet"
+    st = st or "player_bullet"
+    d = 8 --Duration of color effect transition
 
-    bullet = Bullet(x, y, dir.x, dir.y, c)
-    bullet:addElement(DRAW_TABLE.L3, subtype)
+    bullet = Bullet(x, y, dir.x, dir.y, c, color_table)
+    bullet:addElement(DRAW_TABLE.L3, st)
+    bullet:startColorLoop(d)
 
     return bullet
 end

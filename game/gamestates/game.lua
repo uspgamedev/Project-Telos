@@ -39,6 +39,8 @@ function state:update(dt)
         Gamestate.switch(GS.GAMEOVER)
     end
 
+    Util.updateTimers(dt)
+
     --Update psycho
     p:update(dt)
     --Update other objects

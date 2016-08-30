@@ -1,4 +1,6 @@
 local Color = require "classes.color.color"
+local Util = require "util"
+local FX = require "fx"
 
 --PRIMITIVE CLASS--
 
@@ -15,6 +17,7 @@ ELEMENT = Class{
         self.exception = false --If this object is not to be removed when clearing tables
         self.invisible = false --If this object is not to be draw
         self.death = false --If true, the object will be deleted next update
+        self.handles = {} --Table containing active fx timer handles for this object
     end,
 
     --Sets id for this element, and add it to a ID table for quick lookup
@@ -45,6 +48,11 @@ ELEMENT = Class{
     destroy = function(self, t) --Destroy this element from all tables (quicker if you send his drawable table, if he has one)
         self:setSubTp(nil) --Removes from Subtype table, if its in one
         self:setId(nil) --Removes from Id table, if its in one
+        if self.handles then
+            for h in pairs(self.handles) do
+                FX_TIMER.cancel(h) --Stops any timers this object has
+            end
+        end
         if t then
             t[self] = nil --If you provide the  drawable table, removes from it quicker
         else
@@ -100,15 +108,45 @@ POS = Class{
     end
 }
 
---Colorful: the object has a color
+--Colorful: the object has a color, and a color table for  transistions
 CLR = Class{
-    init = function(self, _c)
+    init = function(self, _c, _color_table)
         self.color = HSL() --This object main color
         if _c then Color.copy(self.color, _c) end
+        self.color_table = _color_table or {}
     end,
 
     setColor = function(self, _c) --Set object's color
         Color.copy(self.color, _c)
+    end,
+
+    getRandColor = function(self) --Get a random color from color table (except last color), for the getDiffRandColor function
+        local size
+
+        size = Util.tableLen(self.color_table)
+        if size > 0 then
+            return self.color_table[love.math.random(size-1)]
+        else
+            print("Empty color table")
+        end
+    end,
+
+    getDiffRandColor = function(self) --Get a random color from color table different from current
+        local color, size
+
+        color = self:getRandColor()
+        --In case the color is equal, get the last color that couldn't be chosen in the getRandColor function
+        if math.floor(color.h) == math.floor(self.color.h) and
+           math.floor(color.s) == math.floor(self.color.s) and
+           math.floor(color.l) == math.floor(self.color.l) then
+             size = Util.tableLen(self.color_table)
+             color = self.color_table[size]
+        end
+        return color
+    end,
+
+    startColorLoop = function(self, d)
+        FX.colorLoop(self, "color", d)
     end
 }
 
@@ -133,12 +171,12 @@ WTXT = Class{
 --Rectangle: is a positionable and colorful object with width and height
 RECT = Class{
     __includes = {ELEMENT, POS, CLR},
-    init = function(self, _x, _y, _w, _h, _c) --Set rectangle's atributes
+    init = function(self, _x, _y, _w, _h, _c, _color_table) --Set rectangle's atributes
         ELEMENT.init(self)
         POS.init(self, _x, _y)
         self.w = _w or 10 --Width
         self.h = _h or 10 --Height
-        CLR.init(self, _c)
+        CLR.init(self, _c, _color_table)
     end,
 
     resize = function(self, _w, _h) --Change width/height
@@ -151,12 +189,12 @@ RECT = Class{
 --Circle: is a positionable and colorful object with radius
 CIRC = Class{
     __includes = {ELEMENT, POS, CLR},
-    init = function(self, _x, _y, _r, _c, _mode) --Set circle's atributes
+    init = function(self, _x, _y, _r, _c, _color_table, _mode) --Set circle's atributes
         ELEMENT.init(self)
         POS.init(self, _x, _y)
         self.r = _r or 10 --Radius
         self.mode = _mode or "fill" --Circle draw mode
-        CLR.init(self, _c)
+        CLR.init(self, _c, _color_table)
     end,
 
     resize = function(self, _r) --Change radius

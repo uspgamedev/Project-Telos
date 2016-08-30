@@ -6,6 +6,13 @@ local util = {}
 --UTILITIES FUNCTIONS
 ---------------------
 
+--Counts how many entries are on table T
+function util.tableLen(T)
+  local count = 0
+  if not T then return count end
+  for _ in pairs(T) do count = count + 1 end
+  return count
+end
 
 --Clear a single table T with an optional argument mode:
 --  mode == "force": clear all elements, ignoring exceptions
@@ -32,8 +39,8 @@ end
 --  else, just apply exceptions normally and keep them as they are
 function util.clearAllTables(mode)
 
-    for _, t in pairs(DRAW_TABLE) do
-        util.clearTable(t, mode)
+    for _, T in pairs(DRAW_TABLE) do
+        util.clearTable(T, mode)
     end
 
 end
@@ -75,8 +82,8 @@ end
 ---------------------------
 
 --Adds exceptions to all elements in a given table
-function util.addExceptionTable(t)
-  for o in pairs(t) do
+function util.addExceptionTable(T)
+  for o in pairs(T) do
     o.exception = true
   end
 end
@@ -104,8 +111,8 @@ function util.addExceptionSubtype(st)
 end
 
 --Removes exception in all elements in a given table
-function util.rmvExceptionTable(t)
-  for o in pairs(t) do
+function util.rmvExceptionTable(T)
+  for o in pairs(T) do
     o.exception = false
   end
 end
@@ -149,8 +156,8 @@ end
 ---------------------------
 
 --Adds exceptions to all elements in a given table
-function util.addInvisibleTable(t)
-  for o in pairs(t) do
+function util.addInvisibleTable(T)
+  for o in pairs(T) do
     o.invisible = true
   end
 end
@@ -173,8 +180,8 @@ function util.addInvisibleSubtype(st)
 end
 
 --Removes invisible in all elements in a given table
-function util.rmvInvisibleTable(t)
-  for o in pairs(t) do
+function util.rmvInvisibleTable(T)
+  for o in pairs(T) do
     o.invisible = false
   end
 end
@@ -203,10 +210,10 @@ end
 --------------------
 
 --Update all objects in a table
-function util.updateTable(dt, t)
+function util.updateTable(dt, T)
 
-    if not t then return end
-    for o in pairs(t) do
+    if not T then return end
+    for o in pairs(T) do
         o:update(dt)
     end
 
@@ -217,11 +224,20 @@ function util.updateSubTp(dt, sb)
     util.updateTable(dt, SUBTP_TABLE[sb])
 end
 
---Iterate through a table and destroys any element with the death flag on
-function util.killTable(t)
+function util.updateTimers(dt)
+    GAME_TIMER.update(dt)
+    FX_TIMER.update(dt)
+end
 
-    if not t then return end
-    for o in pairs(t) do
+----------------
+--KILL FUNCTIONS
+----------------
+
+--Iterate through a table and destroys any element with the death flag on
+function util.killTable(T)
+
+    if not T then return end
+    for o in pairs(T) do
         if o.death then o:destroy() end
     end
 
@@ -273,7 +289,6 @@ function util.defaultKeyPressed(key)
     end
 
 end
-
 
 --Return functions
 return util

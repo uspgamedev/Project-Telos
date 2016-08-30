@@ -1,5 +1,6 @@
 require "classes.primitive"
 local Color = require "classes.color.color"
+local Hsl   = require "classes.color.hsl"
 local Util = require "util"
 --SIMPLE BALL CLASS--
 --[[Simple circle blue enemy that just moves around]]
@@ -8,23 +9,28 @@ local enemy = {}
 
 Simple_Ball = Class{
     __includes = {CIRC},
-    init = function(self, _x, _y)
-        local dx, dy
-        CIRC.init(self, _x, _y, self.r, self.color, "fill") --Set atributes
+    init = function(self, _x, _y, _dir)
+        local dx, dy, r, color, color_table
+
+        r = 20 --Radius of enemy
+        color = HSL(Hsl.stdv(213,100,54)) --Color of psycho
+        color_table = {
+            HSL(Hsl.stdv(201,100,50)),
+            HSL(Hsl.stdv(239,100,26)),
+            HSL(Hsl.stdv(220,78,30)),
+            HSL(Hsl.stdv(213,100,54))
+        }
+        CIRC.init(self, _x, _y, r, color, color_table, "fill") --Set atributes
 
         ELEMENT.setSubTp(self, "enemies")
-        self.tp = "simple_ball" --Type of this class
 
-        self.r = 20 --Radius of enemy
-        self.color = Color.blue() --Color of psycho
-
+        --Normalize direction and set speed
         self.speedv = 100 --Speed value
-        dx = love.math.random()*2 - 1 --Rand value between [-1,1]
-        dy = love.math.random()*2 - 1 --Rand value between [-1,1]
-        self.speed = Vector(dx, dy) --Speed vector
+        self.speed = Vector(_dir.x, _dir.y) --Speed vector
         self.speed = self.speed:normalized()*self.speedv
 
         self.enter = false --If this enemy has already entered the game screen
+        self.tp = "simple_ball" --Type of this class
     end
 }
 
@@ -61,11 +67,19 @@ end
 
 --UTILITY FUNCTIONS--
 
-function enemy.create(x, y)
-    local e
+function enemy.create(x, y, dir)
+    local e, d, direction
 
-    e = Simple_Ball(x, y)
+    d = 6 -- Duration of color transition
+    if not dir then --Get random direction
+        direction = Vector()
+        direction.x = love.math.random()*2 - 1 --Rand value between [-1,1]
+        direction.y = love.math.random()*2 - 1 --Rand value between [-1,1]
+    end
+
+    e = Simple_Ball(x, y, dir or direction)
     e:addElement(DRAW_TABLE.L4)
+    e:startColorLoop(d)
 
     return e
 end

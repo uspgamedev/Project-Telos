@@ -40,6 +40,7 @@ function hsl.stdv(h,s,l,a)
   sh = h*255/360
   ss = s*255/100
   sl = l*255/100
+  a = a or 255
 
   return sh, ss, sl, a
 end

@@ -63,6 +63,8 @@ function state:update(dt)
         Gamestate.switch(GS.MENU)
     end
 
+    Util.updateTimers(dt)
+
 end
 
 function state:draw()

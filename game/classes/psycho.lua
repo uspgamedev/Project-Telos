@@ -1,6 +1,7 @@
 require "classes.primitive"
 local Bullet = require "classes.bullet"
 local Color = require "classes.color.color"
+local Hsl = require "classes.color.hsl"
 local Util = require "util"
 --PSYCHO CLASS--
 --[[Our hero... or is it VILLAIN??!!]]
@@ -10,20 +11,30 @@ local psycho = {}
 Psy = Class{
     __includes = {CIRC},
     init = function(self, _x, _y)
-        CIRC.init(self, _x, _y, self.r, self.color, "fill") --Set atributes
+        local color, color_table, r
+
+        color = HSL(Hsl.stdv(271,75,52)) --Color of psycho
+        color_table = {
+            HSL(Hsl.stdv(51,100,50)),
+            HSL(Hsl.stdv(355,89,48)),
+            HSL(Hsl.stdv(95, 89,42)),
+            HSL(Hsl.stdv(207,81,49)),
+            HSL(Hsl.stdv(271,75,52))
+        } --Color table
+        r = 20 --Radius of psycho
+
+        CIRC.init(self, _x, _y, r, color, color_table, "fill") --Set atributes
 
         ELEMENT.setSubTp(self, "player")
         ELEMENT.setId(self, "psycho")
-        self.tp = "psycho" --Type of this class
 
-        self.r = 20 --Radius of psycho
-        self.color = Color.red() --Color of psycho
         self.speedv = 200 --Speed value
         self.speed = Vector(0,0) --Speed vector
 
         self.shoot_tick = 0
-        self.shoot_fps = .2
+        self.shoot_fps = .15
 
+        self.tp = "psycho" --Type of this class
 
     end
 }
@@ -31,13 +42,21 @@ Psy = Class{
 --CLASS FUNCTIONS--
 
 function Psy:shoot(x,y)
-    local p, bullet, dir, c
+    local p, bullet, dir, c, color_table
     p = self
 
-    c = Color.pink()
+    c = HSL(Hsl.hsl(p.color)) --COlor of bullet is current psycho color
+    color_table = {
+        HSL(Hsl.stdv(51,100,50)),
+        HSL(Hsl.stdv(355,89,48)),
+        HSL(Hsl.stdv(95, 89,42)),
+        HSL(Hsl.stdv(207,81,49)),
+        HSL(Hsl.stdv(271,75,52))
+    }
+
     dir = Vector(x-p.pos.x, y-p.pos.y)
     dir = dir:normalized()
-    Bullet.create(p.pos.x, p.pos.y, dir, c, "player_bullet")
+    Bullet.create(p.pos.x, p.pos.y, dir, c, color_table, "player_bullet")
 
 end
 
@@ -112,10 +131,13 @@ end
 --UTILITY FUNCTIONS--
 
 function psycho.create(x, y)
-    local p
+    local p, duration
+
+    duration = 3 --Duration of color transition effect
 
     p = Psy(x, y)
     p:addElement(DRAW_TABLE.L4)
+    p:startColorLoop(duration)
 
     return p
 end

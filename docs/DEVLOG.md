@@ -5,13 +5,21 @@ GAME DESIGN DOCUMENT
 DEV LOG
 =======
 
+#### 30/08/2016:
+
+Started and finished color transition task!
+Game objects now transition between pre-defined color tables that each object has.
+
 #### 29/08/2016:
 
-
+Cleared all issues for version 0.0.0.1!
+Started using a kanban and fenied next iteration to be three weeks, with the main task being:
+-Level Script: create the way of scripting levels, and make a simple test level to test it.
+-Color transition: make objects have color transitions.
 
 #### 28/08/2016:
 
-Cleared almost all issues for ver 0.0.0.1!
+Cleared almost all issues for ver 0.0.0.1!.
 Now a simple version of 3 gamestates are made (still needs main menu)!
 Check the commits for full changes
 

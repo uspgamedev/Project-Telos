@@ -25,7 +25,8 @@ function setup.config()
     SWITCH = nil --What state to go next
 
     --TIMERS--
-    Game_Timer = Timer.new()  --Timer for all game-related timing stuff
+    GAME_TIMER = Timer.new()  --General Timer
+    FX_TIMER = Timer.new() --Effects Timer (for tweening mostly)
 
     --INITIALIZING TABLES--
     --Drawing Tables
