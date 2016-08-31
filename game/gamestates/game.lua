@@ -6,7 +6,9 @@ local Draw = require "draw"
 --ENEMIES--
 local SB = require "classes.enemies.simple_ball"
 
---BUTTON FUNCTIONS--
+--LEVEL FUNCTIONS--
+
+local level1 = require "levels.level1"
 
 --------------------
 
@@ -17,6 +19,7 @@ local p --Psycho
 function state:enter()
 
     p = Psycho.create(400,400)
+    level1.start()
 
 end
 

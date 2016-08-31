@@ -37,6 +37,9 @@ PAUSE    = require "gamestates.pause",    --Pause Gamestate
 GAMEOVER = require "gamestates.gameover"  --Gameover Gamestate
 }
 
+--LEVELS
+require "levels.level1"
+
 function love.load()
 
     Setup.config() --Configure your game

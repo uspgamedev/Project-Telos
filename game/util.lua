@@ -225,8 +225,8 @@ function util.updateSubTp(dt, sb)
 end
 
 function util.updateTimers(dt)
-    GAME_TIMER.update(dt)
-    FX_TIMER.update(dt)
+    GAME_TIMER:update(dt)
+    FX_TIMER:update(dt)
 end
 
 ----------------
