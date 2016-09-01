@@ -4,26 +4,17 @@ local LM = require "level_manager"
 
 --LEVEL 1--
 
+--Level script
 function script()
     --Start Level
-    Formation.fromLeft(SB, 1, 10, "center")
-    print("1")
+    Formation.fromLeft("distribute", SB, 5)
+    LM.wait(4)
+    Formation.fromLeft("distribute", SB, 7)
     LM.wait("noenemies")
 
-    Formation.fromLeft(SB, 2, 10, "center")
-    print("2")
-    LM.wait("noenemies")
+    print("end of level")
 
-    Formation.fromLeft(SB, 3, 10, "center")
-    print("3")
-    LM.wait("noenemies")
-
-    Formation.fromLeft(SB, 4, 10, "center")
-    print("4")
-    LM.wait("noenemies")
-
-    Formation.fromLeft(SB, 8, 10, "center")
-    print("5")
+    LM.stop()
 
 end
 

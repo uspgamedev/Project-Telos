@@ -25,7 +25,7 @@ Simple_Ball = Class{
         ELEMENT.setSubTp(self, "enemies")
 
         --Normalize direction and set speed
-        self.speedv = 100 --Speed value
+        self.speedv = 140 --Speed value
         self.speed = Vector(_dir.x, _dir.y) --Speed vector
         self.speed = self.speed:normalized()*self.speedv
 
