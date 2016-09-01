@@ -74,7 +74,7 @@ function state:keypressed(key)
     local x, y
     p:keypressed(key) --Key handling of psycho
 
-    if key == 'p' then --Pause game
+    if key == 'escape' or key == 'p' then --Pause game
         SWITCH = "PAUSE"
     elseif key == 't' then
         x = 50 + love.math.random()*(WINDOW_WIDTH-100)

@@ -73,7 +73,7 @@ end
 
 function state:keypressed(key)
 
-    if     key == 'p' then
+    if     key == 'p' or key == 'escape' then
         SWITCH = "GAME" --Unpause game
     elseif key == 'b' then
         SWITCH = "MENU" --Go back to menu

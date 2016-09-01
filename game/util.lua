@@ -282,7 +282,7 @@ end
 --Get any key that is pressed and checks for generic events
 function util.defaultKeyPressed(key)
 
-    if key == 'escape' or key == 'x' then
+    if  key == 'x' then
         util.quit()
     elseif key == 'b' then
         util.toggleDebug()
