@@ -1,31 +1,31 @@
-require "classes.primitive"
-local Color = require "classes.color.color"
-local Util = require "util"
+local Formation = require "formation"
+local SB = require "classes.enemies.simple_ball"
+local LM = require "level_manager"
+
 --LEVEL 1--
 
-local level = {}
-
---Level script
-function level_script()
+function script()
     --Start Level
-    print("MY LEVEL")
-    coroutine.yield()
-    print("IS AWESOME")
+    Formation.fromLeft(SB, 1, 10, "center")
+    print("1")
+    LM.wait("noenemies")
+
+    Formation.fromLeft(SB, 2, 10, "center")
+    print("2")
+    LM.wait("noenemies")
+
+    Formation.fromLeft(SB, 3, 10, "center")
+    print("3")
+    LM.wait("noenemies")
+
+    Formation.fromLeft(SB, 4, 10, "center")
+    print("4")
+    LM.wait("noenemies")
+
+    Formation.fromLeft(SB, 8, 10, "center")
+    print("5")
+
 end
-
---Start level (level manager)
-function level.start()
-    GAME_TIMER:script(function(wait)
-        co = coroutine.create(level_script)
-
-        --Start level
-        coroutine.resume(co)
-        wait(5)
-        coroutine.resume(co)
-    end)
-end
-
-
 
 --Return level function
-return level
+return script

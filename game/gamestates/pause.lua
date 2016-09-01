@@ -9,8 +9,6 @@ local Draw = require "draw"
 
 --BUTTON FUNCTIONS--
 
-local but1 = require "buttons.renato_button"
-
 --------------------
 
 local state = {}

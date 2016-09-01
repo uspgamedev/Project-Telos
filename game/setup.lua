@@ -24,6 +24,9 @@ function setup.config()
     WINDOW_HEIGHT = love.graphics.getHeight() --Height of the game window
     SWITCH = nil --What state to go next
 
+    COROUTINE = nil --Current coroutine
+    COROUTINE_HANDLE = nil --Handle timer for current coroutine
+
     --TIMERS--
     GAME_TIMER = Timer.new()  --General Timer
     FX_TIMER = Timer.new() --Effects Timer (for tweening mostly)

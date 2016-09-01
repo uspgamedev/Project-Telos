@@ -1,6 +1,7 @@
 local Psycho = require "classes.psycho"
 local Util = require "util"
 local Draw = require "draw"
+local Level = require "level_manager"
 --MODULE FOR THE GAMESTATE: GAME--
 
 --ENEMIES--
@@ -19,7 +20,7 @@ local p --Psycho
 function state:enter()
 
     p = Psycho.create(400,400)
-    level1.start()
+    Level.start(level1)
 
 end
 
@@ -39,6 +40,9 @@ function state:update(dt)
     elseif SWITCH == "GAMEOVER" then
         SWITCH = nil
         Util.gameElementException("GAMEOVER")
+
+        Level.stop()
+
         Gamestate.switch(GS.GAMEOVER)
     end
 

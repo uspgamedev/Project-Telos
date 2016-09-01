@@ -84,6 +84,11 @@ function enemy.create(x, y, dir)
     return e
 end
 
+--Return this enemy radius
+function enemy.radius()
+    return 20
+end
+
 --LOCAL FUNCTION--
 
 --Checks if a circular enemy has entered (even if partially) inside the game screen

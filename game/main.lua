@@ -14,6 +14,7 @@ require "classes.color.rgb"
 require "classes.color.hsl"
 
 --enemies
+require "formation"
 require "classes.enemies.simple_ball"
 
 --other
