@@ -38,10 +38,10 @@ function level_manager.resume()
 
     --Resumes coroutine only when there aren't any enemies on screen
     if arg == "noenemies" then
-        --Checks every 2 seconds how many enemies there are
-        COROUTINE_HANDLE = GAME_TIMER:every(2,
+        --Checks every .02 seconds how many enemies there are
+        COROUTINE_HANDLE = GAME_TIMER:every(.02,
         function()
-            if Util.tableLen(SUBTP_TABLE["enemies"]) == 0 then
+            if Util.tableEmpty(SUBTP_TABLE["enemies"]) then
                 GAME_TIMER:cancel(COROUTINE_HANDLE)
                 level_manager.resume()
             end

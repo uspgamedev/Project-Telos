@@ -25,7 +25,7 @@ Simple_Ball = Class{
         ELEMENT.setSubTp(self, "enemies")
 
         --Normalize direction and set speed
-        self.speedv = 140 --Speed value
+        self.speedv = 200 --Speed value
         self.speed = Vector(_dir.x, _dir.y) --Speed vector
         self.speed = self.speed:normalized()*self.speedv
 
@@ -95,9 +95,9 @@ end
 function isInside(o)
 
     if    o.pos.x + o.r >= 0
-      and o.pos.x - o.r <= WINDOW_WIDTH
+      and o.pos.x - o.r <= ORIGINAL_WINDOW_WIDTH
       and o.pos.y + o.r >= 0
-      and o.pos.y - o.r <= WINDOW_HEIGHT
+      and o.pos.y - o.r <= ORIGINAL_WINDOW_HEIGHT
       then
           return true
       end

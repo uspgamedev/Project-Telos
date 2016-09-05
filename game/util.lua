@@ -1,3 +1,5 @@
+local FreeRes = require "FreeRes"
+
 --MODULE WITH LOGICAL, MATHEMATICAL AND USEFUL STUFF--
 
 local util = {}
@@ -12,6 +14,12 @@ function util.tableLen(T)
   if not T then return count end
   for _ in pairs(T) do count = count + 1 end
   return count
+end
+
+--Chcks if a tale is empty (true if it doesn't exist)
+function util.tableEmpty(T)
+  if not T then return true end
+  return not next(T)
 end
 
 --Clear a single table T with an optional argument mode:
@@ -272,10 +280,34 @@ function util.quit()
 
 end
 
---Toggles DEBUG
+--Toggles debug mode
 function util.toggleDebug()
 
     DEBUG = not DEBUG
+
+end
+
+--Toggles fullscreen
+function util.toggleFullscreen()
+
+    --Update global vars
+    if love.window.getFullscreen() then
+        --Go back to previous window configuration
+        love.window.setFullscreen(false)
+        WINDOW_WIDTH = PREVIOUS_WINDOW_WIDTH
+        WINDOW_HEIGHT = PREVIOUS_WINDOW_HEIGHT
+        love.window.setMode(WINDOW_WIDTH, WINDOW_HEIGHT, {resizable = true})
+        FreeRes.setScreen(1)
+    else
+        --Go to fullscreen mode, saving last configuration for eventual return
+        PREVIOUS_WINDOW_WIDTH = WINDOW_WIDTH
+        PREVIOUS_WINDOW_HEIGHT = WINDOW_HEIGHT
+        love.window.setFullscreen(true)
+        WINDOW_WIDTH = love.graphics.getWidth()
+        WINDOW_HEIGHT = love.graphics.getHeight()
+        FreeRes.setScreen(1)
+    end
+
 
 end
 
@@ -284,6 +316,8 @@ function util.defaultKeyPressed(key)
 
     if  key == 'x' then
         util.quit()
+    elseif key == 'f6' then
+        util.toggleFullscreen()
     elseif key == 'b' then
         util.toggleDebug()
     end

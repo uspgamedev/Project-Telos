@@ -19,13 +19,14 @@ local p --Psycho
 
 function state:enter()
 
-    p = Psycho.create(400,400)
+    p = Psycho.create(ORIGINAL_WINDOW_WIDTH/2,ORIGINAL_WINDOW_HEIGHT/2)
     Level.start(level1)
 
 end
 
 function state:leave()
 
+    Level.stop()
     Util.clearAllTables("remove")
 
 end
@@ -40,8 +41,6 @@ function state:update(dt)
     elseif SWITCH == "GAMEOVER" then
         SWITCH = nil
         Util.gameElementException("GAMEOVER")
-
-        Level.stop()
 
         Gamestate.switch(GS.GAMEOVER)
     end
@@ -77,8 +76,8 @@ function state:keypressed(key)
     if key == 'escape' or key == 'p' then --Pause game
         SWITCH = "PAUSE"
     elseif key == 't' then
-        x = 50 + love.math.random()*(WINDOW_WIDTH-100)
-        y = 50 + love.math.random()*(WINDOW_HEIGHT-100)
+        x = 50 + love.math.random()*(ORIGINAL_WINDOW_WIDTH-100)
+        y = 50 + love.math.random()*(ORIGINAL_WINDOW_HEIGHT-100)
         SB.create(x, y)
     else
         Util.defaultKeyPressed(key)

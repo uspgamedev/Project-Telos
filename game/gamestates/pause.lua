@@ -3,6 +3,7 @@ local Psycho = require "classes.psycho"
 local Color  = require "classes.color.color"
 local Util = require "util"
 local Draw = require "draw"
+local Level = require "level_manager"
 
 
 --MODULE FOR THE GAMESTATE: PAUSE--
@@ -38,8 +39,6 @@ function state:enter()
         "go (b)ack", GUI_MED, Color.orange())
     b:addElement(DRAW_TABLE.GUI, "gui")
 
-    Util.gameElementException()
-
 end
 
 function state:leave()
@@ -54,6 +53,7 @@ function state:update(dt)
 
     if SWITCH == "GAME" then
         SWITCH = nil
+        Util.gameElementException()
         Gamestate.pop()
     elseif SWITCH == "MENU" then
         SWITCH = nil
@@ -84,7 +84,8 @@ function state:keypressed(key)
 end
 
 function state:mousepressed(x, y, button)
-
+    local scale
+    
     if button == 1 then  --Left mouse button
         Button.checkCollision(x,y)
     end

@@ -1,3 +1,4 @@
+local FreeRes = require "FreeRes"
 --MODULE FOR SETUP STUFF--
 
 local setup = {}
@@ -8,7 +9,6 @@ local setup = {}
 
 --Set game's global variables, random seed, window configuration and anything else needed
 function setup.config()
-    local sucess --Indicates sucess on window configuration
 
     --IMAGES--
     --PIXEL = love.graphics.newImage("assets/pixel.png") --Example image
@@ -20,8 +20,14 @@ function setup.config()
     DEBUG = true --DEBUG mode status
     BUTTON_LOCK = false --Blocks buttons to be pressed
     SWITCH = nil --Which gamestate to switch next
-    WINDOW_WIDTH = love.graphics.getWidth() --Width of the game window
-    WINDOW_HEIGHT = love.graphics.getHeight() --Height of the game window
+
+    WINDOW_WIDTH = love.graphics.getWidth() --Current width of the game window
+    WINDOW_HEIGHT = love.graphics.getHeight() --Current height of the game window
+    ORIGINAL_WINDOW_WIDTH = love.graphics.getWidth() --Default width of the game window
+    ORIGINAL_WINDOW_HEIGHT = love.graphics.getHeight() --Default height of the game window
+    PREVIOUS_WINDOW_WIDTH = love.graphics.getWidth() --Window width before fullscreen
+    PREVIOUS_WINDOW_HEIGHT = love.graphics.getHeight() --Window height before fullscreen
+
     SWITCH = nil --What state to go next
 
     COROUTINE = nil --Current coroutine
@@ -47,7 +53,8 @@ function setup.config()
     ID_TABLE = {} --Table with elements with Ids (for fast lookup)
 
     --WINDOW CONFIG--
-    success = love.window.setMode(WINDOW_WIDTH, WINDOW_HEIGHT, {borderless = not DEBUG})
+    love.window.setMode(WINDOW_WIDTH, WINDOW_HEIGHT, {resizable = true})
+    FreeRes.setScreen(1)
 
     --FONT CONFIG--
     GUI_BIG = love.graphics.newFont("assets/fonts/vanadine_bold.ttf", 60)

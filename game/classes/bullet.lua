@@ -16,7 +16,7 @@ Bullet = Class{
 
         CIRC.init(self, _x, _y, r, color, _color_table, "fill") --Set atributes
 
-        self.speedv = 450 --Speed value
+        self.speedv = 500 --Speed value
         self.speed = Vector(_dx*self.speedv or 0, _dy*self.speedv or 0) --Speed vector
 
         self.tp = "bullet" --Type of this class
@@ -43,9 +43,9 @@ function Bullet:update(dt)
     b.pos = b.pos + dt*b.speed
 
     if not b.death and
-       (b.pos.x > WINDOW_WIDTH or
+       (b.pos.x > ORIGINAL_WINDOW_WIDTH or
        b.pos.x < 0 or
-       b.pos.y > WINDOW_HEIGHT or
+       b.pos.y > ORIGINAL_WINDOW_HEIGHT or
        b.pos.y < 0) then
            b.death = true
     end

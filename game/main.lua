@@ -14,7 +14,6 @@ require "classes.color.rgb"
 require "classes.color.hsl"
 
 --enemies
-require "formation"
 require "classes.enemies.simple_ball"
 
 --other
@@ -27,7 +26,14 @@ Button = require "classes.button"
 --MY MODULES
 require "util"
 require "draw"
+require "formation"
+require "level_manager"
+require "fx"
 local Setup = require "setup"
+
+--IMPORTED MODULES
+local FreeRes = require "FreeRes"
+
 
 
 --GAMESTATES
@@ -47,5 +53,14 @@ function love.load()
 
     Gamestate.registerEvents() --Overwrites love callbacks to call Gamestate as well
     Gamestate.switch(GS.MENU) --Jump to the inicial state
+
+end
+
+--Called when user resizes the screen
+function love.resize(w, h)
+
+    WINDOW_WIDTH = w
+    WINDOW_HEIGHT = h
+    FreeRes.setScreen(1)
 
 end

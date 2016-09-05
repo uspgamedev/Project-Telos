@@ -1,5 +1,6 @@
 require "classes.primitive"
 local Color = require "classes.color.color"
+local FreeRes = require "FreeRes"
 --BUTTON CLASS --
 
 local button = {}
@@ -98,6 +99,15 @@ end
 
 --Check if a mouse click collides with any button
 function button.checkCollision(x,y)
+    local w, h, scale
+
+    --Fix mouse position click to respective distance
+    w, h = FreeRes.windowDistance()
+    scale = FreeRes.scale()
+    x = x - w
+    x = x*(1/scale)
+    y = y - h
+    y = y*(1/scale)
 
     checkCircleButtonCollision(x,y)
 

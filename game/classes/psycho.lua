@@ -3,6 +3,7 @@ local Bullet = require "classes.bullet"
 local Color = require "classes.color.color"
 local Hsl = require "classes.color.hsl"
 local Util = require "util"
+local FreeRes = require "FreeRes"
 --PSYCHO CLASS--
 --[[Our hero... or is it VILLAIN??!!]]
 
@@ -21,18 +22,18 @@ Psy = Class{
             HSL(Hsl.stdv(207,81,49)),
             HSL(Hsl.stdv(271,75,52))
         } --Color table
-        r = 20 --Radius of psycho
+        r = 22 --Radius of psycho
 
         CIRC.init(self, _x, _y, r, color, color_table, "fill") --Set atributes
 
         ELEMENT.setSubTp(self, "player")
         ELEMENT.setId(self, "psycho")
 
-        self.speedv = 200 --Speed value
+        self.speedv = 250 --Speed value
         self.speed = Vector(0,0) --Speed vector
 
-        self.shoot_tick = 0
-        self.shoot_fps = .15
+        self.shoot_tick = 0 --Bullet "cooldown" timer (for shooting repeatedly)
+        self.shoot_fps = .2 --How fast to shoot bullet
 
         self.tp = "psycho" --Type of this class
 
@@ -42,8 +43,16 @@ Psy = Class{
 --CLASS FUNCTIONS--
 
 function Psy:shoot(x,y)
-    local p, bullet, dir, c, color_table
+    local p, bullet, dir, c, color_table, w, h, scale
     p = self
+
+    --Fix mouse position click to respective distance
+    w, h = FreeRes.windowDistance()
+    scale = FreeRes.scale()
+    x = x - w
+    x = x*(1/scale)
+    y = y - h
+    y = y*(1/scale)
 
     c = HSL(Hsl.hsl(p.color)) --COlor of bullet is current psycho color
     color_table = {
@@ -174,20 +183,22 @@ end
 
 --Checks if psycho has leaved (even if partially) the game screen and returns correction vector
 function isOutside(o)
-    local v
+    local v, r, scale
+
+    scale = FreeRes.scale()
 
     v = Vector(0,0)
 
     --X position
     if     o.pos.x - o.r <= 0 then
         v = v + Vector(1,0)
-    elseif o.pos.x + o.r >= WINDOW_WIDTH then
+    elseif o.pos.x + o.r >= ORIGINAL_WINDOW_WIDTH then
         v = v + Vector(-1,0)
     end
     --Y position
     if o.pos.y - o.r <= 0 then
         v = v + Vector(0,1)
-    elseif o.pos.y + o.r >= WINDOW_HEIGHT then
+    elseif o.pos.y + o.r >= ORIGINAL_WINDOW_HEIGHT then
         v = v + Vector(0,-1)
     end
 
