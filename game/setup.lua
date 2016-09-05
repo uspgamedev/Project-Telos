@@ -53,7 +53,7 @@ function setup.config()
     ID_TABLE = {} --Table with elements with Ids (for fast lookup)
 
     --WINDOW CONFIG--
-    love.window.setMode(WINDOW_WIDTH, WINDOW_HEIGHT, {resizable = true})
+    love.window.setMode(WINDOW_WIDTH, WINDOW_HEIGHT, {resizable = true, minwidth = 800, minheight = 600})
     FreeRes.setScreen(1)
 
     --FONT CONFIG--

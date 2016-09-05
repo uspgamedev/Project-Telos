@@ -296,7 +296,7 @@ function util.toggleFullscreen()
         love.window.setFullscreen(false)
         WINDOW_WIDTH = PREVIOUS_WINDOW_WIDTH
         WINDOW_HEIGHT = PREVIOUS_WINDOW_HEIGHT
-        love.window.setMode(WINDOW_WIDTH, WINDOW_HEIGHT, {resizable = true})
+        love.window.setMode(WINDOW_WIDTH, WINDOW_HEIGHT, {resizable = true, minwidth = 800, minheight = 600})
         FreeRes.setScreen(1)
     else
         --Go to fullscreen mode, saving last configuration for eventual return
