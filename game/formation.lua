@@ -8,7 +8,7 @@ local formation = {}
 --top: start placing from the top , with an optional screen margin
 --bottom: start placing from the bottom, with an optional screen margin
 function formation.fromHorizontal(side, mode, enemy, number, enemy_x_margin, enemy_y_margin, screen_margin)
-    local x, y, d, r, dir, half
+    local x, y, r, dir, half
     r = enemy.radius()
 
     if side == "left" or side == "l" then
@@ -21,19 +21,18 @@ function formation.fromHorizontal(side, mode, enemy, number, enemy_x_margin, ene
 
     --Default values
     screen_margin = screen_margin or 0
-    enemy_x_margin = enemy_x_margin or 10
-    enemy_y_margin = enemy_y_margin or 0
+    enemy_x_margin = enemy_x_margin or 0
+    enemy_y_margin = enemy_y_margin or 10 + 2*r
     number = number or 3
 
     --Center mode
     if     mode == "center" then
         half = math.floor(number/2)
-        d = enemy_x_margin + 2*r
-        y = ORIGINAL_WINDOW_HEIGHT/2 - (number-1)/2 *d + screen_margin
+        y = ORIGINAL_WINDOW_HEIGHT/2 - (number-1)/2*enemy_y_margin + screen_margin
         --Placing from the center
         for i=1, number do
-            enemy.create(x - math.abs(i-half-1)*(enemy_y_margin + 2*r)*dir.x, y, dir)
-            y = y + d
+            enemy.create(x - math.abs(i-half-1)*enemy_x_margin*dir.x, y, dir)
+            y = y + enemy_y_margin
         end
     --Distribute mode
     elseif mode == "distribute" then
@@ -47,7 +46,8 @@ function formation.fromHorizontal(side, mode, enemy, number, enemy_x_margin, ene
         y = screen_margin + r
         for i=1, number do
             enemy.create(x, y, dir)
-            y = y + enemy_margin + 2*r
+            y = y + enemy_y_margin
+            x = x - enemy_x_margin*dir.x
         end
 
     --Bottom mode
@@ -55,18 +55,19 @@ function formation.fromHorizontal(side, mode, enemy, number, enemy_x_margin, ene
         y = ORIGINAL_WINDOW_HEIGHT - screen_margin - r
         for i=1, number do
             enemy.create(x, y, dir)
-            y = y - enemy_margin - 2*r
+            y = y - enemy_y_margin
+            x = x - enemy_x_margin*dir.x
         end
     end
 end
 
 --Formation of a line of enemies coming from the top or bottom, with several modes:
---center (default): place enemies from the center of the screen, spaced with enemy_margin
+--center (default): place enemies from the center of the screen, spaced with enemy margin and can be moved with screen_margin
 --distribute: place balls equally distributed on the screen side
 --left: start placing from the left , with an optional screen margin
 --right: start placing from the right, with an optional screen margin
 function formation.fromVertical(side, mode, enemy, number, enemy_x_margin, enemy_y_margin, screen_margin)
-    local x, y, d, r, dir
+    local x, y, r, dir, half
     r = enemy.radius()
 
     if side == "top" or side == "t" then
@@ -79,17 +80,18 @@ function formation.fromVertical(side, mode, enemy, number, enemy_x_margin, enemy
 
     --Default values
     screen_margin = screen_margin or 0
-    enemy_margin = enemy_margin or 10
+    enemy_x_margin = enemy_x_margin or 10 + 2*r
+    enemy_y_margin = enemy_y_margin or 0
     number = number or 3
 
     --Center mode
     if     mode == "center" then
-        d = enemy_margin + 2*r
-        x = ORIGINAL_WINDOW_WIDTH/2 - (number-1)/2 *d
+        half = math.floor(number/2)
+        x = ORIGINAL_WINDOW_WIDTH/2 - (number-1)/2*enemy_x_margin + screen_margin
         --Placing from the center
         for i=1, number do
-            enemy.create(x, y, dir)
-            x = x + d
+            enemy.create(x, y - math.abs(i-half-1)*enemy_y_margin*dir.y, dir)
+            x = x + enemy_x_margin
         end
     --Distribute mode
     elseif mode == "distribute" then
@@ -103,7 +105,8 @@ elseif mode == "left" then
         x = screen_margin + r
         for i=1, number do
             enemy.create(x, y, dir)
-            x = x + enemy_margin + 2*r
+            x = x + enemy_x_margin
+            y = y - enemy_y_margin*dir.y
         end
 
     --Right mode
@@ -111,7 +114,8 @@ elseif mode == "right" then
         x = ORIGINAL_WINDOW_WIDTH - screen_margin - r
         for i=1, number do
             enemy.create(x, y, dir)
-            x = x - enemy_margin - 2*r
+            x = x - enemy_x_margin
+            y = y - enemy_y_margin*dir.y
         end
     end
 end
