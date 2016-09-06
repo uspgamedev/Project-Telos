@@ -64,3 +64,8 @@ function love.resize(w, h)
     FreeRes.setScreen(1)
 
 end
+
+--Called when screen loses or receives focus
+function love.focus(f)
+    FOCUS = f
+end

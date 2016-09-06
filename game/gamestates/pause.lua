@@ -85,7 +85,7 @@ end
 
 function state:mousepressed(x, y, button)
     local scale
-    
+
     if button == 1 then  --Left mouse button
         Button.checkCollision(x,y)
     end

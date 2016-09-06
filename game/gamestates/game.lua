@@ -35,7 +35,7 @@ end
 function state:update(dt)
 
     --Change state if required
-    if SWITCH == "PAUSE" then
+    if SWITCH == "PAUSE" or not FOCUS then
         SWITCH = nil
         Gamestate.push(GS.PAUSE)
     elseif SWITCH == "GAMEOVER" then

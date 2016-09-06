@@ -28,6 +28,7 @@ function setup.config()
     PREVIOUS_WINDOW_WIDTH = love.graphics.getWidth() --Window width before fullscreen
     PREVIOUS_WINDOW_HEIGHT = love.graphics.getHeight() --Window height before fullscreen
 
+    FOCUS = true --If game screen is focused
     SWITCH = nil --What state to go next
 
     COROUTINE = nil --Current coroutine
