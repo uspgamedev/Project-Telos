@@ -132,5 +132,25 @@ function formation.circle(enemy, number, radius)
     end
 end
 
+--Create a single enemy starting in a (x,y) position and moving in a direction
+function formation.single(enemy, x, y, dx, dy)
+    local dir
+
+    dir = Vector(dx, dy)
+    enemy.create(x, y, dir)
+end
+
+--Create a line of enemies starting in a (x,y) position and moving in a direction
+function formation.line(enemy, number, x, y, dx, dy, enemy_margin)
+    local dir, n_dir
+
+    enemy_margin = enemy_margin or 60
+    dir = Vector(dx, dy)
+    n_dir = dir:normalized()
+    for i=0, number-1 do
+        enemy.create(x - i*n_dir.x*enemy_margin, y - i*n_dir.y*enemy_margin, dir)
+    end
+end
+
 --Return functions
 return formation
