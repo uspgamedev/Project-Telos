@@ -1,6 +1,5 @@
 local Color = require "classes.color.color"
 local Util = require "util"
-local FX = require "fx"
 
 --PRIMITIVE CLASS--
 

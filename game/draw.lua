@@ -12,21 +12,21 @@ function draw.allTables()
     --Makes transformations regarding screen curretn size
     FreeRes.transform()
 
-    DrawTable(DRAW_TABLE.BG)
+    DrawTable(DRAW_TABLE.BG) --Background
 
-    DrawTable(DRAW_TABLE.L2)
+    DrawTable(DRAW_TABLE.L2) --Game circle effects
 
     --CAM:attach() --Start tracking camera
 
-    DrawTable(DRAW_TABLE.L3)
+    DrawTable(DRAW_TABLE.L3) --Bullets and projectiles
 
-    DrawTable(DRAW_TABLE.L4)
+    DrawTable(DRAW_TABLE.L4) --Psycho and enemies
 
-    DrawTable(DRAW_TABLE.L5)
+    DrawTable(DRAW_TABLE.GAME_GUI) --Game GUI
 
     --CAM:detach() --Stop tracking camera
 
-    DrawTable(DRAW_TABLE.GUI)
+    DrawTable(DRAW_TABLE.GUI) --Top GUI
 
     --Creates letterbox at the sides of the screenm if needed
     FreeRes.letterbox(color)

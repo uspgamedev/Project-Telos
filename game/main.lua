@@ -18,6 +18,7 @@ require "classes.enemies.simple_ball"
 
 --other
 require "classes.primitive"
+require "classes.particle"
 require "classes.psycho"
 require "classes.bullet"
 require "classes.text"
@@ -28,7 +29,7 @@ require "util"
 require "draw"
 require "formation"
 require "level_manager"
-require "fx"
+FX = require "fx"
 local Setup = require "setup"
 
 --IMPORTED MODULES

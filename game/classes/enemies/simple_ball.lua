@@ -2,6 +2,7 @@ require "classes.primitive"
 local Color = require "classes.color.color"
 local Hsl   = require "classes.color.hsl"
 local Util = require "util"
+
 --SIMPLE BALL CLASS--
 --[[Simple circle blue enemy that just moves around]]
 
@@ -9,7 +10,7 @@ local enemy = {}
 
 Simple_Ball = Class{
     __includes = {CIRC},
-    init = function(self, _x, _y, _dir)
+    init = function(self, _x, _y, _dir, _speed_m)
         local dx, dy, r, color, color_table
 
         r = 20 --Radius of enemy
@@ -26,6 +27,7 @@ Simple_Ball = Class{
 
         --Normalize direction and set speed
         self.speedv = 200 --Speed value
+        self.speed_m = _speed_m or 1 --Speed multiplier
         self.speed = Vector(_dir.x, _dir.y) --Speed vector
         self.speed = self.speed:normalized()*self.speedv
 
@@ -54,7 +56,7 @@ function Simple_Ball:update(dt)
     o = self
 
     --Update movement
-    o.pos = o.pos + dt*o.speed
+    o.pos = o.pos + dt*o.speed*o.speed_m
 
     --Check if enemy entered then leaved the game screen
     if not o.enter then
@@ -65,9 +67,19 @@ function Simple_Ball:update(dt)
 
 end
 
+--Kill this enemy
+function Simple_Ball:kill()
+
+    if self.death then return end
+
+    self.death = true
+    FX.explosion(self.pos.x, self.pos.y, self.r, self.color)
+
+end
+
 --UTILITY FUNCTIONS--
 
-function enemy.create(x, y, dir)
+function enemy.create(x, y, dir, speed_m)
     local e, d, direction
 
     d = 6 -- Duration of color transition
@@ -77,7 +89,7 @@ function enemy.create(x, y, dir)
         direction.y = love.math.random()*2 - 1 --Rand value between [-1,1]
     end
 
-    e = Simple_Ball(x, y, dir or direction)
+    e = Simple_Ball(x, y, dir or direction, speed_m)
     e:addElement(DRAW_TABLE.L4)
     e:startColorLoop(d)
 

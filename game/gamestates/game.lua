@@ -52,12 +52,14 @@ function state:update(dt)
     --Update other objects
     Util.updateSubTp(dt, "player_bullet")
     Util.updateSubTp(dt, "enemies")
+    Util.updateSubTp(dt, "decaying_particle")
 
     checkCollision()
 
     --Kill dead objects
     Util.killSubTp("player_bullet")
     Util.killSubTp("enemies")
+    Util.killSubTp("decaying_particle")
     Util.killId("psycho")
 
 

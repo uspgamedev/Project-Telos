@@ -7,7 +7,7 @@ local formation = {}
 --distribute: place balls equally distributed on the screen side
 --top: start placing from the top , with an optional screen margin
 --bottom: start placing from the bottom, with an optional screen margin
-function formation.fromHorizontal(side, mode, enemy, number, enemy_x_margin, enemy_y_margin, screen_margin)
+function formation.fromHorizontal(side, mode, enemy, number, enemy_x_margin, enemy_y_margin, screen_margin, speed_m)
     local x, y, r, dir, half
     r = enemy.radius()
 
@@ -24,6 +24,7 @@ function formation.fromHorizontal(side, mode, enemy, number, enemy_x_margin, ene
     enemy_x_margin = enemy_x_margin or 0
     enemy_y_margin = enemy_y_margin or 10 + 2*r
     number = number or 3
+    speed_m = speed_m or 1
 
     --Center mode
     if     mode == "center" then
@@ -31,21 +32,21 @@ function formation.fromHorizontal(side, mode, enemy, number, enemy_x_margin, ene
         y = ORIGINAL_WINDOW_HEIGHT/2 - (number-1)/2*enemy_y_margin + screen_margin
         --Placing from the center
         for i=1, number do
-            enemy.create(x - math.abs(i-half-1)*enemy_x_margin*dir.x, y, dir)
+            enemy.create(x - math.abs(i-half-1)*enemy_x_margin*dir.x, y, dir, speed_m)
             y = y + enemy_y_margin
         end
     --Distribute mode
     elseif mode == "distribute" then
         for i=1, number do
             y = i* (ORIGINAL_WINDOW_HEIGHT/(number+1))
-            enemy.create(x, y, dir)
+            enemy.create(x, y, dir, speed_m)
         end
 
     --Top mode
     elseif mode == "top" then
         y = screen_margin + r
         for i=1, number do
-            enemy.create(x, y, dir)
+            enemy.create(x, y, dir, speed_m)
             y = y + enemy_y_margin
             x = x - enemy_x_margin*dir.x
         end
@@ -54,7 +55,7 @@ function formation.fromHorizontal(side, mode, enemy, number, enemy_x_margin, ene
     elseif mode == "bottom" then
         y = ORIGINAL_WINDOW_HEIGHT - screen_margin - r
         for i=1, number do
-            enemy.create(x, y, dir)
+            enemy.create(x, y, dir, speed_m)
             y = y - enemy_y_margin
             x = x - enemy_x_margin*dir.x
         end
@@ -66,7 +67,7 @@ end
 --distribute: place balls equally distributed on the screen side
 --left: start placing from the left , with an optional screen margin
 --right: start placing from the right, with an optional screen margin
-function formation.fromVertical(side, mode, enemy, number, enemy_x_margin, enemy_y_margin, screen_margin)
+function formation.fromVertical(side, mode, enemy, number, enemy_x_margin, enemy_y_margin, screen_margin, speed_m)
     local x, y, r, dir, half
     r = enemy.radius()
 
@@ -83,6 +84,7 @@ function formation.fromVertical(side, mode, enemy, number, enemy_x_margin, enemy
     enemy_x_margin = enemy_x_margin or 10 + 2*r
     enemy_y_margin = enemy_y_margin or 0
     number = number or 3
+    speed_m = speed_m or 1
 
     --Center mode
     if     mode == "center" then
@@ -90,21 +92,21 @@ function formation.fromVertical(side, mode, enemy, number, enemy_x_margin, enemy
         x = ORIGINAL_WINDOW_WIDTH/2 - (number-1)/2*enemy_x_margin + screen_margin
         --Placing from the center
         for i=1, number do
-            enemy.create(x, y - math.abs(i-half-1)*enemy_y_margin*dir.y, dir)
+            enemy.create(x, y - math.abs(i-half-1)*enemy_y_margin*dir.y, dir, speed_m)
             x = x + enemy_x_margin
         end
     --Distribute mode
     elseif mode == "distribute" then
         for i=1, number do
             x = i* (ORIGINAL_WINDOW_WIDTH/(number+1))
-            enemy.create(x, y, dir)
+            enemy.create(x, y, dir, speed_m)
         end
 
     --Left mode
 elseif mode == "left" then
         x = screen_margin + r
         for i=1, number do
-            enemy.create(x, y, dir)
+            enemy.create(x, y, dir, speed_m)
             x = x + enemy_x_margin
             y = y - enemy_y_margin*dir.y
         end
@@ -113,7 +115,7 @@ elseif mode == "left" then
 elseif mode == "right" then
         x = ORIGINAL_WINDOW_WIDTH - screen_margin - r
         for i=1, number do
-            enemy.create(x, y, dir)
+            enemy.create(x, y, dir, speed_m)
             x = x - enemy_x_margin
             y = y - enemy_y_margin*dir.y
         end
@@ -121,34 +123,50 @@ elseif mode == "right" then
 end
 
 --Create an evenly distributed circle of enemies, with a specific radius
-function formation.circle(enemy, number, radius)
+function formation.circle(enemy, number, radius, enemy_margin, x_center, y_center, speed_m)
     local a, x, y, dir
+
     a = 2*math.pi/number --Divides the circunference
-    for i=1, number do
+
+    --Default values
+    radius = radius or 600
+    enemy_margin = enemy_margin or 0
+    x_center = x_center or ORIGINAL_WINDOW_WIDTH/2 --Center x of the circle
+    y_center = y_center or ORIGINAL_WINDOW_HEIGHT/2 --Center y of the circle
+    speed_m = speed_m or 1
+
+    for i=0, number-1 do
         x, y = radius*math.cos(i*a), radius*math.sin(i*a) --Get position in circle with radius and center (0,0)
         dir = Vector(-x,-y) --Get direction pointing to center
-        x, y = ORIGINAL_WINDOW_WIDTH/2+ x, ORIGINAL_WINDOW_HEIGHT/2+ y
-        enemy.create(x, y, dir)
+        x, y = x_center + x, y_center + y --Center circle
+        x, y = x - dir:normalized().x*enemy_margin*i, y - dir:normalized().y*enemy_margin*i --Add enemy margin, if any
+        enemy.create(x, y, dir, speed_m)
     end
 end
 
 --Create a single enemy starting in a (x,y) position and moving in a direction
-function formation.single(enemy, x, y, dx, dy)
+function formation.single(enemy, x, y, dx, dy, speed_m)
     local dir
 
+    --Default values
+    speed_m = speed_m or 1
+
     dir = Vector(dx, dy)
-    enemy.create(x, y, dir)
+    enemy.create(x, y, dir, speed_m)
 end
 
 --Create a line of enemies starting in a (x,y) position and moving in a direction
-function formation.line(enemy, number, x, y, dx, dy, enemy_margin)
+function formation.line(enemy, number, x, y, dx, dy, enemy_margin, speed_m)
     local dir, n_dir
 
+    --Default values
     enemy_margin = enemy_margin or 60
+    speed_m = speed_m or 1
+
     dir = Vector(dx, dy)
     n_dir = dir:normalized()
     for i=0, number-1 do
-        enemy.create(x - i*n_dir.x*enemy_margin, y - i*n_dir.y*enemy_margin, dir)
+        enemy.create(x - i*n_dir.x*enemy_margin, y - i*n_dir.y*enemy_margin, dir, speed_m)
     end
 end
 

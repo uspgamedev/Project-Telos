@@ -5,6 +5,22 @@ GAME DESIGN DOCUMENT
 DEV LOG
 =======
 
+#### 06/08/2016:
+
+Made improvements to the test level (but already imagining to be the level1).
+
+Added particle explosions when enemies die.
+
+#### 05/08/2016:
+
+Forgot to register, but some days ago did all the base for level script!!
+Now we can easily make levels using enemies formations.
+Today I added two new formations (single and line), and added support to change the game resolution!
+You can now resize the window in-game, and the game already scales everything up properly (creating letterboxes
+when needed).
+
+To get the missed progress, check out the commit page on our repository.
+
 #### 30/08/2016:
 
 Started and finished color transition task!

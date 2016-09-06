@@ -55,7 +55,7 @@ end
 
 --Create a bullet in the (x,y) position, direction dir, color c and subtype st
 function bullet.create(x, y, dir, c, color_table, st)
-    local bullet
+    local bullet, d
 
     st = st or "player_bullet"
     d = 8 --Duration of color effect transition

@@ -45,7 +45,7 @@ function setup.config()
     L2 = {}, --Layer 2
     L3 = {}, --Layer 3
     L4 = {}, --Layer 4
-    L5 = {}, --Layer 5
+    GAME_GUI = {}, --Layer 5
     GUI = {}  --Layer 6 (top layer, last to draw)
     }
 

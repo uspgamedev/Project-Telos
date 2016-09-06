@@ -18,9 +18,13 @@ Psy = Class{
         color_table = {
             HSL(Hsl.stdv(51,100,50)),
             HSL(Hsl.stdv(355,89,48)),
-            HSL(Hsl.stdv(95, 89,42)),
+            HSL(Hsl.stdv(95,89,42)),
             HSL(Hsl.stdv(207,81,49)),
-            HSL(Hsl.stdv(271,75,52))
+            HSL(Hsl.stdv(271,75,52)),
+            HSL(Hsl.stdv(329,82.1,54.1)), -- Barbie Pink
+            HSL(Hsl.stdv(280,90.5,28.8)), -- Indigo
+            HSL(Hsl.stdv(16,100,52)) -- Internacional Orange (Aerospace)
+
         } --Color table
         r = 22 --Radius of psycho
 
