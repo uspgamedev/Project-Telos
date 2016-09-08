@@ -5,6 +5,11 @@ GAME DESIGN DOCUMENT
 DEV LOG
 =======
 
+#### 07/08/2016:
+
+Made a simple background with color transitions, initial steps to psycho lives counter and added a different radius for psycho's collision.
+Considered finish current iteration (way ahead of schedule haha), and doing small things.
+
 #### 06/08/2016:
 
 Made improvements to the test level (but already imagining to be the level1).
@@ -29,7 +34,7 @@ Game objects now transition between pre-defined color tables that each object ha
 #### 29/08/2016:
 
 Cleared all issues for version 0.0.0.1!
-Started using a kanban and fenied next iteration to be three weeks, with the main task being:
+Started using a kanban and planned next iteration to be three weeks, with the main task being:
 -Level Script: create the way of scripting levels, and make a simple test level to test it.
 -Color transition: make objects have color transitions.
 
