@@ -40,6 +40,7 @@ end
 
 function state:leave()
 
+    Util.addExceptionId("background")
     Util.clearAllTables("remove")
 
 end

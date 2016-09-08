@@ -22,6 +22,7 @@ require "classes.particle"
 require "classes.psycho"
 require "classes.bullet"
 require "classes.text"
+require "classes.bg"
 Button = require "classes.button"
 
 --MY MODULES

@@ -27,6 +27,7 @@ end
 function state:leave()
 
     Level.stop()
+    Util.addExceptionId("background")
     Util.clearAllTables("remove")
 
 end

@@ -1,4 +1,5 @@
 local FreeRes = require "FreeRes"
+local BG = require "classes.bg"
 --MODULE FOR SETUP STUFF--
 
 local setup = {}
@@ -81,6 +82,9 @@ function setup.config()
             }
         }
     ]]
+
+    --Background start
+    BG.create()
 end
 
 --Return functions

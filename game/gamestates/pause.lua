@@ -44,6 +44,8 @@ end
 function state:leave()
 
     Psycho.updateSpeed(Psycho.get())
+
+    Util.addExceptionId("background")
     Util.clearAllTables("remove")
 
 end
