@@ -153,6 +153,10 @@ function util.gameElementException(mode)
         util.addExceptionSubtype("enemies")
     end
 
+    if util.findId("lives_counter") then
+        util.addExceptionId("lives_counter")
+    end
+
     if mode ~= "GAMEOVER" then
         util.addExceptionId("psycho")
     end

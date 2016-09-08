@@ -27,6 +27,7 @@ Psy = Class{
 
         } --Color table
         r = 22 --Radius of psycho
+        self.collision_r = 19 --Radius of psycho that detects collision
 
         CIRC.init(self, _x, _y, r, color, color_table, "fill") --Set atributes
 
@@ -38,6 +39,9 @@ Psy = Class{
 
         self.shoot_tick = 0 --Bullet "cooldown" timer (for shooting repeatedly)
         self.shoot_fps = .2 --How fast to shoot bullet
+
+        self.lives = 3
+        self.invincible = false
 
         self.tp = "psycho" --Type of this class
 
@@ -112,9 +116,17 @@ function Psy:kill()
 
     p = self
 
-    p.death = true
+    if p.lives == 0 then return end
 
-    SWITCH =  "GAMEOVER"
+    p.lives = p.lives - 1 --Reduces psycho's lives
+    Util.findId("lives_counter").var = p.lives
+
+    if not p.death and p.lives == 0 then
+        p.death = true
+        SWITCH =  "GAMEOVER"
+    else
+        startInvincible(p)
+    end
 end
 
 function Psy:keypressed(key)
@@ -143,8 +155,10 @@ end
 
 --UTILITY FUNCTIONS--
 
-function psycho.create(x, y)
-    local p, duration
+function psycho.create()
+    local p, duration, x, y
+
+    x, y = ORIGINAL_WINDOW_WIDTH/2, ORIGINAL_WINDOW_HEIGHT/2
 
     duration = 3 --Duration of color transition effect
 
@@ -207,6 +221,37 @@ function isOutside(o)
     end
 
     return v:normalized()
+end
+
+--Make psycho temporarily invincible
+function startInvincible(p)
+    local d, count
+
+    d = 2 --Time psycho is invincible
+    c = 8 --Number of times he blinks
+    if p.invincible then return end
+
+    p.invincible = true
+
+    --Blinks psycho for d seconds
+    FX_TIMER:every(d/(2*c),
+        function()
+            --local p = psycho.get()
+
+            p.invisible = not p.invisible
+
+        end,
+    2*c)
+
+    --Makes psycho visible and vunerable again
+    FX_TIMER:after(d,
+        function()
+            --local p = psycho.get()
+
+            p.invisible = false
+            p.invincible = false
+
+        end)
 end
 
 --return function

@@ -16,7 +16,7 @@ Text = Class{
         WTXT.init(self, _text, _font, _t_color) --Set text
         POS.init(self, _x, _y)
 
-        self.var = var --Optional variable that the text can print
+        self.var = _var --Optional variable that the text can print
         self.mode = _mode --How to print the var
         self.tp = "text" --Type of this class
     end

@@ -85,7 +85,13 @@ ELEMENT = Class{
         e = self
         dx = e.pos.x - o.pos.x
         dy = e.pos.y - o.pos.y
-        dr = e.r + o.r
+
+        --In case of psycho, check collision with his collision radius
+        if o.tp == "psycho" then
+            dr = e.r + o.collision_r
+        else
+            dr = e.r + o.r
+        end
 
         return (dx*dx + dy*dy) < dr*dr
 

@@ -2,6 +2,7 @@ local Psycho = require "classes.psycho"
 local Util = require "util"
 local Draw = require "draw"
 local Level = require "level_manager"
+local Color = require "classes.color.color"
 --MODULE FOR THE GAMESTATE: GAME--
 
 --ENEMIES--
@@ -19,7 +20,12 @@ local p --Psycho
 
 function state:enter()
 
-    p = Psycho.create(ORIGINAL_WINDOW_WIDTH/2,ORIGINAL_WINDOW_HEIGHT/2)
+    p = Psycho.create()
+
+    --Lives counter text
+    t = Text(5, 30, "lives: ", GUI_MED, Color.orange(), p.lives, "right")
+    t:addElement(DRAW_TABLE.GUI, "gui", "lives_counter")
+
     Level.start(level1)
 
 end
@@ -112,7 +118,7 @@ function checkCollision()
             end
 
             --Colliding with psycho
-            if e:collides(p) then
+            if not p.invincible and e:collides(p) then
                 p:kill()
             end
 

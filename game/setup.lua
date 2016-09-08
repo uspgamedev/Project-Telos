@@ -56,7 +56,7 @@ function setup.config()
 
     --WINDOW CONFIG--
     love.window.setMode(WINDOW_WIDTH, WINDOW_HEIGHT, {resizable = true, minwidth = 800, minheight = 600})
-    FreeRes.setScreen(1)
+    FreeRes.setScreen()
 
     --FONT CONFIG--
     GUI_BIG = love.graphics.newFont("assets/fonts/vanadine_bold.ttf", 60)
