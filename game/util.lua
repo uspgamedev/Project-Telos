@@ -142,8 +142,14 @@ function util.rmvExceptionSubtype(st)
   end
 end
 
---Add exception to not remove game elements:
+--Add exception to not remove game and gui elements:
 function util.gameElementException(mode)
+
+    --GAME ELEMENTS
+
+    if mode ~= "GAMEOVER" then
+        util.addExceptionId("psycho")
+    end
 
     if util.findSbTp("player_bullet") then
         util.addExceptionSubtype("player_bullet")
@@ -153,13 +159,20 @@ function util.gameElementException(mode)
         util.addExceptionSubtype("enemies")
     end
 
+    if util.findSbTp("decaying_particle") then
+        util.addExceptionSubtype("decaying_particle")
+    end
+
+    if util.findSbTp("psycho_explosion") then
+        util.addExceptionSubtype("psycho_explosion")
+    end
+
+    --GUI ELEMENTS
+
     if util.findId("lives_counter") then
         util.addExceptionId("lives_counter")
     end
 
-    if mode ~= "GAMEOVER" then
-        util.addExceptionId("psycho")
-    end
 
 end
 
@@ -239,6 +252,7 @@ end
 function util.updateTimers(dt)
     GAME_TIMER:update(dt)
     FX_TIMER:update(dt)
+    COLOR_TIMER:update(dt)
 end
 
 ----------------

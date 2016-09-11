@@ -22,6 +22,8 @@ function state:enter()
 
     p = Psycho.create()
 
+    SLOWMO = false
+
     --Lives counter text
     t = Text(5, 30, "lives: ", GUI_MED, Color.orange(), p.lives, "right")
     t:addElement(DRAW_TABLE.GUI, "gui", "lives_counter")
@@ -40,6 +42,7 @@ end
 
 
 function state:update(dt)
+    local m_dt
 
     --Change state if required
     if SWITCH == "PAUSE" or not FOCUS then
@@ -56,10 +59,18 @@ function state:update(dt)
 
     --Update psycho
     p:update(dt)
-    --Update other objects
-    Util.updateSubTp(dt, "player_bullet")
-    Util.updateSubTp(dt, "enemies")
-    Util.updateSubTp(dt, "decaying_particle")
+
+    --Update other objects (if slow mo, make them slow)
+    if SLOWMO then
+        m_dt = dt*SLOWMO_M
+    else
+        m_dt = dt
+    end
+
+    Util.updateSubTp(m_dt, "player_bullet")
+    Util.updateSubTp(m_dt, "enemies")
+    Util.updateSubTp(m_dt, "decaying_particle")
+    Util.updateSubTp(dt, "psycho_explosion") --Are not affected by slowmo
 
     checkCollision()
 
@@ -67,6 +78,7 @@ function state:update(dt)
     Util.killSubTp("player_bullet")
     Util.killSubTp("enemies")
     Util.killSubTp("decaying_particle")
+    Util.killSubTp("psycho_explosion")
     Util.killId("psycho")
 
 

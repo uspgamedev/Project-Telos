@@ -63,7 +63,7 @@ function state:update(dt)
         Gamestate.switch(GS.MENU)
     end
 
-    Util.updateTimers(dt)
+    COLOR_TIMER:update(dt)
 
 end
 

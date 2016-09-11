@@ -35,9 +35,12 @@ function setup.config()
     COROUTINE = nil --Current coroutine
     COROUTINE_HANDLE = nil --Handle timer for current coroutine
 
+    SLOWMO = false --If (most) game elements will move in slow-mo
+    SLOWMO_M = .5 --Slowmo multiplier effect
     --TIMERS--
     GAME_TIMER = Timer.new()  --General Timer
     FX_TIMER = Timer.new() --Effects Timer (for tweening mostly)
+    COLOR_TIMER = Timer.new() --Color Effects Timer
 
     --INITIALIZING TABLES--
     --Drawing Tables
@@ -82,6 +85,12 @@ function setup.config()
             }
         }
     ]]
+
+    --Functions receives two positions (p1 and p2) and a value, and returns a value
+    DEATH_FUNCS = {
+        function(p1, p2, value) return 2.5*value end,
+        function(p1, p2, value) return 100*(math.cos(p1:dist2(p2)*value*3)) end
+    }
 
     --Background start
     BG.create()

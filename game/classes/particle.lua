@@ -5,6 +5,64 @@ local Color = require "classes.color.color"
 
 local particle = {}
 
+------------------
+--REGULAR PARTICLE
+------------------
+
+--Particle that has an alpha decaying over-time
+Regular_Particle = Class{
+    __includes = {CIRC},
+    init = function(self, _x, _y, _dx, _dy, _c, _speed, _radius)
+        CIRC.init(self, _x, _y, _radius, _c, nil, "fill") --Set atributes
+
+        self.speedv = _speed --Speed value
+        self.speed = Vector(_dx, _dy) --Speed vector
+        self.speed = self.speed:normalized()*self.speedv
+
+        self.tp = "regular_particle" --Type of this class
+    end
+}
+
+--CLASS FUNCTIONS--
+
+function Regular_Particle:draw()
+    local p
+
+    p = self
+
+    --Draws the particle
+    Color.set(p.color)
+    love.graphics.circle("fill", p.pos.x, p.pos.y, p.r)
+end
+
+function Regular_Particle:update(dt)
+    local p
+
+    p = self
+    --Update position
+    p.pos = p.pos + dt*p.speed
+
+end
+
+--UTILITY FUNCTIONS--
+
+--Create a particle in the (x,y) position, direction dir, color c, radius r and subtype st
+function particle.create_regular(pos, dir, color, speed, r, st)
+    local part
+
+    st = st or "regular_particle" --subtype
+
+    part = Regular_Particle(pos.x, pos.y, dir.x, dir.y, color, speed, r)
+
+    part:addElement(DRAW_TABLE.L2, st)
+
+    return part
+end
+
+-------------------
+--DECAYING PARTICLE
+-------------------
+
 --Particle that has an alpha decaying over-time
 Decaying_Particle = Class{
     __includes = {CIRC},
@@ -39,7 +97,11 @@ function Decaying_Particle:update(dt)
     --Update position
     p.pos = p.pos + dt*p.speed
     --Decays the alpha value
-    p.color.a = p.color.a*p.decaying_speed
+    if SLOWMO then
+        p.color.a = p.color.a * p.decaying_speed^SLOWMO_M
+    else
+        p.color.a = p.color.a*p.decaying_speed
+    end
 
     if not p.death and p.color.a <=5 then
            p.death = true
@@ -48,7 +110,7 @@ end
 
 --UTILITY FUNCTIONS--
 
---Create a bullet in the (x,y) position, direction dir, color c and subtype st
+--Create a particle in the (x,y) position, direction dir, color c, radius size and subtype st
 function particle.create_decaying(pos, dir, color, speed, decaying, size)
     local part, st
 

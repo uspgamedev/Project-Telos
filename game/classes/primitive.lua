@@ -49,7 +49,7 @@ ELEMENT = Class{
         self:setId(nil) --Removes from Id table, if its in one
         if self.handles then
             for h in pairs(self.handles) do
-                FX_TIMER:cancel(h) --Stops any timers this object has
+                COLOR_TIMER:cancel(h) --Stops any timers this object has
             end
         end
         if t then

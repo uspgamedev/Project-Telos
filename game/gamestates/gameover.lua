@@ -36,6 +36,9 @@ function state:enter()
         "go (b)ack", GUI_MED, Color.orange())
     b:addElement(DRAW_TABLE.GUI, "gui")
 
+    --Add slowmotion effect
+    SLOWMO_M = .2
+
 end
 
 function state:leave()
@@ -47,6 +50,7 @@ end
 
 
 function state:update(dt)
+    local m_dt
 
     if SWITCH == "GAME" then
         SWITCH = nil
@@ -57,6 +61,20 @@ function state:update(dt)
     end
 
     Util.updateTimers(dt)
+
+    --Update objects position in slowmo
+    m_dt = dt*SLOWMO_M
+
+    Util.updateSubTp(m_dt, "player_bullet")
+    Util.updateSubTp(m_dt, "enemies")
+    Util.updateSubTp(m_dt, "decaying_particle")
+    checkCollision()
+
+    --Kill dead objects
+    Util.killSubTp("player_bullet")
+    Util.killSubTp("enemies")
+    Util.killSubTp("decaying_particle")
+    Util.killSubTp("psycho_explosion")
 
 end
 

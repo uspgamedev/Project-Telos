@@ -26,7 +26,7 @@ Psy = Class{
             HSL(Hsl.stdv(16,100,52)) -- Internacional Orange (Aerospace)
 
         } --Color table
-        r = 22 --Radius of psycho
+        r = 24 --Radius of psycho
         self.collision_r = 19 --Radius of psycho that detects collision
 
         CIRC.init(self, _x, _y, r, color, color_table, "fill") --Set atributes
@@ -40,8 +40,9 @@ Psy = Class{
         self.shoot_tick = 0 --Bullet "cooldown" timer (for shooting repeatedly)
         self.shoot_fps = .2 --How fast to shoot bullet
 
-        self.lives = 3
-        self.invincible = false
+        self.lives = 5 --How many lives psycho by default has
+        self.invincible = false --If psycho can't collide with enemies
+        self.controlsLocked = false --If psycho cant move or shoot
 
         self.tp = "psycho" --Type of this class
 
@@ -52,7 +53,9 @@ Psy = Class{
 
 function Psy:shoot(x,y)
     local p, bullet, dir, c, color_table, w, h, scale
+
     p = self
+    if p.controlsLocked then return end
 
     --Fix mouse position click to respective distance
     w, h = FreeRes.windowDistance()
@@ -92,11 +95,6 @@ function Psy:update(dt)
 
     p = self
 
-    --Update movement
-    p.pos = p.pos + dt*p.speed
-    --Fixes if psycho leaves screen
-    p.pos = p.pos + dt*p.speedv*isOutside(p)
-
     --Update shooting
     p.shoot_tick = p.shoot_tick - dt
     if love.mouse.isDown(1) then
@@ -109,6 +107,13 @@ function Psy:update(dt)
         p.shoot_tick = 0
     end
 
+    --Leave before moving psycho
+    if p.controlsLocked then return end
+
+    --Update movement
+    p.pos = p.pos + dt*p.speed
+    --Fixes if psycho leaves screen
+    p.pos = p.pos + dt*p.speedv*isOutside(p)
 end
 
 function Psy:kill()
@@ -122,10 +127,11 @@ function Psy:kill()
     Util.findId("lives_counter").var = p.lives
 
     if not p.death and p.lives == 0 then
+        FX.explosion(p.pos.x, p.pos.y, p.r, p.color, 60, 200, .994, 4)
         p.death = true
         SWITCH =  "GAMEOVER"
     else
-        startInvincible(p)
+        FX.psychoExplosion(p)
     end
 end
 
@@ -151,6 +157,38 @@ function Psy:keyreleased(key)
       psycho.updateSpeed(self)
   end
 
+end
+
+--Make psycho temporarily invincible
+function Psy:startInvincible()
+    local d, count, p
+
+    p = self
+
+    d = 2 --Time psycho is invincible
+    c = 8 --Number of times he blinks
+
+    p.invincible = true
+
+    --Blinks psycho for d seconds
+    FX_TIMER:every(d/(2*c),
+        function()
+            --local p = psycho.get()
+
+            p.invisible = not p.invisible
+
+        end,
+    2*c)
+
+    --Makes psycho visible and vunerable again
+    FX_TIMER:after(d + .2,
+        function()
+            --local p = psycho.get()
+
+            p.invisible = false
+            p.invincible = false
+
+        end)
 end
 
 --UTILITY FUNCTIONS--
@@ -221,37 +259,6 @@ function isOutside(o)
     end
 
     return v:normalized()
-end
-
---Make psycho temporarily invincible
-function startInvincible(p)
-    local d, count
-
-    d = 2 --Time psycho is invincible
-    c = 8 --Number of times he blinks
-    if p.invincible then return end
-
-    p.invincible = true
-
-    --Blinks psycho for d seconds
-    FX_TIMER:every(d/(2*c),
-        function()
-            --local p = psycho.get()
-
-            p.invisible = not p.invisible
-
-        end,
-    2*c)
-
-    --Makes psycho visible and vunerable again
-    FX_TIMER:after(d,
-        function()
-            --local p = psycho.get()
-
-            p.invisible = false
-            p.invincible = false
-
-        end)
 end
 
 --return function
