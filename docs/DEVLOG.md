@@ -5,6 +5,13 @@ GAME DESIGN DOCUMENT
 DEV LOG
 =======
 
+#### 11/08/2016:
+
+Finishing making COOL DEATH EXPLOSIONS!
+
+Now psycho dies in cool ways. Stiil need to add more death functions to create
+different patterns.
+
 #### 07/08/2016:
 
 Made a simple background with color transitions, initial steps to psycho lives counter and added a different radius for psycho's collision.

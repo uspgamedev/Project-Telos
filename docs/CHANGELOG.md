@@ -3,7 +3,10 @@ THE HISTORY OF PSYCHO: THE BALL
 ===============================
 
 #### (xx/xx/2016) Version 0.0.0.6    -  XXXXXXXXX
-
+- Juiyness! Explosions!
+    - Cool death explosions for things to explode.
+- More colors!
+    -Background colors
 #### (05/08/2016) Version 0.0.0.5    -  Snowballing
 
 - Now there is a simple way to create levels for psycho!
