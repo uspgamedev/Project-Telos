@@ -38,15 +38,12 @@ Simple_Ball = Class{
 
 --CLASS FUNCTIONS--
 
---Draw this enemy
-function Simple_Ball:draw()
-    local p
+function Simple_Ball:kill()
 
-    p = self
+    if self.death then return end
+    self.death = true
+    FX.explosion(self.pos.x, self.pos.y, self.r, self.color)
 
-    --Draws the circle
-    Color.set(p.color)
-    love.graphics.circle("fill", p.pos.x, p.pos.y, p.r)
 end
 
 --Update this enemy
@@ -62,18 +59,8 @@ function Simple_Ball:update(dt)
     if not o.enter then
         if isInside(o) then o.enter = true end
     else
-        if not isInside(o) then o.death = true end
+        if not isInside(o) then o:kill() end
     end
-
-end
-
---Kill this enemy
-function Simple_Ball:kill()
-
-    if self.death then return end
-
-    self.death = true
-    FX.explosion(self.pos.x, self.pos.y, self.r, self.color)
 
 end
 

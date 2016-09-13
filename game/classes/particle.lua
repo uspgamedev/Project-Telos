@@ -6,6 +6,67 @@ local Color = require "classes.color.color"
 local particle = {}
 
 ------------------
+--PARTICLE BATCH--
+------------------
+
+--Particle batch that holds a group of particles, and deletes them after a while
+Particle_Batch = Class{
+    __includes = {ELEMENT},
+    init = function(self, endtime)
+        ELEMENT.init(self)
+
+        self.batch = {}
+        self.endtime = endtime
+        self.time = 0
+        self.destroying = false
+        self.tp = "particle_batch"
+    end
+}
+
+--CLASS FUNCTIONS--
+
+function Particle_Batch:update(dt)
+
+    if self.destroying then return end
+
+    self.time = self.time + dt
+    if (self.time >= self.endtime) then
+        self.destroying = true
+        self:clearAll()
+    end
+
+end
+
+
+
+function Particle_Batch:clearAll()
+
+    if self.batch then
+        for _, part in pairs(self.batch) do
+            part.death = true
+        end
+    end
+
+    self.death = true
+
+end
+
+function Particle_Batch:put(particle)
+    table.insert(self.batch, particle)
+end
+
+--UTILITY FUNCTIONS--
+
+function particle.create_batch(endtime)
+    local batch
+
+    batch = Particle_Batch(endtime)
+    batch:setSubTp("particle_batch")
+
+    return batch
+end
+
+------------------
 --REGULAR PARTICLE
 ------------------
 
@@ -94,16 +155,17 @@ function Decaying_Particle:update(dt)
     local p
 
     p = self
+    if p.death then return end
     --Update position
     p.pos = p.pos + dt*p.speed
     --Decays the alpha value
     if SLOWMO then
         p.color.a = p.color.a * p.decaying_speed^SLOWMO_M
     else
-        p.color.a = p.color.a*p.decaying_speed
+        p.color.a = p.color.a * p.decaying_speed
     end
 
-    if not p.death and p.color.a <=5 then
+    if not p.death and p.color.a <=40 then
            p.death = true
     end
 end

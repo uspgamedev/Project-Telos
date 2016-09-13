@@ -38,7 +38,7 @@ function setup.config()
     SLOWMO = false --If (most) game elements will move in slow-mo
     SLOWMO_M = .5 --Slowmo multiplier effect
     --TIMERS--
-    GAME_TIMER = Timer.new()  --General Timer
+    LEVEL_TIMER = Timer.new()  --General Timer
     FX_TIMER = Timer.new() --Effects Timer (for tweening mostly)
     COLOR_TIMER = Timer.new() --Color Effects Timer
 
@@ -88,8 +88,11 @@ function setup.config()
 
     --Functions receives two positions (p1 and p2) and a value, and returns a value
     DEATH_FUNCS = {
-        function(p1, p2, value) return 2.5*value end,
-        function(p1, p2, value) return 100*(math.cos(p1:dist2(p2)*value*3)) end
+        function(p1, p2, value) return 8*value end,
+        function(p1, p2, value) return 300*(math.cos(p1:dist2(p2)*value*3)) end,
+        function(p1, p2, value)  return 500*math.cos(math.deg(math.atan(p1:dist(p2) *.2*value))) end,
+        function(p1, p2, value) return 9*(value^1.75)/p1:dist(p2) end,
+        function(p1, p2, value) return 18*(value^2 - p1:dist2(p2))/value end,
     }
 
     --Background start

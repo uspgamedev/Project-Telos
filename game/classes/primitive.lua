@@ -191,6 +191,10 @@ RECT = Class{
 
 }
 
+--------------------
+--CIRCLE FUNCTIONS--
+--------------------
+
 --Circle: is a positionable and colorful object with radius
 CIRC = Class{
     __includes = {ELEMENT, POS, CLR},
@@ -206,3 +210,25 @@ CIRC = Class{
         self.r = _r
     end
 }
+
+
+function CIRC:draw()
+    local p
+
+    p = self
+
+    --Draws the circle
+    Color.set(p.color)
+    love.graphics.circle("fill", p.pos.x, p.pos.y, p.r)
+end
+
+--Draw this enemy
+function CIRC:draw()
+    local p
+
+    p = self
+
+    --Draws the circle
+    Color.set(p.color)
+    love.graphics.circle("fill", p.pos.x, p.pos.y, p.r)
+end

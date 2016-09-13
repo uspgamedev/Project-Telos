@@ -25,14 +25,12 @@ Bullet = Class{
 
 --CLASS FUNCTIONS--
 
-function Bullet:draw()
-    local b
+function Bullet:kill()
 
-    b = self
+    if self.death then return end
+    self.death = true
+    FX.explosion(self.pos.x, self.pos.y, self.r, self.color, 10, nil, nil, 3)
 
-    --Draws the circle
-    Color.set(b.color)
-    love.graphics.circle("fill", b.pos.x, b.pos.y, b.r)
 end
 
 function Bullet:update(dt)
@@ -43,11 +41,11 @@ function Bullet:update(dt)
     b.pos = b.pos + dt*b.speed
 
     if not b.death and
-       (b.pos.x > ORIGINAL_WINDOW_WIDTH or
-       b.pos.x < 0 or
-       b.pos.y > ORIGINAL_WINDOW_HEIGHT or
-       b.pos.y < 0) then
-           b.death = true
+       (b.pos.x - b.r > ORIGINAL_WINDOW_WIDTH or
+       b.pos.x + b.r < 0 or
+       b.pos.y - b.r > ORIGINAL_WINDOW_HEIGHT or
+       b.pos.y + b.r < 0) then
+           b:kill()
     end
 end
 

@@ -250,7 +250,14 @@ function util.updateSubTp(dt, sb)
 end
 
 function util.updateTimers(dt)
-    GAME_TIMER:update(dt)
+    local m_dt
+
+    m_dt = dt
+    if SLOWMO then
+        m_dt = dt*SLOWMO_M
+    end
+
+    LEVEL_TIMER:update(m_dt)
     FX_TIMER:update(dt)
     COLOR_TIMER:update(dt)
 end
@@ -338,6 +345,8 @@ function util.defaultKeyPressed(key)
         util.toggleFullscreen()
     elseif key == 'b' then
         util.toggleDebug()
+    elseif key == 't' then
+        print(SLOWMO, SLOWMO_M)
     end
 
 end

@@ -11,13 +11,16 @@ local fx = {}
 
 --Creates a colored article explosion starting at a circle with center (x,y) and radius r
 function fx.explosion(x, y, r, color, number, speed, decaying, size)
-    local dir, angle, radius
+    local dir, angle, radius, batch, particle
 
     --Default Values
-    number = number or 50           --Number of particles created in a explosion
+    number = number or 15  --Number of particles created in a explosion
     speed    = speed    or 150  --Particles speed
-    decaying = decaying or .98  --Particles decaying alpha speed (when reaching 0, it will be deleted)
+    decaying = decaying or .99  --Particles decaying alpha speed (when reaching 0, it will be deleted)
     size = size or 4
+
+    --Create a batch with endtime 5
+    batch = Particle.create_batch(1)
 
     --Creates all particles of explosion
     for i=1, number do
@@ -36,7 +39,8 @@ function fx.explosion(x, y, r, color, number, speed, decaying, size)
         pos.x = x + radius*math.cos(angle)
         pos.y = y + radius*math.sin(angle)
 
-        Particle.create_decaying(pos, dir, color, speed, decaying, size)
+        particle = Particle.create_decaying(pos, dir, color, speed, decaying, size)
+        batch:put(particle)
 
     end
 
@@ -44,12 +48,15 @@ end
 
 --Explode Psycho in a cool function when he dies
 function fx.psychoExplosion(p)
-    local d, multi, e, death_func, x, y, dir, pos, speed, c_pos, r
+    local d, multi, e, death_func, x, y, dir, pos, speed, c_pos, r, color
 
     d = 2 --Duration of effect's first part (expansion)
-    multi = 5 --Multiplier of speed in effects second part (going back)
+    multi = 3 --Multiplier of speed in effects second part (going back)
 
-    e = 3 --Size of cell the grid will be created from
+    color = Color.white()
+    Color.copy(color, p.color)
+
+    e = 1.5 --Size of cell the grid will be created from
     r = 3 --Radius of particle explosion
 
     death_func = DEATH_FUNCS[love.math.random(#DEATH_FUNCS)] --Function to generate particle speed (and consequently, pattern)
@@ -104,6 +111,7 @@ function fx.psychoExplosion(p)
     -----------------------------------
     FX_TIMER:after(d + d/multi,
         function()
+
             --Removes slowmotion effect
             SLOWMO = false
 
@@ -115,6 +123,7 @@ function fx.psychoExplosion(p)
             --Fix psycho for invincible-blinking effect
             p.controlsLocked = false
             p.invisible = false
+            Color.copy(p.color, color) --Make psycho the particles color
             p:startInvincible()
         end
     )
@@ -133,7 +142,7 @@ function fx.shake(d, s)
     orig_x = CAM.x
     orig_y = CAM.y
 
-    Game_Timer.during(d,
+    LEVEL_TIMER.during(d,
         function()
             CAM.x = orig_x + math.random(-str,str)
             CAM.y = orig_y + math.random(-str,str)

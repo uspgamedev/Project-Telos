@@ -38,7 +38,7 @@ Psy = Class{
         self.speed = Vector(0,0) --Speed vector
 
         self.shoot_tick = 0 --Bullet "cooldown" timer (for shooting repeatedly)
-        self.shoot_fps = .2 --How fast to shoot bullet
+        self.shoot_fps = .15 --How fast to shoot bullet
 
         self.lives = 5 --How many lives psycho by default has
         self.invincible = false --If psycho can't collide with enemies
@@ -78,16 +78,6 @@ function Psy:shoot(x,y)
     dir = dir:normalized()
     Bullet.create(p.pos.x, p.pos.y, dir, c, color_table, "player_bullet")
 
-end
-
-function Psy:draw()
-    local p
-
-    p = self
-
-    --Draws the circle
-    Color.set(p.color)
-    love.graphics.circle("fill", p.pos.x, p.pos.y, p.r)
 end
 
 function Psy:update(dt)

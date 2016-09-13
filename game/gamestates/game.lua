@@ -71,6 +71,7 @@ function state:update(dt)
     Util.updateSubTp(m_dt, "enemies")
     Util.updateSubTp(m_dt, "decaying_particle")
     Util.updateSubTp(dt, "psycho_explosion") --Are not affected by slowmo
+    Util.updateSubTp(m_dt, "particle_batch")
 
     checkCollision()
 
@@ -79,6 +80,7 @@ function state:update(dt)
     Util.killSubTp("enemies")
     Util.killSubTp("decaying_particle")
     Util.killSubTp("psycho_explosion")
+    Util.killSubTp("particle_batch")
     Util.killId("psycho")
 
 
@@ -96,7 +98,7 @@ function state:keypressed(key)
 
     if key == 'escape' or key == 'p' then --Pause game
         SWITCH = "PAUSE"
-    elseif key == 't' then
+    elseif key == 'o' then
         x = 50 + love.math.random()*(ORIGINAL_WINDOW_WIDTH-100)
         y = 50 + love.math.random()*(ORIGINAL_WINDOW_HEIGHT-100)
         SB.create(x, y)
