@@ -173,6 +173,10 @@ function util.gameElementException(mode)
         util.addExceptionId("lives_counter")
     end
 
+    if util.findId("level_part") then
+        util.addExceptionId("level_part")
+    end
+
 
 end
 

@@ -115,10 +115,11 @@ POS = Class{
 
 --Colorful: the object has a color, and a color table for  transistions
 CLR = Class{
-    init = function(self, _c, _color_table)
+    init = function(self, _c, _color_table, _color_duration)
         self.color = HSL() --This object main color
         if _c then Color.copy(self.color, _c) end
         self.color_table = _color_table or {}
+        self.color_duration = 4 or _color_duration
     end,
 
     setColor = function(self, _c) --Set object's color
@@ -150,8 +151,8 @@ CLR = Class{
         return color
     end,
 
-    startColorLoop = function(self, d)
-        FX.colorLoop(self, "color", d)
+    startColorLoop = function(self)
+        FX.colorLoop(self, "color")
     end
 }
 

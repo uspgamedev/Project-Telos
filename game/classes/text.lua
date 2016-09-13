@@ -12,12 +12,13 @@ local text = {}
 --[[Simple Text that can print a variable]]
 Text = Class{
     __includes = {ELEMENT, WTXT, POS},
-    init = function(self, _x, _y, _text, _font, _t_color, _var, _mode)
-        WTXT.init(self, _text, _font, _t_color) --Set text
+    init = function(self, _x, _y, _text, _font, _var, _mode, _var_font)
+        WTXT.init(self, _text, _font) --Set text
         POS.init(self, _x, _y)
 
         self.var = _var --Optional variable that the text can print
         self.mode = _mode --How to print the var
+        self.var_font = _var_font or _var
         self.tp = "text" --Type of this class
     end
 }
@@ -33,20 +34,37 @@ function Text:draw()
     t = self
 
     --Draws button text
-    Color.set(t.t_color)
+    Color.set(UI_COLOR.color)
     love.graphics.setFont(t.font)
     --Case of variable
     if t.var then
-        if not mode or mode == "right" then
+        if not t.mode or t.mode == "right" then
             love.graphics.print(t.text .. t.var, t.pos.x, t.pos.y)
-        elseif mode == "left" then
+        elseif t.mode == "left" then
             love.graphics.print(t.var .. t.text, t.pos.x, t.pos.y)
+        elseif t.mode == "down" then
+            love.graphics.print(t.text, t.pos.x, t.pos.y)
+            love.graphics.setFont(t.var_font)
+            love.graphics.print(t.var, t.pos.x, t.pos.y + t.font:getHeight(t.text) + 2)
         end
     --Not having a variable
     else
         love.graphics.print(t.text, t.pos.x, t.pos.y)
     end
 end
+
+--UTILITY FUNCTIONS--
+
+--Create a text
+function text.create_gui(x, y, text, font, var, mode, var_font, id)
+    local txt
+
+    txt = Text(x, y, text, font, var, mode, var_font)
+    txt:addElement(DRAW_TABLE.GUI, "gui", id)
+
+    return txt
+end
+
 
 --Return functions
 return text

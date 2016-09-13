@@ -22,8 +22,9 @@ Simple_Ball = Class{
             HSL(Hsl.stdv(213,100,54))
         }
         CIRC.init(self, _x, _y, r, color, color_table, "fill") --Set atributes
-
         ELEMENT.setSubTp(self, "enemies")
+
+        self.color_duration = 6 --Duration between color transitions
 
         --Normalize direction and set speed
         self.speedv = 200 --Speed value
@@ -67,9 +68,8 @@ end
 --UTILITY FUNCTIONS--
 
 function enemy.create(x, y, dir, speed_m)
-    local e, d, direction
+    local e, direction
 
-    d = 6 -- Duration of color transition
     if not dir then --Get random direction
         direction = Vector()
         direction.x = love.math.random()*2 - 1 --Rand value between [-1,1]
@@ -78,7 +78,7 @@ function enemy.create(x, y, dir, speed_m)
 
     e = Simple_Ball(x, y, dir or direction, speed_m)
     e:addElement(DRAW_TABLE.L4)
-    e:startColorLoop(d)
+    e:startColorLoop()
 
     return e
 end

@@ -3,6 +3,7 @@ local Util = require "util"
 local Draw = require "draw"
 local Level = require "level_manager"
 local Color = require "classes.color.color"
+local Txt = require "classes.text"
 --MODULE FOR THE GAMESTATE: GAME--
 
 --ENEMIES--
@@ -24,9 +25,11 @@ function state:enter()
 
     SLOWMO = false
 
+    --Level part text
+    Txt.create_gui(200, 10, "Part 0: Test", GUI_MED, nil, nil, nil, "level_part")
+
     --Lives counter text
-    t = Text(5, 30, "lives: ", GUI_MED, Color.orange(), p.lives, "right")
-    t:addElement(DRAW_TABLE.GUI, "gui", "lives_counter")
+    Txt.create_gui(5, 10, "lives: ", GUI_MED, p.lives, "down", GUI_MEDPLUS, "lives_counter")
 
     Level.start(level1)
 

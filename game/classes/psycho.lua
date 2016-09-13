@@ -34,6 +34,8 @@ Psy = Class{
         ELEMENT.setSubTp(self, "player")
         ELEMENT.setId(self, "psycho")
 
+        self.color_duration = 3 --Duration between color transitions
+
         self.speedv = 250 --Speed value
         self.speed = Vector(0,0) --Speed vector
 
@@ -184,15 +186,13 @@ end
 --UTILITY FUNCTIONS--
 
 function psycho.create()
-    local p, duration, x, y
+    local p, x, y
 
     x, y = ORIGINAL_WINDOW_WIDTH/2, ORIGINAL_WINDOW_HEIGHT/2
 
-    duration = 3 --Duration of color transition effect
-
     p = Psy(x, y)
     p:addElement(DRAW_TABLE.L4)
-    p:startColorLoop(duration)
+    p:startColorLoop()
 
     return p
 end

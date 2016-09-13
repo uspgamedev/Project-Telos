@@ -1,5 +1,7 @@
 local FreeRes = require "FreeRes"
 local BG = require "classes.bg"
+local Hsl = require "classes.color.hsl"
+local UI = require "classes.ui"
 --MODULE FOR SETUP STUFF--
 
 local setup = {}
@@ -57,12 +59,22 @@ function setup.config()
     SUBTP_TABLE = {} --Table with tables for each subtype (for fast lookup)
     ID_TABLE = {} --Table with elements with Ids (for fast lookup)
 
+    --Functions receives two positions (p1 and p2) and a value, and returns a value
+    DEATH_FUNCS = {
+        function(p1, p2, value) return 8*value end,
+        function(p1, p2, value) return 300*(math.cos(p1:dist2(p2)*value*3)) end,
+        function(p1, p2, value)  return 500*math.cos(math.deg(math.atan(p1:dist(p2) *.2*value))) end,
+        function(p1, p2, value) return 9*(value^1.75)/p1:dist(p2) end,
+        function(p1, p2, value) return 18*(value^2 - p1:dist2(p2))/value end,
+    }
+
     --WINDOW CONFIG--
     love.window.setMode(WINDOW_WIDTH, WINDOW_HEIGHT, {resizable = true, minwidth = 800, minheight = 600})
     FreeRes.setScreen()
 
     --FONT CONFIG--
     GUI_BIG = love.graphics.newFont("assets/fonts/vanadine_bold.ttf", 60)
+    GUI_MEDPLUS = love.graphics.newFont("assets/fonts/Nevis.ttf", 30)
     GUI_MED = love.graphics.newFont("assets/fonts/Nevis.ttf", 20)
 
     --CAMERA--
@@ -86,14 +98,9 @@ function setup.config()
         }
     ]]
 
-    --Functions receives two positions (p1 and p2) and a value, and returns a value
-    DEATH_FUNCS = {
-        function(p1, p2, value) return 8*value end,
-        function(p1, p2, value) return 300*(math.cos(p1:dist2(p2)*value*3)) end,
-        function(p1, p2, value)  return 500*math.cos(math.deg(math.atan(p1:dist(p2) *.2*value))) end,
-        function(p1, p2, value) return 9*(value^1.75)/p1:dist(p2) end,
-        function(p1, p2, value) return 18*(value^2 - p1:dist2(p2))/value end,
-    }
+    --Start UI color transition
+    UI_COLOR = UI.create_color()
+
 
     --Background start
     BG.create()

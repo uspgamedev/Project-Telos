@@ -16,6 +16,8 @@ Bullet = Class{
 
         CIRC.init(self, _x, _y, r, color, _color_table, "fill") --Set atributes
 
+        self.color_duration = 8 --Duration between color transitions
+
         self.speedv = 500 --Speed value
         self.speed = Vector(_dx*self.speedv or 0, _dy*self.speedv or 0) --Speed vector
 
@@ -53,14 +55,13 @@ end
 
 --Create a bullet in the (x,y) position, direction dir, color c and subtype st
 function bullet.create(x, y, dir, c, color_table, st)
-    local bullet, d
+    local bullet
 
     st = st or "player_bullet"
-    d = 8 --Duration of color effect transition
 
     bullet = Bullet(x, y, dir.x, dir.y, c, color_table)
     bullet:addElement(DRAW_TABLE.L3, st)
-    bullet:startColorLoop(d)
+    bullet:startColorLoop()
 
     return bullet
 end

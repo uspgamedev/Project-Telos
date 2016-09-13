@@ -159,14 +159,15 @@ end
 --COLOR EFFECTS
 ---------------
 
-function fx.colorLoop(o, color_var, d)
-    local color_target, duration, func, handle
+function fx.colorLoop(o, color_var)
+    local color_target, func, handle, d
 
     color_target = o:getDiffRandColor()
-    duration = d or 4
+    d = o.color_duration
+
     func = "in-linear"
-    fx.colorTransition(o, color_var, color_target, duration, func)
-    handle = COLOR_TIMER:after(duration+.1,
+    fx.colorTransition(o, color_var, color_target, func)
+    handle = COLOR_TIMER:after(d+.1,
         function()
             fx.colorLoop(o, color_var)
         end
@@ -187,15 +188,15 @@ end
 
 --Make a smooth transition in an objects o.color_var to color_target
 --USES HSL
-function fx.colorTransition(o, color_var, color_target, duration, func)
+function fx.colorTransition(o, color_var, color_target, func)
 
     --HSL transition
     if o[color_var] then
-        table.insert(o.handles, COLOR_TIMER:tween(duration, o[color_var], {h = color_target.h}, func))
+        table.insert(o.handles, COLOR_TIMER:tween(o.color_duration, o[color_var], {h = color_target.h}, func))
 
-        table.insert(o.handles, COLOR_TIMER:tween(duration, o[color_var], {s = color_target.s}, func))
+        table.insert(o.handles, COLOR_TIMER:tween(o.color_duration, o[color_var], {s = color_target.s}, func))
 
-        table.insert(o.handles, COLOR_TIMER:tween(duration, o[color_var], {l = color_target.l}, func))
+        table.insert(o.handles, COLOR_TIMER:tween(o.color_duration, o[color_var], {l = color_target.l}, func))
     else
         print("COLOR TRANSITION ERROR")
     end

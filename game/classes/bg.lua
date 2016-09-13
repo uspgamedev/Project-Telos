@@ -22,6 +22,8 @@ Background = Class{
 
         RECT.init(self, 0, 0, ORIGINAL_WINDOW_WIDTH, ORIGINAL_WINDOW_HEIGHT, color_table[1], color_table) --Set atributes
 
+        self.color_duration = 5 --Duration between color transitions
+
         self.tp = "background" --Type of this class
     end
 }
@@ -43,14 +45,13 @@ end
 
 --Create the background image (transitioning)
 function bg.create()
-    local bg, id, d
+    local bg, id
 
     id = "background" --identification
-    d = 5 --Duration of color transition
 
     bg = Background()
     bg:addElement(DRAW_TABLE.BG, nil, id)
-    bg:startColorLoop(d)
+    bg:startColorLoop()
 
     return bg
 end

@@ -4,8 +4,7 @@ local Color  = require "classes.color.color"
 local Util = require "util"
 local Draw = require "draw"
 local Level = require "level_manager"
-
-
+local Txt = require "classes.text"
 --MODULE FOR THE GAMESTATE: PAUSE--
 
 --BUTTON FUNCTIONS--
@@ -20,15 +19,14 @@ function state:enter()
     --GUI--
 
     --Main pause text
-    t = Text(440, 300, "Pause", GUI_BIG, Color.orange())
-    t:addElement(DRAW_TABLE.GUI, "gui")
+    Txt.create_gui(440, 300, "Pause", GUI_BIG)
 
     --Unpause button
     b = Inv_Button(140, 650,
         function()
             SWITCH = "GAME"
         end,
-        "un(p)ause", GUI_MED, Color.orange())
+        "un(p)ause", GUI_MED)
     b:addElement(DRAW_TABLE.GUI, "gui")
 
     --"Go back" button
@@ -36,7 +34,7 @@ function state:enter()
         function()
             SWITCH = "MENU"
         end,
-        "go (b)ack", GUI_MED, Color.orange())
+        "go (b)ack", GUI_MED)
     b:addElement(DRAW_TABLE.GUI, "gui")
 
 end

@@ -56,7 +56,7 @@ end
 --[[Text button with an invisible box behind (for collision)]]
 Inv_Button = Class{
     __includes = {RECT, WTXT},
-    init = function(self, _x, _y, _func, _text, _font, _t_color)
+    init = function(self, _x, _y, _func, _text, _font)
         local w, h
 
         w = _font:getWidth(_text)
@@ -66,7 +66,7 @@ Inv_Button = Class{
 
         self.func  = _func  --Function to call when pressed
 
-        WTXT.init(self, _text, _font, _t_color) --Set text
+        WTXT.init(self, _text, _font, nil) --Set text
 
         self.tp = "invbutton" --Type of this class
     end
@@ -80,14 +80,8 @@ function Inv_Button:draw()
 
     b = self
 
-    --Draws button box
-
-    Color.set(b.color)
-    love.graphics.rectangle("fill", b.pos.x, b.pos.y, b.w, b.h)
-
-
     --Draws button text
-    Color.set(b.t_color)
+    Color.set(UI_COLOR.color)
     love.graphics.setFont(b.font)
     love.graphics.print(b.text, b.pos.x , b.pos.y)
 
