@@ -9,7 +9,7 @@ local ui = {}
 UI_Color = Class{
     __includes = {CLR},
     init = function(self)
-        local color_table, color
+        local color_table, color, color_duration
 
         color_table = {
             HSL(Hsl.stdv(57,100,54.9)), --Cadmium Yellow
@@ -18,9 +18,11 @@ UI_Color = Class{
             HSL(Hsl.stdv(125,88.2,56.9)) --Lime Green
         }
 
-        color = HSL(Hsl.stdv(57,100,54.9))
+        color = HSL(Hsl.stdv(307,94.4,35.3))
 
-        CLR.init(self, color, color_table, 4)
+        color_duration = 15
+
+        CLR.init(self, color, color_table, color_duration)
 
         self.handles = {}
         self.tp = "ui_color" --Type of this class

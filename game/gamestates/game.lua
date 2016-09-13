@@ -26,7 +26,7 @@ function state:enter()
     SLOWMO = false
 
     --Level part text
-    Txt.create_gui(200, 10, "Part 0: Test", GUI_MED, nil, nil, nil, "level_part")
+    Txt.create_gui(200, 10, "Part PI: Eletric Boogaloo", GUI_MED, nil, nil, nil, "level_part")
 
     --Lives counter text
     Txt.create_gui(5, 10, "lives: ", GUI_MED, p.lives, "down", GUI_MEDPLUS, "lives_counter")
@@ -84,6 +84,7 @@ function state:update(dt)
     Util.killSubTp("decaying_particle")
     Util.killSubTp("psycho_explosion")
     Util.killSubTp("particle_batch")
+    Util.killSubTp("gui")
     Util.killId("psycho")
 
 

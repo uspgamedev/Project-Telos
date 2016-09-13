@@ -119,7 +119,7 @@ CLR = Class{
         self.color = HSL() --This object main color
         if _c then Color.copy(self.color, _c) end
         self.color_table = _color_table or {}
-        self.color_duration = 4 or _color_duration
+        self.color_duration = _color_duration or 4
     end,
 
     setColor = function(self, _c) --Set object's color

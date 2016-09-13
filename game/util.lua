@@ -177,6 +177,9 @@ function util.gameElementException(mode)
         util.addExceptionId("level_part")
     end
 
+    if util.findId("game_title") then
+        util.addExceptionId("game_title")
+    end
 
 end
 

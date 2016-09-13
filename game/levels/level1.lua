@@ -11,9 +11,11 @@ local SB = require "classes.enemies.simple_ball"
 function script()
     local t
     --Start Level
-
+    LM.level_title("I - THE FALL OF PSYCHO")
     --1-2: Circle madness
-    LM.wait(1)
+    LM.level_part("Part 2 - Circle Madness")
+
+    LM.wait(6)
     F.circle(SB, 20, 800, 0, 300)
     LM.wait(1)
     F.circle(SB, 20, 800, 0, 700)

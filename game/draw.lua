@@ -12,7 +12,7 @@ function draw.allTables()
     --Makes transformations regarding screen curretn size
     FreeRes.transform()
 
-    DrawTable(DRAW_TABLE.BG) --Background
+    --DrawTable(DRAW_TABLE.BG) --Background
 
     DrawTable(DRAW_TABLE.L2) --Game circle effects
 

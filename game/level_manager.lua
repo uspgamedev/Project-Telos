@@ -1,6 +1,11 @@
 local Util = require "util"
+local Txt = require "classes.text"
 
 local level_manager = {}
+
+--------------------
+--SCRIPT FUNCTIONS--
+--------------------
 
 --Starts a coroutine with a level script
 function level_manager.start(level_script)
@@ -51,5 +56,45 @@ function level_manager.resume()
         COROUTINE_HANDLE = LEVEL_TIMER:after(arg, level_manager.resume)
     end
 end
+
+-------------------
+--OTHER FUNCTIONS--
+-------------------
+
+--Changes the level part text
+function level_manager.level_part(name)
+    Util.findId("level_part").text = name
+end
+
+--Create a centralized level title, that fades out after 3 seconds
+function level_manager.level_title(name)
+    local txt, fx, fy, x, y, font, limit
+
+    font = GUI_GAME_TITLE
+    limit = 4*ORIGINAL_WINDOW_WIDTH/5
+
+    --Get position so that the text is centralized on screen
+    fx = math.min(font:getWidth(name),limit) --Width of text
+    fy = font:getHeight(name)*  math.ceil(font:getWidth(name)/fx) --Height of text
+    x = ORIGINAL_WINDOW_WIDTH/2 - fx/2
+    y = ORIGINAL_WINDOW_HEIGHT/2 - fy/2
+    --Create level title
+    txt = Txt.create_gui(x, y, name, GUI_GAME_TITLE, nil, "format", nil, "game_title", "center", limit)
+    --in the future, make a "PAAAM" sound here
+
+    --After two seconds, fades-out the title
+    FX_TIMER:after(2,
+        function()
+            FX_TIMER:tween(1, Util.findId("game_title"), {alpha = 0}, 'in-linear')
+            FX_TIMER:after(1,
+                function()
+                    Util.findId("game_title").death = true
+                end
+            )
+        end
+    )
+
+end
+
 --Return functions
 return level_manager

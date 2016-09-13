@@ -177,14 +177,8 @@ end
 ----------------------
 --TRANSITION FUNCTIONS
 ----------------------
-
---Make a smooth transition in a variable var to value f
-function fx.varTransition(o, var, f, duration, func)
-    mode = mode or 'in-linear'
-    duration = duration or 5
-
-    return FX_TIMER:tween(duration, o[var], {f}, func)
-end
+--Tween model:
+--FX_TIMER:tween(duration, o, {var = f}, func)
 
 --Make a smooth transition in an objects o.color_var to color_target
 --USES HSL
