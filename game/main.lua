@@ -15,6 +15,7 @@ require "classes.color.hsl"
 
 --enemies
 require "classes.enemies.simple_ball"
+require "classes.enemies.double_ball"
 
 --other
 require "classes.primitive"

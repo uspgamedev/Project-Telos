@@ -2,24 +2,25 @@ require "classes.primitive"
 local Color = require "classes.color.color"
 local Hsl   = require "classes.color.hsl"
 local Util = require "util"
+local SB = require "classes.enemies.simple_ball"
 
---SIMPLE BALL CLASS--
---[[Simple circle blue enemy that just moves around]]
+--DOUBLE BALL CLASS--
+--[[Simple red circle enemy that spawns simple balls when it dies]]
 
 local enemy = {}
 
-Simple_Ball = Class{
+Double_Ball = Class{
     __includes = {CIRC},
     init = function(self, _x, _y, _dir, _speed_m)
         local dx, dy, r, color, color_table
 
         r = 20 --Radius of enemy
-        color = HSL(Hsl.stdv(213,100,54)) --Color of enemy
+        color = HSL(Hsl.stdv(0,100,44.9)) --Color of enemy
         color_table = {
-            HSL(Hsl.stdv(201,100,50)),
-            HSL(Hsl.stdv(239,100,26)),
-            HSL(Hsl.stdv(220,78,30)),
-            HSL(Hsl.stdv(213,100,54))
+            HSL(Hsl.stdv(0,100,44.9)), --Ku Crimson
+            HSL(Hsl.stdv(14,100,46)), --Coquelicot
+            HSL(Hsl.stdv(1,84,55)), --Deep Carmine Red
+            HSL(Hsl.stdv(12,100,38.8)) --Candy Apple Red
         }
         CIRC.init(self, _x, _y, r, color, color_table, "fill") --Set atributes
         ELEMENT.setSubTp(self, "enemies")
@@ -33,22 +34,29 @@ Simple_Ball = Class{
         self.speed = self.speed:normalized()*self.speedv
 
         self.enter = false --If this enemy has already entered the game screen
-        self.tp = "simple_ball" --Type of this class
+        self.tp = "double_ball" --Type of this class
     end
 }
 
 --CLASS FUNCTIONS--
 
-function Simple_Ball:kill()
+function Double_Ball:kill()
+    local e
 
     if self.death then return end
     self.death = true
     FX.explosion(self.pos.x, self.pos.y, self.r, self.color)
 
+    --Create two Simple Balls in a V shape
+    e = SB.create(self.pos.x, self.pos.y, self.speed:rotated(math.pi/6))
+    e.enter = true
+    e = SB.create(self.pos.x, self.pos.y, self.speed:rotated(-math.pi/6))
+    e.enter = true
+    
 end
 
 --Update this enemy
-function Simple_Ball:update(dt)
+function Double_Ball:update(dt)
     local o
 
     o = self
@@ -76,7 +84,7 @@ function enemy.create(x, y, dir, speed_m)
         direction.y = love.math.random()*2 - 1 --Rand value between [-1,1]
     end
 
-    e = Simple_Ball(x, y, dir or direction, speed_m)
+    e = Double_Ball(x, y, dir or direction, speed_m)
     e:addElement(DRAW_TABLE.L4)
     e:startColorLoop()
 

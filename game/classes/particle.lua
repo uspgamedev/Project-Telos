@@ -18,7 +18,6 @@ Particle_Batch = Class{
         self.batch = {}
         self.endtime = endtime
         self.time = 0
-        self.destroying = false
         self.tp = "particle_batch"
     end
 }
@@ -27,29 +26,24 @@ Particle_Batch = Class{
 
 function Particle_Batch:update(dt)
 
-    if self.destroying then return end
+    if self.death then return end
 
     self.time = self.time + dt
     if (self.time >= self.endtime) then
-        self.destroying = true
-        self:clearAll()
+        self.death = true
     end
 
 end
 
-
-
-function Particle_Batch:clearAll()
-
+function Particle_Batch:destroy()
+    ELEMENT.destroy(self)
     if self.batch then
         for _, part in pairs(self.batch) do
             part.death = true
         end
     end
-
-    self.death = true
-
 end
+
 
 function Particle_Batch:put(particle)
     table.insert(self.batch, particle)

@@ -2,6 +2,7 @@ local Button = require "classes.button"
 local Color  = require "classes.color.color"
 local Util = require "util"
 local Draw = require "draw"
+local Txt = require "classes.text"
 --MODULE FOR THE GAMESTATE: MENU--
 
 --BUTTON FUNCTIONS--
@@ -28,6 +29,7 @@ end
 function state:leave()
 
     Util.addExceptionId("background")
+    Util.addExceptionId("fps_counter")
     Util.clearAllTables("remove")
 
 end
@@ -41,6 +43,11 @@ function state:update(dt)
     end
 
     Util.updateTimers(dt)
+
+    Util.updateFPS()
+
+    Util.killAll()
+
 
 end
 

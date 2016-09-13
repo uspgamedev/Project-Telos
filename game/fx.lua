@@ -12,7 +12,6 @@ local fx = {}
 --Creates a colored article explosion starting at a circle with center (x,y) and radius r
 function fx.explosion(x, y, r, color, number, speed, decaying, size)
     local dir, angle, radius, batch, particle
-
     --Default Values
     number = number or 15  --Number of particles created in a explosion
     speed    = speed    or 150  --Particles speed
@@ -48,7 +47,7 @@ end
 
 --Explode Psycho in a cool function when he dies
 function fx.psychoExplosion(p)
-    local d, multi, e, death_func, x, y, dir, pos, speed, c_pos, r, color
+    local d, multi, e, death_func, x, y, dir, pos, speed, c_pos, r, color, handle
 
     d = 2 --Duration of effect's first part (expansion)
     multi = 3 --Multiplier of speed in effects second part (going back)
@@ -98,18 +97,18 @@ function fx.psychoExplosion(p)
     --EFFECT SECOND PART: GOING BACK
     --------------------------------
     --Male all particles go back the way they expanded, but faster
-    FX_TIMER:after(d,
+    handle = FX_TIMER:after(d,
         function()
             for part in pairs(Util.findSbTp("psycho_explosion")) do
                 part.speed = -part.speed*multi
             end
         end
     )
-
+    table.insert(DEATH_HANDLES, handle)
     -----------------------------------
     --EFFECT LAST PART: REVIVING PSYCHO
     -----------------------------------
-    FX_TIMER:after(d + d/multi,
+    handle = FX_TIMER:after(d + d/multi,
         function()
 
             --Removes slowmotion effect
@@ -127,6 +126,7 @@ function fx.psychoExplosion(p)
             p:startInvincible()
         end
     )
+    table.insert(DEATH_HANDLES, handle)
 end
 
 ------------------

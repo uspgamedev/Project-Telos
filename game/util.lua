@@ -28,6 +28,7 @@ end
 --  else, just apply exceptions normally and keep them as they are
 function util.clearTable(T, mode)
     local exc --Element exception
+
     if not T then return end --If table is empty
     --Clear T table
     for o in pairs (T) do
@@ -37,6 +38,16 @@ function util.clearTable(T, mode)
         if o and o.exception and mode == "remove" then
             o.exception = false
         end
+    end
+
+end
+
+function util.clearTimerTable(T, TIMER)
+
+    if not T then return end --If table is empty
+    --Clear T table
+    for _,o in pairs (T) do
+        TIMER:cancel(o)
     end
 
 end
@@ -256,6 +267,7 @@ function util.updateSubTp(dt, sb)
     util.updateTable(dt, SUBTP_TABLE[sb])
 end
 
+--Update all timers
 function util.updateTimers(dt)
     local m_dt
 
@@ -267,6 +279,11 @@ function util.updateTimers(dt)
     LEVEL_TIMER:update(m_dt)
     FX_TIMER:update(dt)
     COLOR_TIMER:update(dt)
+end
+
+--Update the fps counter
+function util.updateFPS()
+    util.findId("fps_counter").var = love.timer.getFPS()
 end
 
 ----------------
@@ -287,6 +304,18 @@ end
 function util.killSubTp(sb)
 
     util.killTable(SUBTP_TABLE[sb])
+
+end
+
+function util.killAll()
+
+    for T in pairs(SUBTP_TABLE) do
+        util.killSubTp(T)
+    end
+
+    for o in pairs(ID_TABLE) do
+        util.killId(o)
+    end
 
 end
 
@@ -319,6 +348,22 @@ function util.toggleDebug()
 
 end
 
+--Count all elements being drawn
+function util.countDrawables()
+    local count, tables
+
+    count = 0
+    tables = util.tableLen(SUBTP_TABLE)
+    for i,T in pairs(SUBTP_TABLE) do
+        print(i)
+        count = count + util.tableLen(T)
+    end
+
+    count = count + util.tableLen(ID_TABLE)
+
+    print(count, tables)
+end
+
 --Toggles fullscreen
 function util.toggleFullscreen()
 
@@ -345,6 +390,7 @@ end
 
 --Get any key that is pressed and checks for generic events
 function util.defaultKeyPressed(key)
+    local p
 
     if  key == 'x' then
         util.quit()
@@ -354,6 +400,12 @@ function util.defaultKeyPressed(key)
         util.toggleDebug()
     elseif key == 't' then
         print(SLOWMO, SLOWMO_M)
+    elseif key == '0' then
+        util.countDrawables()
+    elseif key == '9' then
+        p = util.findId("psycho")
+        p.lives = p.lives + 10
+        util.findId("lives_counter").var = p.lives
     end
 
 end

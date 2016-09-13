@@ -2,6 +2,7 @@ local FreeRes = require "FreeRes"
 local BG = require "classes.bg"
 local Hsl = require "classes.color.hsl"
 local UI = require "classes.ui"
+local Txt = require "classes.text"
 --MODULE FOR SETUP STUFF--
 
 local setup = {}
@@ -67,6 +68,8 @@ function setup.config()
         function(p1, p2, value) return 9*(value^1.75)/p1:dist(p2) end,
         function(p1, p2, value) return 18*(value^2 - p1:dist2(p2))/value end,
     }
+    --Contains the death timer handles
+    DEATH_HANDLES = {}
 
     --WINDOW CONFIG--
     love.window.setMode(WINDOW_WIDTH, WINDOW_HEIGHT, {resizable = true, minwidth = 800, minheight = 600})
@@ -105,6 +108,9 @@ function setup.config()
 
     --Background start
     BG.create()
+
+    --FPS Counter
+    Txt.create_gui(ORIGINAL_WINDOW_WIDTH - 100, 10, "FPS: ", GUI_MED, love.timer.getFPS(), "right", GUI_MED, "fps_counter")
 end
 
 --Return functions

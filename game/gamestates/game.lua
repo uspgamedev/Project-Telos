@@ -39,6 +39,7 @@ function state:leave()
 
     Level.stop()
     Util.addExceptionId("background")
+    Util.addExceptionId("fps_counter")
     Util.clearAllTables("remove")
 
 end
@@ -60,6 +61,8 @@ function state:update(dt)
 
     Util.updateTimers(dt)
 
+    Util.updateFPS()
+
     --Update psycho
     p:update(dt)
 
@@ -79,13 +82,7 @@ function state:update(dt)
     checkCollision()
 
     --Kill dead objects
-    Util.killSubTp("player_bullet")
-    Util.killSubTp("enemies")
-    Util.killSubTp("decaying_particle")
-    Util.killSubTp("psycho_explosion")
-    Util.killSubTp("particle_batch")
-    Util.killSubTp("gui")
-    Util.killId("psycho")
+    Util.killAll()
 
 
 end
@@ -128,7 +125,7 @@ function checkCollision()
             --Checking player bullet collision
             if SUBTP_TABLE["player_bullet"] then
                 for bullet in pairs(SUBTP_TABLE["player_bullet"]) do
-                    if e:collides(bullet) then
+                    if not bullet.death and e:collides(bullet) then
                         e:kill()
                         bullet:kill()
                     end

@@ -42,6 +42,7 @@ end
 function state:leave()
 
     Util.addExceptionId("background")
+    Util.addExceptionId("fps_counter")
     Util.clearAllTables("remove")
 
 end
@@ -60,6 +61,8 @@ function state:update(dt)
 
     Util.updateTimers(dt)
 
+    Util.updateFPS()
+
     --Update objects position in slowmo
     m_dt = dt*SLOWMO_M
 
@@ -69,10 +72,8 @@ function state:update(dt)
     checkCollision()
 
     --Kill dead objects
-    Util.killSubTp("player_bullet")
-    Util.killSubTp("enemies")
-    Util.killSubTp("decaying_particle")
-    Util.killSubTp("psycho_explosion")
+    Util.killAll()
+
 
 end
 

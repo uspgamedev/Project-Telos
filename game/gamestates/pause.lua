@@ -44,6 +44,7 @@ function state:leave()
     Psycho.updateSpeed(Psycho.get())
 
     Util.addExceptionId("background")
+    Util.addExceptionId("fps_counter")
     Util.clearAllTables("remove")
 
 end
@@ -57,11 +58,17 @@ function state:update(dt)
         Gamestate.pop()
     elseif SWITCH == "MENU" then
         SWITCH = nil
+        Util.clearTimerTable(DEATH_HANDLES, FX_TIMER)
         Gamestate.pop()
         Gamestate.switch(GS.MENU)
     end
 
     COLOR_TIMER:update(dt)
+
+    Util.updateFPS()
+
+    Util.killAll()
+
 
 end
 
