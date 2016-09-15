@@ -173,7 +173,9 @@ function fx.colorLoop(o, color_var)
         end
     )
     table.insert(o.handles, handle)
+
 end
+
 ----------------------
 --TRANSITION FUNCTIONS
 ----------------------
@@ -194,6 +196,7 @@ function fx.colorTransition(o, color_var, color_target, func)
     else
         print("COLOR TRANSITION ERROR")
     end
+    
 end
 
 --Return fucntions

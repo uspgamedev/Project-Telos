@@ -48,7 +48,7 @@ ELEMENT = Class{
         self:setSubTp(nil) --Removes from Subtype table, if its in one
         self:setId(nil) --Removes from Id table, if its in one
         if self.handles then
-            for h in pairs(self.handles) do
+            for _,h in pairs(self.handles) do
                 COLOR_TIMER:cancel(h) --Stops any timers this object has
             end
         end

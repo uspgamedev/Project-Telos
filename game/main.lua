@@ -73,3 +73,7 @@ end
 function love.focus(f)
     FOCUS = f
 end
+
+function love.update(dt)
+
+end

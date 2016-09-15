@@ -2,7 +2,7 @@ local Util = require "util"
 local Txt = require "classes.text"
 
 local level_manager = {}
-
+local Level_Handle1, Level_Handle2, Level_Handle3
 --------------------
 --SCRIPT FUNCTIONS--
 --------------------
@@ -22,6 +22,9 @@ function level_manager.stop()
     COROUTINE = nil
 
     if COROUTINE_HANDLE then LEVEL_TIMER:cancel(COROUTINE_HANDLE) end
+    if Level_Handle1 then LEVEL_TIMER:cancel(Level_Handle1) end
+    if Level_Handle2 then LEVEL_TIMER:cancel(Level_Handle2) end
+    if Level_Handle3 then LEVEL_TIMER:cancel(Level_Handle3) end
 
 end
 
@@ -44,15 +47,27 @@ function level_manager.resume()
     --Resumes coroutine only when there aren't any enemies on screen
     if arg == "noenemies" then
         --Checks every .02 seconds how many enemies there are
+
+        if COROUTINE_HANDLE then
+            LEVEL_TIMER:cancel(COROUTINE_HANDLE)
+        end
+
         COROUTINE_HANDLE = LEVEL_TIMER:every(.02,
-        function()
-            if Util.tableEmpty(SUBTP_TABLE["enemies"]) then
-                LEVEL_TIMER:cancel(COROUTINE_HANDLE)
-                level_manager.resume()
+            function()
+                if Util.tableEmpty(SUBTP_TABLE["enemies"]) then
+                    LEVEL_TIMER:cancel(COROUTINE_HANDLE)
+                    level_manager.resume()
+                end
             end
-        end)
+        )
+        
     --Waits arg seconds
     elseif type(arg) == "number" then
+
+        if COROUTINE_HANDLE then
+            LEVEL_TIMER:cancel(COROUTINE_HANDLE)
+        end
+
         COROUTINE_HANDLE = LEVEL_TIMER:after(arg, level_manager.resume)
     end
 end
@@ -83,10 +98,10 @@ function level_manager.level_title(name)
     --in the future, make a "PAAAM" sound here
 
     --After two seconds, fades-out the title
-    FX_TIMER:after(2,
+    Level_Handle1 = LEVEL_TIMER:after(2,
         function()
-            FX_TIMER:tween(1, Util.findId("game_title"), {alpha = 0}, 'in-linear')
-            FX_TIMER:after(1,
+            Level_Handle2 = LEVEL_TIMER:tween(1, Util.findId("game_title"), {alpha = 0}, 'in-linear')
+            Level_Handle3 = LEVEL_TIMER:after(1,
                 function()
                     Util.findId("game_title").death = true
                 end
