@@ -60,7 +60,7 @@ function level_manager.resume()
                 end
             end
         )
-        
+
     --Waits arg seconds
     elseif type(arg) == "number" then
 

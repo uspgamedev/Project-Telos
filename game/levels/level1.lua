@@ -15,7 +15,7 @@ function script()
     LM.level_title("I - THE FALL OF PSYCHO")
     --1-2: Circle madness
     LM.level_part("Part 2 - Circle Madness")
-    --[[]]
+
     LM.wait(4)
     F.circle(SB, 10, 640)
     LM.wait("noenemies")

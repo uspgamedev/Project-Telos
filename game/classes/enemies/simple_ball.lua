@@ -10,10 +10,10 @@ local enemy = {}
 
 Simple_Ball = Class{
     __includes = {CIRC},
-    init = function(self, _x, _y, _dir, _speed_m)
+    init = function(self, _x, _y, _dir, _speed_m, _radius)
         local dx, dy, r, color, color_table
 
-        r = 20 --Radius of enemy
+        r = _radius or 20 --Radius of enemy
         color = HSL(Hsl.stdv(213,100,54)) --Color of enemy
         color_table = {
             HSL(Hsl.stdv(201,100,50)),
@@ -67,7 +67,7 @@ end
 
 --UTILITY FUNCTIONS--
 
-function enemy.create(x, y, dir, speed_m)
+function enemy.create(x, y, dir, speed_m, radius)
     local e, direction
 
     if not dir then --Get random direction
@@ -76,7 +76,7 @@ function enemy.create(x, y, dir, speed_m)
         direction.y = love.math.random()*2 - 1 --Rand value between [-1,1]
     end
 
-    e = Simple_Ball(x, y, dir or direction, speed_m)
+    e = Simple_Ball(x, y, dir or direction, speed_m, radius)
     e:addElement(DRAW_TABLE.L4)
     e:startColorLoop()
 

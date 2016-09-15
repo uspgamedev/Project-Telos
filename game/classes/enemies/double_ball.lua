@@ -11,10 +11,10 @@ local enemy = {}
 
 Double_Ball = Class{
     __includes = {CIRC},
-    init = function(self, _x, _y, _dir, _speed_m)
+    init = function(self, _x, _y, _dir, _speed_m, _radius)
         local dx, dy, r, color, color_table
 
-        r = 20 --Radius of enemy
+        r = _radius or 20 --Radius of enemy
         color = HSL(Hsl.stdv(0,100,44.9)) --Color of enemy
         color_table = {
             HSL(Hsl.stdv(0,100,44.9)), --Ku Crimson
@@ -48,11 +48,11 @@ function Double_Ball:kill()
     FX.explosion(self.pos.x, self.pos.y, self.r, self.color)
 
     --Create two Simple Balls in a V shape
-    e = SB.create(self.pos.x, self.pos.y, self.speed:rotated(math.pi/6))
+    e = SB.create(self.pos.x, self.pos.y, self.speed:rotated(math.pi/12), 1.25*self.speed_m, 15)
     e.enter = true
-    e = SB.create(self.pos.x, self.pos.y, self.speed:rotated(-math.pi/6))
+    e = SB.create(self.pos.x, self.pos.y, self.speed:rotated(-math.pi/12), 1.25*self.speed_m, 15)
     e.enter = true
-    
+
 end
 
 --Update this enemy
@@ -75,7 +75,7 @@ end
 
 --UTILITY FUNCTIONS--
 
-function enemy.create(x, y, dir, speed_m)
+function enemy.create(x, y, dir, speed_m, radius)
     local e, direction
 
     if not dir then --Get random direction
