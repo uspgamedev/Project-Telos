@@ -69,6 +69,22 @@ function level_manager.resume()
         end
 
         COROUTINE_HANDLE = LEVEL_TIMER:after(arg, level_manager.resume)
+    --Waits for all enemies to die, then wait .5 second more
+    elseif arg == "noenemies+" then
+        --Checks every .02 seconds how many enemies there are
+        if COROUTINE_HANDLE then
+            LEVEL_TIMER:cancel(COROUTINE_HANDLE)
+        end
+
+        COROUTINE_HANDLE = LEVEL_TIMER:every(.02,
+            function()
+                if Util.tableEmpty(SUBTP_TABLE["enemies"]) then
+                    LEVEL_TIMER:cancel(COROUTINE_HANDLE)
+                    COROUTINE_HANDLE = LEVEL_TIMER:after(.5, level_manager.resume)
+                end
+            end
+        )
+
     end
 end
 

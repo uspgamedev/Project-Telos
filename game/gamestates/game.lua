@@ -21,7 +21,7 @@ local p --Psycho
 
 function state:enter()
 
-    p = Psycho.create()
+    p = Psycho.create(662,424)
 
     SLOWMO = false
 

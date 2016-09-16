@@ -14,7 +14,6 @@ Psy = Class{
     init = function(self, _x, _y)
         local color, color_table, r
 
-        color = HSL(Hsl.stdv(271,75,52)) --Color of psycho
         color_table = {
             HSL(Hsl.stdv(51,100,50)),
             HSL(Hsl.stdv(355,89,48)),
@@ -26,6 +25,7 @@ Psy = Class{
             HSL(Hsl.stdv(16,100,52)) -- Internacional Orange (Aerospace)
 
         } --Color table
+        color = color_table[love.math.random(#color_table)] --Color of enemy
         r = 24 --Radius of psycho
         self.collision_r = 19 --Radius of psycho that detects collision
 
@@ -35,14 +35,15 @@ Psy = Class{
         ELEMENT.setId(self, "psycho")
 
         self.color_duration = 3 --Duration between color transitions
+        self.ui_color = false --If its color should be the same as the ui
 
-        self.speedv = 250 --Speed value
+        self.speedv = 265 --Speed value
         self.speed = Vector(0,0) --Speed vector
 
         self.shoot_tick = 0 --Bullet "cooldown" timer (for shooting repeatedly)
-        self.shoot_fps = .15 --How fast to shoot bullet
+        self.shoot_fps = .14 --How fast to shoot bullet
 
-        self.lives = 5 --How many lives psycho by default has
+        self.lives = 8 --How many lives psycho by default has
         self.invincible = false --If psycho can't collide with enemies
         self.controlsLocked = false --If psycho cant move or shoot
 
@@ -52,6 +53,20 @@ Psy = Class{
 }
 
 --CLASS FUNCTIONS--
+
+function Psy:draw()
+    local p
+
+    p = self
+
+    --Draws the circle
+    if not p.ui_color then
+        Color.set(p.color)
+    else
+        Color.set(UI_COLOR.color)
+    end
+    love.graphics.circle("fill", p.pos.x, p.pos.y, p.r)
+end
 
 function Psy:shoot(x,y)
     local p, bullet, dir, c, color_table, w, h, scale
@@ -187,14 +202,22 @@ end
 
 --UTILITY FUNCTIONS--
 
-function psycho.create()
-    local p, x, y
+function psycho.create(x, y)
+    local p, handle
 
-    x, y = ORIGINAL_WINDOW_WIDTH/2, ORIGINAL_WINDOW_HEIGHT/2
+    x, y = x or ORIGINAL_WINDOW_WIDTH/2, y or  ORIGINAL_WINDOW_HEIGHT/2
 
     p = Psy(x, y)
     p:addElement(DRAW_TABLE.L4)
-    p:startColorLoop()
+    p.ui_color = true
+    handle = COLOR_TIMER:after(2.5,
+        function()
+            p.ui_color = false
+            Color.copy(p.color, UI_COLOR.color)
+            p:startColorLoop()
+        end
+    )
+    table.insert(p.handles, handle)
 
     return p
 end

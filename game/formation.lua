@@ -136,7 +136,7 @@ speed_m: speed multiplier applied to the enemies created
 dir_follow: whether the enemies' dir is facing towards psycho, or not
 ]]
 function formation.fromVertical(a)
-    local x, y, dir, half, max_r, enemy_table_size, current_enemy
+    local x, y, dir, half, max_r, enemy_table_size, current_enemy, p
 
     enemy_table_size = Util.tableLen(a.enemy)
 
@@ -151,7 +151,7 @@ function formation.fromVertical(a)
     --Default values
     p = Psycho.get()
     a.screen_margin = a.screen_margin or 0
-    a.enemy_x_margin = a.enemy_x_margin or 10 + 2*r
+    a.enemy_x_margin = a.enemy_x_margin or 10 + 2*max_r
     a.enemy_y_margin = a.enemy_y_margin or 0
     a.number = a.number or 3
     a.speed_m = a.speed_m or 1
@@ -287,15 +287,16 @@ speed_m: speed multiplier applied to the enemies created
 dir_follow: whether the enemies' dir is facing towards psycho, or not
 ]]
 function formation.single(a)
-    local dir
+    local dir, p
 
     --Default values
     p = Psycho.get()
     a.speed_m = a.speed_m or 1
     a.dir_follow = a.dir_follow or false
-
-    dir = Vector(a.dx, a.dy)
+    a.dx = a.dx or 0
+    a.dy = a.dy or 0
     if not a.dir_follow then
+        dir = Vector(a.dx, a.dy)
         a.enemy.create(a.x, a.y, dir, a.speed_m)
     else
         a.enemy.create(a.x, a.y, Vector(p.pos.x - a.x, p.pos.y - a.y), a.speed_m)
@@ -314,16 +315,16 @@ speed_m: speed multiplier applied to the enemies created
 dir_follow: whether the enemies' dir is facing towards psycho, or not
 ]]
 function formation.line(a)
-    local dir, n_dir, enemy_table_size, current_enemy
+    local dir, n_dir, enemy_table_size, current_enemy, p
 
     --Default values
     p = Psycho.get()
     a.enemy_margin = a.enemy_margin or 60
     a.speed_m = a.speed_m or 1
     a.dir_follow = a.dir_follow or false
-
+    a.dx = a.dx or 0
+    a.dy = a.dy or 0
     enemy_table_size = Util.tableLen(a.enemy)
-
     dir = Vector(a.dx, a.dy)
     n_dir = dir:normalized() --Normalized direction
 

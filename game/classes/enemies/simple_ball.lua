@@ -14,20 +14,20 @@ Simple_Ball = Class{
         local dx, dy, r, color, color_table
 
         r = _radius or 20 --Radius of enemy
-        color = HSL(Hsl.stdv(213,100,54)) --Color of enemy
         color_table = {
             HSL(Hsl.stdv(201,100,50)),
             HSL(Hsl.stdv(239,100,26)),
             HSL(Hsl.stdv(220,78,30)),
             HSL(Hsl.stdv(213,100,54))
         }
+        color = color_table[love.math.random(#color_table)] --Color of enemy
         CIRC.init(self, _x, _y, r, color, color_table, "fill") --Set atributes
         ELEMENT.setSubTp(self, "enemies")
 
         self.color_duration = 6 --Duration between color transitions
 
         --Normalize direction and set speed
-        self.speedv = 200 --Speed value
+        self.speedv = 240 --Speed value
         self.speed_m = _speed_m or 1 --Speed multiplier
         self.speed = Vector(_dir.x, _dir.y) --Speed vector
         self.speed = self.speed:normalized()*self.speedv

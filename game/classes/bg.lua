@@ -22,7 +22,7 @@ Background = Class{
 
         RECT.init(self, 0, 0, ORIGINAL_WINDOW_WIDTH, ORIGINAL_WINDOW_HEIGHT, color_table[1], color_table) --Set atributes
 
-        self.color_duration = 5 --Duration between color transitions
+        self.color_duration = 10 --Duration between color transitions
 
         self.tp = "background" --Type of this class
     end
