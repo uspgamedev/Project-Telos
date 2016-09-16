@@ -40,10 +40,14 @@ function setup.config()
 
     SLOWMO = false --If (most) game elements will move in slow-mo
     SLOWMO_M = .5 --Slowmo multiplier effect
+
     --TIMERS--
     LEVEL_TIMER = Timer.new()  --General Timer
     FX_TIMER = Timer.new() --Effects Timer (for tweening mostly)
     COLOR_TIMER = Timer.new() --Color Effects Timer
+
+    --CHEATS--
+    GODMODE = false
 
     --INITIALIZING TABLES--
     --Drawing Tables

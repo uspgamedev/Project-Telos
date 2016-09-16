@@ -341,27 +341,25 @@ function util.quit()
 
 end
 
---Toggles debug mode
+--Toggle debug mode
 function util.toggleDebug()
 
     DEBUG = not DEBUG
+    print("DEBUG is", DEBUG)
+
+end
+
+--Toggle GODMODE
+function util.toggleGODMODE()
+
+    GODMODE = not GODMODE
+    print("GODMODE is", GODMODE)
 
 end
 
 --Count all elements being drawn
 function util.countDrawables()
-    local count, tables
 
-    count = 0
-    tables = util.tableLen(SUBTP_TABLE)
-    for i,T in pairs(SUBTP_TABLE) do
-        print(i)
-        count = count + util.tableLen(T)
-    end
-
-    count = count + util.tableLen(ID_TABLE)
-
-    print(count, tables)
 end
 
 --Toggles fullscreen
@@ -396,12 +394,12 @@ function util.defaultKeyPressed(key)
         util.quit()
     elseif key == 'f6' then
         util.toggleFullscreen()
-    elseif key == 'b' then
+    elseif key == 'f9' then
         util.toggleDebug()
     elseif key == 't' then
         print(SLOWMO, SLOWMO_M)
     elseif key == '0' then
-        util.countDrawables()
+        util.toggleGODMODE()
     elseif key == '9' then
         p = util.findId("psycho")
         p.lives = p.lives + 10

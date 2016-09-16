@@ -109,8 +109,9 @@ function Psy:update(dt)
 end
 
 function Psy:kill()
-    if true then return end
     local p
+
+    if GODMODE then return end --GODMODE cheat
 
     p = self
 

@@ -22,26 +22,38 @@ speed_m: speed multiplier applied to the enemies created
 dir_follow: whether the enemies' dir is facing towards psycho, or not
 ]]
 function formation.fromHorizontal(a)
-    local x, y, r, dir, half, p
+    local x, y, dir, half, p, enemy_table_size, max_r, current_enemy
 
-    r = a.enemy.radius()
 
-    if a.side == "left" or a.side == "l" then
-        dir = Vector(1,0)
-        x = -5 -r
-    elseif a.side == "right" or a.side == "r" then
-        dir = Vector(-1,0)
-        x = ORIGINAL_WINDOW_WIDTH + 5 + r
+    enemy_table_size = Util.tableLen(a.enemy)
+
+    --Find the biggest radius between enemies
+    max_r = a.enemy[1].radius()
+    for i=2,enemy_table_size do
+        if a.enemy[i].radius() > max_r then
+            max_r = a.enemy[i].radius()
+        end
     end
 
     --Default values
     p = Psycho.get()
     a.screen_margin = a.screen_margin or 0
     a.enemy_x_margin = a.enemy_x_margin or 0
-    a.enemy_y_margin = a.enemy_y_margin or 10 + 2*r
+    a.enemy_y_margin = a.enemy_y_margin or 10 + 2*max_r
     a.number = a.number or 3
     a.speed_m = a.speed_m or 1
     a.dir_follow = a.dir_follow or false
+
+    if a.side == "left" or a.side == "l" then
+        dir = Vector(1,0)
+        x = -5 -max_r
+    elseif a.side == "right" or a.side == "r" then
+        dir = Vector(-1,0)
+        x = ORIGINAL_WINDOW_WIDTH + 5 + max_r
+    end
+    ---------
+    --MODES--
+    ---------
 
     --Center mode
     if     a.mode == "center" then
@@ -49,45 +61,57 @@ function formation.fromHorizontal(a)
         y = ORIGINAL_WINDOW_HEIGHT/2 - (a.number-1)/2*a.enemy_y_margin + a.screen_margin
         --Placing from the center
         for i=1, a.number do
+            --Cicle through enemies
+            current_enemy = a.enemy[(i-1)%enemy_table_size + 1]
+
             if not a.dir_follow then
-                a.enemy.create(x - math.abs(i-half-1)*a.enemy_x_margin*dir.x, y, dir, a.speed_m)
+                current_enemy.create(x - math.abs(i-half-1)*a.enemy_x_margin*dir.x, y, dir, a.speed_m)
             else
-                a.enemy.create(x - math.abs(i-half-1)*a.enemy_x_margin*dir.x, y, Vector(p.pos.x - x, p.pos.y - y), a.speed_m)
+                current_enemy.create(x - math.abs(i-half-1)*a.enemy_x_margin*dir.x, y, Vector(p.pos.x - x, p.pos.y - y), a.speed_m)
             end
             y = y + a.enemy_y_margin
         end
     --Distribute mode
-elseif a.mode == "distribute" then
+    elseif a.mode == "distribute" then
         for i=1, a.number do
+            --Cicle through enemies
+            current_enemy = a.enemy[(i-1)%enemy_table_size + 1]
+
             y = i* (ORIGINAL_WINDOW_HEIGHT/(a.number+1))
             if not a.dir_follow then
-                a.enemy.create(x, y, dir, a.speed_m)
+                current_enemy.create(x, y, dir, a.speed_m)
             else
-                a.enemy.create(x, y, Vector(p.pos.x - x, p.pos.y - y), a.speed_m)
+                current_enemy.create(x, y, Vector(p.pos.x - x, p.pos.y - y), a.speed_m)
             end
         end
 
     --Top mode
-elseif a.mode == "top" then
-        y = a.screen_margin + r
+    elseif a.mode == "top" then
+        y = a.screen_margin + max_r
         for i=1, a.number do
+            --Cicle through enemies
+            current_enemy = a.enemy[(i-1)%enemy_table_size + 1]
+
             if not a.dir_follow then
-                a.enemy.create(x, y, dir, a.speed_m)
+                current_enemy.create(x, y, dir, a.speed_m)
             else
-                a.enemy.create(x, y, Vector(p.pos.x - x, p.pos.y - y), a.speed_m)
+                current_enemy.create(x, y, Vector(p.pos.x - x, p.pos.y - y), a.speed_m)
             end
             y = y + a.enemy_y_margin
             x = x - a.enemy_x_margin*dir.x
         end
 
     --Bottom mode
-elseif a.mode == "bottom" then
-        y = ORIGINAL_WINDOW_HEIGHT - a.screen_margin - r
+    elseif a.mode == "bottom" then
+        y = ORIGINAL_WINDOW_HEIGHT - a.screen_margin - max_r
         for i=1, a.number do
+            --Cicle through enemies
+            current_enemy = a.enemy[(i-1)%enemy_table_size + 1]
+
             if not a.dir_follow then
-                a.enemy.create(x, y, dir, a.speed_m)
+                current_enemy.create(x, y, dir, a.speed_m)
             else
-                a.enemy.create(x, y, Vector(p.pos.x - x, p.pos.y - y), a.speed_m)
+                current_enemy.create(x, y, Vector(p.pos.x - x, p.pos.y - y), a.speed_m)
             end
             y = y - a.enemy_y_margin
             x = x - a.enemy_x_margin*dir.x
@@ -112,15 +136,16 @@ speed_m: speed multiplier applied to the enemies created
 dir_follow: whether the enemies' dir is facing towards psycho, or not
 ]]
 function formation.fromVertical(a)
-    local x, y, r, dir, half
-    r = a.enemy.radius()
+    local x, y, dir, half, max_r, enemy_table_size, current_enemy
 
-    if a.side == "top" or a.side == "t" then
-        dir = Vector(0,1)
-        y = -5 -r
-    elseif a.side == "bottom" or a.side == "b" then
-        dir = Vector(0,-1)
-        y = ORIGINAL_WINDOW_HEIGHT + 5 + r
+    enemy_table_size = Util.tableLen(a.enemy)
+
+    --Find the biggest radius between enemies
+    max_r = a.enemy[1].radius()
+    for i=2,enemy_table_size do
+        if a.enemy[i].radius() > max_r then
+            max_r = a.enemy[i].radius()
+        end
     end
 
     --Default values
@@ -132,51 +157,75 @@ function formation.fromVertical(a)
     a.speed_m = a.speed_m or 1
     a.dir_follow = a.dir_follow or false
 
+    if a.side == "top" or a.side == "t" then
+        dir = Vector(0,1)
+        y = -5 -max_r
+    elseif a.side == "bottom" or a.side == "b" then
+        dir = Vector(0,-1)
+        y = ORIGINAL_WINDOW_HEIGHT + 5 + max_r
+    end
+
+    ---------
+    --MODES--
+    ---------
+
     --Center mode
     if     a.mode == "center" then
         half = math.floor(a.number/2)
         x = ORIGINAL_WINDOW_WIDTH/2 - (a.number-1)/2*a.enemy_x_margin + a.screen_margin
         --Placing from the center
         for i=1, a.number do
+            --Cicle through enemies
+            current_enemy = a.enemy[(i-1)%enemy_table_size + 1]
+
             if not a.dir_follow then
-                a.enemy.create(x, y - math.abs(i-half-1)*a.enemy_y_margin*dir.y, dir, a.speed_m)
+                current_enemy.create(x, y - math.abs(i-half-1)*a.enemy_y_margin*dir.y, dir, a.speed_m)
             else
-                a.enemy.create(x, y - math.abs(i-half-1)*a.enemy_y_margin*dir.y, Vector(p.pos.x - x, p.pos.y - y), a.speed_m)
+                current_enemy.create(x, y - math.abs(i-half-1)*a.enemy_y_margin*dir.y, Vector(p.pos.x - x, p.pos.y - y), a.speed_m)
             end
             x = x + a.enemy_x_margin
         end
     --Distribute mode
-elseif a.mode == "distribute" then
+    elseif a.mode == "distribute" then
         for i=1, a.number do
+            --Cicle through enemies
+            current_enemy = a.enemy[(i-1)%enemy_table_size + 1]
+
             x = i* (ORIGINAL_WINDOW_WIDTH/(a.number+1))
             if not a.dir_follow then
-                a.enemy.create(x, y, dir, a.speed_m)
+                current_enemy.create(x, y, dir, a.speed_m)
             else
-                a.enemy.create(x, y, Vector(p.pos.x - x, p.pos.y - y), a.speed_m)
+                current_enemy.create(x, y, Vector(p.pos.x - x, p.pos.y - y), a.speed_m)
             end
         end
 
     --Left mode
-elseif a.mode == "left" then
-        x = a.screen_margin + r
+    elseif a.mode == "left" then
+        x = a.screen_margin + max_r
         for i=1, a.number do
+            --Cicle through enemies
+            current_enemy = a.enemy[(i-1)%enemy_table_size + 1]
+
             if not a.dir_follow then
-                a.enemy.create(x, y, dir, a.speed_m)
+                current_enemy.create(x, y, dir, a.speed_m)
             else
-                a.enemy.create(x, y, Vector(p.pos.x - x, p.pos.y - y), a.speed_m)
+                current_enemy.create(x, y, Vector(p.pos.x - x, p.pos.y - y), a.speed_m)
             end
             x = x + a.enemy_x_margin
             y = y - a.enemy_y_margin*dir.y
         end
 
     --Right mode
-elseif a.mode == "right" then
-        x = ORIGINAL_WINDOW_WIDTH - a.screen_margin - r
+    elseif a.mode == "right" then
+        x = ORIGINAL_WINDOW_WIDTH - a.screen_margin - max_r
         for i=1, a.number do
+            --Cicle through enemies
+            current_enemy = a.enemy[(i-1)%enemy_table_size + 1]
+
             if not a.dir_follow then
-                a.enemy.create(x, y, dir, a.speed_m)
+                current_enemy.create(x, y, dir, a.speed_m)
             else
-                a.enemy.create(x, y, Vector(p.pos.x - x, p.pos.y - y), a.speed_m)
+                current_enemy.create(x, y, Vector(p.pos.x - x, p.pos.y - y), a.speed_m)
             end
             x = x - a.enemy_x_margin
             y = y - a.enemy_y_margin*dir.y
@@ -196,9 +245,7 @@ speed_m: speed multiplier applied to the enemies created
 dir_follow: whether the enemies' dir is facing towards psycho, or not
 ]]
 function formation.circle(a)
-    local value, x, y, dir
-
-    value = 2*math.pi/a.number --Divides the circunference
+    local value, x, y, dir, enemy_table_size, current_enemy
 
     --Default values
     p = Psycho.get()
@@ -209,15 +256,22 @@ function formation.circle(a)
     a.speed_m = a.speed_m or 1
     a.dir_follow = a.dir_follow or false
 
+    enemy_table_size = Util.tableLen(a.enemy)
+
+    value = 2*math.pi/a.number --Divides the circunference
+
     for i=0, a.number-1 do
+        --Cicle through enemies
+        current_enemy = a.enemy[(i-1)%enemy_table_size + 1]
+
         x, y = a.radius*math.cos(i*value), a.radius*math.sin(i*value) --Get position in circle with radius and center (0,0)
         dir = Vector(-x,-y) --Get direction pointing to center
         x, y = a.x_center + x, a.y_center + y --Center circle
         x, y = x - dir:normalized().x*a.enemy_margin*i, y - dir:normalized().y*a.enemy_margin*i --Add enemy margin, if any
         if not a.dir_follow then
-            a.enemy.create(x, y, dir, a.speed_m)
+            current_enemy.create(x, y, dir, a.speed_m)
         else
-            a.enemy.create(x, y, Vector(p.pos.x - x, p.pos.y - y), a.speed_m)
+            current_enemy.create(x, y, Vector(p.pos.x - x, p.pos.y - y), a.speed_m)
         end
     end
 end
@@ -260,7 +314,7 @@ speed_m: speed multiplier applied to the enemies created
 dir_follow: whether the enemies' dir is facing towards psycho, or not
 ]]
 function formation.line(a)
-    local dir, n_dir
+    local dir, n_dir, enemy_table_size, current_enemy
 
     --Default values
     p = Psycho.get()
@@ -268,13 +322,19 @@ function formation.line(a)
     a.speed_m = a.speed_m or 1
     a.dir_follow = a.dir_follow or false
 
+    enemy_table_size = Util.tableLen(a.enemy)
+
     dir = Vector(a.dx, a.dy)
-    n_dir = dir:normalized()
+    n_dir = dir:normalized() --Normalized direction
+
     for i=0, a.number-1 do
+        --Cicle through enemies
+        current_enemy = a.enemy[(i-1)%enemy_table_size + 1]
+
         if not a.dir_follow then
-            a.enemy.create(a.x - i*n_dir.x*a.enemy_margin, a.y - i*n_dir.y*a.enemy_margin, dir, a.speed_m)
+            current_enemy.create(a.x - i*n_dir.x*a.enemy_margin, a.y - i*n_dir.y*a.enemy_margin, dir, a.speed_m)
         else
-            a.enemy.create(a.x - i*n_dir.x*a.enemy_margin, a.y - i*n_dir.y*a.enemy_margin, Vector(p.pos.x - a.x, p.pos.y - a.y), a.speed_m)
+            current_enemy.create(a.x - i*n_dir.x*a.enemy_margin, a.y - i*n_dir.y*a.enemy_margin, Vector(p.pos.x - a.x, p.pos.y - a.y), a.speed_m)
         end
     end
 end
