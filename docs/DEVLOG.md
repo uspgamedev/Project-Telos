@@ -5,6 +5,10 @@ GAME DESIGN DOCUMENT
 DEV LOG
 =======
 
+#### 12-16/08/2016:
+
+Working on level scripts, removing bugs and lags. See more at the commits.
+
 #### 11/08/2016:
 
 Finishing making COOL DEATH EXPLOSIONS!

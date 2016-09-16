@@ -17,38 +17,40 @@ function script()
     LM.level_part("Part 2 - Circle Madness")
 
     LM.wait(4)
-    F.circle(SB, 10, 640)
+    F.single{enemy = DB, x = -10, y = ORIGINAL_WINDOW_HEIGHT/2, speed_m = 2, dir_follow = true}
     LM.wait("noenemies")
-    F.circle(DB, 20, 640)
+    F.circle{enemy = SB, number = 10, radius = 640, dir_follow = true}
     LM.wait("noenemies")
-    F.circle(DB, 20, 800, 0, 300)
-    F.circle(SB, 20, 800, 0, 700)
+    F.circle({enemy = DB, number = 20, radius = 640})
     LM.wait("noenemies")
-    F.circle(SB, 20, 800, 0, 300)
-    F.circle(DB, 20, 800, 0, 700)
+    F.circle{enemy = DB, number = 20, radius = 800, enemy_margin = 0, x_center = 300}
+    F.circle{enemy = SB, number = 20, radius = 800, enemy_margin = 0, x_center = 700}
     LM.wait("noenemies")
-    F.circle(SB, 80, 640, 100, nil, nil, 2)
+    F.circle{enemy = SB, number = 20, radius = 800, enemy_margin = 0, x_center = 300}
+    F.circle{enemy = DB, number = 20, radius = 800, enemy_margin = 0, x_center = 700}
+    LM.wait("noenemies")
+    F.circle{enemy = SB, number = 80, radius = 640, enemy_margin = 100, speed_m = 2}
     LM.wait(5)
-    F.circle(DB, 70, 640, 100, nil, nil, 2)
+    F.circle{enemy = DB, number = 70, radius = 640, enemy_margin = 100, speed_m = 2}
     LM.wait(6)
-    F.fromHorizontal("left", "distribute", SB, 9, nil, nil, nil, 1.5)
+    F.fromHorizontal{side = "left", mode = "distribute", enemy = SB, number = 9, speed_m = 1.5}
     LM.wait(3.5)
-    F.fromHorizontal("right", "distribute", SB, 9, nil, nil, nil, 1.5)
+    F.fromHorizontal{side = "right", mode = "distribute", enemy = SB, number = 9, speed_m = 1.5}
     LM.wait(4)
-    F.fromHorizontal("left", "top", DB, 9, 0, 40, 40, 1.5)
-    F.fromHorizontal("right", "bottom", DB, 9, 0, 40, 40, 1.5)
+    F.fromHorizontal{side = "left", mode = "top", enemy = DB, number = 9, enemy_x_margin = 0, enemy_y_margin = 40, screen_margin = 40, speed_m = 1.5}
+    F.fromHorizontal{side = "right", mode = "bottom", enemy = DB, number = 9, enemy_x_margin = 0, enemy_y_margin = 40, screen_margin = 40, speed_m = 1.5}
     LM.wait(4)
-    F.fromVertical("top", "center", SB, 11, 40, 40, 0, 1.5)
-    F.fromVertical("bottom", "left", SB, 9, 40, 0, 0, 1.5)
-    F.fromVertical("bottom", "right", SB, 9, 40, 0, 0, 1.5)
+    F.fromVertical{side = "top", mode = "center", enemy = SB, number = 11, enemy_x_margin = 40, enemy_y_margin = 40, screen_margin = 0, speed_m = 1.5}
+    F.fromVertical{side = "bottom", mode = "left", enemy = SB, number = 9, enemy_x_margin = 40, enemy_y_margin = 0, screen_margin = 0, speed_m = 1.5}
+    F.fromVertical{side = "bottom", mode = "right", enemy = SB, number = 9, enemy_x_margin = 40, enemy_y_margin = 0, screen_margin = 0, speed_m = 1.5}
     LM.wait(.8)
-    F.fromVertical("top", "center", DB, 11, 40, 40, 0, 1.5)
+    F.fromVertical{side = "top", mode = "center", enemy = DB, number = 11, enemy_x_margin = 40, enemy_y_margin = 40, screen_margin = 0, speed_m = 1.5}
     LM.wait("noenemies")
-    F.circle(DB, 50, 640)
+    F.circle{enemy = DB, number = 50, radius = 640}
     LM.wait(1.5)
-    F.circle(SB, 50, 640)
+    F.circle{enemy = SB, number = 50, radius = 640}
     LM.wait(1.5)
-    F.circle(DB, 50, 640)
+    F.circle{enemy = DB, number = 50, radius = 640}
     LM.wait("noenemies")
 
     print("end of level")

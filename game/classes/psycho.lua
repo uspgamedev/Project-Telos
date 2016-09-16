@@ -109,6 +109,7 @@ function Psy:update(dt)
 end
 
 function Psy:kill()
+    if true then return end
     local p
 
     p = self
