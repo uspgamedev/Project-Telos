@@ -6,6 +6,10 @@ local Color = require "classes.color.color"
 local SB = require "classes.enemies.simple_ball"
 local DB = require "classes.enemies.double_ball"
 
+--Level
+
+local level2 = require "levels.level2"
+
 --LEVEL 1--
 
 --Level script
@@ -115,6 +119,7 @@ function script()
     LM.wait(.8)
     F.fromVertical{side = "top", mode = "center", enemy = {DB}, number = 11, enemy_x_margin = 40, enemy_y_margin = 40, screen_margin = 0, speed_m = 1.4}
     LM.wait("noenemies")
+
     F.circle{enemy = {SB}, number = 25, radius = 640}
     LM.wait(1.5)
     F.circle{enemy = {SB,DB}, number = 25, radius = 640}
@@ -122,15 +127,9 @@ function script()
     F.circle{enemy = {DB}, number = 25, radius = 640}
     LM.wait("noenemies")
 
-    print("end of level")
-    --[[t = Text(240, 200, "FELIZ ANIVERSARIO YAN", GUI_BIG, Color.red())
-    t:addElement(DRAW_TABLE.GUI)
-    t = Text(10, 300, "VOCE EH UM DOS MEUS MELHORES AMIGOS", GUI_BIG, Color.orange())
-    t:addElement(DRAW_TABLE.GUI)
-    t = Text(340, 400, "VALEU CARA <3", GUI_BIG, Color.pink())
-    t:addElement(DRAW_TABLE.GUI)]]--
-
+    LM.wait(2)
     LM.stop()
+    LM.start(level2)
 
 end
 

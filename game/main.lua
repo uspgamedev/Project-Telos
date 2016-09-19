@@ -17,6 +17,11 @@ require "classes.color.hsl"
 require "classes.enemies.simple_ball"
 require "classes.enemies.double_ball"
 
+--levels
+
+require "levels.level1"
+require "levels.level2"
+
 --other
 require "classes.primitive"
 require "classes.particle"
