@@ -174,6 +174,10 @@ function util.gameElementException(mode)
         util.addExceptionSubtype("decaying_particle")
     end
 
+    if util.findSbTp("growing_circle") then
+        util.addExceptionSubtype("growing_circle")
+    end
+
     if util.findSbTp("psycho_explosion") then
         util.addExceptionSubtype("psycho_explosion")
     end

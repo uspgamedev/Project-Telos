@@ -4,6 +4,7 @@ local Color = require "classes.color.color"
 local Hsl = require "classes.color.hsl"
 local Util = require "util"
 local FreeRes = require "FreeRes"
+local C_FX = require "classes.circle_effect"
 --PSYCHO CLASS--
 --[[Our hero... or is it VILLAIN??!!]]
 
@@ -42,6 +43,10 @@ Psy = Class{
 
         self.shoot_tick = 0 --Bullet "cooldown" timer (for shooting repeatedly)
         self.shoot_fps = .14 --How fast to shoot bullet
+
+        self.circle_fx_tick = 0 --Circle Effect "cooldown" timer
+        self.circle_fx_fps = .2 --How fast to create the circle effect
+
 
         self.lives = 8 --How many lives psycho by default has
         self.invincible = false --If psycho can't collide with enemies
@@ -114,8 +119,15 @@ function Psy:update(dt)
         p.shoot_tick = 0
     end
 
-    --Leave before moving psycho
+    --Leave before moving psycho or creating circle effects
     if p.controlsLocked then return end
+
+    --Create circle effect
+    p.circle_fx_tick = p.circle_fx_tick - dt
+    if p.circle_fx_tick <= 0 then
+        p.circle_fx_tick = p.circle_fx_tick + p.circle_fx_fps
+        C_FX.create(p.pos)
+    end
 
     --Update movement
     p.pos = p.pos + dt*p.speed

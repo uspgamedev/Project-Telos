@@ -7,7 +7,9 @@ DEV LOG
 
 #### 12-16/08/2016:
 
-Working on level scripts, removing bugs and lags. See more at the commits.
+Working on level scripts, removing bugs and lags.
+Part 1-1 and 1-2 are basicaly finished.
+See more at the commits.
 
 #### 11/08/2016:
 

@@ -54,6 +54,7 @@ function script()
     F.fromVertical{side = "bottom", mode = "center", number = 5, enemy = {SB}, speed_m = .9}
     LM.wait("noenemies")
 
+    --MAKE BIGGER
     LM.wait(1)
     F.single{enemy = DB, x = ORIGINAL_WINDOW_WIDTH/2, y = -25, dy = 1}
     LM.wait("noenemies")
@@ -61,12 +62,12 @@ function script()
     F.line{enemy = {DB}, x = ORIGINAL_WINDOW_WIDTH + 25, y = ORIGINAL_WINDOW_HEIGHT/2, dx = -1, number = 20}
     LM.wait("noenemies")
 
-    F.line{enemy = {DB}, x = ORIGINAL_WINDOW_WIDTH/2 - 200, y = ORIGINAL_WINDOW_HEIGHT + 25, dy = -1, number = 45}
-    F.line{enemy = {DB}, x = ORIGINAL_WINDOW_WIDTH/2 + 200, y = - 25, dy = 1, number = 45}
-    LM.wait(5)
+    F.line{enemy = {DB}, x = ORIGINAL_WINDOW_WIDTH/2 - 200, y = ORIGINAL_WINDOW_HEIGHT + 25, dy = -1, number = 36}
+    F.line{enemy = {DB}, x = ORIGINAL_WINDOW_WIDTH/2 + 200, y = - 25, dy = 1, number = 36}
+    LM.wait(4)
     F.fromVertical{side = "top", mode = "distribute", number = 9, enemy = {SB}}
     F.fromVertical{side = "bottom", mode = "distribute", number = 9, enemy = {SB}}
-    LM.wait(5)
+    LM.wait(4)
     F.fromVertical{side = "top", mode = "distribute", number = 14, enemy = {SB, DB}}
     F.fromVertical{side = "bottom", mode = "distribute", number = 14, enemy = {SB, DB}}
     LM.wait("noenemies+")

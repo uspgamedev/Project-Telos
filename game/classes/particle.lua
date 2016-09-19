@@ -154,7 +154,7 @@ function Decaying_Particle:update(dt)
     p.pos = p.pos + dt*p.speed
     --Decays the alpha value
     if SLOWMO then
-        p.color.a = p.color.a * p.decaying_speed^SLOWMO_M
+        p.color.a = p.color.a * (p.decaying_speed^SLOWMO_M)^dt
     else
         p.color.a = p.color.a * p.decaying_speed
     end

@@ -18,7 +18,7 @@ Bullet = Class{
 
         self.color_duration = 8 --Duration between color transitions
 
-        self.speedv = 500 --Speed value
+        self.speedv = 600 --Speed value
         self.speed = Vector(_dx*self.speedv or 0, _dy*self.speedv or 0) --Speed vector
 
         self.tp = "bullet" --Type of this class
@@ -31,7 +31,7 @@ function Bullet:kill()
 
     if self.death then return end
     self.death = true
-    FX.explosion(self.pos.x, self.pos.y, self.r, self.color, 10, nil, nil, 1)
+    FX.explosion(self.pos.x, self.pos.y, self.r, self.color, 10, nil, nil, 2)
 
 end
 

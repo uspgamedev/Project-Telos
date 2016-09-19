@@ -12,9 +12,11 @@ function draw.allTables()
     --Makes transformations regarding screen curretn size
     FreeRes.transform()
 
-    --DrawTable(DRAW_TABLE.BG) --Background
+    DrawTable(DRAW_TABLE.BG) --Background
 
-    DrawTable(DRAW_TABLE.L2) --Game circle effects
+    DrawTable(DRAW_TABLE.L1) --Circle effect
+
+    DrawTable(DRAW_TABLE.L2) --Game particle effects
 
     --CAM:attach() --Start tracking camera
 

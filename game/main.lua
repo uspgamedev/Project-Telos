@@ -24,6 +24,7 @@ require "classes.psycho"
 require "classes.bullet"
 require "classes.text"
 require "classes.bg"
+require "classes.circle_effect"
 require "classes.ui"
 Button = require "classes.button"
 

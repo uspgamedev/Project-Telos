@@ -52,12 +52,13 @@ function setup.config()
     --INITIALIZING TABLES--
     --Drawing Tables
     DRAW_TABLE = {
-    BG = {}, --Layer 1 (bottom layer, first to draw)
+    BG = {}, --Background (bottom layer, first to draw)
+    L1 = {}, --Layer 1
     L2 = {}, --Layer 2
     L3 = {}, --Layer 3
     L4 = {}, --Layer 4
-    GAME_GUI = {}, --Layer 5
-    GUI = {}  --Layer 6 (top layer, last to draw)
+    GAME_GUI = {}, --Game User Interface
+    GUI = {}  --Graphic User Interface (top layer, last to draw)
     }
 
     --Other Tables
