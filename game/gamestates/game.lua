@@ -79,6 +79,7 @@ function state:update(dt)
     Util.updateSubTp(dt, "psycho_explosion") --Are not affected by slowmo
     Util.updateSubTp(m_dt, "particle_batch")
     Util.updateSubTp(m_dt, "growing_circle")
+    Util.findId("psycho_aim"):update(dt) --is not affected by slowmo
 
     checkCollision()
 

@@ -1,4 +1,5 @@
 require "classes.primitive"
+local Aim = require "classes.psycho_aim"
 local Bullet = require "classes.bullet"
 local Color = require "classes.color.color"
 local Hsl = require "classes.color.hsl"
@@ -42,7 +43,7 @@ Psy = Class{
         self.speed = Vector(0,0) --Speed vector
 
         self.shoot_tick = 0 --Bullet "cooldown" timer (for shooting repeatedly)
-        self.shoot_fps = .14 --How fast to shoot bullet
+        self.shoot_fps = .145 --How fast to shoot bullet
 
         self.circle_fx_tick = 0 --Circle Effect "cooldown" timer
         self.circle_fx_fps = .2 --How fast to create the circle effect
@@ -150,6 +151,7 @@ function Psy:kill()
     if not p.death and p.lives == 0 then
         FX.explosion(p.pos.x, p.pos.y, p.r, p.color, 60, 200, .994, 4)
         p.death = true
+        Util.findId("psycho_aim").death = true --Delete aim
         SWITCH =  "GAMEOVER"
     else
         FX.psychoExplosion(p)
@@ -219,9 +221,16 @@ function psycho.create(x, y)
 
     x, y = x or ORIGINAL_WINDOW_WIDTH/2, y or  ORIGINAL_WINDOW_HEIGHT/2
 
+    --Create psycho
     p = Psy(x, y)
     p:addElement(DRAW_TABLE.L4)
+
+    --Create aim
+    Aim.create("psycho_aim")
+
+    --Make psycho first color to be the UI color (to blend with title)
     p.ui_color = true
+    --Return to normal after 2.5 seconds
     handle = COLOR_TIMER:after(2.5,
         function()
             p.ui_color = false

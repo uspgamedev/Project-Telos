@@ -26,6 +26,7 @@ require "classes.text"
 require "classes.bg"
 require "classes.circle_effect"
 require "classes.ui"
+require "classes.psycho_aim"
 Button = require "classes.button"
 
 --MY MODULES

@@ -39,7 +39,7 @@ function Circle_FX:draw()
     color.a = 50
 
 
-    --Draws the particle
+    --Draw the circle effect
     Color.set(color)
     love.graphics.setLineWidth(circle.line_width)
     love.graphics.circle("line", circle.pos.x, circle.pos.y, circle.r)

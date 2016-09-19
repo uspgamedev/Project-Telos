@@ -178,6 +178,10 @@ function util.gameElementException(mode)
         util.addExceptionSubtype("growing_circle")
     end
 
+    if util.findId("psycho_aim") then
+        util.addExceptionId("psycho_aim")
+    end
+
     if util.findSbTp("psycho_explosion") then
         util.addExceptionSubtype("psycho_explosion")
     end
