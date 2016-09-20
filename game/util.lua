@@ -186,6 +186,10 @@ function util.gameElementException(mode)
         util.addExceptionSubtype("psycho_explosion")
     end
 
+    if util.findSbTp("enemy_indicator") then
+        util.addExceptionSubtype("enemy_indicator")
+    end
+
     --GUI ELEMENTS
 
     if util.findId("lives_counter") then

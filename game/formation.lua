@@ -1,5 +1,6 @@
 local Psycho = require "classes.psycho"
 local Util = require "util"
+local Indicator = require "classes.indicator"
 --MODULE TO CREATE ENEMY FORMATIONS--
 
 local formation = {}
@@ -20,9 +21,13 @@ enemy_y_margin: vertical margin between enemies
 screen_margin: margin from screen (or offset) the enemies are to be created
 speed_m: speed multiplier applied to the enemies created
 dir_follow: whether the enemies' dir is facing towards psycho, or not
+ind_mode: indicator mode. If nil, won't create an indicator:
+    --all: Create an indicator for all created enemies in the formation
+    --first:Create an indicator only to the first enemy created
+ind_duration: duration to display indicator before creating the enemies
 ]]
 function formation.fromHorizontal(a)
-    local x, y, dir, half, p, enemy_table_size, max_r, current_enemy
+    local x, y, dir, half, p, enemy_table_size, max_r
 
 
     enemy_table_size = Util.tableLen(a.enemy)
@@ -43,6 +48,7 @@ function formation.fromHorizontal(a)
     a.number = a.number or 3
     a.speed_m = a.speed_m or 1
     a.dir_follow = a.dir_follow or false
+    a.ind_duration = a.ind_duration or 3
 
     if a.side == "left" or a.side == "l" then
         dir = Vector(1,0)
@@ -61,58 +67,125 @@ function formation.fromHorizontal(a)
         y = ORIGINAL_WINDOW_HEIGHT/2 - (a.number-1)/2*a.enemy_y_margin + a.screen_margin
         --Placing from the center
         for i=1, a.number do
+            local l_pos, l_dir, current_enemy, l_speed --Local values so that enemies are properly created
+
             --Cicle through enemies
             current_enemy = a.enemy[(i-1)%enemy_table_size + 1]
 
-            if not a.dir_follow then
-                current_enemy.create(x - math.abs(i-half-1)*a.enemy_x_margin*dir.x, y, dir, a.speed_m)
+            --Setting local variables
+            l_pos = Vector(x - math.abs(i-half-1)*a.enemy_x_margin*dir.x, y)
+            l_speed = a.speed_m
+
+            --Make direction equal to current position of psycho, if desired
+            if a.dir_follow then
+                l_dir = Vector(p.pos.x - x, p.pos.y - y)
             else
-                current_enemy.create(x - math.abs(i-half-1)*a.enemy_x_margin*dir.x, y, Vector(p.pos.x - x, p.pos.y - y), a.speed_m)
+                l_dir = Vector(dir.x, dir.y)
             end
+
+            if (i == 1 and a.ind_mode == "first") or a.ind_mode == "all" then
+                --Create the indicator, and later, the enemy
+                Indicator.create_enemy(current_enemy, l_pos, l_dir, a.dir_follow, nil, a.ind_duration, l_speed)
+            else
+                --Just create the enemy
+                current_enemy.create(l_pos.x, l_pos.y, l_dir, a.speed_m)
+            end
+
             y = y + a.enemy_y_margin
         end
     --Distribute mode
     elseif a.mode == "distribute" then
         for i=1, a.number do
+            local l_pos, l_dir, current_enemy, l_speed --Local values so that enemies are properly created
+
             --Cicle through enemies
             current_enemy = a.enemy[(i-1)%enemy_table_size + 1]
 
+            --"Distribute" the enemies
             y = i* (ORIGINAL_WINDOW_HEIGHT/(a.number+1))
-            if not a.dir_follow then
-                current_enemy.create(x, y, dir, a.speed_m)
+
+            --Make direction equal to current position of psycho, if desired
+            if a.dir_follow then
+                l_dir = Vector(p.pos.x - x, p.pos.y - y)
             else
-                current_enemy.create(x, y, Vector(p.pos.x - x, p.pos.y - y), a.speed_m)
+                l_dir = Vector(dir.x, dir.y)
             end
+
+            --Setting local variables
+            l_pos = Vector(x, y)
+            l_speed = a.speed_m
+
+            if (i == 1 and a.ind_mode == "first") or a.ind_mode == "all" then
+                --Create the indicator, and later, the enemy
+                Indicator.create_enemy(current_enemy, l_pos, l_dir, a.dir_follow, nil, a.ind_duration, l_speed)
+            else
+                --Just create the enemy
+                current_enemy.create(l_pos.x, l_pos.y, l_dir, a.speed_m)
+            end
+
         end
 
     --Top mode
     elseif a.mode == "top" then
         y = a.screen_margin + max_r
         for i=1, a.number do
+            local l_pos, l_dir, current_enemy, l_speed --Local values so that enemies are properly created
+
             --Cicle through enemies
             current_enemy = a.enemy[(i-1)%enemy_table_size + 1]
 
-            if not a.dir_follow then
-                current_enemy.create(x, y, dir, a.speed_m)
+            --Make direction equal to current position of psycho, if desired
+            if a.dir_follow then
+                l_dir = Vector(p.pos.x - x, p.pos.y - y)
             else
-                current_enemy.create(x, y, Vector(p.pos.x - x, p.pos.y - y), a.speed_m)
+                l_dir = Vector(dir.x, dir.y)
             end
+
+            --Setting local variables
+            l_pos = Vector(x,y)
+            l_speed = a.speed_m
+
+            if (i == 1 and a.ind_mode == "first") or a.ind_mode == "all" then
+                --Create the indicator, and later, the enemy
+                Indicator.create_enemy(current_enemy, l_pos, l_dir, a.dir_follow, nil, a.ind_duration, l_speed)
+            else
+                --Just create the enemy
+                current_enemy.create(l_pos.x, l_pos.y, l_dir, a.speed_m)
+            end
+
             y = y + a.enemy_y_margin
             x = x - a.enemy_x_margin*dir.x
         end
 
     --Bottom mode
     elseif a.mode == "bottom" then
+
         y = ORIGINAL_WINDOW_HEIGHT - a.screen_margin - max_r
         for i=1, a.number do
+            local l_pos, l_dir, current_enemy, l_speed --Local values so that enemies are properly created
+
             --Cicle through enemies
             current_enemy = a.enemy[(i-1)%enemy_table_size + 1]
 
-            if not a.dir_follow then
-                current_enemy.create(x, y, dir, a.speed_m)
+            --Make direction equal to current position of psycho, if desired
+            if a.dir_follow then
+                l_dir = Vector(p.pos.x - x, p.pos.y - y)
             else
-                current_enemy.create(x, y, Vector(p.pos.x - x, p.pos.y - y), a.speed_m)
+                l_dir = Vector(dir.x, dir.y)
             end
+
+            --Setting local variables
+            l_pos = Vector(x,y)
+            l_speed = a.speed_m
+
+            if (i == 1 and a.ind_mode == "first") or a.ind_mode == "all" then
+                --Create the indicator, and later, the enemy
+                Indicator.create_enemy(current_enemy, l_pos, l_dir, a.dir_follow, nil, a.ind_duration, l_speed)
+            else
+                --Just create the enemy
+                current_enemy.create(l_pos.x, l_pos.y, l_dir, a.speed_m)
+            end
+
             y = y - a.enemy_y_margin
             x = x - a.enemy_x_margin*dir.x
         end
@@ -134,9 +207,13 @@ enemy_y_margin: vertical margin between enemies
 screen_margin: margin from screen (or offset) the enemies are to be created
 speed_m: speed multiplier applied to the enemies created
 dir_follow: whether the enemies' dir is facing towards psycho, or not
+ind_mode: indicator mode. If nil, won't create an indicator:
+    --all: Create an indicator for all created enemies in the formation
+    --first:Create an indicator only to the first enemy created
+ind_duration: duration to display indicator before creating the enemies
 ]]
 function formation.fromVertical(a)
-    local x, y, dir, half, max_r, enemy_table_size, current_enemy, p
+    local x, y, dir, half, max_r, enemy_table_size, p
 
     enemy_table_size = Util.tableLen(a.enemy)
 
@@ -156,6 +233,7 @@ function formation.fromVertical(a)
     a.number = a.number or 3
     a.speed_m = a.speed_m or 1
     a.dir_follow = a.dir_follow or false
+    a.ind_duration = a.ind_duration or 3
 
     if a.side == "top" or a.side == "t" then
         dir = Vector(0,1)
@@ -175,42 +253,92 @@ function formation.fromVertical(a)
         x = ORIGINAL_WINDOW_WIDTH/2 - (a.number-1)/2*a.enemy_x_margin + a.screen_margin
         --Placing from the center
         for i=1, a.number do
+            local l_pos, l_dir, current_enemy, l_speed --Local values so that enemies are properly created
+
             --Cicle through enemies
             current_enemy = a.enemy[(i-1)%enemy_table_size + 1]
 
-            if not a.dir_follow then
-                current_enemy.create(x, y - math.abs(i-half-1)*a.enemy_y_margin*dir.y, dir, a.speed_m)
+            --Make direction equal to current position of psycho, if desired
+            if a.dir_follow then
+                l_dir = Vector(p.pos.x - x, p.pos.y - y)
             else
-                current_enemy.create(x, y - math.abs(i-half-1)*a.enemy_y_margin*dir.y, Vector(p.pos.x - x, p.pos.y - y), a.speed_m)
+                l_dir = Vector(dir.x, dir.y)
             end
+
+            --Setting local variables
+            l_pos = Vector(x, y - math.abs(i-half-1)*a.enemy_y_margin*dir.y)
+            l_speed = a.speed_m
+
+            if (i == 1 and a.ind_mode == "first") or a.ind_mode == "all" then
+                --Create the indicator, and later, the enemy
+                Indicator.create_enemy(current_enemy, l_pos, l_dir, a.dir_follow, nil, a.ind_duration, l_speed)
+            else
+                --Just create the enemy
+                current_enemy.create(l_pos.x, l_pos.y, l_dir, a.speed_m)
+            end
+
             x = x + a.enemy_x_margin
         end
     --Distribute mode
     elseif a.mode == "distribute" then
         for i=1, a.number do
+            local l_pos, l_dir, current_enemy, l_speed --Local values so that enemies are properly created
+
             --Cicle through enemies
             current_enemy = a.enemy[(i-1)%enemy_table_size + 1]
 
+            --"Distribute" enemies
             x = i* (ORIGINAL_WINDOW_WIDTH/(a.number+1))
-            if not a.dir_follow then
-                current_enemy.create(x, y, dir, a.speed_m)
+
+            --Make direction equal to current position of psycho, if desired
+            if a.dir_follow then
+                l_dir = Vector(p.pos.x - x, p.pos.y - y)
             else
-                current_enemy.create(x, y, Vector(p.pos.x - x, p.pos.y - y), a.speed_m)
+                l_dir = Vector(dir.x, dir.y)
             end
+
+            --Setting local variables
+            l_pos = Vector(x, y)
+            l_speed = a.speed_m
+
+            if (i == 1 and a.ind_mode == "first") or a.ind_mode == "all" then
+                --Create the indicator, and later, the enemy
+                Indicator.create_enemy(current_enemy, l_pos, l_dir, a.dir_follow, nil, a.ind_duration, l_speed)
+            else
+                --Just create the enemy
+                current_enemy.create(l_pos.x, l_pos.y, l_dir, a.speed_m)
+            end
+
         end
 
     --Left mode
     elseif a.mode == "left" then
         x = a.screen_margin + max_r
         for i=1, a.number do
+            local l_pos, l_dir, current_enemy, l_speed --Local values so that enemies are properly created
+
             --Cicle through enemies
             current_enemy = a.enemy[(i-1)%enemy_table_size + 1]
 
-            if not a.dir_follow then
-                current_enemy.create(x, y, dir, a.speed_m)
+            --Make direction equal to current position of psycho, if desired
+            if a.dir_follow then
+                l_dir = Vector(p.pos.x - x, p.pos.y - y)
             else
-                current_enemy.create(x, y, Vector(p.pos.x - x, p.pos.y - y), a.speed_m)
+                l_dir = Vector(dir.x, dir.y)
             end
+
+            --Setting local variables
+            l_pos = Vector(x, y)
+            l_speed = a.speed_m
+
+            if (i == 1 and a.ind_mode == "first") or a.ind_mode == "all" then
+                --Create the indicator, and later, the enemy
+                Indicator.create_enemy(current_enemy, l_pos, l_dir, a.dir_follow, nil, a.ind_duration, l_speed)
+            else
+                --Just create the enemy
+                current_enemy.create(l_pos.x, l_pos.y, l_dir, a.speed_m)
+            end
+
             x = x + a.enemy_x_margin
             y = y - a.enemy_y_margin*dir.y
         end
@@ -219,14 +347,30 @@ function formation.fromVertical(a)
     elseif a.mode == "right" then
         x = ORIGINAL_WINDOW_WIDTH - a.screen_margin - max_r
         for i=1, a.number do
+            local l_pos, l_dir, current_enemy, l_speed --Local values so that enemies are properly created
+
             --Cicle through enemies
             current_enemy = a.enemy[(i-1)%enemy_table_size + 1]
 
-            if not a.dir_follow then
-                current_enemy.create(x, y, dir, a.speed_m)
+            --Make direction equal to current position of psycho, if desired
+            if a.dir_follow then
+                l_dir = Vector(p.pos.x - x, p.pos.y - y)
             else
-                current_enemy.create(x, y, Vector(p.pos.x - x, p.pos.y - y), a.speed_m)
+                l_dir = Vector(dir.x, dir.y)
             end
+
+            --Setting local variables
+            l_pos = Vector(x, y)
+            l_speed = a.speed_m
+
+            if (i == 1 and a.ind_mode == "first") or a.ind_mode == "all" then
+                --Create the indicator, and later, the enemy
+                Indicator.create_enemy(current_enemy, l_pos, l_dir, a.dir_follow, nil, a.ind_duration, l_speed)
+            else
+                --Just create the enemy
+                current_enemy.create(l_pos.x, l_pos.y, l_dir, a.speed_m)
+            end
+
             x = x - a.enemy_x_margin
             y = y - a.enemy_y_margin*dir.y
         end
@@ -243,9 +387,13 @@ x_center: x position of center
 y_center: y position of center
 speed_m: speed multiplier applied to the enemies created
 dir_follow: whether the enemies' dir is facing towards psycho, or not
+ind_mode: indicator mode. If nil, won't create an indicator:
+    --all: Create an indicator for all created enemies in the formation
+    --first:Create an indicator only to the first enemy created
+ind_duration: duration to display indicator before creating the enemies
 ]]
 function formation.circle(a)
-    local value, x, y, dir, enemy_table_size, current_enemy
+    local value, x, y, dir, enemy_table_size
 
     --Default values
     p = Psycho.get()
@@ -255,24 +403,42 @@ function formation.circle(a)
     a.y_center = a.y_center or ORIGINAL_WINDOW_HEIGHT/2 --Center y of the circle
     a.speed_m = a.speed_m or 1
     a.dir_follow = a.dir_follow or false
+    a.ind_duration = a.ind_duration or 3
 
     enemy_table_size = Util.tableLen(a.enemy)
 
     value = 2*math.pi/a.number --Divides the circunference
 
     for i=0, a.number-1 do
+        local l_pos, l_dir, current_enemy, l_speed --Local values so that enemies are properly created
+
         --Cicle through enemies
-        current_enemy = a.enemy[(i-1)%enemy_table_size + 1]
+        current_enemy = a.enemy[(i%enemy_table_size) + 1]
 
         x, y = a.radius*math.cos(i*value), a.radius*math.sin(i*value) --Get position in circle with radius and center (0,0)
         dir = Vector(-x,-y) --Get direction pointing to center
         x, y = a.x_center + x, a.y_center + y --Center circle
         x, y = x - dir:normalized().x*a.enemy_margin*i, y - dir:normalized().y*a.enemy_margin*i --Add enemy margin, if any
-        if not a.dir_follow then
-            current_enemy.create(x, y, dir, a.speed_m)
+
+        --Setting local variables
+        l_pos = Vector(x, y)
+        l_speed = a.speed_m
+
+        --Make direction equal to current position of psycho, if desired
+        if a.dir_follow then
+            l_dir = Vector(p.pos.x - x, p.pos.y - y)
         else
-            current_enemy.create(x, y, Vector(p.pos.x - x, p.pos.y - y), a.speed_m)
+            l_dir = Vector(dir.x, dir.y)
         end
+
+        if (i == 0 and a.ind_mode == "first") or a.ind_mode == "all" then
+            --Create the indicator, and later, the enemy
+            Indicator.create_enemy(current_enemy, l_pos, l_dir, a.dir_follow, nil, a.ind_duration, l_speed)
+        else
+            --Just create the enemy
+            current_enemy.create(l_pos.x, l_pos.y, l_dir, a.speed_m)
+        end
+
     end
 end
 
@@ -285,9 +451,11 @@ dx: x direction of enemy
 dy: y direction of enemy
 speed_m: speed multiplier applied to the enemies created
 dir_follow: whether the enemies' dir is facing towards psycho, or not
+ind_mode: if true, create an indicator for the enemy being created
+ind_duration: duration to display indicator before creating the enemy
 ]]
 function formation.single(a)
-    local dir, p
+    local p
 
     --Default values
     p = Psycho.get()
@@ -295,12 +463,27 @@ function formation.single(a)
     a.dir_follow = a.dir_follow or false
     a.dx = a.dx or 0
     a.dy = a.dy or 0
-    if not a.dir_follow then
-        dir = Vector(a.dx, a.dy)
-        a.enemy.create(a.x, a.y, dir, a.speed_m)
+    a.ind_duration = a.ind_duration or 3
+    --Setting local variables
+    l_pos = Vector(a.x, a.y)
+    l_speed = a.speed_m
+
+    --Make direction equal to current position of psycho, if desired
+    if a.dir_follow then
+        l_dir = Vector(p.pos.x - a.x, p.pos.y - a.y)
     else
-        a.enemy.create(a.x, a.y, Vector(p.pos.x - a.x, p.pos.y - a.y), a.speed_m)
+        l_dir = Vector(a.dx, a.dy)
     end
+
+
+    if a.ind_mode then
+        --Create the indicator, and later, the enemy
+        Indicator.create_enemy(a.enemy, l_pos, l_dir, a.dir_follow, nil, a.ind_duration, l_speed)
+    else
+        --Just create the enemy
+        a.enemy.create(l_pos.x, l_pos.y, l_dir, a.speed_m)
+    end
+
 end
 
 --[[Create a line of enemies starting in a (x,y) position and moving in a direction
@@ -313,9 +496,13 @@ dy: y direction of enemies
 enemy_margin: margin between enemies
 speed_m: speed multiplier applied to the enemies created
 dir_follow: whether the enemies' dir is facing towards psycho, or not
+ind_mode: indicator mode. If nil, won't create an indicator:
+    --all: Create an indicator for all created enemies in the formation
+    --first:Create an indicator only to the first enemy created
+ind_duration: duration to display indicator before creating the enemies
 ]]
 function formation.line(a)
-    local dir, n_dir, enemy_table_size, current_enemy, p
+    local dir, n_dir, enemy_table_size, p
 
     --Default values
     p = Psycho.get()
@@ -324,18 +511,35 @@ function formation.line(a)
     a.dir_follow = a.dir_follow or false
     a.dx = a.dx or 0
     a.dy = a.dy or 0
+    a.ind_duration = a.ind_duration or 3
+
     enemy_table_size = Util.tableLen(a.enemy)
     dir = Vector(a.dx, a.dy)
     n_dir = dir:normalized() --Normalized direction
 
     for i=0, a.number-1 do
-        --Cicle through enemies
-        current_enemy = a.enemy[(i-1)%enemy_table_size + 1]
+        local l_pos, l_dir, current_enemy, l_speed --Local values so that enemies are properly created
 
-        if not a.dir_follow then
-            current_enemy.create(a.x - i*n_dir.x*a.enemy_margin, a.y - i*n_dir.y*a.enemy_margin, dir, a.speed_m)
+        --Cicle through enemies
+        current_enemy = a.enemy[ (i%enemy_table_size) + 1]
+
+        --Setting local variables
+        l_pos = Vector(a.x - i*n_dir.x*a.enemy_margin, a.y - i*n_dir.y*a.enemy_margin)
+        l_speed = a.speed_m
+
+        --Make direction equal to current position of psycho, if desired
+        if a.dir_follow then
+            l_dir = Vector(p.pos.x - a.x, p.pos.y - a.y)
         else
-            current_enemy.create(a.x - i*n_dir.x*a.enemy_margin, a.y - i*n_dir.y*a.enemy_margin, Vector(p.pos.x - a.x, p.pos.y - a.y), a.speed_m)
+            l_dir = Vector(a.dx, a.dy)
+        end
+
+        if (i == 0 and a.ind_mode == "first") or a.ind_mode == "all" then
+            --Create the indicator, and later, the enemy
+            Indicator.create_enemy(current_enemy, l_pos, l_dir, a.dir_follow, nil, a.ind_duration, l_speed)
+        else
+            --Just create the enemy
+            current_enemy.create(l_pos.x, l_pos.y, l_dir, a.speed_m)
         end
     end
 end

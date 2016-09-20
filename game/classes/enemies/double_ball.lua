@@ -98,6 +98,11 @@ function enemy.radius()
     return 20
 end
 
+--Return the color for this enemy indicator
+function enemy.indColor()
+    return HSL(Hsl.stdv(1,84,55))
+end
+
 --LOCAL FUNCTION--
 
 --Checks if a circular enemy has entered (even if partially) inside the game screen

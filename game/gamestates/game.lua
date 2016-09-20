@@ -12,6 +12,7 @@ local SB = require "classes.enemies.simple_ball"
 --LEVEL FUNCTIONS--
 
 local level1 = require "levels.level1"
+local level2 = require "levels.level2"
 
 --------------------
 
@@ -79,7 +80,8 @@ function state:update(dt)
     Util.updateSubTp(dt, "psycho_explosion") --Are not affected by slowmo
     Util.updateSubTp(m_dt, "particle_batch")
     Util.updateSubTp(m_dt, "growing_circle")
-    Util.findId("psycho_aim"):update(dt) --is not affected by slowmo
+    Util.updateSubTp(m_dt, "enemy_indicator")
+    Util.findId("psycho_aim"):update(dt) --Is not affected by slowmo
 
     checkCollision()
 

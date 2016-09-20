@@ -20,7 +20,7 @@ function draw.allTables()
 
     --CAM:attach() --Start tracking camera
 
-    DrawTable(DRAW_TABLE.L3) --Bullets and projectiles
+    DrawTable(DRAW_TABLE.L3) --Bullets, projectiles and indicators
 
     DrawTable(DRAW_TABLE.L4) --Psycho and enemies
 

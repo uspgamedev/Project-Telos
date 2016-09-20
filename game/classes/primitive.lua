@@ -174,6 +174,10 @@ WTXT = Class{
 --SHAPES--
 ----------
 
+-----------------------
+--RECTANGLE FUNCTIONS--
+-----------------------
+
 --Rectangle: is a positionable and colorful object with width and height
 RECT = Class{
     __includes = {ELEMENT, POS, CLR},
@@ -191,6 +195,40 @@ RECT = Class{
     end
 
 }
+
+----------------------
+--TRIANGLE FUNCTIONS--
+----------------------
+
+--Triangle: is a positionable and colorful object with three points
+TRIANGLE = Class{
+    __includes = {ELEMENT, CLR},
+    init = function(self, _pos1, _pos2, _pos3, _color, _color_table, _mode, _line_width) --Set rectangle's atributes
+        ELEMENT.init(self)
+
+        --Triangle positions
+        self.p1 = Vector(_pos1.x, _pos1.y)
+        self.p2 = Vector(_pos2.x, _pos2.y)
+        self.p3 = Vector(_pos3.x, _pos3.y)
+
+        self.mode = _mode or "line" --Mode to draw the triangle
+        self.line_width = _line_width or 3 --Line thickness if mode is line
+
+        CLR.init(self, _color, _color_table)
+
+    end
+}
+
+function TRIANGLE:draw()
+    local t
+
+    t = self
+
+    --Draws the triangle
+    Color.set(t.color)
+    love.graphics.setLineWidth(t.line_width)
+    love.graphics.polygon(t.mode, t.p1.x, t.p1.y, t.p2.x, t.p2.y, t.p3.x, t.p3.y)
+end
 
 --------------------
 --CIRCLE FUNCTIONS--
@@ -212,18 +250,7 @@ CIRC = Class{
     end
 }
 
-
-function CIRC:draw()
-    local p
-
-    p = self
-
-    --Draws the circle
-    Color.set(p.color)
-    love.graphics.circle("fill", p.pos.x, p.pos.y, p.r)
-end
-
---Draw this enemy
+--Draws the circle
 function CIRC:draw()
     local p
 

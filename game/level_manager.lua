@@ -25,6 +25,11 @@ function level_manager.stop()
     if Level_Handle1 then LEVEL_TIMER:cancel(Level_Handle1) end
     if Level_Handle2 then LEVEL_TIMER:cancel(Level_Handle2) end
     if Level_Handle3 then LEVEL_TIMER:cancel(Level_Handle3) end
+    if not Util.tableEmpty(INDICATOR_HANDLES) then
+        for _,h in pairs(INDICATOR_HANDLES) do
+            LEVEL_TIMER:cancel(h)
+        end
+    end
 
 end
 

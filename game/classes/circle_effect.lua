@@ -6,9 +6,9 @@ local Util = require "util"
 
 local fx = {}
 
-------------------
---Circle Effect
-------------------
+-----------------
+--Circle Effect--
+-----------------
 
 --Particle that has an alpha decaying over-time
 Circle_FX = Class{

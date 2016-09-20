@@ -64,6 +64,7 @@ function setup.config()
     --Other Tables
     SUBTP_TABLE = {} --Table with tables for each subtype (for fast lookup)
     ID_TABLE = {} --Table with elements with Ids (for fast lookup)
+    INDICATOR_HANDLES = {} --Table holding handles for enemies indicators
 
     --Functions receives two positions (p1 and p2) and a value, and returns a value
     DEATH_FUNCS = {

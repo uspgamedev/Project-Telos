@@ -86,20 +86,20 @@ function script()
     F.circle{enemy = {SB,DB}, number = 20, radius = 640}
     LM.wait("noenemies")
 
-    F.circle{enemy = {SB}, number = 10, radius = 800, enemy_margin = 0, x_center = 300}
-    F.circle{enemy = {SB}, number = 10, radius = 800, enemy_margin = 0, x_center = 700}
-    LM.wait("noenemies")
-
-    F.circle{enemy = {SB,DB,SB}, number = 12, radius = 800, enemy_margin = 0, x_center = 300}
+    F.circle{enemy = {SB}, number = 12, radius = 800, enemy_margin = 0, x_center = 300}
     F.circle{enemy = {SB}, number = 12, radius = 800, enemy_margin = 0, x_center = 700}
     LM.wait("noenemies")
 
-    F.circle{enemy = {SB}, number = 12, radius = 800, enemy_margin = 0, x_center = 300}
-    F.circle{enemy = {SB,DB,SB}, number = 12, radius = 800, enemy_margin = 0, x_center = 700}
+    F.circle{enemy = {SB,DB,SB}, number = 15, radius = 800, enemy_margin = 0, x_center = 300}
+    F.circle{enemy = {SB}, number = 15, radius = 800, enemy_margin = 0, x_center = 700}
     LM.wait("noenemies")
 
-    F.circle{enemy = {SB, DB}, number = 10, radius = 800, enemy_margin = 0, x_center = 300}
-    F.circle{enemy = {DB, SB}, number = 10, radius = 800, enemy_margin = 0, x_center = 700}
+    F.circle{enemy = {SB}, number = 15, radius = 800, enemy_margin = 0, x_center = 300}
+    F.circle{enemy = {DB,SB,DB}, number = 15, radius = 800, enemy_margin = 0, x_center = 700}
+    LM.wait("noenemies")
+
+    F.circle{enemy = {SB, DB}, number = 16, radius = 800, enemy_margin = 0, x_center = 300}
+    F.circle{enemy = {DB, SB}, number = 16, radius = 800, enemy_margin = 0, x_center = 700}
     LM.wait("noenemies")
 
     F.circle{enemy = {SB}, number = 80, radius = 640, enemy_margin = 100, speed_m = 2}
@@ -120,11 +120,11 @@ function script()
     F.fromVertical{side = "top", mode = "center", enemy = {DB}, number = 11, enemy_x_margin = 40, enemy_y_margin = 40, screen_margin = 0, speed_m = 1.4}
     LM.wait("noenemies")
 
-    F.circle{enemy = {SB}, number = 25, radius = 640}
+    F.circle{enemy = {SB}, number = 28, radius = 640}
     LM.wait(1.5)
-    F.circle{enemy = {SB,DB}, number = 25, radius = 640}
+    F.circle{enemy = {SB,DB}, number = 28, radius = 640}
     LM.wait(1.5)
-    F.circle{enemy = {DB}, number = 25, radius = 640}
+    F.circle{enemy = {DB}, number = 28, radius = 640}
     LM.wait("noenemies")
 
     LM.wait(2)
