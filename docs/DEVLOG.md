@@ -5,6 +5,12 @@ GAME DESIGN DOCUMENT
 DEV LOG
 =======
 
+#### 19-23/08/2016:
+
+Finishing remaining issues for this iteration.
+Aim and circle effects added.
+Enemy indicator working.
+
 #### 12-16/08/2016:
 
 Working on level scripts, removing bugs and lags.

@@ -17,7 +17,7 @@ function getPositions(center, dir, side)
     ndir = dir:normalized() --Normalized direction
 
     --Get vertex positions
-    p1 = Vector(center.x + ndir.x * (side/math.sqrt(3)), center.y + ndir.y * (side/math.sqrt(3)) ) --"Pointing" vertex
+    p1 = Vector(center.x + ndir.x * ((1.8*side)/math.sqrt(3)), center.y + ndir.y * (side/math.sqrt(3)) ) --"Pointing" vertex
     p2 = Vector(center.x + ndir:rotated((2*math.pi)/3).x*(side/math.sqrt(3)), center.y + ndir:rotated((2*math.pi)/3).y*(side/math.sqrt(3))) --Other vertex
     p3 = Vector(center.x + ndir:rotated((-2*math.pi)/3).x*(side/math.sqrt(3)), center.y + ndir:rotated((-2*math.pi)/3).y*(side/math.sqrt(3))) --Remaining vertex
 
@@ -36,7 +36,6 @@ Enemy_Indicator = Class{
         local p1, p2, p3
 
         p1, p2, p3 = getPositions(_center_pos, _dir, _side)
-
         TRIANGLE.init(self, p1, p2, p3, _color) --Set atributes
 
         self.center = Vector(_center_pos.x, _center_pos.y)
@@ -79,11 +78,12 @@ end
 
 --Create an enemy indicator from a margin in the screen, and after duration, create the enemy
 function indicator.create_enemy(enemy, pos, dir, following, side, duration, speed_m, st)
-    local i, center, margin, handle
+    local i, center, margin, handle, color
 
     margin = 10
     center = Vector(pos.x, pos.y)
     side = side or 20
+    color = enemy.indColor()
 
     --Put indicator center inside the screen
     if pos.x < margin then
@@ -99,7 +99,7 @@ function indicator.create_enemy(enemy, pos, dir, following, side, duration, spee
 
     st = st or "enemy_indicator" --subtype
 
-    i = Enemy_Indicator(center, dir, side, enemy.indColor(), duration, following)
+    i = Enemy_Indicator(center, dir, side, color, duration, following)
 
     i:addElement(DRAW_TABLE.L3, st)
 

@@ -48,7 +48,8 @@ function formation.fromHorizontal(a)
     a.number = a.number or 3
     a.speed_m = a.speed_m or 1
     a.dir_follow = a.dir_follow or false
-    a.ind_duration = a.ind_duration or 3
+    a.ind_duration = a.ind_duration or 1.5
+    a.ind_mode = a.ind_mode or "all"
 
     if a.side == "left" or a.side == "l" then
         dir = Vector(1,0)
@@ -86,6 +87,14 @@ function formation.fromHorizontal(a)
             if (i == 1 and a.ind_mode == "first") or a.ind_mode == "all" then
                 --Create the indicator, and later, the enemy
                 Indicator.create_enemy(current_enemy, l_pos, l_dir, a.dir_follow, nil, a.ind_duration, l_speed)
+            elseif a.ind_mode == "first" then
+                --Create the enemy after duration
+                handle = LEVEL_TIMER:after(a.ind_duration,
+                    function()
+                        current_enemy.create(l_pos.x, l_pos.y, l_dir, a.speed_m)
+                    end
+                )
+                table.insert(INDICATOR_HANDLES, handle)
             else
                 --Just create the enemy
                 current_enemy.create(l_pos.x, l_pos.y, l_dir, a.speed_m)
@@ -118,6 +127,14 @@ function formation.fromHorizontal(a)
             if (i == 1 and a.ind_mode == "first") or a.ind_mode == "all" then
                 --Create the indicator, and later, the enemy
                 Indicator.create_enemy(current_enemy, l_pos, l_dir, a.dir_follow, nil, a.ind_duration, l_speed)
+            elseif a.ind_mode == "first" then
+                --Create the enemy after duration
+                handle = LEVEL_TIMER:after(a.ind_duration,
+                    function()
+                        current_enemy.create(l_pos.x, l_pos.y, l_dir, a.speed_m)
+                    end
+                )
+                table.insert(INDICATOR_HANDLES, handle)
             else
                 --Just create the enemy
                 current_enemy.create(l_pos.x, l_pos.y, l_dir, a.speed_m)
@@ -148,6 +165,14 @@ function formation.fromHorizontal(a)
             if (i == 1 and a.ind_mode == "first") or a.ind_mode == "all" then
                 --Create the indicator, and later, the enemy
                 Indicator.create_enemy(current_enemy, l_pos, l_dir, a.dir_follow, nil, a.ind_duration, l_speed)
+            elseif a.ind_mode == "first" then
+                --Create the enemy after duration
+                handle = LEVEL_TIMER:after(a.ind_duration,
+                    function()
+                        current_enemy.create(l_pos.x, l_pos.y, l_dir, a.speed_m)
+                    end
+                )
+                table.insert(INDICATOR_HANDLES, handle)
             else
                 --Just create the enemy
                 current_enemy.create(l_pos.x, l_pos.y, l_dir, a.speed_m)
@@ -181,6 +206,14 @@ function formation.fromHorizontal(a)
             if (i == 1 and a.ind_mode == "first") or a.ind_mode == "all" then
                 --Create the indicator, and later, the enemy
                 Indicator.create_enemy(current_enemy, l_pos, l_dir, a.dir_follow, nil, a.ind_duration, l_speed)
+            elseif a.ind_mode == "first" then
+                --Create the enemy after duration
+                handle = LEVEL_TIMER:after(a.ind_duration,
+                    function()
+                        current_enemy.create(l_pos.x, l_pos.y, l_dir, a.speed_m)
+                    end
+                )
+                table.insert(INDICATOR_HANDLES, handle)
             else
                 --Just create the enemy
                 current_enemy.create(l_pos.x, l_pos.y, l_dir, a.speed_m)
@@ -233,7 +266,8 @@ function formation.fromVertical(a)
     a.number = a.number or 3
     a.speed_m = a.speed_m or 1
     a.dir_follow = a.dir_follow or false
-    a.ind_duration = a.ind_duration or 3
+    a.ind_duration = a.ind_duration or 1.5
+    a.ind_mode = a.ind_mode or "all"
 
     if a.side == "top" or a.side == "t" then
         dir = Vector(0,1)
@@ -272,6 +306,14 @@ function formation.fromVertical(a)
             if (i == 1 and a.ind_mode == "first") or a.ind_mode == "all" then
                 --Create the indicator, and later, the enemy
                 Indicator.create_enemy(current_enemy, l_pos, l_dir, a.dir_follow, nil, a.ind_duration, l_speed)
+            elseif a.ind_mode == "first" then
+                --Create the enemy after duration
+                handle = LEVEL_TIMER:after(a.ind_duration,
+                    function()
+                        current_enemy.create(l_pos.x, l_pos.y, l_dir, a.speed_m)
+                    end
+                )
+                table.insert(INDICATOR_HANDLES, handle)
             else
                 --Just create the enemy
                 current_enemy.create(l_pos.x, l_pos.y, l_dir, a.speed_m)
@@ -304,6 +346,14 @@ function formation.fromVertical(a)
             if (i == 1 and a.ind_mode == "first") or a.ind_mode == "all" then
                 --Create the indicator, and later, the enemy
                 Indicator.create_enemy(current_enemy, l_pos, l_dir, a.dir_follow, nil, a.ind_duration, l_speed)
+            elseif a.ind_mode == "first" then
+                --Create the enemy after duration
+                handle = LEVEL_TIMER:after(a.ind_duration,
+                    function()
+                        current_enemy.create(l_pos.x, l_pos.y, l_dir, a.speed_m)
+                    end
+                )
+                table.insert(INDICATOR_HANDLES, handle)
             else
                 --Just create the enemy
                 current_enemy.create(l_pos.x, l_pos.y, l_dir, a.speed_m)
@@ -334,6 +384,14 @@ function formation.fromVertical(a)
             if (i == 1 and a.ind_mode == "first") or a.ind_mode == "all" then
                 --Create the indicator, and later, the enemy
                 Indicator.create_enemy(current_enemy, l_pos, l_dir, a.dir_follow, nil, a.ind_duration, l_speed)
+            elseif a.ind_mode == "first" then
+                --Create the enemy after duration
+                handle = LEVEL_TIMER:after(a.ind_duration,
+                    function()
+                        current_enemy.create(l_pos.x, l_pos.y, l_dir, a.speed_m)
+                    end
+                )
+                table.insert(INDICATOR_HANDLES, handle)
             else
                 --Just create the enemy
                 current_enemy.create(l_pos.x, l_pos.y, l_dir, a.speed_m)
@@ -366,6 +424,14 @@ function formation.fromVertical(a)
             if (i == 1 and a.ind_mode == "first") or a.ind_mode == "all" then
                 --Create the indicator, and later, the enemy
                 Indicator.create_enemy(current_enemy, l_pos, l_dir, a.dir_follow, nil, a.ind_duration, l_speed)
+            elseif a.ind_mode == "first" then
+                --Create the enemy after duration
+                handle = LEVEL_TIMER:after(a.ind_duration,
+                    function()
+                        current_enemy.create(l_pos.x, l_pos.y, l_dir, a.speed_m)
+                    end
+                )
+                table.insert(INDICATOR_HANDLES, handle)
             else
                 --Just create the enemy
                 current_enemy.create(l_pos.x, l_pos.y, l_dir, a.speed_m)
@@ -403,7 +469,8 @@ function formation.circle(a)
     a.y_center = a.y_center or ORIGINAL_WINDOW_HEIGHT/2 --Center y of the circle
     a.speed_m = a.speed_m or 1
     a.dir_follow = a.dir_follow or false
-    a.ind_duration = a.ind_duration or 3
+    a.ind_duration = a.ind_duration or 1.5
+    a.ind_mode = a.ind_mode or "all"
 
     enemy_table_size = Util.tableLen(a.enemy)
 
@@ -434,6 +501,14 @@ function formation.circle(a)
         if (i == 0 and a.ind_mode == "first") or a.ind_mode == "all" then
             --Create the indicator, and later, the enemy
             Indicator.create_enemy(current_enemy, l_pos, l_dir, a.dir_follow, nil, a.ind_duration, l_speed)
+        elseif a.ind_mode == "first" then
+            --Create the enemy after duration
+            handle = LEVEL_TIMER:after(a.ind_duration,
+                function()
+                    current_enemy.create(l_pos.x, l_pos.y, l_dir, a.speed_m)
+                end
+            )
+            table.insert(INDICATOR_HANDLES, handle)
         else
             --Just create the enemy
             current_enemy.create(l_pos.x, l_pos.y, l_dir, a.speed_m)
@@ -463,7 +538,9 @@ function formation.single(a)
     a.dir_follow = a.dir_follow or false
     a.dx = a.dx or 0
     a.dy = a.dy or 0
-    a.ind_duration = a.ind_duration or 3
+    a.ind_duration = a.ind_duration or 1.5
+    a.ind_mode = a.ind_mode or true
+
     --Setting local variables
     l_pos = Vector(a.x, a.y)
     l_speed = a.speed_m
@@ -511,7 +588,8 @@ function formation.line(a)
     a.dir_follow = a.dir_follow or false
     a.dx = a.dx or 0
     a.dy = a.dy or 0
-    a.ind_duration = a.ind_duration or 3
+    a.ind_duration = a.ind_duration or 1.5
+    a.ind_mode = a.ind_mode or "first"
 
     enemy_table_size = Util.tableLen(a.enemy)
     dir = Vector(a.dx, a.dy)
@@ -537,7 +615,16 @@ function formation.line(a)
         if (i == 0 and a.ind_mode == "first") or a.ind_mode == "all" then
             --Create the indicator, and later, the enemy
             Indicator.create_enemy(current_enemy, l_pos, l_dir, a.dir_follow, nil, a.ind_duration, l_speed)
+        elseif a.ind_mode == "first" then
+            --Create the enemy after duration
+            handle = LEVEL_TIMER:after(a.ind_duration,
+                function()
+                    current_enemy.create(l_pos.x, l_pos.y, l_dir, a.speed_m)
+                end
+            )
+            table.insert(INDICATOR_HANDLES, handle)
         else
+
             --Just create the enemy
             current_enemy.create(l_pos.x, l_pos.y, l_dir, a.speed_m)
         end

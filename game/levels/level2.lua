@@ -18,7 +18,7 @@ function script()
     LM.level_part("Part 1 - Cool level")
 
     --LM.wait(4)
-    F.line{enemy = {DB, SB}, x = ORIGINAL_WINDOW_WIDTH + 25, y = ORIGINAL_WINDOW_HEIGHT/2, dx = -1, number = 20, ind_mode = "all", ind_duration = 4, dir_follow = true}
+    F.line{enemy = {DB, SB}, x = ORIGINAL_WINDOW_WIDTH + 25, y = ORIGINAL_WINDOW_HEIGHT/2, dx = -1, number = 20, ind_mode = "first", ind_duration = 4, dir_follow = true}
     LM.wait(7)
     LM.wait("noenemies")
     LM.stop()

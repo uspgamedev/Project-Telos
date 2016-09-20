@@ -46,7 +46,7 @@ Psy = Class{
         self.shoot_fps = .155 --How fast to shoot bullet
 
         self.circle_fx_tick = 0 --Circle Effect "cooldown" timer
-        self.circle_fx_fps = .3 --How fast to create the circle effect
+        self.circle_fx_fps = .2 --How fast to create the circle effect
 
 
         self.lives = 8 --How many lives psycho by default has

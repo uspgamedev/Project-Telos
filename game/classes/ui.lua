@@ -12,13 +12,13 @@ UI_Color = Class{
         local color_table, color, color_duration
 
         color_table = {
-            HSL(Hsl.stdv(57,100,54.9)), --Cadmium Yellow
-            HSL(Hsl.stdv(12,100,38.8)), --Mahogany
-            HSL(Hsl.stdv(307,94.4,35.3)), --Heliotrope Magenta
-            HSL(Hsl.stdv(125,88.2,56.9)) --Lime Green
+            HSL(Hsl.stdv(57,100,55)), --Cadmium Yellow
+            HSL(Hsl.stdv(12,100,55)), --Mahogany
+            HSL(Hsl.stdv(307,100,55)), --Heliotrope Magenta (mod)
+            HSL(Hsl.stdv(125,100,55)) --Lime Green (mod)
         }
 
-        color = HSL(Hsl.stdv(307,94.4,35.3))
+        color = color_table[love.math.random(#color_table)]
 
         color_duration = 15
 

@@ -90,7 +90,7 @@ end
 
 --Return the color for this enemy indicator
 function enemy.indColor()
-    return HSL(Hsl.stdv(220,78,30))
+    return HSL(Hsl.stdv(227,88.8,49.2))
 end
 
 --LOCAL FUNCTION--

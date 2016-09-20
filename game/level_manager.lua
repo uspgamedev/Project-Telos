@@ -59,7 +59,7 @@ function level_manager.resume()
 
         COROUTINE_HANDLE = LEVEL_TIMER:every(.02,
             function()
-                if Util.tableEmpty(SUBTP_TABLE["enemies"]) then
+                if Util.tableEmpty(SUBTP_TABLE["enemies"]) and Util.tableEmpty(SUBTP_TABLE["enemy_indicator"]) then
                     LEVEL_TIMER:cancel(COROUTINE_HANDLE)
                     level_manager.resume()
                 end
@@ -83,7 +83,7 @@ function level_manager.resume()
 
         COROUTINE_HANDLE = LEVEL_TIMER:every(.02,
             function()
-                if Util.tableEmpty(SUBTP_TABLE["enemies"]) then
+                if Util.tableEmpty(SUBTP_TABLE["enemies"]) and Util.tableEmpty(SUBTP_TABLE["enemy_indicator"]) then
                     LEVEL_TIMER:cancel(COROUTINE_HANDLE)
                     COROUTINE_HANDLE = LEVEL_TIMER:after(.5, level_manager.resume)
                 end
