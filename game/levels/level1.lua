@@ -27,8 +27,7 @@ function script()
 
     F.single{enemy = SB, x = -20, y = ORIGINAL_WINDOW_HEIGHT/2, dx = 1, dy = 0}
     F.single{enemy = SB, x = ORIGINAL_WINDOW_WIDTH + 20, y = ORIGINAL_WINDOW_HEIGHT/2, dx = -1, dy = 0}
-    LM.wait("noenemies")
-
+    LM.wait(1.5)
     F.circle{enemy = {SB}, number = 4, radius = 610}
     LM.wait("noenemies")
 
@@ -41,7 +40,7 @@ function script()
     F.fromHorizontal{side = "left", mode = "center", number = 9, enemy_x_margin = 25, enemy_y_margin = 90, enemy = {SB}, speed_m = 1.5}
     LM.wait(.4)
     F.fromHorizontal{side = "left", mode = "center", number = 9, enemy_x_margin = 25, enemy_y_margin = 90, enemy = {SB}, speed_m = 2}
-    LM.wait(2.5)
+    LM.wait(1.5)
     F.fromHorizontal{side = "right", mode = "distribute", number = 16, enemy = {SB}, speed_m = 1.5}
     LM.wait("noenemies")
 
@@ -58,7 +57,7 @@ function script()
 
     --MAKE BIGGER
     LM.wait(1)
-    F.single{enemy = DB, x = ORIGINAL_WINDOW_WIDTH/2, y = -25, dy = 1}
+    F.single{enemy = DB, x = ORIGINAL_WINDOW_WIDTH/2, y = -25, dy = 1, ind_duration = 2}
     LM.wait("noenemies")
 
     F.line{enemy = {DB}, x = ORIGINAL_WINDOW_WIDTH + 25, y = ORIGINAL_WINDOW_HEIGHT/2, dx = -1, number = 20}

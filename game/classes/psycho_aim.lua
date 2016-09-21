@@ -54,13 +54,22 @@ function Aim:draw()
 end
 
 function Aim:update(dt)
-    local aim, p
+    local aim, p, w, h, scale
 
     aim = self
     p = Util.findId("psycho")
 
+    --Fix mouse position click to respective distance
+    x, y = love.mouse.getPosition()
+    w, h = FreeRes.windowDistance()
+    scale = FreeRes.scale()
+    x = x - w
+    x = x*(1/scale)
+    y = y - h
+    y = y*(1/scale)
+
     --Update circle position
-    aim.mouse_pos.x, aim.mouse_pos.y = love.mouse.getPosition()
+    aim.mouse_pos.x, aim.mouse_pos.y = x, y
 
     --Update line position
     aim.pos.x, aim.pos.y = p.pos.x, p.pos.y

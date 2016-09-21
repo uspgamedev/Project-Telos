@@ -28,7 +28,7 @@ Double_Ball = Class{
         self.color_duration = 6 --Duration between color transitions
 
         --Normalize direction and set speed
-        self.speedv = 240 --Speed value
+        self.speedv = 270 --Speed value
         self.speed_m = _speed_m or 1 --Speed multiplier
         self.speed = Vector(_dir.x, _dir.y) --Speed vector
         self.speed = self.speed:normalized()*self.speedv
