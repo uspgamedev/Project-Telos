@@ -49,9 +49,9 @@ function Double_Ball:kill(mode)
 
     if mode ~= "dontspawn" then
         --Create two Simple Balls in a V shape
-        e = SB.create(self.pos.x, self.pos.y, self.speed:rotated(math.pi/12), 1.25*self.speed_m, 15)
+        e = SB.create(self.pos.x, self.pos.y, self.speed:rotated(math.pi/12), 1.25*self.speed_m, .75*self.r)
         e.enter = true
-        e = SB.create(self.pos.x, self.pos.y, self.speed:rotated(-math.pi/12), 1.25*self.speed_m, 15)
+        e = SB.create(self.pos.x, self.pos.y, self.speed:rotated(-math.pi/12), 1.25*self.speed_m, .75*self.r)
         e.enter = true
     end
 
@@ -86,7 +86,7 @@ function enemy.create(x, y, dir, speed_m, radius)
         direction.y = love.math.random()*2 - 1 --Rand value between [-1,1]
     end
 
-    e = Double_Ball(x, y, dir or direction, speed_m)
+    e = Double_Ball(x, y, dir or direction, speed_m, radius)
     e:addElement(DRAW_TABLE.L4)
     e:startColorLoop()
 

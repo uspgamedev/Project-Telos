@@ -17,7 +17,7 @@ function getPositions(center, dir, side)
     ndir = dir:normalized() --Normalized direction
 
     --Get vertex positions
-    p1 = Vector(center.x + ndir.x * ((1.8*side)/math.sqrt(3)), center.y + ndir.y * (side/math.sqrt(3)) ) --"Pointing" vertex
+    p1 = Vector(center.x + ndir.x * ((1.8*side)/math.sqrt(3)), center.y + ndir.y * (1.8*side/math.sqrt(3)) ) --"Pointing" vertex
     p2 = Vector(center.x + ndir:rotated((2*math.pi)/3).x*(side/math.sqrt(3)), center.y + ndir:rotated((2*math.pi)/3).y*(side/math.sqrt(3))) --Other vertex
     p3 = Vector(center.x + ndir:rotated((-2*math.pi)/3).x*(side/math.sqrt(3)), center.y + ndir:rotated((-2*math.pi)/3).y*(side/math.sqrt(3))) --Remaining vertex
 
@@ -60,6 +60,7 @@ function Enemy_Indicator:update(dt)
 
     --Ticks the indicator
     i.tick = i.tick + dt
+
     if i.tick >= i.duration then
         i.death = true
     end
@@ -77,7 +78,7 @@ end
 --UTILITY FUNCTIONS--
 
 --Create an enemy indicator from a margin in the screen, and after duration, create the enemy
-function indicator.create_enemy(enemy, pos, dir, following, side, duration, speed_m, st)
+function indicator.create_enemy(enemy, pos, dir, following, side, duration, speed_m, radius, st)
     local i, center, margin, handle, color
 
     margin = 10
@@ -107,7 +108,7 @@ function indicator.create_enemy(enemy, pos, dir, following, side, duration, spee
         --Create the enemy after duration
         handle = LEVEL_TIMER:after(duration,
             function()
-                enemy.create(pos.x, pos.y, dir, speed_m)
+                enemy.create(pos.x, pos.y, dir, speed_m, radius)
             end
         )
         table.insert(INDICATOR_HANDLES, handle)
@@ -120,7 +121,7 @@ function indicator.create_enemy(enemy, pos, dir, following, side, duration, spee
                 p  = Util.findId("psycho")
                 position = Vector(pos.x, pos.y)
 
-                enemy.create(pos.x, pos.y, Vector(p.pos.x - pos.x, p.pos.y - pos.y), speed_m)
+                enemy.create(pos.x, pos.y, Vector(p.pos.x - pos.x, p.pos.y - pos.y), speed_m, radius)
             end
         )
         table.insert(INDICATOR_HANDLES, handle)

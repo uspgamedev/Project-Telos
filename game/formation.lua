@@ -48,7 +48,7 @@ function formation.fromHorizontal(a)
     a.number = a.number or 3
     a.speed_m = a.speed_m or 1
     a.dir_follow = a.dir_follow or false
-    a.ind_duration = a.ind_duration or 1.5
+    a.ind_duration = a.ind_duration or INDICATOR_DEFAULT
     a.ind_mode = a.ind_mode or "all"
 
     if a.side == "left" or a.side == "l" then
@@ -266,7 +266,7 @@ function formation.fromVertical(a)
     a.number = a.number or 3
     a.speed_m = a.speed_m or 1
     a.dir_follow = a.dir_follow or false
-    a.ind_duration = a.ind_duration or 1.5
+    a.ind_duration = a.ind_duration or INDICATOR_DEFAULT
     a.ind_mode = a.ind_mode or "all"
 
     if a.side == "top" or a.side == "t" then
@@ -469,7 +469,7 @@ function formation.circle(a)
     a.y_center = a.y_center or ORIGINAL_WINDOW_HEIGHT/2 --Center y of the circle
     a.speed_m = a.speed_m or 1
     a.dir_follow = a.dir_follow or false
-    a.ind_duration = a.ind_duration or 1.5
+    a.ind_duration = a.ind_duration or INDICATOR_DEFAULT
     a.ind_mode = a.ind_mode or "all"
 
     enemy_table_size = Util.tableLen(a.enemy)
@@ -528,6 +528,7 @@ speed_m: speed multiplier applied to the enemies created
 dir_follow: whether the enemies' dir is facing towards psycho, or not
 ind_mode: if true, create an indicator for the enemy being created
 ind_duration: duration to display indicator before creating the enemy
+radius: Radius of enemy being created
 ]]
 function formation.single(a)
     local p
@@ -538,7 +539,7 @@ function formation.single(a)
     a.dir_follow = a.dir_follow or false
     a.dx = a.dx or 0
     a.dy = a.dy or 0
-    a.ind_duration = a.ind_duration or 1.5
+    a.ind_duration = a.ind_duration or INDICATOR_DEFAULT
     a.ind_mode = a.ind_mode or true
 
     --Setting local variables
@@ -555,10 +556,10 @@ function formation.single(a)
 
     if a.ind_mode then
         --Create the indicator, and later, the enemy
-        Indicator.create_enemy(a.enemy, l_pos, l_dir, a.dir_follow, nil, a.ind_duration, l_speed)
+        Indicator.create_enemy(a.enemy, l_pos, l_dir, a.dir_follow, nil, a.ind_duration, l_speed, a.radius)
     else
         --Just create the enemy
-        a.enemy.create(l_pos.x, l_pos.y, l_dir, a.speed_m)
+        a.enemy.create(l_pos.x, l_pos.y, l_dir, a.speed_m, a.radius)
     end
 
 end
@@ -588,7 +589,7 @@ function formation.line(a)
     a.dir_follow = a.dir_follow or false
     a.dx = a.dx or 0
     a.dy = a.dy or 0
-    a.ind_duration = a.ind_duration or 1.5
+    a.ind_duration = a.ind_duration or INDICATOR_DEFAULT
     a.ind_mode = a.ind_mode or "first"
 
     enemy_table_size = Util.tableLen(a.enemy)
