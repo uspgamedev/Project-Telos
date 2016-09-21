@@ -94,7 +94,7 @@ function aim_functions.create(id)
     aim:addElement(DRAW_TABLE.L2, nil, id)
 
     --Fade in the aim
-    LEVEL_TIMER:after(3,
+    LEVEL_TIMER:after(2.2,
         function()
             LEVEL_TIMER:tween(.3, aim, {alpha = 90}, 'in-linear')
         end

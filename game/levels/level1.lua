@@ -139,12 +139,42 @@ function script()
     F.circle{enemy = {SB}, number = 20, radius = 640, ind_duration = 8, dir_follow = true}
     LM.wait("noenemies")
 
-    F.fromVertical{side = "top", mode = "center", enemy = {DB}, number = 20, enemy_x_margin = 40, enemy_y_margin = 40}
-    F.fromVertical{side = "bottom", mode = "center", enemy = {SB}, number = 20, enemy_x_margin = 40, enemy_y_margin = 40}
+    F.fromVertical{side = "top", mode = "center", enemy = {DB}, number = 21, enemy_x_margin = 40, enemy_y_margin = 40}
+    F.fromVertical{side = "bottom", mode = "center", enemy = {SB}, number = 21, enemy_x_margin = 40, enemy_y_margin = 40}
     LM.wait(1)
-    F.fromHorizontal{side = "right", mode = "distribute", number = 8, ind_duration = 4, dir_follow = true, enemy = {SB}}
-    F.fromHorizontal{side = "left", mode = "distribute", number = 8, ind_duration = 4, dir_follow = true, enemy = {DB}}
+    F.fromHorizontal{side = "right", mode = "distribute", number = 15, ind_duration = 4, dir_follow = true, enemy = {SB}, speed_m = 1.5}
+    F.fromHorizontal{side = "left", mode = "distribute", number = 15, ind_duration = 4, dir_follow = true, enemy = {DB}, speed_m = 1.5}
+    LM.wait(6)
+
+    F.line{ x = -25, y = ORIGINAL_WINDOW_HEIGHT/2, dx = 1, number = 40, enemy = {DB}, speed_m = .8}
+    F.line{ x = ORIGINAL_WINDOW_WIDTH + 25, y = ORIGINAL_WINDOW_HEIGHT/2, dx = -1, number = 40, enemy = {DB}, speed_m = .8}
+    F.line{ x = ORIGINAL_WINDOW_WIDTH/2 , y = -25, dy = 1, number = 40, enemy = {DB}, speed_m = .8}
+    F.line{ x = ORIGINAL_WINDOW_WIDTH/2 , y = ORIGINAL_WINDOW_HEIGHT + 25, dy = -1, number = 40, enemy = {DB}, speed_m = .8}
+    F.line{ x = -25 , y = -25, dx = 1, dy = 1, number = 40, enemy = {DB}, speed_m = .8}
+    F.line{ x = ORIGINAL_WINDOW_WIDTH + 25 , y = -25, dx = -1, dy = 1, number = 40, enemy = {DB}, speed_m = .8}
+    F.line{ x = ORIGINAL_WINDOW_WIDTH + 25 , y = ORIGINAL_WINDOW_HEIGHT + 25, dx = -1, dy = -1, number = 40, enemy = {DB}, speed_m = .8}
+    F.line{ x = - 25 , y = ORIGINAL_WINDOW_HEIGHT + 25, dx = 1, dy = -1, number = 40, enemy = {DB}, speed_m = .8}
+    LM.wait(4)
+    F.fromHorizontal{side = "left", mode = "center", enemy = {SB}, number = 20, enemy_x_margin = 60, enemy_y_margin = 40, speed_m = .6}
+    LM.wait(1)
+    F.fromHorizontal{side = "left", mode = "center", enemy = {SB}, number = 20, enemy_x_margin = 60, enemy_y_margin = 40, speed_m = .6}
+    LM.wait(1)
+    F.fromHorizontal{side = "left", mode = "center", enemy = {SB}, number = 20, enemy_x_margin = 60, enemy_y_margin = 40, speed_m = .6}
     LM.wait("noenemies")
+
+    F.circle{enemy = {SB,DB}, number = 180, radius = 640, enemy_margin = 20, speed_m = 1, ind_mode = "first", ind_duration = 2}
+    LM.wait(3)
+    F.fromHorizontal{side = "left", mode = "top", number = 10, enemy = {DB}, speed_m = 1.5}
+    F.fromVertical{side = "top", mode = "left", number = 10, enemy = {DB}, speed_m = 1.5}
+    LM.wait(3)
+    F.fromHorizontal{side = "right", mode = "top", number = 10, enemy = {DB}, speed_m = 1.5}
+    F.fromVertical{side = "top", mode = "right", number = 10, enemy = {DB}, speed_m = 1.5}
+    LM.wait(3)
+    F.fromHorizontal{side = "right", mode = "bottom", number = 10, enemy = {DB}, speed_m = 1.5}
+    F.fromVertical{side = "bottom", mode = "right", number = 10, enemy = {DB}, speed_m = 1.5}
+    LM.wait(3)
+    F.fromHorizontal{side = "left", mode = "bottom", number = 10, enemy = {DB}, speed_m = 1.5}
+    F.fromVertical{side = "bottom", mode = "left", number = 10, enemy = {DB}, speed_m = 1.5}
 
     LM.stop()
     LM.start(level2)

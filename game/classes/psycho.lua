@@ -241,8 +241,8 @@ function psycho.create(x, y)
     )
     table.insert(p.handles, handle)
 
-    --Enable shooting after 3 seconds
-    LEVEL_TIMER:after(3,
+    --Enable shooting after 2.5 seconds
+    LEVEL_TIMER:after(2.5,
         function()
             p.shootLocked = false
         end
