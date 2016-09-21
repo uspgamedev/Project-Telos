@@ -60,8 +60,13 @@ function fx.psychoExplosion(p)
 
     death_func = DEATH_FUNCS[love.math.random(#DEATH_FUNCS)] --Function to generate particle speed (and consequently, pattern)
 
-    --Config psycho so he just disapears
-    p.controlsLocked = true --Refrains player from interacting with psycho
+
+
+    --Refrains player from interacting with psycho
+    p.controlsLocked = true
+    p.shootLocked = true
+
+    --Config psycho so he disapears
     p.invisible = true
     p.invincible = true
     SLOWMO = true
@@ -121,6 +126,7 @@ function fx.psychoExplosion(p)
 
             --Fix psycho for invincible-blinking effect
             p.controlsLocked = false
+            p.shootLocked = false
             p.invisible = false
             Color.copy(p.color, color) --Make psycho the particles color
             p:startInvincible()
@@ -196,7 +202,7 @@ function fx.colorTransition(o, color_var, color_target, func)
     else
         print("COLOR TRANSITION ERROR")
     end
-    
+
 end
 
 --Return fucntions

@@ -1,6 +1,7 @@
 require "classes.primitive"
 local Color = require "classes.color.color"
 local Util = require "util"
+local FreeRes = require "FreeRes"
 --PSYCHO AIM CLASS--
 --[[Line and circle representing psycho's aim]]
 
@@ -25,6 +26,8 @@ Aim = Class{
         self.circle_size = 5
         self.mouse_pos = Vector(0,0)
 
+        self.alpha = 0 --Alpha of aim
+
         self.tp = "aim" --Type of this class
     end
 }
@@ -35,12 +38,12 @@ function Aim:draw()
     local aim, color
 
     --Don't draw if psycho is exploding
-    if Util.findId("psycho").controlsLocked then return end
+    if Util.findId("psycho").shootLocked and Util.findId("psycho").controlsLocked then return end
 
     aim = self
     color = Color.black()
     Color.copy(color, Util.findId("psycho").color)
-    color.a = 90
+    color.a = aim.alpha
 
 
     --Draw the line
@@ -89,6 +92,13 @@ function aim_functions.create(id)
     aim = Aim()
 
     aim:addElement(DRAW_TABLE.L2, nil, id)
+
+    --Fade in the aim
+    LEVEL_TIMER:after(3,
+        function()
+            LEVEL_TIMER:tween(.3, aim, {alpha = 90}, 'in-linear')
+        end
+    )
 
     return aim
 end

@@ -279,6 +279,18 @@ function util.updateSubTp(dt, sb)
     util.updateTable(dt, SUBTP_TABLE[sb])
 end
 
+--Update an object with an id
+function util.updateId(dt, id)
+    local o
+
+    o = util.findId(id)
+
+    if not o then return end
+
+    o:update(dt)
+
+end
+
 --Update all timers
 function util.updateTimers(dt)
     local m_dt
@@ -415,6 +427,10 @@ function util.defaultKeyPressed(key)
     elseif key == '9' then
         p = util.findId("psycho")
         p.lives = p.lives + 10
+        util.findId("lives_counter").var = p.lives
+    elseif key == '8' then
+        p = util.findId("psycho")
+        p.lives = 1
         util.findId("lives_counter").var = p.lives
     end
 

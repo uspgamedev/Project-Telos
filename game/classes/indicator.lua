@@ -104,6 +104,10 @@ function indicator.create_enemy(enemy, pos, dir, following, side, duration, spee
 
     i:addElement(DRAW_TABLE.L3, st)
 
+    i.color.a = 0
+    --Fade in the indicator
+    LEVEL_TIMER:tween(.3, i.color, {a = 255}, 'in-linear')
+
     if not following then
         --Create the enemy after duration
         handle = LEVEL_TIMER:after(duration,

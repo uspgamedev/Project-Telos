@@ -52,6 +52,7 @@ Psy = Class{
         self.lives = 8 --How many lives psycho by default has
         self.invincible = false --If psycho can't collide with enemies
         self.controlsLocked = false --If psycho cant move or shoot
+        self.shootLocked = true --If psycho cant shoot
 
         self.tp = "psycho" --Type of this class
 
@@ -78,7 +79,7 @@ function Psy:shoot(x,y)
     local p, bullet, dir, c, color_table, w, h, scale
 
     p = self
-    if p.controlsLocked then return end
+    if p.shootLocked then return end
 
     --Fix mouse position click to respective distance
     w, h = FreeRes.windowDistance()
@@ -239,6 +240,13 @@ function psycho.create(x, y)
         end
     )
     table.insert(p.handles, handle)
+
+    --Enable shooting after 3 seconds
+    LEVEL_TIMER:after(3,
+        function()
+            p.shootLocked = false
+        end
+    )
 
     return p
 end

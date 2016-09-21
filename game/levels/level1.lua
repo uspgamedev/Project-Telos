@@ -21,7 +21,7 @@ function script()
     LM.level_part("Part 1 - The Start of the End")
 
 
-    LM.wait(3)
+    LM.wait(4)
     INDICATOR_DEFAULT = 1.5
     F.single{enemy = SB, x = -20, y = ORIGINAL_WINDOW_HEIGHT/2, dx = 1, dy = 0, radius = 28, ind_duration = 2}
     LM.wait("noenemies")
@@ -80,6 +80,7 @@ function script()
     --1-2: Circle madness
     LM.level_part("Part 2 - Circle Madness")
 
+    LM.wait(2)
     F.circle{enemy = {SB}, number = 10, radius = 640, ind_duration = 2}
     LM.wait("noenemies")
 
@@ -133,6 +134,17 @@ function script()
 
     --1-3: The Betrayal
     LM.level_part("Part 3 - The Betrayal")
+
+    LM.wait(2)
+    F.circle{enemy = {SB}, number = 20, radius = 640, ind_duration = 8, dir_follow = true}
+    LM.wait("noenemies")
+
+    F.fromVertical{side = "top", mode = "center", enemy = {DB}, number = 20, enemy_x_margin = 40, enemy_y_margin = 40}
+    F.fromVertical{side = "bottom", mode = "center", enemy = {SB}, number = 20, enemy_x_margin = 40, enemy_y_margin = 40}
+    LM.wait(1)
+    F.fromHorizontal{side = "right", mode = "distribute", number = 8, ind_duration = 4, dir_follow = true, enemy = {SB}}
+    F.fromHorizontal{side = "left", mode = "distribute", number = 8, ind_duration = 4, dir_follow = true, enemy = {DB}}
+    LM.wait("noenemies")
 
     LM.stop()
     LM.start(level2)
