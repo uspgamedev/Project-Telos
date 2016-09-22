@@ -211,7 +211,7 @@ TRIANGLE = Class{
         self.p2 = Vector(_pos2.x, _pos2.y)
         self.p3 = Vector(_pos3.x, _pos3.y)
 
-        self.mode = _mode or "line" --Mode to draw the triangle
+        self.mode = self.mode or _mode or "line" --Mode to draw the triangle
         self.line_width = _line_width or 3 --Line thickness if mode is line
 
         CLR.init(self, _color, _color_table)

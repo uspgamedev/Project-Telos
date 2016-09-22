@@ -132,5 +132,31 @@ function level_manager.level_title(name)
 
 end
 
+--Function takes a distance between [0 ,2*'screen_width'+2*'screen_height'] and returns a position x,y outside the screen.
+--it cycles the screen going from the upmost left position to the screen and spins clockwise.
+function level_manager.outsidePosition(dist)
+    local x, y
+
+    --For debugguing, but shouldn't happen
+    x = ORIGINAL_WINDOW_WIDTH/2
+    y = ORIGINAL_WINDOW_HEIGHT/2
+
+    if dist >= 0 and dist <= ORIGINAL_WINDOW_WIDTH then
+        x = dist
+        y = -25
+    elseif dist <= ORIGINAL_WINDOW_WIDTH + ORIGINAL_WINDOW_HEIGHT then
+        x = ORIGINAL_WINDOW_WIDTH + 25
+        y = dist - ORIGINAL_WINDOW_WIDTH
+    elseif dist <= ORIGINAL_WINDOW_WIDTH + ORIGINAL_WINDOW_HEIGHT + ORIGINAL_WINDOW_WIDTH then
+        x = 2*ORIGINAL_WINDOW_WIDTH - dist + ORIGINAL_WINDOW_HEIGHT
+        y = ORIGINAL_WINDOW_HEIGHT + 25
+    elseif dist <= 2*ORIGINAL_WINDOW_WIDTH + 2*ORIGINAL_WINDOW_HEIGHT then
+        x = -25
+        y = 2*ORIGINAL_WINDOW_HEIGHT - dist + 2*ORIGINAL_WINDOW_WIDTH
+    end
+
+    return x, y
+end
+
 --Return functions
 return level_manager

@@ -67,12 +67,22 @@ end
 
 --UTILITY FUNCTIONS--
 
---Create a text
+--Create a text in the gui draw table
 function text.create_gui(x, y, text, font, var, mode, var_font, id, align, limit)
     local txt
 
     txt = Text(x, y, text, font, var, mode, var_font, align, limit)
     txt:addElement(DRAW_TABLE.GUI, "gui", id)
+
+    return txt
+end
+
+--Create a text in the game_gui draw table
+function text.create_game_gui(x, y, text, font, var, mode, var_font, id, align, limit)
+    local txt
+
+    txt = Text(x, y, text, font, var, mode, var_font, align, limit)
+    txt:addElement(DRAW_TABLE.GAME_GUI, "gui", id)
 
     return txt
 end

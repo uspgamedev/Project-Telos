@@ -46,6 +46,13 @@ Enemy_Indicator = Class{
 
         self.follow_psycho = _follow_psycho or false
 
+        --Create a full triangle when is following psycho
+        if self.follow_psycho then
+            self.mode = "fill"
+        else
+            self.mode = "line"
+        end
+
         self.tp = "enemy_indicator" --Type of this class
     end
 }
@@ -81,9 +88,9 @@ end
 function indicator.create_enemy(enemy, pos, dir, following, side, duration, speed_m, radius, st)
     local i, center, margin, handle, color
 
-    margin = 10
     center = Vector(pos.x, pos.y)
     side = side or 20
+    margin = side/2 + 1
     color = enemy.indColor()
 
     --Put indicator center inside the screen
@@ -102,7 +109,7 @@ function indicator.create_enemy(enemy, pos, dir, following, side, duration, spee
 
     i = Enemy_Indicator(center, dir, side, color, duration, following)
 
-    i:addElement(DRAW_TABLE.L3, st)
+    i:addElement(DRAW_TABLE.L5, st)
 
     i.color.a = 0
     --Fade in the indicator
