@@ -536,6 +536,7 @@ function formation.circle(a)
     a.y_center = a.y_center or ORIGINAL_WINDOW_HEIGHT/2 --Center y of the circle
     a.speed_m = a.speed_m or 1
     a.dir_follow = a.dir_follow or false
+    a.aim = a.aim or false
     a.ind_duration = a.ind_duration or INDICATOR_DEFAULT
     a.ind_mode = a.ind_mode or "all"
 

@@ -17,6 +17,9 @@ require "classes.color.hsl"
 require "classes.enemies.simple_ball"
 require "classes.enemies.double_ball"
 
+--bosses
+require "classes.bosses.boss1"
+
 --levels
 
 require "levels.level1"

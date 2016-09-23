@@ -75,17 +75,18 @@ function level_manager.resume()
 
         COROUTINE_HANDLE = LEVEL_TIMER:after(arg, level_manager.resume)
     --Waits for all enemies to die, then wait .5 second more
-    elseif arg == "noenemies+" then
+    elseif arg == "nobosses" then
         --Checks every .02 seconds how many enemies there are
+
         if COROUTINE_HANDLE then
             LEVEL_TIMER:cancel(COROUTINE_HANDLE)
         end
 
         COROUTINE_HANDLE = LEVEL_TIMER:every(.02,
             function()
-                if Util.tableEmpty(SUBTP_TABLE["enemies"]) and Util.tableEmpty(SUBTP_TABLE["enemy_indicator"]) then
+                if Util.tableEmpty(SUBTP_TABLE["bosses"]) and Util.tableEmpty(SUBTP_TABLE["enemy_indicator"]) then
                     LEVEL_TIMER:cancel(COROUTINE_HANDLE)
-                    COROUTINE_HANDLE = LEVEL_TIMER:after(.5, level_manager.resume)
+                    level_manager.resume()
                 end
             end
         )
@@ -156,6 +157,16 @@ function level_manager.outsidePosition(dist)
     end
 
     return x, y
+end
+
+--Increase psycho's lives
+function level_manager.giveLives(number)
+    local p
+
+    p = Util.findId("psycho")
+
+    p.lives = p.lives + number
+    Util.findId("lives_counter").var = p.lives
 end
 
 --Return functions

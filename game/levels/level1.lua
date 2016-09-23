@@ -1,10 +1,15 @@
 local F = require "formation"
 local LM = require "level_manager"
 local Color = require "classes.color.color"
+local Util = require "util"
 
 --Enemies
 local SB = require "classes.enemies.simple_ball"
 local DB = require "classes.enemies.double_ball"
+
+--Boss
+
+local Boss = require "classes.bosses.boss1"
 
 --Levels
 local level2 = require "levels.level2"
@@ -17,7 +22,7 @@ function script()
     --Start Level
     LM.level_title("I - THE FALL OF PSYCHO")
 
-    --1-1: The Start of the End
+    --[[1-1: The Start of the End
     LM.level_part("Part 1 - The Start of the End")
 
 
@@ -59,30 +64,31 @@ function script()
     F.fromVertical{side = "bottom", mode = "center", number = 5, enemy = {SB}, speed_m = .9}
     LM.wait("noenemies")
 
-    F.single{enemy = DB, x = ORIGINAL_WINDOW_WIDTH/2, y = ORIGINAL_WINDOW_HEIGHT + 25, dy = 1, ind_duration = 2, radius = 28}
+    INDICATOR_DEFAULT = 1.5
+    F.single{enemy = DB, x = ORIGINAL_WINDOW_WIDTH/2, y = ORIGINAL_WINDOW_HEIGHT + 25, dy = -1, radius = 28}
     LM.wait("noenemies")
 
-    INDICATOR_DEFAULT = 1.5
-    F.line{enemy = {DB}, x = ORIGINAL_WINDOW_WIDTH + 25, y = ORIGINAL_WINDOW_HEIGHT/2, dx = -1, number = 35, ind_side = 35}
+    F.line{enemy = {DB}, x = ORIGINAL_WINDOW_WIDTH + 25, y = ORIGINAL_WINDOW_HEIGHT/2, dx = -1, number = 45, ind_side = 35}
     LM.wait(5)
     F.fromVertical{side = "top", mode = "center", enemy = {DB}, number = 20, speed_m = .55}
     LM.wait(3)
-    F.fromHorizontal{side = "left", mode = "center", enemy = {DB}, number = 14, speed_m = 1.4}
+    F.fromHorizontal{side = "left", mode = "center", enemy = {DB}, number = 14, speed_m = 1.2}
     LM.wait("noenemies")
 
-    F.line{enemy = {DB}, x = ORIGINAL_WINDOW_WIDTH/2 - 200, y = ORIGINAL_WINDOW_HEIGHT + 25, dy = -1, number = 50, ind_side = 35}
-    F.line{enemy = {DB}, x = ORIGINAL_WINDOW_WIDTH/2 + 200, y = - 25, dy = 1, number = 50, ind_side = 35}
+    F.line{enemy = {DB}, x = ORIGINAL_WINDOW_WIDTH/2 - 200, y = ORIGINAL_WINDOW_HEIGHT + 25, dy = -1, number = 56, ind_side = 35}
+    F.line{enemy = {DB}, x = ORIGINAL_WINDOW_WIDTH/2 + 200, y = - 25, dy = 1, number = 56, ind_side = 35}
     LM.wait(4)
     INDICATOR_DEFAULT = 1.2
-    F.fromVertical{side = "top", mode = "distribute", number = 9, enemy = {SB}, speed_m = 1.5}
-    F.fromVertical{side = "bottom", mode = "distribute", number = 9, enemy = {SB}, speed_m = 1.5}
+    F.fromVertical{side = "top", mode = "distribute", number = 9, enemy = {SB}, speed_m = 1.4}
+    F.fromVertical{side = "bottom", mode = "distribute", number = 9, enemy = {SB}, speed_m = 1.4}
     LM.wait(4)
-    F.fromVertical{side = "top", mode = "distribute", number = 14, enemy = {SB, DB}, speed_m = 1.8}
-    F.fromVertical{side = "bottom", mode = "distribute", number = 14, enemy = {SB, DB}, speed_m = 1.8}
+    F.fromVertical{side = "top", mode = "distribute", number = 14, enemy = {SB, DB}, speed_m = 1.2}
+    F.fromVertical{side = "bottom", mode = "distribute", number = 14, enemy = {SB, DB}, speed_m = 1.2}
     LM.wait(4)
-    F.fromVertical{side = "top", mode = "distribute", number = 14, enemy = {DB}, speed_m = 1.4}
-    F.fromVertical{side = "bottom", mode = "distribute", number = 14, enemy = {DB}, speed_m = 1.4}
+    F.fromVertical{side = "top", mode = "distribute", number = 12, enemy = {DB}, speed_m = .9}
+    F.fromVertical{side = "bottom", mode = "distribute", number = 12, enemy = {DB}, speed_m = .9}
     LM.wait("noenemies")
+    LM.giveLives(3)
 
     --1-2: Circle madness
     LM.level_part("Part 2 - Circle Madness")
@@ -111,9 +117,9 @@ function script()
     F.circle{enemy = {DB, SB}, number = 18, radius = 800, enemy_margin = 0, x_center = 700}
     LM.wait("noenemies")
 
-    F.circle{enemy = {SB}, number = 80, radius = 640, enemy_margin = 100, speed_m = 2, ind_mode = "first", ind_duration = 3, ind_side = 35}
+    F.circle{enemy = {SB}, number = 90, radius = 640, enemy_margin = 100, speed_m = 2, ind_mode = "first", ind_duration = 3, ind_side = 35}
     LM.wait(5)
-    F.circle{enemy = {SB, DB}, number = 70, radius = 640, enemy_margin = 100, speed_m = 2, ind_mode = "first", ind_duration = 2, ind_side = 35}
+    F.circle{enemy = {SB, DB}, number = 80, radius = 640, enemy_margin = 100, speed_m = 2, ind_mode = "first", ind_duration = 2, ind_side = 35}
     LM.wait(6)
 
     INDICATOR_DEFAULT = 1.2
@@ -138,12 +144,17 @@ function script()
     LM.wait(1.5)
     F.circle{enemy = {DB}, number = 28, radius = 640}
     LM.wait("noenemies")
+    LM.giveLives(5)]]
 
     --1-3: The Betrayal
     LM.level_part("Part 3 - The Betrayal")
 
     LM.wait(2)
-    F.circle{enemy = {SB}, number = 20, radius = 640, ind_duration = 8, dir_follow = true}
+    F.circle{enemy = {SB}, number = 20, radius = 640, ind_duration = 8, dir_follow = true, ind_side = 35}
+    --Create aims for indicators
+    for aim in pairs(Util.findSbTp("enemy_indicator")) do
+        aim:create_aim()
+    end
     LM.wait("noenemies")
 
     F.fromVertical{side = "top", mode = "center", enemy = {DB}, number = 21, enemy_x_margin = 40, enemy_y_margin = 40}
@@ -210,26 +221,38 @@ function script()
     LM.wait(2)
     LM.wait("noenemies")
 
-    F.line{x = -25, y = ORIGINAL_WINDOW_HEIGHT/2, dx = 1, number = 170, enemy = {DB,SB}, ind_duration = 2.5, dir_follow = true, ind_side = 40}
+    F.line{x = -25, y = ORIGINAL_WINDOW_HEIGHT/2, dx = 1, number = 190, enemy = {DB,SB}, ind_duration = 2.5, dir_follow = true, ind_side = 40}
     LM.wait(4)
-    F.line{x = ORIGINAL_WINDOW_WIDTH + 25, y = ORIGINAL_WINDOW_HEIGHT/2, dx = -1, number = 150, enemy = {DB,SB}, ind_duration = 2.5, dir_follow = true, ind_side = 40}
+    F.line{x = ORIGINAL_WINDOW_WIDTH + 25, y = ORIGINAL_WINDOW_HEIGHT/2, dx = -1, number = 170, enemy = {DB,SB}, ind_duration = 2.5, dir_follow = true, ind_side = 40}
     LM.wait(4)
-    F.line{x = ORIGINAL_WINDOW_WIDTH/2 , y = -25, dy = 1, number = 130, enemy = {DB,SB}, ind_duration = 2.5, dir_follow = true, ind_side = 40}
+    F.line{x = ORIGINAL_WINDOW_WIDTH/2 , y = -25, dy = 1, number = 150, enemy = {DB,SB}, ind_duration = 2.5, dir_follow = true, ind_side = 40}
     LM.wait(4)
-    F.line{x = ORIGINAL_WINDOW_WIDTH/2 , y = ORIGINAL_WINDOW_HEIGHT + 25, dy = -1, number = 110, enemy = {DB,SB}, ind_duration = 2.5, dir_follow = true, ind_side = 40}
+    F.line{x = ORIGINAL_WINDOW_WIDTH/2 , y = ORIGINAL_WINDOW_HEIGHT + 25, dy = -1, number = 130, enemy = {DB,SB}, ind_duration = 2.5, dir_follow = true, ind_side = 40}
     LM.wait(4)
-    F.line{x = -25 , y = -25, dx = 1, dy = 1, number = 90, enemy = {DB,SB}, ind_duration = 2.5, dir_follow = true, ind_side = 40}
+    F.line{x = -25 , y = -25, dx = 1, dy = 1, number = 110, enemy = {DB,SB}, ind_duration = 2.5, dir_follow = true, ind_side = 40}
     LM.wait(4)
-    F.line{x = ORIGINAL_WINDOW_WIDTH + 25 , y = -25, dx = -1, dy = 1, number = 70, enemy = {DB,SB}, ind_duration = 2.5, dir_follow = true, ind_side = 40}
+    F.line{x = ORIGINAL_WINDOW_WIDTH + 25 , y = -25, dx = -1, dy = 1, number = 90, enemy = {DB,SB}, ind_duration = 2.5, dir_follow = true, ind_side = 40}
     LM.wait(4)
-    F.line{x = ORIGINAL_WINDOW_WIDTH + 25 , y = ORIGINAL_WINDOW_HEIGHT + 25, dx = -1, dy = -1, number = 50, enemy = {DB,SB}, ind_duration = 2.5, dir_follow = true, ind_side = 40}
+    F.line{x = ORIGINAL_WINDOW_WIDTH + 25 , y = ORIGINAL_WINDOW_HEIGHT + 25, dx = -1, dy = -1, number = 70, enemy = {DB,SB}, ind_duration = 2.5, dir_follow = true, ind_side = 40}
     LM.wait(4)
-    F.line{x = - 25 , y = ORIGINAL_WINDOW_HEIGHT + 25, dx = 1, dy = -1, number = 30, enemy = {DB,SB}, ind_duration = 2.5, dir_follow = true, ind_side = 40}
+    F.line{x = - 25 , y = ORIGINAL_WINDOW_HEIGHT + 25, dx = 1, dy = -1, number = 50, enemy = {DB,SB}, ind_duration = 2.5, dir_follow = true, ind_side = 40}
+    LM.wait(6)
+    F.fromVertical{side = "bottom", mode = "center", number = 20, ind_duration = 2, enemy = {SB}, speed_m = .6}
+    LM.wait(.2)
+    F.fromVertical{side = "bottom", mode = "center", number = 20, ind_duration = 2, enemy = {SB}, speed_m = .6}
+    LM.wait(4)
+    F.fromVertical{side = "bottom", mode = "center", number = 20, ind_duration = 2, speed_m = .5, enemy = {DB}}
+    LM.wait(.3)
+    F.fromVertical{side = "bottom", mode = "center", number = 20, ind_duration = 2, speed_m = .5, enemy = {DB}}
     LM.wait("noenemies")
 
+    LM.wait(1)
     for i= 1, 30 do
         local _x, _y = LM.outsidePosition(love.math.random(2*ORIGINAL_WINDOW_WIDTH+2*ORIGINAL_WINDOW_HEIGHT+1)-1)
-        if i <= 4 then
+        if i == 1 then
+            F.single{enemy = SB, x = _x, y = _y, dir_follow = true, speed_m = 5, ind_side = 35, ind_duration = 2.5}
+            LM.wait(3)
+        elseif i <= 4 then
             F.single{enemy = SB, x = _x, y = _y, dir_follow = true, speed_m = 5, ind_side = 35}
             LM.wait(3)
         elseif i <= 15 then
@@ -243,9 +266,15 @@ function script()
             LM.wait(.6)
         end
     end
-
     LM.wait("noenemies")
+    LM.giveLives(5)
+
+    --1-4: The Betrayal
+    LM.level_part("Part 4 - The Betrayal")
+
     LM.wait(2)
+    --Boss.create()
+    LM.wait("nobosses")
     LM.stop()
     LM.start(level2)
 

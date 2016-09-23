@@ -134,7 +134,7 @@ F.fromVertical{side = "top", mode = "center", speed_m = .3, enemy_x_margin = 90,
 LM.wait(.25)
 F.fromVertical{side = "top", mode = "center", speed_m = .3, enemy_x_margin = 70, number = 2, enemy = {SB,SB}, ind_duration = 4}
 LM.wait(.25)
-F.fromVertical{side = "top", mode = "center", speed_m = .3, enemy_x_margin = 70, number = 1, enemy = {DB}, ind_duration = 4}]]
+F.fromVertical{side = "top", mode = "center", speed_m = .3, enemy_x_margin = 70, number = 1, enemy = {DB}, ind_duration = 4}
 
 --PENGUIN - SHOOTER by yan
 LM.wait(2)

@@ -1,6 +1,7 @@
 require "classes.primitive"
 local Color = require "classes.color.color"
 local Util = require "util"
+local Aim_Functions = require "classes.psycho_aim"
 --INDICATOR CLASS--
 --[[Indicates when something is about to happen]]--
 
@@ -72,13 +73,24 @@ function Enemy_Indicator:update(dt)
         i.death = true
     end
 
-    if not i.follow_psycho then return end
-
     p = Util.findId("psycho")
+
+    if not i.follow_psycho or not p then return end
+
 
     dir = Vector(p.pos.x - i.center.x, p.pos.y - i.center.y)
 
     i.p1, i.p2, i.p3 = getPositions(i.center, dir, i.side)
+
+end
+
+--Creates an aim that remains on screen for 6 seconds
+function Enemy_Indicator:create_aim()
+    local aim, h1, h2
+
+    aim, h1, h2 = Aim_Functions.create_indicator(self.center.x, self.center.y, Color.red())
+    table.insert(self.handles, h1)
+    table.insert(self.handles, h2)
 
 end
 
@@ -136,6 +148,7 @@ function indicator.create_enemy(enemy, pos, dir, following, side, duration, spee
             end
         )
         table.insert(INDICATOR_HANDLES, handle)
+
     end
 
     return i

@@ -76,6 +76,7 @@ function state:update(dt)
 
     Util.updateSubTp(m_dt, "player_bullet")
     Util.updateSubTp(m_dt, "enemies")
+    Util.updateSubTp(m_dt, "bosses")
     Util.updateSubTp(m_dt, "decaying_particle")
     Util.updateSubTp(dt, "psycho_explosion") --Are not affected by slowmo
     Util.updateSubTp(m_dt, "particle_batch")
@@ -141,6 +142,20 @@ function checkCollision()
                 p:kill()
             end
 
+        end
+    end
+
+    --Colliding player bullets with bosses
+    if SUBTP_TABLE["player_bullet"] then
+        for bullet in pairs(SUBTP_TABLE["player_bullet"]) do
+            if SUBTP_TABLE["bosses"] then
+                for boss in pairs(SUBTP_TABLE["bosses"]) do
+                    if not bullet.death and bullet:collides(boss) then
+                        bullet:kill()
+                        boss:getHit()
+                    end
+                end
+            end
         end
     end
 

@@ -49,7 +49,7 @@ Psy = Class{
         self.circle_fx_fps = .2 --How fast to create the circle effect
 
 
-        self.lives = 8 --How many lives psycho by default has
+        self.lives = 15 --How many lives psycho by default has
         self.invincible = false --If psycho can't collide with enemies
         self.controlsLocked = false --If psycho cant move or shoot
         self.shootLocked = true --If psycho cant shoot

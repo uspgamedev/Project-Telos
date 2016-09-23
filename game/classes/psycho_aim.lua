@@ -7,11 +7,11 @@ local FreeRes = require "FreeRes"
 
 local aim_functions = {}
 
--------
---AIM--
--------
+---------------
+--REGULAR AIM--
+---------------
 
---Particle that has an alpha decaying over-time
+--Line that aims in a direction
 Aim = Class{
     __includes = {ELEMENT},
     init = function(self)
@@ -83,7 +83,7 @@ end
 
 --UTILITY FUNCTIONS--
 
---Create a particle in the (x,y) position, direction dir, color c, radius r and subtype st
+--Create a regular aim with and id
 function aim_functions.create(id)
     local aim
 
@@ -101,6 +101,71 @@ function aim_functions.create(id)
     )
 
     return aim
+end
+
+--Line that aims in a direction
+Indicator_Aim = Class{
+    __includes = {ELEMENT, CLR},
+    init = function(self, _x, _y, _c)
+
+        ELEMENT.init(self) --Set atributes
+        CLR.init(self, _c)
+
+        self.pos = Vector(_x, _y) --Center of aim
+        self.line_width = 2 --Thickness of aim line
+        self.alpha = 0 --Alpha of aim
+
+        self.tp = "indicator_aim" --Type of this class
+    end
+}
+
+--CLASS FUNCTIONS--
+
+function Indicator_Aim:draw()
+    local aim, color
+
+    aim = self
+    color = aim.color
+    color.a = aim.alpha
+    p = Util.findId("psycho")
+
+    --Draw the line
+    Color.set(color)
+    love.graphics.setLineWidth(aim.line_width)
+    love.graphics.line(aim.pos.x, aim.pos.y, p.pos.x, p.pos.y)
+
+end
+
+--UTILITY FUNCTIONS--
+
+--Create a regular aim with and st
+function aim_functions.create_indicator(x, y, c, st)
+    local aim, h1, h2
+
+    st = st or "indicator_aim" --subtype
+
+    aim = Indicator_Aim(x, y, c)
+
+    aim:addElement(DRAW_TABLE.L2, st)
+
+    --Fade in the aim
+    h1 = LEVEL_TIMER:after(2,
+        function()
+            LEVEL_TIMER:tween(1, aim, {alpha = 30}, 'in-linear')
+        end
+    )
+    --Fade out the aim
+    h2 = LEVEL_TIMER:after(6,
+        function()
+            LEVEL_TIMER:tween(1, aim, {alpha = 0}, 'in-linear',
+                function()
+                    aim.death = true
+                end
+            )
+        end
+    )
+
+    return aim, h1, h2
 end
 
 --Return functions

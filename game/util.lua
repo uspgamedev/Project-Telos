@@ -182,6 +182,10 @@ function util.gameElementException(mode)
         util.addExceptionId("psycho_aim")
     end
 
+    if util.findSbTp("indicator_aim") then
+        util.addExceptionSubtype("indicator_aim")
+    end
+
     if util.findSbTp("psycho_explosion") then
         util.addExceptionSubtype("psycho_explosion")
     end
