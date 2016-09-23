@@ -35,15 +35,21 @@ Boss_1 = Class{
         ELEMENT.setSubTp(self, "boss")
 
         --Normalize direction and set speed
-        self.speedv = 250 --Speed value
-        self.speed_m =  1 --Speed multiplier
-        self.speed = Vector(0, 0) --Speed vector
+        self.duration_to_target = 4 --Time to get from one target to the next
 
         self.life = 100 --How many hits this boss can take before changng state
         self.damage_taken = 0 --How many hits this boss has taken
         self.invincible = true --If boss can get hit
         self.static = true --If boss can move
         self.stage = 1 --Stage this boss is
+        self.target = nil --Index of target position
+        self.newTarget = true --If boss needs a new target
+
+        self.validPositions = {}
+        self.validPositions[1] = Vector(100, 100) --Top Left
+        self.validPositions[2] = Vector(ORIGINAL_WINDOW_WIDTH - 100, 100) --Top Right
+        self.validPositions[3] = Vector(ORIGINAL_WINDOW_WIDTH - 100, ORIGINAL_WINDOW_HEIGHT - 100) --Bottom Right
+        self.validPositions[4] = Vector(100, ORIGINAL_WINDOW_HEIGHT - 100) --Bottom Left
 
         self.tp = "boss_one" --Type of this class
     end
@@ -72,6 +78,12 @@ function Boss_1:kill()
     if b.handles["gethittimer"] then
         LEVEL_TIMER:cancel(b.handles["gethittimer"])
     end
+    if b.handles["move"] then
+        LEVEL_TIMER:cancel(b.handles["move"])
+    end
+    if b.handles["begin_stage"] then
+        LEVEL_TIMER:cancel(b.handles["begin_stage"])
+    end
 
 
     FX.explosion(self.pos.x, self.pos.y, self.r, self.color)
@@ -83,12 +95,18 @@ function Boss_1:update(dt)
     local b
 
     b = self
-
     --Boss won't move if static
     if b.static then return end
 
-    --Update movement
-    b.pos = b.pos + dt*b.speed*b.speed_m
+    if b.stage == 1 or b.stage == 2 then
+        if b.newTarget then
+            --Get new target for boss
+            b.target = b:getTargetPosition()
+            b.newTarget = false
+            --Transition to new position
+            b.handles["move"] = LEVEL_TIMER:tween(b.duration_to_target, b.pos, {x = b.validPositions[b.target].x, y = b.validPositions[b.target].y}, 'in-linear', function() b.newTarget = true; print(b.pos.x, b.pos.y) end)
+        end
+    end
 
 end
 
@@ -128,8 +146,13 @@ function Boss_1:getHit()
     b:getHitAnimation()
 
     if b.damage_taken >= b.life then
-        print("ded")
-        b:kill()
+        b.stage = b.stage + 1
+        print("changing state to", b.stage)
+        if b.stage >= 5 then
+            b:kill()
+        else
+            b:changeStage()
+        end
     end
 
 end
@@ -177,14 +200,68 @@ function Boss_1:getHitAnimation()
 
 end
 
+function Boss_1:getTargetPosition()
+    local position, b
+
+    b = self
+
+    position = love.math.random(4) --Get random position index
+    if not b.target then return position end --If target == nil just go to any valid position
+    --Don't go to opposing position on screen
+    if b.stage == 1 then
+        while(position == b.target or  position == (b.target + 2 - 1 )%4 + 1) do
+            position = love.math.random(4) --Get random position index
+        end
+    elseif b.stage == 2 then
+        --Just don't go to same position on screen
+        while(position == b.target) do
+            position = love.math.random(4) --Get random position index
+        end
+    end
+
+    return position
+end
+
+function Boss_1:changeStage()
+    local b
+
+    b = self
+
+    if b.stage == 2 then
+        b.duration_to_target = 2 --Make boss faster
+        b.damage_taken = 0
+        b.invincible = true
+        b.static = true
+        --Start stage 2
+        b.handles["begin_stage"] = LEVEL_TIMER:after(3,
+            function()
+                 print("changed")
+                 b.static ,b.invincible = false, false
+             end
+        )
+    end
+
+end
 
 --UTILITY FUNCTIONS--
 
 function boss.create()
     local b
+
+    --CREATE SHADOW GROWING
+    --Boss enters the screen
     b = Boss_1()
     b:addElement(DRAW_TABLE.L4, "bosses")
     b:colorLightnessLoop()
+    --Screen shake and roar
+
+    --Start stage 1
+    b.handles["begin_stage"] = LEVEL_TIMER:after(3,
+        function()
+             print("begin")
+             b.static ,b.invincible = false, false
+         end
+    )
 
     return b
 end

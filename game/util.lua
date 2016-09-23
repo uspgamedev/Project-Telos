@@ -170,6 +170,10 @@ function util.gameElementException(mode)
         util.addExceptionSubtype("enemies")
     end
 
+    if util.findSbTp("bosses") then
+        util.addExceptionSubtype("bosses")
+    end
+
     if util.findSbTp("decaying_particle") then
         util.addExceptionSubtype("decaying_particle")
     end
