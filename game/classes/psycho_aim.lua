@@ -112,7 +112,7 @@ Indicator_Aim = Class{
         CLR.init(self, _c)
 
         self.pos = Vector(_x, _y) --Center of aim
-        self.line_width = 2 --Thickness of aim line
+        self.line_width = 3 --Thickness of aim line
         self.alpha = 0 --Alpha of aim
 
         self.tp = "indicator_aim" --Type of this class
@@ -155,7 +155,7 @@ function aim_functions.create_indicator(x, y, c, st)
         end
     )
     --Fade out the aim
-    h2 = LEVEL_TIMER:after(6,
+    h2 = LEVEL_TIMER:after(7,
         function()
             LEVEL_TIMER:tween(1, aim, {alpha = 0}, 'in-linear',
                 function()

@@ -12,7 +12,7 @@ local DB = require "classes.enemies.double_ball"
 function script()
 
     --Start Level
-    LM.level_title("END OF LEVEL     BOA WIL")
+    LM.level_title("END OF LEVEL  U DA BEST")
 
     --2-1: Cool level
     LM.level_part("Part 1 - Cool level")

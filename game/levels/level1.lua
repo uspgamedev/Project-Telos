@@ -144,13 +144,13 @@ function script()
     LM.wait(1.5)
     F.circle{enemy = {DB}, number = 28, radius = 640}
     LM.wait("noenemies")
-    LM.giveLives(5)]]
+    LM.giveLives(5)
 
     --1-3: The Betrayal
     LM.level_part("Part 3 - The Betrayal")
 
     LM.wait(2)
-    F.circle{enemy = {SB}, number = 20, radius = 640, ind_duration = 8, dir_follow = true, ind_side = 35}
+    F.circle{enemy = {SB}, number = 15, radius = 640, ind_duration = 9, dir_follow = true, ind_side = 40}
     --Create aims for indicators
     for aim in pairs(Util.findSbTp("enemy_indicator")) do
         aim:create_aim()
@@ -180,7 +180,7 @@ function script()
     F.fromHorizontal{side = "left", mode = "center", enemy = {SB}, number = 20, enemy_x_margin = 60, enemy_y_margin = 40, speed_m = .6}
     LM.wait("noenemies")
 
-    F.circle{enemy = {SB,DB}, number = 200, radius = 640, enemy_margin = 40, speed_m = 1, ind_mode = "first", ind_duration = 2, ind_side = 35}
+    F.circle{enemy = {SB,DB}, number = 200, radius = 640, enemy_margin = 40, speed_m = .9, ind_mode = "first", ind_duration = 2, ind_side = 35}
 
     LM.wait(3)
     F.fromHorizontal{side = "left", mode = "top", number = 6, enemy = {DB}, speed_m = 1.5}
@@ -267,13 +267,13 @@ function script()
         end
     end
     LM.wait("noenemies")
-    LM.giveLives(5)
+    LM.giveLives(5)]]
 
     --1-4: The Betrayal
     LM.level_part("Part 4 - The Betrayal")
 
     LM.wait(2)
-    --Boss.create()
+    Boss.create()
     LM.wait("nobosses")
     LM.stop()
     LM.start(level2)
