@@ -2,12 +2,13 @@ require "classes.primitive"
 local Color = require "classes.color.color"
 local Hsl   = require "classes.color.hsl"
 local Util = require "util"
+local F = require "formation"
 
 --BOSS #1 CLASS--
 --[[Name of boss here]]
 
 --Behaviours--
-local Stage_1_and_2
+local Stage_1_and_2, Stage_3, Stage_4, Stage_5
 
 local boss = {}
 
@@ -39,7 +40,7 @@ Boss_1 = Class{
         ELEMENT.setSubTp(self, "boss")
 
         --Boss speed value
-        self.speedv = 320 --Speed value
+        self.speedv = 350 --Speed value
 
         self.life = 80 --How many hits this boss can take before changng state
         self.damage_taken = 0 --How many hits this boss has taken
@@ -56,6 +57,7 @@ Boss_1 = Class{
         self.validPositions[4] = Vector(self.r + 10, ORIGINAL_WINDOW_HEIGHT - self.r - 10) --Bottom Left
 
     	self.long_roar =  love.audio.newSource("assets/sfx/boss1/long_roar.wav")
+    	self.hurt_roar =  love.audio.newSource("assets/sfx/boss1/hurt_roar.wav")
 
         self.behaviour = Stage_1_and_2 --What behaviour this boss is following
         self.tp = "boss_one" --Type of this class
@@ -102,6 +104,10 @@ Stage_1_and_2 = function(b, dt)
     end
 end
 
+Stage_3 = function(b, dt)
+    b:kill()
+end
+
 --Keeps transitioning boss color saturation from values bottom_lightness to upper_lightness, and vice-versa
 function Boss_1:colorLightnessLoop()
     local b
@@ -131,9 +137,11 @@ end
 --Called when boss gets hit with psycho's bullet
 function Boss_1:getHit()
     local b
-
+    
     b = self
-
+    
+    if b.stage >= 5 then return end
+    
     b.damage_taken = b.damage_taken + 1
     b.bottom_lightness = b.bottom_lightness - .2
     b.upper_lightness = b.upper_lightness - .2
@@ -142,11 +150,9 @@ function Boss_1:getHit()
     if b.damage_taken >= b.life then
         b.stage = b.stage + 1
         print("changing state to", b.stage)
-        if b.stage >= 5 then
-            b:kill()
-        else
-            b:changeStage()
-        end
+
+        b:changeStage() --Change boss stage
+
     end
 
 end
@@ -227,7 +233,7 @@ function Boss_1:changeStage()
         b.upper_lightness = 130 --Reset upper color lightness (in %)
         b:colorLightnessLoop() --Start transition all over again
         b.color_stage_current_saturation = b.initial_saturation
-        b.speedv = 400 --Make boss faster
+        b.speedv = 450 --Make boss faster
         b.damage_taken = 0 --Reset boss life
         b.invincible = true --Can't take damage
 
@@ -236,9 +242,14 @@ function Boss_1:changeStage()
         if b.level_handles["move"] then
             LEVEL_TIMER:cancel(b.level_handles["move"])
         end
+        
+        b.hurt_roar:setVolume(5)
+		b.hurt_roar:play()
+        SFX["boss_roar"] = b.hurt_roar
+        FX.shake(2, 3) --Shake screen
 
         --Start stage 2
-        b.level_handles["begin_stage"] = LEVEL_TIMER:after(3,
+        b.level_handles["begin_stage"] = LEVEL_TIMER:after(2.1,
             function()
                  print("changed")
 
@@ -248,6 +259,41 @@ function Boss_1:changeStage()
                  b.level_handles["move"] = LEVEL_TIMER:tween(timeToReach(b), b.pos, {x = b.validPositions[b.target].x, y = b.validPositions[b.target].y}, 'in-linear',
                      function()
                          b.newTarget = true
+                     end
+                 )
+             end
+        )
+    end
+    
+    if b.stage == 3 then
+        --Reset stats
+        b.bottom_lightness = 100 --Reset bottom color lightness (in %)
+        b.upper_lightness = 130 --Reset upper color lightness (in %)
+        b:colorLightnessLoop() --Start transition all over again
+        b.color_stage_current_saturation = b.initial_saturation
+        b.damage_taken = 0 --Reset boss life
+        b.invincible = true --Can't take damage
+        b.behaviour = Stage_3
+        --Stop moving
+        b.static = true
+        if b.level_handles["move"] then
+            LEVEL_TIMER:cancel(b.level_handles["move"])
+        end
+        
+        b.angry_hurt_roar:setVolume(5)
+		b.angry_hurt_roar:play()
+        SFX["boss_roar"] = b.angry_hurt_roar
+        FX.shake(3, 4) --Shake screen
+
+        --Start stage 2
+        b.level_handles["begin_stage"] = LEVEL_TIMER:after(3.1,
+            function()
+
+                 --Move to the center
+                 b.level_handles["move"] = LEVEL_TIMER:tween(timeToReach(b), b.pos, {x = ORIGINAL_WINDOW_WIDTH/2, y = ORIGINAL_WINDOW_HEIGHT/2}, 'in-linear',
+                     function()
+                         b.static, b.invincible = false, false --Make boss walk and be able to die
+                         b.startSpinning = true --Start his behaviour
                      end
                  )
              end
