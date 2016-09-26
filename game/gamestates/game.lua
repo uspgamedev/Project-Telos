@@ -152,9 +152,19 @@ function checkCollision()
                 for boss in pairs(SUBTP_TABLE["bosses"]) do
                     if not bullet.death and bullet:collides(boss) then
                         bullet:kill()
-                        boss:getHit()
+                        if not boss.invincible then boss:getHit() end
                     end
                 end
+            end
+        end
+    end
+
+    --Colliding bosses with psycho
+    if SUBTP_TABLE["bosses"] then
+        for boss in pairs(SUBTP_TABLE["bosses"]) do
+            --Colliding with psycho
+            if not p.invincible and boss:collides(p) then
+                p:kill()
             end
         end
     end

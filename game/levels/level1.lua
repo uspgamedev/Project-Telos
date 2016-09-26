@@ -274,6 +274,7 @@ function script()
 
     LM.wait(2)
     Boss.create()
+    LM.wait(8)
     LM.wait("nobosses")
     LM.stop()
     LM.start(level2)

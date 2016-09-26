@@ -424,7 +424,7 @@ function util.defaultKeyPressed(key)
 
     if  key == 'x' then
         util.quit()
-    elseif key == 'f6' then
+    elseif key == 'f11' then
         util.toggleFullscreen()
     elseif key == 'f9' then
         util.toggleDebug()

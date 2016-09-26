@@ -14,21 +14,23 @@ function draw.allTables()
 
     DrawTable(DRAW_TABLE.BG) --Background
 
+    CAM:attach() --Start tracking camera
+
     DrawTable(DRAW_TABLE.L1) --Circle effect
 
     DrawTable(DRAW_TABLE.L2) --Game particle effects
-
-    --CAM:attach() --Start tracking camera
 
     DrawTable(DRAW_TABLE.L3) --Bullets, projectiles
 
     DrawTable(DRAW_TABLE.L4) --Psycho and enemies
 
+    DrawTable(DRAW_TABLE.BOSS) --Bosses
+
+    CAM:detach() --Stop tracking camera
+
     DrawTable(DRAW_TABLE.GAME_GUI) --Game GUI
 
     DrawTable(DRAW_TABLE.L5) --Indicators
-
-    --CAM:detach() --Stop tracking camera
 
     DrawTable(DRAW_TABLE.GUI) --Top GUI
 

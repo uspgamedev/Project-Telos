@@ -58,6 +58,7 @@ function setup.config()
     L2 = {}, --Layer 2
     L3 = {}, --Layer 3
     L4 = {}, --Layer 4
+    BOSS = {}, --Bosses
     GAME_GUI = {}, --Game User Interface
     L5 = {}, --Layer 5
     GUI = {}  --Graphic User Interface (top layer, last to draw)
