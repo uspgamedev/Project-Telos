@@ -54,8 +54,10 @@ Boss_1 = Class{
         self.validPositions[2] = Vector(ORIGINAL_WINDOW_WIDTH - self.r - 10, self.r + 10) --Top Right
         self.validPositions[3] = Vector(ORIGINAL_WINDOW_WIDTH - self.r - 10, ORIGINAL_WINDOW_HEIGHT - self.r  - 10) --Bottom Right
         self.validPositions[4] = Vector(self.r + 10, ORIGINAL_WINDOW_HEIGHT - self.r - 10) --Bottom Left
-
-        self.behaviour = Stage_1_and_2
+    print("hey")
+	self.long_roar =  love.audio.newSource("assets/sfx/boss1/long_roar.wav")
+        print("ho")
+        self.behaviour = Stage_1_and_2 --What behaviour this boss is following
         self.tp = "boss_one" --Type of this class
     end
 }
@@ -284,7 +286,7 @@ function boss.create()
 
     --Create shadow of boss
     shadow = CIRC(ORIGINAL_WINDOW_WIDTH/2, ORIGINAL_WINDOW_HEIGHT/2, 0, HSL(0,0,8,200))
-    shadow:addElement(DRAW_TABLE.L2, nil, "shadow")
+    shadow:addElement(DRAW_TABLE.BOSS, nil, "shadow")
 
     --Grows shadow
     b.handles["begin_stage"] = LEVEL_TIMER:tween(6, shadow, {r = 120}, 'in-cubic' ,
@@ -294,14 +296,16 @@ function boss.create()
             b:colorLightnessLoop() --Start color transition
             FX.shake(.5, 5) --Shake screen
             --Screen shake and roar
-            b.handles["begin_stage"] = LEVEL_TIMER:after(2,
+            b.handles["begin_stage"] = LEVEL_TIMER:after(1,
                 function()
 
                     --ROAR AND SHAKE
-                    FX.shake(1, 3) --Shake screen
+                    b.long_roar:setVolume(5)
+		    b.long_roar:play()
+                    FX.shake(2, 3) --Shake screen
 
                     --Start stage 1
-                    b.handles["begin_stage"] = LEVEL_TIMER:after(1.5,
+                    b.handles["begin_stage"] = LEVEL_TIMER:after(2.1,
                         function()
                              b.static ,b.invincible = false, false
                          end
