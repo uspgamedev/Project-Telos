@@ -2,6 +2,7 @@ local F = require "formation"
 local LM = require "level_manager"
 local Color = require "classes.color.color"
 local Util = require "util"
+local Audio = require "audio"
 
 --Enemies
 local SB = require "classes.enemies.simple_ball"
@@ -21,8 +22,9 @@ function script()
     local t
     --Start Level
     LM.level_title("I - THE FALL OF PSYCHO")
-
-    --[[1-1: The Start of the End
+    Audio.playBGM(LEVEL_1)
+    
+    --1-1: The Start of the End
     LM.level_part("Part 1 - The Start of the End")
 
 
@@ -267,7 +269,7 @@ function script()
         end
     end
     LM.wait("noenemies")
-    LM.giveLives(5)]]
+    LM.giveLives(5)
 
     --1-4: The Betrayal
     LM.level_part("Part 4 - The Betrayal")

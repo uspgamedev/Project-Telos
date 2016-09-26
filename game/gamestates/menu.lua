@@ -3,6 +3,7 @@ local Color  = require "classes.color.color"
 local Util = require "util"
 local Draw = require "draw"
 local Txt = require "classes.text"
+local Audio = require "audio"
 --MODULE FOR THE GAMESTATE: MENU--
 
 --BUTTON FUNCTIONS--
@@ -23,6 +24,9 @@ function state:enter()
             end,
         "Play", GUI_BIG, Color.black())
     b:addElement(DRAW_TABLE.GUI, "gui")
+    
+    --AUDIO--
+    Audio.playBGM(MENU)
 
 end
 
@@ -47,7 +51,8 @@ function state:update(dt)
     Util.updateFPS()
 
     Util.killAll()
-
+    
+    Audio.loopBGM()
 
 end
 

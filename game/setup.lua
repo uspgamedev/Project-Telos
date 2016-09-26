@@ -46,6 +46,7 @@ function setup.config()
     LEVEL_TIMER = Timer.new()  --General Timer
     FX_TIMER = Timer.new() --Effects Timer (for tweening mostly)
     COLOR_TIMER = Timer.new() --Color Effects Timer
+    AUDIO_TIMER = Timer.new() --Audio effects
 
     --CHEATS--
     GODMODE = false
@@ -110,6 +111,20 @@ function setup.config()
             }
         }
     ]]
+
+    --AUDIO--
+    SOUNDTRACK = {}
+    SOUNDTRACK["current"] = nil --Current soudntrack playing
+    SOUNDTRACK["next"] = nil  --Next soundtrack to play (for cross-fading)
+    SFX = {} --Table with all sound effects playing
+    BGM_VOLUME_LEVEL = 10 --Volume of BGM
+    --Useful handles for audio manipulation
+    FADE_IN_HANDLE = nil
+    FADE_OUT_HANDLE = nil
+    AUDIO_TIMER_HANDLE = nil
+    --Tracks
+    MENU = love.audio.newSource("assets/bgm/Flying Carrots 2.mp3")
+    LEVEL_1 = love.audio.newSource("assets/bgm/Limitless.mp3") 
 
     --Start UI color transition
     UI_COLOR = UI.create_color()

@@ -186,6 +186,10 @@ function util.gameElementException(mode)
         util.addExceptionId("psycho_aim")
     end
 
+    if util.findSbTp("boss_effect") then
+        util.addExceptionSubtype("boss_effect")
+    end
+
     if util.findSbTp("indicator_aim") then
         util.addExceptionSubtype("indicator_aim")
     end
@@ -311,6 +315,8 @@ function util.updateTimers(dt)
     LEVEL_TIMER:update(m_dt)
     FX_TIMER:update(dt)
     COLOR_TIMER:update(dt)
+    AUDIO_TIMER:update(dt)
+    
 end
 
 --Update the fps counter

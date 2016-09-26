@@ -134,7 +134,7 @@ function Psy:update(dt)
     --Update movement
     p.pos = p.pos + dt*p.speed
     --Fixes if psycho leaves screen
-    p.pos = p.pos + dt*p.speedv*isOutside(p)
+    p.pos.x, p.pos.y = isOutside(p)
 end
 
 function Psy:kill()
@@ -281,28 +281,27 @@ function psycho.updateSpeed(self)
 
 end
 
---Checks if psycho has leaved (even if partially) the game screen and returns correction vector
+--Checks if psycho has leaved (even if partially) the game screen and returns correct position
 function isOutside(o)
-    local v, r, scale
+    local x, y
 
-    scale = FreeRes.scale()
 
-    v = Vector(0,0)
+    x, y = o.pos.x, o.pos.y
 
     --X position
     if     o.pos.x - o.r <= 0 then
-        v = v + Vector(1,0)
+        x = o.r
     elseif o.pos.x + o.r >= ORIGINAL_WINDOW_WIDTH then
-        v = v + Vector(-1,0)
+        x = ORIGINAL_WINDOW_WIDTH - o.r
     end
     --Y position
     if o.pos.y - o.r <= 0 then
-        v = v + Vector(0,1)
+        y = o.r
     elseif o.pos.y + o.r >= ORIGINAL_WINDOW_HEIGHT then
-        v = v + Vector(0,-1)
+        y = ORIGINAL_WINDOW_HEIGHT - o.r
     end
 
-    return v:normalized()
+    return x,y
 end
 
 --return function

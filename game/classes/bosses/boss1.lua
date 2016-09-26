@@ -54,9 +54,9 @@ Boss_1 = Class{
         self.validPositions[2] = Vector(ORIGINAL_WINDOW_WIDTH - self.r - 10, self.r + 10) --Top Right
         self.validPositions[3] = Vector(ORIGINAL_WINDOW_WIDTH - self.r - 10, ORIGINAL_WINDOW_HEIGHT - self.r  - 10) --Bottom Right
         self.validPositions[4] = Vector(self.r + 10, ORIGINAL_WINDOW_HEIGHT - self.r - 10) --Bottom Left
-    print("hey")
-	self.long_roar =  love.audio.newSource("assets/sfx/boss1/long_roar.wav")
-        print("ho")
+
+    	self.long_roar =  love.audio.newSource("assets/sfx/boss1/long_roar.wav")
+
         self.behaviour = Stage_1_and_2 --What behaviour this boss is following
         self.tp = "boss_one" --Type of this class
     end
@@ -71,27 +71,6 @@ function Boss_1:kill()
 
     if b.death then return end
     b.death = true
-
-    --Remove transitions
-    if b.handles["gethithue"] then
-        LEVEL_TIMER:cancel(b.handles["gethithue"])
-    end
-    if b.handles["gethitsaturation"] then
-        LEVEL_TIMER:cancel(b.handles["gethitsaturation"])
-    end
-    if b.handles["lightness"] then
-        COLOR_TIMER:cancel(b.handles["lightness"])
-    end
-    if b.handles["gethittimer"] then
-        LEVEL_TIMER:cancel(b.handles["gethittimer"])
-    end
-    if b.handles["move"] then
-        LEVEL_TIMER:cancel(b.handles["move"])
-    end
-    if b.handles["begin_stage"] then
-        LEVEL_TIMER:cancel(b.handles["begin_stage"])
-    end
-
 
     FX.explosion(self.pos.x, self.pos.y, self.r, self.color)
 
@@ -115,7 +94,7 @@ Stage_1_and_2 = function(b, dt)
         b.target = b:getTargetPosition()
         b.newTarget = false
         --Transition to new position
-        b.handles["move"] = LEVEL_TIMER:tween(timeToReach(b), b.pos, {x = b.validPositions[b.target].x, y = b.validPositions[b.target].y}, 'in-linear',
+        b.level_handles["move"] = LEVEL_TIMER:tween(timeToReach(b), b.pos, {x = b.validPositions[b.target].x, y = b.validPositions[b.target].y}, 'in-linear',
             function()
                 b.newTarget = true
             end
@@ -130,15 +109,15 @@ function Boss_1:colorLightnessLoop()
     b = self
 
     --Remove previous timer
-    if b.handles["lightness"] then
-        COLOR_TIMER:cancel(b.handles["lightness"])
+    if b.level_handles["lightness"] then
+        COLOR_TIMER:cancel(b.level_handles["lightness"])
     end
 
     --Start saturation transition from bottom_lightness to upper_lightness
-    b.handles["lightness"] = COLOR_TIMER:tween(b.color_pulse_duration/2, b.color, {l = b.upper_lightness}, 'in-linear',
+    b.level_handles["lightness"] = COLOR_TIMER:tween(b.color_pulse_duration/2, b.color, {l = b.upper_lightness}, 'in-linear',
         --After reaching upper_lightness, start lightness transition from upper_lightness to bottom_lightness
         function()
-            b.handles["lightness"] = COLOR_TIMER:tween(b.color_pulse_duration/2, b.color, {l = b.bottom_lightness}, 'in-linear',
+            b.level_handles["lightness"] = COLOR_TIMER:tween(b.color_pulse_duration/2, b.color, {l = b.bottom_lightness}, 'in-linear',
                 --After reaching bottom_lightness, start eveything again
                 function()
                     b:colorLightnessLoop()
@@ -178,14 +157,14 @@ function Boss_1:getHitAnimation()
 
     b = self
     --Remove previous transition
-    if b.handles["gethithue"] then
-        LEVEL_TIMER:cancel(b.handles["gethithue"])
+    if b.level_handles["gethithue"] then
+        LEVEL_TIMER:cancel(b.level_handles["gethithue"])
     end
-    if b.handles["gethitsaturation"] then
-        LEVEL_TIMER:cancel(b.handles["gethitsaturation"])
+    if b.level_handles["gethitsaturation"] then
+        LEVEL_TIMER:cancel(b.level_handles["gethitsaturation"])
     end
-    if b.handles["gethittimer"] then
-        LEVEL_TIMER:cancel(b.handles["gethittimer"])
+    if b.level_handles["gethittimer"] then
+        LEVEL_TIMER:cancel(b.level_handles["gethittimer"])
     end
 
     --Make boss red when hit
@@ -197,17 +176,17 @@ function Boss_1:getHitAnimation()
     b.color_stage_current_saturation = b.initial_saturation + diff --Make current saturation the proper saturation
 
     --Stay red for .03 seconds
-    b.handles["gethittimer"] = LEVEL_TIMER:after(.05,
+    b.level_handles["gethittimer"] = LEVEL_TIMER:after(.05,
         function()
             --Transition current onhit hue to boss stage current hue when saturation is 0
-            b.handles["gethithue"] = LEVEL_TIMER:after(.25,
+            b.level_handles["gethithue"] = LEVEL_TIMER:after(.25,
                 function()
                     b.color.h = b.color_stage_hue[b.stage]
                 end)
             --Drops saturation, then go to stage current saturation
-            b.handles["gethitsaturation"] = LEVEL_TIMER:tween(.25, b.color, {s = 0}, 'in-linear',
+            b.level_handles["gethitsaturation"] = LEVEL_TIMER:tween(.25, b.color, {s = 0}, 'in-linear',
                function()
-                   b.handles["gethitsaturation"] = LEVEL_TIMER:tween(.25, b.color, {s = b.color_stage_current_saturation}, 'in-linear')
+                   b.level_handles["gethitsaturation"] = LEVEL_TIMER:tween(.25, b.color, {s = b.color_stage_current_saturation}, 'in-linear')
                 end
             )
         end
@@ -254,19 +233,19 @@ function Boss_1:changeStage()
 
         --Stop moving
         b.static = true
-        if b.handles["move"] then
-            LEVEL_TIMER:cancel(b.handles["move"])
+        if b.level_handles["move"] then
+            LEVEL_TIMER:cancel(b.level_handles["move"])
         end
 
         --Start stage 2
-        b.handles["begin_stage"] = LEVEL_TIMER:after(3,
+        b.level_handles["begin_stage"] = LEVEL_TIMER:after(3,
             function()
                  print("changed")
 
                  b.static, b.invincible = false, false --Make boss walk and be able to die
 
                  --Continue his movement
-                 b.handles["move"] = LEVEL_TIMER:tween(timeToReach(b), b.pos, {x = b.validPositions[b.target].x, y = b.validPositions[b.target].y}, 'in-linear',
+                 b.level_handles["move"] = LEVEL_TIMER:tween(timeToReach(b), b.pos, {x = b.validPositions[b.target].x, y = b.validPositions[b.target].y}, 'in-linear',
                      function()
                          b.newTarget = true
                      end
@@ -286,26 +265,27 @@ function boss.create()
 
     --Create shadow of boss
     shadow = CIRC(ORIGINAL_WINDOW_WIDTH/2, ORIGINAL_WINDOW_HEIGHT/2, 0, HSL(0,0,8,200))
-    shadow:addElement(DRAW_TABLE.BOSS, nil, "shadow")
+    shadow:addElement(DRAW_TABLE.BOSS, "boss_effect")
 
     --Grows shadow
-    b.handles["begin_stage"] = LEVEL_TIMER:tween(6, shadow, {r = 120}, 'in-cubic' ,
+    shadow.level_handles["create_boss"] = LEVEL_TIMER:tween(4, shadow, {r = 120}, 'in-cubic' ,
         function()
             shadow.death = true --Remove shadow
             b:addElement(DRAW_TABLE.BOSS, "bosses") --make boss appear
             b:colorLightnessLoop() --Start color transition
             FX.shake(.5, 5) --Shake screen
             --Screen shake and roar
-            b.handles["begin_stage"] = LEVEL_TIMER:after(1,
+            b.level_handles["begin_stage"] = LEVEL_TIMER:after(1.5,
                 function()
 
                     --ROAR AND SHAKE
                     b.long_roar:setVolume(5)
-		    b.long_roar:play()
+		            b.long_roar:play()
+                    SFX["boss_roar"] = b.long_roar
                     FX.shake(2, 3) --Shake screen
 
                     --Start stage 1
-                    b.handles["begin_stage"] = LEVEL_TIMER:after(2.1,
+                    b.level_handles["begin_stage"] = LEVEL_TIMER:after(2.2,
                         function()
                              b.static ,b.invincible = false, false
                          end

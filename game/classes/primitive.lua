@@ -16,7 +16,8 @@ ELEMENT = Class{
         self.exception = false --If this object is not to be removed when clearing tables
         self.invisible = false --If this object is not to be draw
         self.death = false --If true, the object will be deleted next update
-        self.handles = {} --Table containing active fx timer handles for this object
+        self.handles = {} --Table containing active color timer handles for this object
+        self.level_handles = {} --Table containing active level timer handles for this object
     end,
 
     --Sets id for this element, and add it to a ID table for quick lookup
@@ -50,6 +51,11 @@ ELEMENT = Class{
         if self.handles then
             for _,h in pairs(self.handles) do
                 COLOR_TIMER:cancel(h) --Stops any timers this object has
+            end
+        end
+        if self.level_handles then
+            for _,h in pairs(self.level_handles) do
+                LEVEL_TIMER:cancel(h) --Stops any timers this object has
             end
         end
         if t then

@@ -4,6 +4,7 @@ local Draw = require "draw"
 local Level = require "level_manager"
 local Color = require "classes.color.color"
 local Txt = require "classes.text"
+local Audio = require "audio"
 --MODULE FOR THE GAMESTATE: GAME--
 
 --ENEMIES--
@@ -59,6 +60,9 @@ function state:update(dt)
 
         Gamestate.switch(GS.GAMEOVER)
     end
+    
+    Audio.cleanupSFX() --Remove sfx that have ended
+    Audio.loopBGM()
 
     Util.updateTimers(dt)
 

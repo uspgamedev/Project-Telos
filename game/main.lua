@@ -41,6 +41,7 @@ Button = require "classes.button"
 --MY MODULES
 require "util"
 require "draw"
+require "audio"
 require "formation"
 require "level_manager"
 FX = require "fx"

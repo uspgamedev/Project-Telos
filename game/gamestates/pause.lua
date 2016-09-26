@@ -5,6 +5,7 @@ local Util = require "util"
 local Draw = require "draw"
 local Level = require "level_manager"
 local Txt = require "classes.text"
+local Audio = require "audio"
 --MODULE FOR THE GAMESTATE: PAUSE--
 
 --BUTTON FUNCTIONS--
@@ -36,6 +37,9 @@ function state:enter()
         end,
         "go (b)ack", GUI_MED)
     b:addElement(DRAW_TABLE.GUI, "gui")
+    
+    --AUDIO--
+    Audio.pauseSFX()
 
 end
 
@@ -46,6 +50,8 @@ function state:leave()
     Util.addExceptionId("background")
     Util.addExceptionId("fps_counter")
     Util.clearAllTables("remove")
+    
+    Audio.resumeSFX()
 
 end
 
@@ -64,6 +70,9 @@ function state:update(dt)
     end
 
     COLOR_TIMER:update(dt)
+    AUDIO_TIMER:update(dt)
+    
+    Audio.loopBGM()
 
     Util.updateFPS()
 
