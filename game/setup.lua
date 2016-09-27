@@ -38,6 +38,8 @@ function setup.config()
     FOCUS = true --If game screen is focused
     SWITCH = nil --What state to go next
 
+    MAX_PARTICLES = 500 --Max number of particles effects on screen
+
     COROUTINE = nil --Current coroutine
     COROUTINE_HANDLE = nil --Handle timer for current coroutine
     INDICATOR_DEFAULT = 1.5 --Indicator timer default

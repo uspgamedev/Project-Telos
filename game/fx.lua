@@ -10,14 +10,30 @@ local fx = {}
 --------------------
 
 --Creates a colored article explosion starting at a circle with center (x,y) and radius r
-function fx.explosion(x, y, r, color, number, speed, decaying, size)
-    local dir, angle, radius, batch, particle
+function fx.explosion(x, y, r, color, number, speed, decaying, size, important)
+    local dir, angle, radius, batch, particle, number_of_particles
 
     --Default Values
     number = number or 25  --Number of particles created in a explosion
     speed    = speed    or 150  --Particles speed
     decaying = decaying or 400  --Particles decaying alpha speed (decreases this amunt per second, when reaching 0, it will be deleted)
     size = size or 4
+    important = important or false --If an explosion is important, it will always be drawn intact, despite current number of particles already on screen
+
+    number_of_particles = Util.tableLen(Util.findSbTp("decaying_particle"))
+
+    --If current particles are already 75% of the max, half the number of particles being drawn
+    if not important and number_of_particles >= .75* MAX_PARTICLES and number_of_particles < MAX_PARTICLES then
+        number = math.floor(number/2)
+    --If current particles already reached or exceded max number of particles, then don't explode
+    elseif not important and number_of_particles >= MAX_PARTICLES then
+        return
+    end
+
+    --Create as much particles it can before exceding the max
+    if not important and number + number_of_particles > MAX_PARTICLES then
+        number = math.max(0, MAX_PARTICLES - number_of_particles - number)
+    end
 
     --Create a batch with endtime 5
     batch = Particle.create_batch(255/decaying + .05)--FAZER CONTA
@@ -56,7 +72,7 @@ function fx.psychoExplosion(p)
     color = Color.white()
     Color.copy(color, p.color)
 
-    e = 1.5 --Size of cell the grid will be created from
+    e = 2 --Size of cell the grid will be created from
     r = 3 --Radius of particle explosion
 
     death_func = DEATH_FUNCS[love.math.random(#DEATH_FUNCS)] --Function to generate particle speed (and consequently, pattern)

@@ -39,7 +39,7 @@ require "classes.indicator"
 Button = require "classes.button"
 
 --MY MODULES
-require "util"
+local Util = require "util"
 require "draw"
 require "audio"
 require "formation"
@@ -89,12 +89,17 @@ end
 --Used to draw canvas (fixes screen blinking when changing gamestates)
 function love.draw()
 
-if USE_CANVAS and SCREEN_CANVAS then
-    love.graphics.setColor(255, 255, 255, 255)
-    -- Use the premultiplied alpha blend mode when drawing the Canvas itself to prevent improper blending.
-    love.graphics.setBlendMode("alpha", "premultiplied")
-    love.graphics.draw(SCREEN_CANVAS)
-    love.graphics.setBlendMode("alpha")
+    if USE_CANVAS and SCREEN_CANVAS then
+        love.graphics.setColor(255, 255, 255, 255)
+        -- Use the premultiplied alpha blend mode when drawing the Canvas itself to prevent improper blending.
+        love.graphics.setBlendMode("alpha", "premultiplied")
+        love.graphics.draw(SCREEN_CANVAS)
+        love.graphics.setBlendMode("alpha")
+    end
+
 end
+
+--Used for debugging
+function love.update()
 
 end

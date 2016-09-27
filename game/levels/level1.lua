@@ -70,7 +70,7 @@ function script()
     F.single{enemy = DB, x = ORIGINAL_WINDOW_WIDTH/2, y = ORIGINAL_WINDOW_HEIGHT + 25, dy = -1, radius = 28}
     LM.wait("noenemies")
 
-    F.line{enemy = {DB}, x = ORIGINAL_WINDOW_WIDTH + 25, y = ORIGINAL_WINDOW_HEIGHT/2, dx = -1, number = 40, ind_side = 35}
+    F.line{enemy = {DB}, x = ORIGINAL_WINDOW_WIDTH + 25, y = ORIGINAL_WINDOW_HEIGHT/2, dx = -1, number = 36, ind_side = 35}
     LM.wait(5)
     F.fromVertical{side = "top", mode = "center", enemy = {DB}, number = 20, speed_m = .55}
     LM.wait(3)

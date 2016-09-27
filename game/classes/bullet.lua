@@ -28,10 +28,13 @@ Bullet = Class{
 --CLASS FUNCTIONS--
 
 function Bullet:kill()
+    local important
+
+    important = (self.subtp == "player_bullet") and true or false
 
     if self.death then return end
     self.death = true
-    FX.explosion(self.pos.x, self.pos.y, self.r, self.color, 10, nil, nil, 2)
+    FX.explosion(self.pos.x, self.pos.y, self.r, self.color, 10, nil, nil, 2, important)
 
 end
 
