@@ -86,6 +86,15 @@ function love.focus(f)
     FOCUS = f
 end
 
-function love.update(dt)
+--Used to draw canvas (fixes screen blinking when changing gamestates)
+function love.draw()
+
+if USE_CANVAS and SCREEN_CANVAS then
+    love.graphics.setColor(255, 255, 255, 255)
+    -- Use the premultiplied alpha blend mode when drawing the Canvas itself to prevent improper blending.
+    love.graphics.setBlendMode("alpha", "premultiplied")
+    love.graphics.draw(SCREEN_CANVAS)
+    love.graphics.setBlendMode("alpha")
+end
 
 end

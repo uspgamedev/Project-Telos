@@ -32,6 +32,9 @@ function setup.config()
     PREVIOUS_WINDOW_WIDTH = love.graphics.getWidth() --Window width before fullscreen
     PREVIOUS_WINDOW_HEIGHT = love.graphics.getHeight() --Window height before fullscreen
 
+    SCREEN_CANVAS = nil --Screen canvas that can be draw or apllied effects
+    USE_CANVAS = false --If game should draw the SCREEN_CANVAS
+
     FOCUS = true --If game screen is focused
     SWITCH = nil --What state to go next
 

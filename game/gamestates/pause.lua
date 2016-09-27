@@ -59,10 +59,19 @@ end
 function state:update(dt)
 
     if SWITCH == "GAME" then
+        --Make use of canvas so screen won't blink
+        USE_CANVAS = true
+        Draw.allTables()
+
         SWITCH = nil
         Util.gameElementException()
         Gamestate.pop()
+
     elseif SWITCH == "MENU" then
+        --Make use of canvas so screen won't blink
+        USE_CANVAS = true
+        Draw.allTables()
+
         SWITCH = nil
         Util.clearTimerTable(DEATH_HANDLES, FX_TIMER)
         Gamestate.pop()
@@ -80,6 +89,13 @@ function state:update(dt)
 end
 
 function state:draw()
+
+    --Stop using canvas
+    if USE_CANVAS then
+        USE_CANVAS = false
+        SCREEN_CANVAS = nil
+        love.graphics.clear()
+    end
 
     Draw.allTables()
 

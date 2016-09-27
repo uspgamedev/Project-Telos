@@ -35,6 +35,7 @@ function state:enter()
 
     Level.start(level1)
 
+
 end
 
 function state:leave()
@@ -52,9 +53,17 @@ function state:update(dt)
 
     --Change state if required
     if SWITCH == "PAUSE" or not FOCUS then
+        --Make use of canvas so screen won't blink
+        USE_CANVAS = true
+        Draw.allTables()
+
         SWITCH = nil
         Gamestate.push(GS.PAUSE)
     elseif SWITCH == "GAMEOVER" then
+        --Make use of canvas so screen won't blink
+        USE_CANVAS = true
+        Draw.allTables()
+
         SWITCH = nil
         Util.gameElementException("GAMEOVER")
 
@@ -97,6 +106,13 @@ function state:update(dt)
 end
 
 function state:draw()
+
+    --Stop using canvas
+    if USE_CANVAS then
+        USE_CANVAS = false
+        SCREEN_CANVAS = nil
+        love.graphics.clear()
+    end
 
     Draw.allTables()
 
