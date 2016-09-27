@@ -77,9 +77,12 @@ function state:update(dt)
 
     Util.updateSubTp(m_dt, "player_bullet")
     Util.updateSubTp(m_dt, "enemies")
+    Util.updateSubTp(m_dt, "bosses")
     Util.updateSubTp(m_dt, "decaying_particle")
+    Util.updateSubTp(m_dt, "particle_batch")
     Util.updateSubTp(m_dt, "growing_circle")
     Util.updateSubTp(m_dt, "enemy_indicator")
+    Util.updateSubTp(m_dt, "rotating_indicator")
     checkCollision()
 
     --Kill dead objects

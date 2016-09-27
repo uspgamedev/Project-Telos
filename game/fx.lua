@@ -12,14 +12,15 @@ local fx = {}
 --Creates a colored article explosion starting at a circle with center (x,y) and radius r
 function fx.explosion(x, y, r, color, number, speed, decaying, size)
     local dir, angle, radius, batch, particle
+
     --Default Values
-    number = number or 15  --Number of particles created in a explosion
+    number = number or 25  --Number of particles created in a explosion
     speed    = speed    or 150  --Particles speed
-    decaying = decaying or .99  --Particles decaying alpha speed (when reaching 0, it will be deleted)
+    decaying = decaying or 400  --Particles decaying alpha speed (decreases this amunt per second, when reaching 0, it will be deleted)
     size = size or 4
 
     --Create a batch with endtime 5
-    batch = Particle.create_batch(1)
+    batch = Particle.create_batch(255/decaying + .05)--FAZER CONTA
 
     --Creates all particles of explosion
     for i=1, number do

@@ -12,11 +12,11 @@ local particle = {}
 --Particle batch that holds a group of particles, and deletes them after a while
 Particle_Batch = Class{
     __includes = {ELEMENT},
-    init = function(self, endtime)
+    init = function(self, _endtime)
         ELEMENT.init(self)
 
         self.batch = {}
-        self.endtime = endtime
+        self.endtime = _endtime
         self.time = 0
         self.tp = "particle_batch"
     end
@@ -127,7 +127,7 @@ Decaying_Particle = Class{
         self.speedv = _speed --Speed value
         self.speed = Vector(_dx, _dy) --Speed vector
         self.speed = self.speed:normalized()*self.speedv
-        self.decaying_speed = _decaying_speed --Decaying alpha speed (object is deleted when it reaches 0)
+        self.decaying_speed = _decaying_speed --Decaying alpha speed (object is deleted when alpha reaches it reaches 0)
 
         self.tp = "decaying_particle" --Type of this class
     end
@@ -154,12 +154,16 @@ function Decaying_Particle:update(dt)
     p.pos = p.pos + dt*p.speed
     --Decays the alpha value
     if SLOWMO then
-        p.color.a = p.color.a * (p.decaying_speed^SLOWMO_M)^dt
+        p.color.a = p.color.a - p.decaying_speed*SLOWMO_M*dt
     else
-        p.color.a = p.color.a * p.decaying_speed
+        p.color.a = p.color.a - p.decaying_speed*dt
     end
 
-    if not p.death and p.color.a <=40 then
+    if p.color.a < 0 then
+        p.color.a = 0
+    end
+
+    if not p.death and p.color.a <=0 then
            p.death = true
     end
 end

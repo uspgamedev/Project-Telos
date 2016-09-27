@@ -150,7 +150,7 @@ function Psy:kill()
     Util.findId("lives_counter").var = p.lives
 
     if not p.death and p.lives == 0 then
-        FX.explosion(p.pos.x, p.pos.y, p.r, p.color, 60, 200, .994, 4)
+        FX.explosion(p.pos.x, p.pos.y, p.r, p.color, 100, 450, 250, 4)
         p.death = true
         Util.findId("psycho_aim").death = true --Delete aim
         SWITCH =  "GAMEOVER"
