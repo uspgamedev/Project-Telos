@@ -43,7 +43,7 @@ Psy = Class{
         self.speed = Vector(0,0) --Speed vector
 
         self.shoot_tick = 0 --Bullet "cooldown" timer (for shooting repeatedly)
-        self.shoot_fps = .155 --How fast to shoot bullet
+        self.shoot_fps = .155 --How fast to shoot bullets
 
         self.circle_fx_tick = 0 --Circle Effect "cooldown" timer
         self.circle_fx_fps = .2 --How fast to create the circle effect

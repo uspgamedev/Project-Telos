@@ -3,12 +3,16 @@ local Color = require "classes.color.color"
 local Hsl   = require "classes.color.hsl"
 local Util = require "util"
 local F = require "formation"
+local Audio = require "audio"
+
+local SB = require "classes.enemies.simple_ball"
+local DB = require "classes.enemies.double_ball"
 
 --BOSS #1 CLASS--
 --[[Name of boss here]]
 
 --Behaviours--
-local Stage_1_and_2, Stage_3, Stage_4, Stage_5
+local Stage_1_and_2, Stage_3, Stage_4
 
 local boss = {}
 
@@ -33,8 +37,7 @@ Boss_1 = Class{
 
         color = HSL(self.color_stage_hue[1], self.initial_saturation, self.bottom_lightness) --Color of boss
 
-
-        self.color_pulse_duration = 2 --Duration between color saturation transitions
+        self.color_pulse_duration = 1 --Duration between color saturation transitions
 
         CIRC.init(self, ORIGINAL_WINDOW_WIDTH/2, ORIGINAL_WINDOW_HEIGHT/2, r, color, nil, "fill") --Set atributes
         ELEMENT.setSubTp(self, "boss")
@@ -42,22 +45,34 @@ Boss_1 = Class{
         --Boss speed value
         self.speedv = 350 --Speed value
 
-        self.life = 80 --How many hits this boss can take before changng state
+        self.life = 2--50 --How many hits this boss can take before changng state
         self.damage_taken = 0 --How many hits this boss has taken
         self.invincible = true --If boss can get hit
         self.static = true --If boss can move
         self.stage = 1 --Stage this boss is
-        self.target = nil --Index of target position
-        self.newTarget = true --If boss needs a new target
+        self.target = nil --Index of target position (stage 1 and 2)
+        self.newTarget = true --If boss needs a new target (stage 1 and 2)
+        
+        self.getDir = nil --If boss should pick a direction to shoot (stage 3)
+        self.dir = nil --Direction to shoot the enemies (stage 3)
+        self.enemy_2_shoot = nil --What enemy to shoot
+        
+        self.isShooting = false --If boss is shooting player
+        self.shoot_tick = 0 --Enemy shooter "cooldown" timer (for shooting repeatedly)
+        self.shoot_fps = .5 --How fast to shoot enemies
 
         self.validPositions = {}
-        self.validPositions[1] = Vector(self.r + 10, self.r + 10) --Top Left
-        self.validPositions[2] = Vector(ORIGINAL_WINDOW_WIDTH - self.r - 10, self.r + 10) --Top Right
-        self.validPositions[3] = Vector(ORIGINAL_WINDOW_WIDTH - self.r - 10, ORIGINAL_WINDOW_HEIGHT - self.r  - 10) --Bottom Right
-        self.validPositions[4] = Vector(self.r + 10, ORIGINAL_WINDOW_HEIGHT - self.r - 10) --Bottom Left
+        self.validPositions[1] = Vector(self.r + 5, self.r + 5) --Top Left
+        self.validPositions[2] = Vector(ORIGINAL_WINDOW_WIDTH - self.r - 5, self.r + 5) --Top Right
+        self.validPositions[3] = Vector(ORIGINAL_WINDOW_WIDTH - self.r - 5, ORIGINAL_WINDOW_HEIGHT - self.r  - 5) --Bottom Right
+        self.validPositions[4] = Vector(self.r + 5, ORIGINAL_WINDOW_HEIGHT - self.r - 5) --Bottom Left
 
-    	self.long_roar =  love.audio.newSource("assets/sfx/boss1/long_roar.wav")
-    	self.hurt_roar =  love.audio.newSource("assets/sfx/boss1/hurt_roar.wav")
+        self.stomp = love.audio.newSource("assets/sfx/boss1/stomp.wav")
+        self.big_thump = love.audio.newSource("assets/sfx/boss1/big_thump.wav")
+        self.long_roar =  love.audio.newSource("assets/sfx/boss1/long_roar.wav")
+        self.hurt_roar =  love.audio.newSource("assets/sfx/boss1/hurt_roar.wav")
+        self.angry_hurt_roar =  love.audio.newSource("assets/sfx/boss1/angry_hurt_roar.wav")
+        self.angry_af_roar =  love.audio.newSource("assets/sfx/boss1/angry_af_roar.wav")
 
         self.behaviour = Stage_1_and_2 --What behaviour this boss is following
         self.tp = "boss_one" --Type of this class
@@ -74,7 +89,7 @@ function Boss_1:kill()
     if b.death then return end
     b.death = true
 
-    FX.explosion(self.pos.x, self.pos.y, self.r, self.color)
+    FX.explosion(self.pos.x, self.pos.y, 120, self.color, 100)
 
 end
 
@@ -86,53 +101,12 @@ function Boss_1:update(dt)
     --Boss won't move if static
     if b.static then return end
 
-    b:behaviour(dt) --Make boss current stage behaviour
-
-end
-
-Stage_1_and_2 = function(b, dt)
-    if b.newTarget then
-        --Get new target for boss
-        b.target = b:getTargetPosition()
-        b.newTarget = false
-        --Transition to new position
-        b.level_handles["move"] = LEVEL_TIMER:tween(timeToReach(b), b.pos, {x = b.validPositions[b.target].x, y = b.validPositions[b.target].y}, 'in-linear',
-            function()
-                b.newTarget = true
-            end
-        )
-    end
-end
-
-Stage_3 = function(b, dt)
-    b:kill()
-end
-
---Keeps transitioning boss color saturation from values bottom_lightness to upper_lightness, and vice-versa
-function Boss_1:colorLightnessLoop()
-    local b
-
-    b = self
-
-    --Remove previous timer
-    if b.level_handles["lightness"] then
-        COLOR_TIMER:cancel(b.level_handles["lightness"])
+    if b.behaviour then
+        b:behaviour(dt) --Make boss current stage behaviour
     end
 
-    --Start saturation transition from bottom_lightness to upper_lightness
-    b.level_handles["lightness"] = COLOR_TIMER:tween(b.color_pulse_duration/2, b.color, {l = b.upper_lightness}, 'in-linear',
-        --After reaching upper_lightness, start lightness transition from upper_lightness to bottom_lightness
-        function()
-            b.level_handles["lightness"] = COLOR_TIMER:tween(b.color_pulse_duration/2, b.color, {l = b.bottom_lightness}, 'in-linear',
-                --After reaching bottom_lightness, start eveything again
-                function()
-                    b:colorLightnessLoop()
-                end
-            )
-        end
-    )
-
 end
+
 
 --Called when boss gets hit with psycho's bullet
 function Boss_1:getHit()
@@ -236,6 +210,9 @@ function Boss_1:changeStage()
         b.speedv = 450 --Make boss faster
         b.damage_taken = 0 --Reset boss life
         b.invincible = true --Can't take damage
+        b.isShooting = false --Stop shooting
+        b.shoot_tick = 0
+        b.shoot_fps = .45
 
         --Stop moving
         b.static = true
@@ -243,8 +220,7 @@ function Boss_1:changeStage()
             LEVEL_TIMER:cancel(b.level_handles["move"])
         end
         
-        b.hurt_roar:setVolume(5)
-		b.hurt_roar:play()
+        b.hurt_roar:play()
         SFX["boss_roar"] = b.hurt_roar
         FX.shake(2, 3) --Shake screen
 
@@ -253,7 +229,7 @@ function Boss_1:changeStage()
             function()
                  print("changed")
 
-                 b.static, b.invincible = false, false --Make boss walk and be able to die
+                 b.static, b.invincible, b.isShooting = false, false, true --Make boss walk, be able to die and shoot
 
                  --Continue his movement
                  b.level_handles["move"] = LEVEL_TIMER:tween(timeToReach(b), b.pos, {x = b.validPositions[b.target].x, y = b.validPositions[b.target].y}, 'in-linear',
@@ -263,9 +239,8 @@ function Boss_1:changeStage()
                  )
              end
         )
-    end
     
-    if b.stage == 3 then
+    elseif b.stage == 3 then
         --Reset stats
         b.bottom_lightness = 100 --Reset bottom color lightness (in %)
         b.upper_lightness = 130 --Reset upper color lightness (in %)
@@ -274,30 +249,80 @@ function Boss_1:changeStage()
         b.damage_taken = 0 --Reset boss life
         b.invincible = true --Can't take damage
         b.behaviour = Stage_3
+        b.life = 210 --Increase boss max life
         --Stop moving
         b.static = true
+        b.isShooting = false
+        b.shoot_tick = 0
+        
         if b.level_handles["move"] then
             LEVEL_TIMER:cancel(b.level_handles["move"])
         end
         
-        b.angry_hurt_roar:setVolume(5)
-		b.angry_hurt_roar:play()
+        b.angry_hurt_roar:play()
         SFX["boss_roar"] = b.angry_hurt_roar
-        FX.shake(3, 4) --Shake screen
+        FX.shake(2.5, 4) --Shake screen
 
-        --Start stage 2
-        b.level_handles["begin_stage"] = LEVEL_TIMER:after(3.1,
+        --Start stage 3
+        b.level_handles["begin_stage"] = LEVEL_TIMER:after(2.6,
             function()
 
                  --Move to the center
-                 b.level_handles["move"] = LEVEL_TIMER:tween(timeToReach(b), b.pos, {x = ORIGINAL_WINDOW_WIDTH/2, y = ORIGINAL_WINDOW_HEIGHT/2}, 'in-linear',
+                 b.level_handles["move"] = LEVEL_TIMER:tween((b.pos:dist(Vector(ORIGINAL_WINDOW_WIDTH/2, ORIGINAL_WINDOW_HEIGHT/2))) / b.speedv, b.pos, {x = ORIGINAL_WINDOW_WIDTH/2, y = ORIGINAL_WINDOW_HEIGHT/2}, 'in-linear',
                      function()
-                         b.static, b.invincible = false, false --Make boss walk and be able to die
-                         b.startSpinning = true --Start his behaviour
+                         b.static, b.invincible, b.getDir = false, false, true --Make boss walk, be able to die and get a direction for spin attack
                      end
                  )
              end
         )
+    elseif b.stage == 4 then
+        --Reset stats
+        b.bottom_lightness = 100 --Reset bottom color lightness (in %)
+        b.upper_lightness = 130 --Reset upper color lightness (in %)
+        b:colorLightnessLoop() --Start transition all over again
+        b.color_stage_current_saturation = b.initial_saturation
+        b.damage_taken = 0 --Reset boss life
+        b.invincible = true --Can't take damage
+        b.behaviour = Stage_4
+        b.life = 10 --Increase boss max life
+        --Stop moving
+        b.static = true
+        
+        b.angry_af_roar:play()
+        SFX["boss_roar"] = b.angry_af_roar
+        FX.shake(3, 4) --Shake screen
+
+        --Start stage 4
+        b.level_handles["begin_stage"] = LEVEL_TIMER:after(3.1,
+            function()
+
+                 --Move to the center
+                 b.level_handles["move"] = LEVEL_TIMER:after(1,
+                     function()
+                         b.static = false --Make boss start to shrink
+                     end
+                 )
+             end
+        )
+    elseif b.stage == 5 then
+        --Reset stats
+        b.bottom_lightness = 100 --Reset bottom color lightness (in %)
+        b.upper_lightness = 130 --Reset upper color lightness (in %)
+        b:colorLightnessLoop() --Start transition all over again
+        b.color_stage_current_saturation = b.initial_saturation
+        b.damage_taken = 0 --Reset boss life
+        b.invincible = true --Can't take damage
+        b.behaviour = nil
+        b.life = 10
+
+        --Remove growing tween
+        if b.level_handles["grow_quick"] then
+            LEVEL_TIMER:cancel(b.level_handles["begin_stage"])
+        end
+
+        --Shrinks then dies
+        b.level_handles["die"] = LEVEL_TIMER:tween(2, b, {r = 1}, 'in-cubic', function() b:kill() end)
+
     end
 
 end
@@ -305,36 +330,66 @@ end
 --UTILITY FUNCTIONS--
 
 function boss.create()
-    local b, shadow
+    local b, shadow, volume, bgm
 
     b = Boss_1()
 
     --Create shadow of boss
-    shadow = CIRC(ORIGINAL_WINDOW_WIDTH/2, ORIGINAL_WINDOW_HEIGHT/2, 0, HSL(0,0,8,200))
+    shadow = CIRC(ORIGINAL_WINDOW_WIDTH/2, -1200, 800, HSL(0,0,8,200))
     shadow:addElement(DRAW_TABLE.BOSS, "boss_effect")
+    
+    --Lower music volume
+    bgm = SOUNDTRACK["next"] or SOUNDTRACK["current"]
+    Audio.fade_out(bgm, bgm:getVolume(), bgm:getVolume()/10, .8)
 
-    --Grows shadow
-    shadow.level_handles["create_boss"] = LEVEL_TIMER:tween(4, shadow, {r = 120}, 'in-cubic' ,
+    --Shake screen
+    volume = .2
+    shadow.level_handles["shake_screen"] = LEVEL_TIMER:every(1.5, 
         function()
-            shadow.death = true --Remove shadow
-            b:addElement(DRAW_TABLE.BOSS, "bosses") --make boss appear
-            b:colorLightnessLoop() --Start color transition
-            FX.shake(.5, 5) --Shake screen
-            --Screen shake and roar
-            b.level_handles["begin_stage"] = LEVEL_TIMER:after(1.5,
+            FX.shake(.5, 2)
+            b.stomp:setVolume(volume)
+            volume = volume + .1
+            b.stomp:play()    
+        end,
+        6
+    )
+    
+    --Moves shadow
+    shadow.level_handles["create_boss"] = LEVEL_TIMER:tween(9, shadow.pos, {y = ORIGINAL_WINDOW_HEIGHT/2}, 'in-linear',
+        function()
+            --Shrinks shadow
+            shadow.level_handles["create_boss"] = LEVEL_TIMER:tween(1, shadow, {r = 120}, 'in-cubic' ,
                 function()
+                    shadow.death = true --Remove shadow
+                    
+                    b:addElement(DRAW_TABLE.BOSS, "bosses") --make boss appear
+                    b:colorLightnessLoop() --Start color transition
+                    
+                    --Increase music volume
+                    bgm = SOUNDTRACK["next"] or SOUNDTRACK["current"]
+                    Audio.fade_in(bgm, bgm:getVolume(), BGM_VOLUME_LEVEL, 2)
+                    
+                    FX.shake(.5, 5) --Shake screen
+                    b.big_thump:play()   
+                    
+                    --SHOW BOSS NAME
 
-                    --ROAR AND SHAKE
-                    b.long_roar:setVolume(5)
-		            b.long_roar:play()
-                    SFX["boss_roar"] = b.long_roar
-                    FX.shake(2, 3) --Shake screen
-
-                    --Start stage 1
-                    b.level_handles["begin_stage"] = LEVEL_TIMER:after(2.2,
+                    --Screen shake and roar
+                    b.level_handles["begin_stage"] = LEVEL_TIMER:after(2,
                         function()
-                             b.static ,b.invincible = false, false
-                         end
+
+                            --ROAR AND SHAKE
+                            b.long_roar:play()
+                            SFX["boss_roar"] = b.long_roar
+                            FX.shake(2, 3) --Shake screen
+
+                            --Start stage 1
+                            b.level_handles["begin_stage"] = LEVEL_TIMER:after(2.2,
+                                function()
+                                     b.static ,b.invincible, b.isShooting = false, false, true
+                                 end
+                            )
+                        end
                     )
                 end
             )
@@ -355,6 +410,165 @@ end
 --Return the time needed for boss to reach target position based on his current position and speed
 function timeToReach(b)
     return (b.pos:dist(b.validPositions[b.target])) / b.speedv
+end
+
+--STAGES--
+
+--Run around the corners of the screen shooting at psycho. For stage 2, it can go to opposing corners and shoots faster
+Stage_1_and_2 = function(b, dt)
+    local e, mul
+    
+    --Shoot enemies with boss fps
+    if b.isShooting then
+        b.shoot_tick = b.shoot_tick + dt
+        if b.shoot_tick >= b.shoot_fps then
+            b.shoot_tick = b.shoot_tick - b.shoot_fps --Update tick
+            
+            --Shoot enemies
+            
+            --Choose to shoot simple ball(66%) or double ball(34%)
+            if b.stage == 1 then
+                if love.math.random() > .66 then
+                    e = DB
+                    mul = 2
+                else
+                    e = SB
+                    mul = 2.6
+                end
+                F.single{x = b.pos.x, y = b.pos.y, dir_follow = true, ind_mode = false, enemy = e, speed_m = mul}
+            
+            --Choose to shoot simple ball(40%) or double ball(60%)
+            else
+                if love.math.random() > .4 then
+                    e = DB
+                    mul = 2
+                else
+                    e = SB
+                    mul = 2.7
+                end
+                F.single{x = b.pos.x, y = b.pos.y, dir_follow = true, ind_mode = false, enemy = e, speed_m = mul}
+            end
+            
+        end
+    end
+    
+    if b.newTarget then
+        --Get new target for boss
+        b.target = b:getTargetPosition()
+        b.newTarget = false
+        --Transition to new position
+        b.level_handles["move"] = LEVEL_TIMER:tween(timeToReach(b), b.pos, {x = b.validPositions[b.target].x, y = b.validPositions[b.target].y}, 'in-linear',
+            function()
+                b.newTarget = true
+            end
+        )
+    end
+end
+
+--Stays at the center of the screen, and shoots in circle motion to the psycho
+Stage_3 = function(b, dt)
+    local p, d, clockwise, turn_angle, turn_ratio, e
+
+    d = 4.5 --Duration of spinning attack
+    cooldown = 1.2 --Duration between attacks
+    if b.isShooting then
+        b.shoot_tick = b.shoot_tick + dt
+        if b.shoot_tick >= b.shoot_fps then
+            b.shoot_tick = b.shoot_tick - b.shoot_fps --Update tick
+            if b.enemy_2_shoot == SB then
+                e = (love.math.random()>.05 and SB or DB) --Choose to shoot SB(95%) or DB(5%)
+            else 
+                e = DB
+            end
+            --Shoot enemies
+            F.single{x = b.pos.x, y = b.pos.y, dx = b.dir.x, dy = b.dir.y, ind_mode = false, enemy = e, speed_m = 2}
+            
+        end
+    end
+
+    if b.getDir then
+        b.getDir = false
+        b.isShooting = true
+        clockwise = (love.math.random()>.5 and -1 or 1) --Choose to rotate clockwise or not
+        b.enemy_2_shoot = (love.math.random()>.5 and SB or DB) --Choose to rotate clockwise or not
+        
+        if b.enemy_2_shoot == SB then
+            turn_angle = 18
+            turn_ratio = .025
+            b.shoot_fps = .025
+        else
+            turn_angle = 32
+            turn_ratio = .07
+            b.shoot_fps = .07
+        end
+
+        p = Util.findId("psycho")
+        
+        b.dir = Vector(p.pos.x - b.pos.x, p.pos.y - b.pos.y):normalized() --At first, point at psycho
+        --Rotates the direction
+        b.level_handles["spin"] = LEVEL_TIMER:every(turn_ratio,
+            function()
+                b.dir = b.dir:rotated(clockwise*math.pi/turn_angle)
+                 --2% chance of inverting clock direction if its not spawning DB
+                if love.math.random() >.98 then
+                    clockwise =  -clockwise
+                end
+            end,
+            d/turn_ratio
+        )
+        b.level_handles["stop_spinning_attack"] = LEVEL_TIMER:after(d, function() b.isShooting = false end) 
+        b.level_handles["loop_spinning_attack"] = LEVEL_TIMER:after(d + cooldown, function() b.getDir = true end) 
+    end
+
+
+end
+
+--Shrinks, then gorws quickly trying to kill psycho one last time
+Stage_4 = function(b, dt)
+    
+    --Shrink
+    if not b.static and not b.level_handles["shrink"] then
+        b.level_handles["shrink"] = LEVEL_TIMER:tween(6, b, {r = 25}, 'in-linear',
+            --Grow quick
+            function()
+                b.invincible = false
+                b.level_handles["grow_quick"] = LEVEL_TIMER:tween(4, b, {r = 900}, 'in-linear',
+                    function()
+                        b.stage = b.stage + 1
+                        print("changing state to", b.stage)
+
+                        b:changeStage() --Change boss stage
+                    end
+                )
+            end
+        )
+    end
+end
+
+--Keeps transitioning boss color saturation from values bottom_lightness to upper_lightness, and vice-versa
+function Boss_1:colorLightnessLoop()
+    local b
+
+    b = self
+
+    --Remove previous timer
+    if b.level_handles["lightness"] then
+        COLOR_TIMER:cancel(b.level_handles["lightness"])
+    end
+
+    --Start saturation transition from bottom_lightness to upper_lightness
+    b.level_handles["lightness"] = COLOR_TIMER:tween(b.color_pulse_duration/2, b.color, {l = b.upper_lightness}, 'in-linear',
+        --After reaching upper_lightness, start lightness transition from upper_lightness to bottom_lightness
+        function()
+            b.level_handles["lightness"] = COLOR_TIMER:tween(b.color_pulse_duration/2, b.color, {l = b.bottom_lightness}, 'in-linear',
+                --After reaching bottom_lightness, start eveything again
+                function()
+                    b:colorLightnessLoop()
+                end
+            )
+        end
+    )
+
 end
 
 --return function

@@ -148,7 +148,7 @@ function fx.shake(d, s)
     orig_x = CAM.x
     orig_y = CAM.y
 
-    LEVEL_TIMER:during(d,
+    SHAKE_HANDLE = LEVEL_TIMER:during(d,
         function()
             CAM.x = orig_x + love.math.random(-str,str)
             CAM.y = orig_y + love.math.random(-str,str)

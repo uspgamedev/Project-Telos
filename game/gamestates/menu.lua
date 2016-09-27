@@ -26,7 +26,12 @@ function state:enter()
     b:addElement(DRAW_TABLE.GUI, "gui")
     
     --AUDIO--
-    Audio.playBGM(MENU)
+    Audio.playBGM(BGM_MENU)
+
+    --SHAKE--
+    if SHAKE_HANDLE then
+        LEVEL_TIMER:cancel(SHAKE_HANDLE)
+    end
 
 end
 

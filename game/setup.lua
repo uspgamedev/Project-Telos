@@ -27,8 +27,8 @@ function setup.config()
 
     WINDOW_WIDTH = love.graphics.getWidth() --Current width of the game window
     WINDOW_HEIGHT = love.graphics.getHeight() --Current height of the game window
-    ORIGINAL_WINDOW_WIDTH = love.graphics.getWidth() --Default width of the game window
-    ORIGINAL_WINDOW_HEIGHT = love.graphics.getHeight() --Default height of the game window
+    ORIGINAL_WINDOW_WIDTH = 1000 --Default width of the game window
+    ORIGINAL_WINDOW_HEIGHT = 750 --Default height of the game window
     PREVIOUS_WINDOW_WIDTH = love.graphics.getWidth() --Window width before fullscreen
     PREVIOUS_WINDOW_HEIGHT = love.graphics.getHeight() --Window height before fullscreen
 
@@ -38,6 +38,8 @@ function setup.config()
     COROUTINE = nil --Current coroutine
     COROUTINE_HANDLE = nil --Handle timer for current coroutine
     INDICATOR_DEFAULT = 1.5 --Indicator timer default
+
+    SHAKE_HANDLE = nil --Handle for shake effect
 
     SLOWMO = false --If (most) game elements will move in slow-mo
     SLOWMO_M = .5 --Slowmo multiplier effect
@@ -117,14 +119,14 @@ function setup.config()
     SOUNDTRACK["current"] = nil --Current soudntrack playing
     SOUNDTRACK["next"] = nil  --Next soundtrack to play (for cross-fading)
     SFX = {} --Table with all sound effects playing
-    BGM_VOLUME_LEVEL = 10 --Volume of BGM
+    BGM_VOLUME_LEVEL = 0 --Volume of BGM
     --Useful handles for audio manipulation
     FADE_IN_HANDLE = nil
     FADE_OUT_HANDLE = nil
     AUDIO_TIMER_HANDLE = nil
     --Tracks
-    MENU = love.audio.newSource("assets/bgm/Flying Carrots 2.mp3")
-    LEVEL_1 = love.audio.newSource("assets/bgm/Limitless.mp3") 
+    BGM_MENU = love.audio.newSource("assets/bgm/Flying Carrots 2.mp3")
+    BGM_LEVEL_1 = love.audio.newSource("assets/bgm/Limitless.mp3")
 
     --Start UI color transition
     UI_COLOR = UI.create_color()

@@ -617,7 +617,7 @@ function formation.single(a)
     a.dx = a.dx or 0
     a.dy = a.dy or 0
     a.ind_duration = a.ind_duration or INDICATOR_DEFAULT
-    a.ind_mode = a.ind_mode or true
+    if a.ind_mode == nil then a.ind_mode = true end
 
     --Setting local variables
     l_pos = Vector(a.x, a.y)

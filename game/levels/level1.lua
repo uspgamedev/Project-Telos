@@ -22,7 +22,7 @@ function script()
     local t
     --Start Level
     LM.level_title("I - THE FALL OF PSYCHO")
-    Audio.playBGM(LEVEL_1)
+    Audio.playBGM(BGM_LEVEL_1)
     
     --[[1-1: The Start of the End
     LM.level_part("Part 1 - The Start of the End")
@@ -276,7 +276,7 @@ function script()
 
     LM.wait(2)
     Boss.create()
-    LM.wait(8)
+    LM.wait(20)
     LM.wait("nobosses")
     LM.stop()
     LM.start(level2)
