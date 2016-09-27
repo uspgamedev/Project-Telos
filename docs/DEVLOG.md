@@ -5,6 +5,12 @@ GAME DESIGN DOCUMENT
 DEV LOG
 =======
 
+#### 24-27/08/2016:
+
+Finished Boss 1!!
+Also finished all issues for this iteration, including level 1 ^^
+Hoping to have today (27) discussion with group.
+
 #### 19-23/08/2016:
 
 Finishing remaining issues for this iteration.

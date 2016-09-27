@@ -2,11 +2,20 @@
 THE HISTORY OF PSYCHO: THE BALL
 ===============================
 
-#### (xx/xx/2016) Version 0.0.0.6    -  XXXXXXXXX
+#### (xx/xx/2016) Version 0.0.0.7    -  XXXXXXXXXXX
+
+#### (27/08/2016) Version 0.0.0.6    -  The Big One
 - Juiyness! Explosions!
     - Cool death explosions for things to explode.
 - More colors!
-    -Background colors
+    - Background colors
+- Level 1!
+    - Awesome patterns
+    - Awesome boss
+    - Awesome effects and indicators for enemies
+- Music!
+    - SFX and BGM playing properly an fade-in/out.
+    - Added menu and level 1 music (may still change)
 #### (05/08/2016) Version 0.0.0.5    -  Snowballing
 
 - Now there is a simple way to create levels for psycho!
