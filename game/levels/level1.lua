@@ -24,13 +24,13 @@ function script()
     LM.level_title("I - THE FALL OF PSYCHO")
     Audio.playBGM(BGM_LEVEL_1)
 
-    --[[1-1: The Start of the End
+    --1-1: The Start of the End
     LM.level_part("Part 1 - The Start of the End")
 
 
     LM.wait(4)
     INDICATOR_DEFAULT = 1.5
-    F.single{enemy = SB, x = -20, y = ORIGINAL_WINDOW_HEIGHT/2, dx = 1, dy = 0, radius = 28, ind_duration = 2}
+    F.single{enemy = SB, x = -20, y = ORIGINAL_WINDOW_HEIGHT/2, dx = 1, dy = 0, radius = 28, ind_duration = 2, ind_side = 35}
     LM.wait("noenemies")
 
     F.single{enemy = SB, x = -20, y = ORIGINAL_WINDOW_HEIGHT/2, dx = 1, dy = 0}
@@ -70,7 +70,7 @@ function script()
     F.single{enemy = DB, x = ORIGINAL_WINDOW_WIDTH/2, y = ORIGINAL_WINDOW_HEIGHT + 25, dy = -1, radius = 28}
     LM.wait("noenemies")
 
-    F.line{enemy = {DB}, x = ORIGINAL_WINDOW_WIDTH + 25, y = ORIGINAL_WINDOW_HEIGHT/2, dx = -1, number = 45, ind_side = 35}
+    F.line{enemy = {DB}, x = ORIGINAL_WINDOW_WIDTH + 25, y = ORIGINAL_WINDOW_HEIGHT/2, dx = -1, number = 40, ind_side = 35}
     LM.wait(5)
     F.fromVertical{side = "top", mode = "center", enemy = {DB}, number = 20, speed_m = .55}
     LM.wait(3)
@@ -81,8 +81,8 @@ function script()
     F.line{enemy = {DB}, x = ORIGINAL_WINDOW_WIDTH/2 + 200, y = - 25, dy = 1, number = 56, ind_side = 35}
     LM.wait(4)
     INDICATOR_DEFAULT = 1.2
-    F.fromVertical{side = "top", mode = "distribute", number = 9, enemy = {SB}, speed_m = 1.4}
-    F.fromVertical{side = "bottom", mode = "distribute", number = 9, enemy = {SB}, speed_m = 1.4}
+    F.fromVertical{side = "top", mode = "distribute", number = 9, enemy = {SB}, speed_m = 1.3}
+    F.fromVertical{side = "bottom", mode = "distribute", number = 9, enemy = {SB}, speed_m = 1.3}
     LM.wait(4)
     F.fromVertical{side = "top", mode = "distribute", number = 14, enemy = {SB, DB}, speed_m = 1.2}
     F.fromVertical{side = "bottom", mode = "distribute", number = 14, enemy = {SB, DB}, speed_m = 1.2}
@@ -269,7 +269,7 @@ function script()
         end
     end
     LM.wait("noenemies")
-    LM.giveLives(7)]]
+    LM.giveLives(7)
 
     --1-4: The Big One
     LM.level_part("Part 4 - The Big One")

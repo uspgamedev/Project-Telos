@@ -134,7 +134,7 @@ function indicator.create_enemy(enemy, pos, dir, following, side, duration, spee
                 enemy.create(pos.x, pos.y, dir, speed_m, radius)
             end
         )
-        i.level_handles["create_enemy"] = handle
+        table.insert(INDICATOR_HANDLES,handle)
     else
         --Create the enemy after duration getting psycho current position
         handle = LEVEL_TIMER:after(duration,
@@ -147,7 +147,7 @@ function indicator.create_enemy(enemy, pos, dir, following, side, duration, spee
                 enemy.create(pos.x, pos.y, Vector(p.pos.x - pos.x, p.pos.y - pos.y), speed_m, radius)
             end
         )
-        i.level_handles["create_enemy"] = handle
+        table.insert(INDICATOR_HANDLES,handle)
 
     end
 
