@@ -60,8 +60,6 @@ function state:update(dt)
         Gamestate.switch(GS.MENU)
     end
 
-    Audio.loopBGM()
-
     Util.updateTimers(dt)
 
     Util.updateFPS()

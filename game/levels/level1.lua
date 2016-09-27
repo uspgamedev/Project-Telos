@@ -23,7 +23,7 @@ function script()
     --Start Level
     LM.level_title("I - THE FALL OF PSYCHO")
     Audio.playBGM(BGM_LEVEL_1)
-    
+
     --[[1-1: The Start of the End
     LM.level_part("Part 1 - The Start of the End")
 
@@ -271,13 +271,14 @@ function script()
     LM.wait("noenemies")
     LM.giveLives(7)]]
 
-    --1-4: The Betrayal
-    LM.level_part("Part 4 - The Betrayal")
+    --1-4: The Big One
+    LM.level_part("Part 4 - The Big One")
 
     LM.wait(2)
     Boss.create()
     LM.wait(20)
     LM.wait("nobosses")
+    LM.wait(6)
     LM.stop()
     LM.start(level2)
 

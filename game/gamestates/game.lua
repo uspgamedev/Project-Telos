@@ -60,9 +60,8 @@ function state:update(dt)
 
         Gamestate.switch(GS.GAMEOVER)
     end
-    
+
     Audio.cleanupSFX() --Remove sfx that have ended
-    Audio.loopBGM()
 
     Util.updateTimers(dt)
 
@@ -86,6 +85,7 @@ function state:update(dt)
     Util.updateSubTp(m_dt, "particle_batch")
     Util.updateSubTp(m_dt, "growing_circle")
     Util.updateSubTp(m_dt, "enemy_indicator")
+    Util.updateSubTp(m_dt, "rotating_indicator")
     Util.updateId(dt, "psycho_aim") --Is not affected by slowmo
 
     checkCollision()

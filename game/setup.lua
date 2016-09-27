@@ -89,6 +89,7 @@ function setup.config()
 
     --FONT CONFIG--
     GUI_GAME_TITLE = love.graphics.newFont("assets/fonts/Nevis.ttf", 90)
+    GUI_BOSS_TITLE = love.graphics.newFont("assets/fonts/Nevis.ttf", 60)
     GUI_BIG = love.graphics.newFont("assets/fonts/vanadine_bold.ttf", 60)
     GUI_MEDPLUS = love.graphics.newFont("assets/fonts/Nevis.ttf", 30)
     GUI_MED = love.graphics.newFont("assets/fonts/Nevis.ttf", 20)

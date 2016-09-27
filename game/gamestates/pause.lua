@@ -37,7 +37,7 @@ function state:enter()
         end,
         "go (b)ack", GUI_MED)
     b:addElement(DRAW_TABLE.GUI, "gui")
-    
+
     --AUDIO--
     Audio.pauseSFX()
 
@@ -50,7 +50,7 @@ function state:leave()
     Util.addExceptionId("background")
     Util.addExceptionId("fps_counter")
     Util.clearAllTables("remove")
-    
+
     Audio.resumeSFX()
 
 end
@@ -71,8 +71,6 @@ function state:update(dt)
 
     COLOR_TIMER:update(dt)
     AUDIO_TIMER:update(dt)
-    
-    Audio.loopBGM()
 
     Util.updateFPS()
 

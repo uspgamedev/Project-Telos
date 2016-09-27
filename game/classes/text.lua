@@ -73,7 +73,6 @@ function text.create_gui(x, y, text, font, var, mode, var_font, id, align, limit
 
     txt = Text(x, y, text, font, var, mode, var_font, align, limit)
     txt:addElement(DRAW_TABLE.GUI, "gui", id)
-
     return txt
 end
 

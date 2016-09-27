@@ -116,7 +116,7 @@ function level_manager.level_title(name)
     x = ORIGINAL_WINDOW_WIDTH/2 - fx/2
     y = ORIGINAL_WINDOW_HEIGHT/2 - fy/2
     --Create level title
-    txt = Txt.create_gui(x, y, name, GUI_GAME_TITLE, nil, "format", nil, "game_title", "center", limit)
+    txt = Txt.create_gui(x, y, name, GUI_GAME_TITLE, nil, "format", nil, "game_title", "center", fx)
     --in the future, make a "PAAAM" sound here
 
     --After two seconds, fades-out the title
@@ -126,6 +126,36 @@ function level_manager.level_title(name)
             Level_Handle3 = LEVEL_TIMER:after(1,
                 function()
                     Util.findId("game_title").death = true
+                end
+            )
+        end
+    )
+
+end
+
+--Create a centralized on top of screen boss title, that fades out after 3 seconds
+function level_manager.boss_title(name)
+    local txt, fx, fy, x, y, font, limit
+
+    font = GUI_BOSS_TITLE
+    limit = ORIGINAL_WINDOW_WIDTH
+
+    --Get position so that the text is centralized on screen
+    fx = math.min(font:getWidth(name),limit) --Width of text
+    fy = font:getHeight(name)*  math.ceil(font:getWidth(name)/fx) --Height of text
+    x = ORIGINAL_WINDOW_WIDTH/2 - fx/2
+    y = ORIGINAL_WINDOW_HEIGHT/5 - fy/2
+    --Create level title
+    txt = Txt.create_gui(x, y, name, font, nil, "format", nil, "boss_title", "center", fx)
+    --in the future, make a "PAAAM" sound here
+
+    --After two seconds, fades-out the title
+    Level_Handle1 = LEVEL_TIMER:after(2,
+        function()
+            Level_Handle2 = LEVEL_TIMER:tween(1, Util.findId("boss_title"), {alpha = 0}, 'in-linear')
+            Level_Handle3 = LEVEL_TIMER:after(1,
+                function()
+                    Util.findId("boss_title").death = true
                 end
             )
         end

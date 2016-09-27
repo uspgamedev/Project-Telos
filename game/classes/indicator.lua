@@ -125,7 +125,7 @@ function indicator.create_enemy(enemy, pos, dir, following, side, duration, spee
 
     i.color.a = 0
     --Fade in the indicator
-    LEVEL_TIMER:tween(.3, i.color, {a = 255}, 'in-linear')
+    i.level_handles["fadein"] = LEVEL_TIMER:tween(.3, i.color, {a = 255}, 'in-linear')
 
     if not following then
         --Create the enemy after duration
@@ -134,7 +134,7 @@ function indicator.create_enemy(enemy, pos, dir, following, side, duration, spee
                 enemy.create(pos.x, pos.y, dir, speed_m, radius)
             end
         )
-        table.insert(INDICATOR_HANDLES, handle)
+        i.level_handles["create_enemy"] = handle
     else
         --Create the enemy after duration getting psycho current position
         handle = LEVEL_TIMER:after(duration,
@@ -147,9 +147,85 @@ function indicator.create_enemy(enemy, pos, dir, following, side, duration, spee
                 enemy.create(pos.x, pos.y, Vector(p.pos.x - pos.x, p.pos.y - pos.y), speed_m, radius)
             end
         )
-        table.insert(INDICATOR_HANDLES, handle)
+        i.level_handles["create_enemy"] = handle
 
     end
+
+    return i
+end
+
+----------------------
+--Rotating Indicator--
+----------------------
+
+--Indicates where an enemy will appear, with a triangle. After _duration, disappears.
+--Pass only the center of the triangle, the direction to face, and side length
+--Rotates around a given circle radius, following psycho
+Rotating_Indicator = Class{
+    __includes = {TRIANGLE},
+    init = function(self, _side, _color, _duration, _radius, _circle_center)
+        local p1, p2, p3, p, center
+
+        p = Util.findId("psycho")
+        self.radius = _radius --Radius of circle this indicator is rotating from
+        self.circle_center = Vector(_circle_center.x, _circle_center.y) --Center of circle this indicator is rotating from
+        self.dir = Vector(p.pos.x - self.circle_center.x, p.pos.y - self.circle_center.y)
+        self.center = Vector(self.circle_center.x + self.radius*self.dir:normalized().x, self.circle_center.y + self.radius*self.dir:normalized().y)--Center of triangle
+        self.side = _side
+
+        p1, p2, p3 = getPositions(self.center, self.dir, self.side)
+        TRIANGLE.init(self, p1, p2, p3, _color) --Set atributes
+
+
+        self.tick = 0 --Time this indicator has been "alive"
+        self.duration = _duration or 1
+
+        --Create a full triangle when is following psycho
+        self.mode = "fill"
+        self.mode = "line"
+
+        self.tp = "rotating_indicator" --Type of this class
+    end
+}
+
+--CLASS FUNCTIONS--
+
+--If indicator is following psycho, update his positions
+function Rotating_Indicator:update(dt)
+    local i, dir, p
+
+    i = self
+
+    --Ticks the indicator
+    i.tick = i.tick + dt
+
+    if i.tick >= i.duration then
+        i.death = true
+    end
+
+    p = Util.findId("psycho")
+
+    i.dir = Vector(p.pos.x - i.circle_center.x, p.pos.y - i.circle_center.y)
+    i.center = Vector(i.circle_center.x + i.radius*i.dir:normalized().x, i.circle_center.y + i.radius*i.dir:normalized().y)--Center of triangle
+
+    i.p1, i.p2, i.p3 = getPositions(i.center, i.dir, i.side)
+
+end
+
+--UTILITY FUNCTIONS--
+
+--Create an enemy indicator from a margin in the screen, and after duration, create the enemy
+function indicator.create_rotating(side, color, duration, radius, circle_center, st)
+    local i
+
+    st = st or "rotating_indicator" --subtype
+
+    i = Rotating_Indicator(side, color, duration, radius, circle_center)
+    i:addElement(DRAW_TABLE.L5, st)
+
+    i.color.a = 0
+    --Fade in the indicator
+    i.level_handles["fadein"] = LEVEL_TIMER:tween(.3, i.color, {a = 255}, 'in-linear')
 
     return i
 end

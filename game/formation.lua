@@ -50,7 +50,9 @@ function formation.fromHorizontal(a)
     a.speed_m = a.speed_m or 1
     a.dir_follow = a.dir_follow or false
     a.ind_duration = a.ind_duration or INDICATOR_DEFAULT
-    a.ind_mode = a.ind_mode or "all"
+    if a.ind_mode ~= false then
+        a.ind_mode = a.ind_mode or "all"
+    end
 
     if a.side == "left" or a.side == "l" then
         dir = Vector(1,0)
@@ -301,7 +303,9 @@ function formation.fromVertical(a)
     a.speed_m = a.speed_m or 1
     a.dir_follow = a.dir_follow or false
     a.ind_duration = a.ind_duration or INDICATOR_DEFAULT
-    a.ind_mode = a.ind_mode or "all"
+    if a.ind_mode ~= false then
+        a.ind_mode = a.ind_mode or "all"
+    end
 
     if a.side == "top" or a.side == "t" then
         dir = Vector(0,1)
@@ -538,7 +542,9 @@ function formation.circle(a)
     a.dir_follow = a.dir_follow or false
     a.aim = a.aim or false
     a.ind_duration = a.ind_duration or INDICATOR_DEFAULT
-    a.ind_mode = a.ind_mode or "all"
+    if a.ind_mode ~= false then
+        a.ind_mode = a.ind_mode or "all"
+    end
 
     enemy_table_size = Util.tableLen(a.enemy)
 
@@ -670,7 +676,9 @@ function formation.line(a)
     a.dx = a.dx or 0
     a.dy = a.dy or 0
     a.ind_duration = a.ind_duration or INDICATOR_DEFAULT
-    a.ind_mode = a.ind_mode or "first"
+    if a.ind_mode ~= false then
+        a.ind_mode = a.ind_mode or "first"
+    end
 
     enemy_table_size = Util.tableLen(a.enemy)
     dir = Vector(a.dx, a.dy)

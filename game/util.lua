@@ -202,6 +202,10 @@ function util.gameElementException(mode)
         util.addExceptionSubtype("enemy_indicator")
     end
 
+    if util.findSbTp("rotating_indicator") then
+        util.addExceptionSubtype("rotating_indicator")
+    end
+
     --GUI ELEMENTS
 
     if util.findId("lives_counter") then
@@ -316,7 +320,7 @@ function util.updateTimers(dt)
     FX_TIMER:update(dt)
     COLOR_TIMER:update(dt)
     AUDIO_TIMER:update(dt)
-    
+
 end
 
 --Update the fps counter

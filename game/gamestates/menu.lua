@@ -24,7 +24,7 @@ function state:enter()
             end,
         "Play", GUI_BIG, Color.black())
     b:addElement(DRAW_TABLE.GUI, "gui")
-    
+
     --AUDIO--
     Audio.playBGM(BGM_MENU)
 
@@ -56,8 +56,6 @@ function state:update(dt)
     Util.updateFPS()
 
     Util.killAll()
-    
-    Audio.loopBGM()
 
 end
 
