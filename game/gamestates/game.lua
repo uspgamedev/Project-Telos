@@ -33,6 +33,9 @@ function state:enter()
     --Lives counter text
     Txt.create_game_gui(5, 10, "lives: ", GUI_MED, p.lives, "down", GUI_MEDPLUS, "lives_counter")
 
+    --Ultrablast counter text
+    Txt.create_game_gui(5, 80, "Ultrablast: ", GUI_MED, p.ultrablast_counter, "down", GUI_MEDPLUS, "ultrablast_counter")
+
     Level.start(level1)
 
 
@@ -95,9 +98,10 @@ function state:update(dt)
     Util.updateSubTp(m_dt, "growing_circle")
     Util.updateSubTp(m_dt, "enemy_indicator")
     Util.updateSubTp(m_dt, "rotating_indicator")
+    Util.updateSubTp(m_dt, "ultrablast")
     Util.updateId(dt, "psycho_aim") --Is not affected by slowmo
 
-    checkCollision()
+    Util.checkCollision()
 
     --Kill dead objects
     Util.killAll()
@@ -140,52 +144,14 @@ function state:keyreleased(key)
 
 end
 
---Makes all collisions
-function checkCollision()
+function state:mousepressed(x, y, button, istouch)
+    local p
 
-    if SUBTP_TABLE["enemies"] then
-
-        for e in pairs(SUBTP_TABLE["enemies"]) do
-
-            --Checking player bullet collision
-            if SUBTP_TABLE["player_bullet"] then
-                for bullet in pairs(SUBTP_TABLE["player_bullet"]) do
-                    if not bullet.death and e:collides(bullet) then
-                        e:kill()
-                        bullet:kill()
-                    end
-                end
-            end
-
-            --Colliding with psycho
-            if not p.invincible and e:collides(p) then
-                p:kill()
-            end
-
-        end
-    end
-
-    --Colliding player bullets with bosses
-    if SUBTP_TABLE["player_bullet"] then
-        for bullet in pairs(SUBTP_TABLE["player_bullet"]) do
-            if SUBTP_TABLE["bosses"] then
-                for boss in pairs(SUBTP_TABLE["bosses"]) do
-                    if not bullet.death and bullet:collides(boss) then
-                        bullet:kill()
-                        if not boss.invincible then boss:getHit() end
-                    end
-                end
-            end
-        end
-    end
-
-    --Colliding bosses with psycho
-    if SUBTP_TABLE["bosses"] then
-        for boss in pairs(SUBTP_TABLE["bosses"]) do
-            --Colliding with psycho
-            if not p.invincible and boss:collides(p) then
-                p:kill()
-            end
+    --Secondary mouse button unleashes an ultrablast
+    if button == 2 then
+        p = Util.findId("psycho")
+        if not p.shootLocked then
+            p:ultrablast(p.default_ultrablast_power)
         end
     end
 

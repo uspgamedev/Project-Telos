@@ -198,6 +198,10 @@ function util.gameElementException(mode)
         util.addExceptionSubtype("psycho_explosion")
     end
 
+    if util.findSbTp("ultrablast") then
+        util.addExceptionSubtype("ultrablast")
+    end
+
     if util.findSbTp("enemy_indicator") then
         util.addExceptionSubtype("enemy_indicator")
     end
@@ -210,6 +214,10 @@ function util.gameElementException(mode)
 
     if util.findId("lives_counter") then
         util.addExceptionId("lives_counter")
+    end
+
+    if util.findId("ultrablast_counter") then
+        util.addExceptionId("ultrablast_counter")
     end
 
     if util.findId("level_part") then
@@ -376,6 +384,67 @@ end
 --GLOBAL FUNCTIONS
 --------------------
 
+--Makes all collisions
+function util.checkCollision()
+
+    if SUBTP_TABLE["enemies"] then
+
+        for e in pairs(SUBTP_TABLE["enemies"]) do
+
+            --Checking player bullet collision
+            if SUBTP_TABLE["player_bullet"] then
+                for bullet in pairs(SUBTP_TABLE["player_bullet"]) do
+                    if not bullet.death and e:collides(bullet) then
+                        e:kill()
+                        bullet:kill()
+                    end
+                end
+            end
+
+            --Colliding with psycho
+            if not p.invincible and e:collides(p) then
+                p:kill()
+            end
+
+            --Checking player bullet collision
+            if SUBTP_TABLE["ultrablast"] then
+                for ultra in pairs(SUBTP_TABLE["ultrablast"]) do
+                    if not ultra.death and ultra:collides(e) then
+                        e:kill()
+                        ultra:takeHit()
+                    end
+                end
+            end
+
+        end
+    end
+
+    --Colliding player bullets with bosses
+    if SUBTP_TABLE["player_bullet"] then
+        for bullet in pairs(SUBTP_TABLE["player_bullet"]) do
+            if SUBTP_TABLE["bosses"] then
+                for boss in pairs(SUBTP_TABLE["bosses"]) do
+                    if not bullet.death and bullet:collides(boss) then
+                        bullet:kill()
+                        if not boss.invincible then boss:getHit() end
+                    end
+                end
+            end
+        end
+    end
+
+    --Colliding bosses with psycho
+    if SUBTP_TABLE["bosses"] then
+        for boss in pairs(SUBTP_TABLE["bosses"]) do
+            --Colliding with psycho
+            if not p.invincible and boss:collides(p) then
+                p:kill()
+            end
+        end
+    end
+
+end
+
 --Exit program
 function util.quit()
 
@@ -438,8 +507,6 @@ function util.defaultKeyPressed(key)
         util.toggleFullscreen()
     elseif key == 'f9' then
         util.toggleDebug()
-    elseif key == 't' then
-        print(SLOWMO, SLOWMO_M)
     elseif key == '0' then
         util.toggleGODMODE()
     elseif key == '9' then
@@ -450,6 +517,10 @@ function util.defaultKeyPressed(key)
         p = util.findId("psycho")
         p.lives = 1
         util.findId("lives_counter").var = p.lives
+    elseif key == '7' then
+        p = util.findId("psycho")
+        p.ultrablast_counter = p.ultrablast_counter + 10
+        util.findId("ultrablast_counter").var = p.ultrablast_counter
     end
 
 end

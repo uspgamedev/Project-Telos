@@ -82,8 +82,9 @@ function state:update(dt)
     Util.updateSubTp(m_dt, "particle_batch")
     Util.updateSubTp(m_dt, "growing_circle")
     Util.updateSubTp(m_dt, "enemy_indicator")
+    Util.updateSubTp(m_dt, "ultrablast")
     Util.updateSubTp(m_dt, "rotating_indicator")
-    checkCollision()
+    Util.checkCollision()
 
     --Kill dead objects
     Util.killAll()

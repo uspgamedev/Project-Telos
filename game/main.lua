@@ -36,6 +36,7 @@ require "classes.circle_effect"
 require "classes.ui"
 require "classes.psycho_aim"
 require "classes.indicator"
+require "classes.ultrablast"
 Button = require "classes.button"
 
 --MY MODULES

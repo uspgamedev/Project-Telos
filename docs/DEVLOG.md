@@ -8,10 +8,10 @@ DEV LOG
 #### 27/08/2016:
 
 Created a milestone for this week until next monday, to make some useful bug correction and refactoring.
-If I have time, will make score system with save.
+If I have time, will make score system and save.
 
 Fixed "screen flashing black" bug using canvas.
-Refactored particle system to avoid potential lag
+Refactored particle system to avoid potential lag.
 
 #### 24-27/08/2016:
 

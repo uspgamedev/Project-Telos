@@ -4,6 +4,7 @@ local Bullet = require "classes.bullet"
 local Color = require "classes.color.color"
 local Hsl = require "classes.color.hsl"
 local Util = require "util"
+local Ultra = require "classes.ultrablast"
 local FreeRes = require "FreeRes"
 local C_FX = require "classes.circle_effect"
 --PSYCHO CLASS--
@@ -50,9 +51,12 @@ Psy = Class{
 
 
         self.lives = 15 --How many lives psycho by default has
+        self.ultrablast_counter = 30 --How many ultrablasts psycho by default has
+        self.default_ultrablast_power = 5 --Ultrablast power when using right mouse button
+
         self.invincible = false --If psycho can't collide with enemies
         self.controlsLocked = false --If psycho cant move or shoot
-        self.shootLocked = true --If psycho cant shoot
+        self.shootLocked = true --If psycho cant shoot or ultrablast
 
         self.tp = "psycho" --Type of this class
 
@@ -101,6 +105,21 @@ function Psy:shoot(x,y)
     dir = Vector(x-p.pos.x, y-p.pos.y)
     dir = dir:normalized()
     Bullet.create(p.pos.x, p.pos.y, dir, c, color_table, "player_bullet")
+
+end
+
+function Psy:ultrablast(power)
+    local p
+
+    p = self
+
+    if p.ultrablast_counter <= 0 then return end
+
+    --Update ultrablast counter
+    p.ultrablast_counter = p.ultrablast_counter - 1
+    Util.findId("ultrablast_counter").var = p.ultrablast_counter
+
+    Ultra.create(p.pos.x, p.pos.y, p.color, power)
 
 end
 
