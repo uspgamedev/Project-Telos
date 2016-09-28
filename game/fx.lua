@@ -32,7 +32,7 @@ function fx.explosion(x, y, r, color, number, speed, decaying, size, important)
 
     --Create as much particles it can before exceding the max
     if not important and number + number_of_particles > MAX_PARTICLES then
-        number = math.max(0, MAX_PARTICLES - number_of_particles - number)
+        number = math.max(0, MAX_PARTICLES - number_of_particles)
     end
 
     --Create a batch with endtime 5

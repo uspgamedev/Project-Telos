@@ -89,7 +89,7 @@ function Psy:shoot(x,y)
     y = y - h
     y = y*(1/scale)
 
-    c = HSL(Hsl.hsl(p.color)) --COlor of bullet is current psycho color
+    c = HSL(Hsl.hsl(p.color)) --Color of bullet is current psycho color
     color_table = {
         HSL(Hsl.stdv(51,100,50)),
         HSL(Hsl.stdv(355,89,48)),

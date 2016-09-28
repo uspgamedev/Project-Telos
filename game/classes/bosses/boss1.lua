@@ -96,7 +96,7 @@ function Boss_1:kill()
     if b.death then return end
     b.death = true
 
-    FX.explosion(self.pos.x, self.pos.y, 500, self.color, 1000)
+    FX.explosion(self.pos.x, self.pos.y, 500, self.color, 500)
 
 end
 
