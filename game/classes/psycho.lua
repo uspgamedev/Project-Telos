@@ -54,7 +54,8 @@ Psy = Class{
 
 
         self.lives = 15 --How many lives psycho by default has
-        self.ultrablast_counter = 30 --How many ultrablasts psycho by default has
+        self.ultrablast_counter = 3 --How many ultrablasts psycho has
+        self.default_ultrablast_number = 3 --How many ultrablasts psycho by default has in every life
         self.default_ultrablast_power = 50 --Ultrablast power when using right mouse button
 
         self.invincible = false --If psycho can't collide with enemies
@@ -181,6 +182,8 @@ function Psy:kill()
 
     p.lives = p.lives - 1 --Reduces psycho's lives
     Util.findId("lives_counter").var = p.lives
+    p.ultrablast_counter = p.default_ultrablast_number --Reset ultrablast counter
+    Util.findId("ultrablast_counter").var = p.ultrablast_counter
 
     if not p.death and p.lives == 0 then
         FX.explosion(p.pos.x, p.pos.y, p.r, p.color, 100, 450, 250, 4)

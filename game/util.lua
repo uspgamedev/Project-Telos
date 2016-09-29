@@ -409,7 +409,7 @@ function util.checkCollision()
             --Checking player bullet collision
             if SUBTP_TABLE["ultrablast"] then
                 for ultra in pairs(SUBTP_TABLE["ultrablast"]) do
-                    if not ultra.death and ultra:collides(e) then
+                    if not ultra.death and not e.death and ultra:collides(e) then
                         e:kill()
                         ultra:takeHit()
                     end
