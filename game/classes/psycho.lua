@@ -30,8 +30,8 @@ Psy = Class{
         } --Color table
         color = color_table[love.math.random(#color_table)] --Color of enemy
         r = 24 --Radius of psycho
-        self.collision_r = 19 --Radius of psycho that detects collision
-
+        self.collision_r = 19 --Radius of psycho that detects collision, and radius when psyho is focused
+        self.normal_radius = r --Radius when psycho is not focused
         CIRC.init(self, _x, _y, r, color, color_table, "fill") --Set atributes
 
         ELEMENT.setSubTp(self, "player")
@@ -43,6 +43,9 @@ Psy = Class{
         self.speedv = 265 --Speed value
         self.speed = Vector(0,0) --Speed vector
 
+        self.focused = false --If psycho is focused or not
+        self.speedvm_focus = .5 -- Speed value multiplier when focused
+
         self.shoot_tick = 0 --Bullet "cooldown" timer (for shooting repeatedly)
         self.shoot_fps = .155 --How fast to shoot bullets
 
@@ -52,7 +55,7 @@ Psy = Class{
 
         self.lives = 15 --How many lives psycho by default has
         self.ultrablast_counter = 30 --How many ultrablasts psycho by default has
-        self.default_ultrablast_power = 5 --Ultrablast power when using right mouse button
+        self.default_ultrablast_power = 50 --Ultrablast power when using right mouse button
 
         self.invincible = false --If psycho can't collide with enemies
         self.controlsLocked = false --If psycho cant move or shoot
@@ -128,6 +131,13 @@ function Psy:update(dt)
 
     p = self
 
+    --Update psycho radius
+    if p.focused and p.r > p.collision_r then
+        p.r = p.r - 20*dt
+    elseif not p.focused and p.r < p.normal_radius then
+        p.r = p.r + 20*dt
+    end
+
     --Update shooting
     p.shoot_tick = p.shoot_tick - dt
     if love.mouse.isDown(1) then
@@ -151,7 +161,11 @@ function Psy:update(dt)
     end
 
     --Update movement
-    p.pos = p.pos + dt*p.speed
+    if not p.focused then
+        p.pos = p.pos + dt*p.speed
+    else
+        p.pos = p.pos + dt*p.speed*p.speedvm_focus
+    end
     --Fixes if psycho leaves screen
     p.pos.x, p.pos.y = isOutside(p)
 end
@@ -188,6 +202,8 @@ function Psy:keypressed(key)
     if key == 'w' or key == 'a' or key == 's' or key == 'd' or
        key == 'up' or key == 'left' or key == 'down' or key == 'right' then
         psycho.updateSpeed(self)
+    elseif key == 'lshift' then
+        p.focused = true
     end
 
 end
@@ -195,10 +211,12 @@ end
 function Psy:keyreleased(key)
 
     --Movement
-    if key == 'w' or key == 'a' or key == 's' or key == 'd' or
-       key == 'up' or key == 'left' or key == 'down' or key == 'right' then
+if key == 'w' or key == 'a' or key == 's' or key == 'd' or
+   key == 'up' or key == 'left' or key == 'down' or key == 'right' then
       psycho.updateSpeed(self)
-  end
+elseif key == 'lshift' then
+    p.focused = false
+end
 
 end
 

@@ -22,8 +22,15 @@ local state = {}
 local p --Psycho
 
 function state:enter()
+    local x, y
 
-    p = Psycho.create(662,424)
+    if love.math.random() >= .5 then
+        x, y = 662, 424 --'O' of Psycho
+    else
+        x, y = 662, 424 --'O' of Psycho
+    end
+
+    p = Psycho.create(x,y)
 
     SLOWMO = false
 
