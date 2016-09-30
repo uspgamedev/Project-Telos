@@ -5,6 +5,20 @@ GAME DESIGN DOCUMENT
 DEV LOG
 =======
 
+#### 30/08/2016:
+
+Added score system, and player can get lives and ultrablasts from score.
+Still need to balanced, which might take a while and lots of playtesting.
+Deciding which other issues to complete before the next iteration, probably make the menu screen better and add control for sound.
+
+#### 29/08/2016:
+
+Made focused mode and fixed some Ultrablast bugs
+
+#### 28/08/2016:
+
+Made Ultrablast mode!
+
 #### 27/08/2016:
 
 Created a milestone for this week until next monday, to make some useful bug correction and refactoring.
