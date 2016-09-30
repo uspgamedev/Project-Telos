@@ -212,20 +212,8 @@ function util.gameElementException(mode)
 
     --GUI ELEMENTS
 
-    if util.findId("lives_counter") then
-        util.addExceptionId("lives_counter")
-    end
-
-    if util.findId("ultrablast_counter") then
-        util.addExceptionId("ultrablast_counter")
-    end
-
-    if util.findId("level_part") then
-        util.addExceptionId("level_part")
-    end
-
-    if util.findId("game_title") then
-        util.addExceptionId("game_title")
+    if util.findSbTp("game_gui") then
+        util.addExceptionSubtype("game_gui")
     end
 
 end
@@ -409,11 +397,11 @@ function util.checkCollision()
                 p:kill()
             end
 
-            --Checking player bullet collision
+            --Checking ultrablast collision
             if SUBTP_TABLE["ultrablast"] then
                 for ultra in pairs(SUBTP_TABLE["ultrablast"]) do
                     if not ultra.death and not e.death and ultra:collides(e) then
-                        e:kill()
+                        e:kill(false) --Don't give score if enemy is killed by ultrablast
                         ultra:takeHit()
                     end
                 end

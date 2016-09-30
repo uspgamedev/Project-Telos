@@ -125,7 +125,7 @@ function setup.config()
     SOUNDTRACK["current"] = nil --Current soudntrack playing
     SOUNDTRACK["next"] = nil  --Next soundtrack to play (for cross-fading)
     SFX = {} --Table with all sound effects playing
-    BGM_VOLUME_LEVEL = 0 --Volume of BGM
+    BGM_VOLUME_LEVEL = 1 --Volume of BGM
     --Useful handles for audio manipulation
     FADE_IN_HANDLE = nil
     FADE_OUT_HANDLE = nil

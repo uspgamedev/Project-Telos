@@ -67,7 +67,7 @@ function Ultrablast:update(dt)
 
     if ultra.death then return end
 
-    ultra.line_width = ultra.power/8 + 1 --Thickness of blast
+    ultra.line_width = ultra.power/4 + 1 --Thickness of blast
 
     ultra.r = ultra.r + ultra.speedv*dt
 

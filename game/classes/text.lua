@@ -81,7 +81,7 @@ function text.create_game_gui(x, y, text, font, var, mode, var_font, id, align, 
     local txt
 
     txt = Text(x, y, text, font, var, mode, var_font, align, limit)
-    txt:addElement(DRAW_TABLE.GAME_GUI, "gui", id)
+    txt:addElement(DRAW_TABLE.GAME_GUI, "game_gui", id)
 
     return txt
 end

@@ -24,7 +24,7 @@ function script()
     LM.level_title("I - THE FALL OF PSYCHO")
     Audio.playBGM(BGM_LEVEL_1)
 
-    --1-1: The Start of the End
+    --[[1-1: The Start of the End
     LM.level_part("Part 1 - The Start of the End")
 
 
@@ -90,7 +90,7 @@ function script()
     F.fromVertical{side = "top", mode = "distribute", number = 12, enemy = {DB}, speed_m = .9}
     F.fromVertical{side = "bottom", mode = "distribute", number = 12, enemy = {DB}, speed_m = .9}
     LM.wait("noenemies")
-    LM.giveLives(3)
+    LM.giveLives(1)
 
     --1-2: Circle madness
     LM.level_part("Part 2 - Circle Madness")
@@ -146,7 +146,7 @@ function script()
     LM.wait(1.5)
     F.circle{enemy = {DB}, number = 28, radius = 640}
     LM.wait("noenemies")
-    LM.giveLives(5)
+    LM.giveLives(2)
 
     --1-3: The Betrayal
     LM.level_part("Part 3 - The Betrayal")
@@ -269,7 +269,7 @@ function script()
         end
     end
     LM.wait("noenemies")
-    LM.giveLives(7)
+    LM.giveLives(3)]]
 
     --1-4: The Big One
     LM.level_part("Part 4 - The Big One")

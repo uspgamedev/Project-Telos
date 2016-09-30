@@ -97,7 +97,7 @@ end
 --UTILITY FUNCTIONS--
 
 --Create an enemy indicator from a margin in the screen, and after duration, create the enemy
-function indicator.create_enemy(enemy, pos, dir, following, side, duration, speed_m, radius, st)
+function indicator.create_enemy(enemy, pos, dir, following, side, duration, speed_m, radius, score_mul, st)
     local i, center, margin, handle, color
 
     center = Vector(pos.x, pos.y)
@@ -131,7 +131,7 @@ function indicator.create_enemy(enemy, pos, dir, following, side, duration, spee
         --Create the enemy after duration
         handle = LEVEL_TIMER:after(duration,
             function()
-                enemy.create(pos.x, pos.y, dir, speed_m, radius)
+                enemy.create(pos.x, pos.y, dir, speed_m, radius, score_mul)
             end
         )
         table.insert(INDICATOR_HANDLES,handle)
@@ -144,7 +144,7 @@ function indicator.create_enemy(enemy, pos, dir, following, side, duration, spee
                 p  = Util.findId("psycho")
                 position = Vector(pos.x, pos.y)
 
-                enemy.create(pos.x, pos.y, Vector(p.pos.x - pos.x, p.pos.y - pos.y), speed_m, radius)
+                enemy.create(pos.x, pos.y, Vector(p.pos.x - pos.x, p.pos.y - pos.y), speed_m, radius, score_mul)
             end
         )
         table.insert(INDICATOR_HANDLES,handle)

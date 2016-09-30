@@ -116,7 +116,7 @@ function level_manager.level_title(name)
     x = ORIGINAL_WINDOW_WIDTH/2 - fx/2
     y = ORIGINAL_WINDOW_HEIGHT/2 - fy/2
     --Create level title
-    txt = Txt.create_gui(x, y, name, GUI_GAME_TITLE, nil, "format", nil, "game_title", "center", fx)
+    txt = Txt.create_game_gui(x, y, name, GUI_GAME_TITLE, nil, "format", nil, "game_title", "center", fx)
     --in the future, make a "PAAAM" sound here
 
     --After two seconds, fades-out the title
@@ -198,6 +198,35 @@ function level_manager.giveLives(number)
     p.lives = p.lives + number
     Util.findId("lives_counter").var = p.lives
 end
+
+--Increase psycho's score by 'value'
+function level_manager.giveScore(value)
+    local p
+
+    p = Util.findId("psycho")
+
+    --Update main score
+    p.score = p.score + value
+    Util.findId("score_counter").var = p.score
+
+    --Update life score
+    p.life_score = p.life_score + value
+    while p.life_score >= p.life_score_target do
+        p.life_score = p.life_score - p.life_score_target
+        p.lives = p.lives + 1
+        Util.findId("lives_counter").var = p.lives
+    end
+
+    --Update ultrablast score
+    p.ultrablast_score = p.ultrablast_score + value
+    while p.ultrablast_score >= p.ultrablast_score_target do
+        p.ultrablast_score = p.ultrablast_score - p.ultrablast_score_target
+        p.ultrablast_counter = p.ultrablast_counter + 1
+        Util.findId("ultrablast_counter").var = p.ultrablast_counter
+    end
+
+end
+
 
 --Return functions
 return level_manager

@@ -96,7 +96,7 @@ function Boss_1:kill()
     if b.death then return end
     b.death = true
 
-    FX.explosion(self.pos.x, self.pos.y, 500, self.color, 500)
+    FX.explosion(self.pos.x, self.pos.y, 500, self.color, 600, 200, 200, 4, true)
 
 end
 
@@ -219,6 +219,7 @@ function Boss_1:changeStage()
         b.isShooting = false --Stop shooting
         b.shoot_tick = 0
         b.shoot_fps = .45
+        LM.giveScore(1000)
 
         --Stop moving
         b.static = true
@@ -229,7 +230,7 @@ function Boss_1:changeStage()
         b.hurt_roar:play()
         SFX["boss_roar"] = b.hurt_roar
         FX.shake(2, 3) --Shake screen
-        F.circle{x_center = b.pos.x, y_center = b.pos.y, radius = 40, speed_m = 1.1, ind_mode = false, enemy = {SB, DB}, number = 20}
+        F.circle{x_center = b.pos.x, y_center = b.pos.y, radius = 40, speed_m = 1.1, ind_mode = false, enemy = {SB, DB}, number = 20, score_mul = 0}
 
         --Start stage 2
         b.level_handles["begin_stage"] = LEVEL_TIMER:after(2.1,
@@ -260,6 +261,7 @@ function Boss_1:changeStage()
         b.static = true
         b.isShooting = false
         b.shoot_tick = 0
+        LM.giveScore(1000)
 
         if b.level_handles["move"] then
             LEVEL_TIMER:cancel(b.level_handles["move"])
@@ -268,7 +270,7 @@ function Boss_1:changeStage()
         b.angry_hurt_roar:play()
         SFX["boss_roar"] = b.angry_hurt_roar
         FX.shake(2.5, 4) --Shake screen
-        F.circle{x_center = b.pos.x, y_center = b.pos.y, radius = 40, speed_m = 1.1, ind_mode = false, enemy = {DB}, number = 20}
+        F.circle{x_center = b.pos.x, y_center = b.pos.y, radius = 40, speed_m = 1.1, ind_mode = false, enemy = {DB}, number = 20, score_mul = 0}
 
 
         --Start stage 3
@@ -293,6 +295,9 @@ function Boss_1:changeStage()
         b.invincible = true --Can't take damage
         b.behaviour = Stage_4
         b.life = 18 --Increase boss max life
+        LM.giveScore(1000)
+
+
         --Stop moving
         b.static = true
         if b.indicator then b.indicator.death = true end --Remove pending indicator
@@ -300,7 +305,7 @@ function Boss_1:changeStage()
         b.angry_af_roar:play()
         SFX["boss_roar"] = b.angry_af_roar
         FX.shake(3, 4) --Shake screen
-        F.circle{x_center = b.pos.x, y_center = b.pos.y, radius = 40, speed_m = 1.1, ind_mode = false, enemy = {DB}, number = 00}
+        F.circle{x_center = b.pos.x, y_center = b.pos.y, radius = 40, speed_m = 1.1, ind_mode = false, enemy = {DB}, number = 20, score_mul = 0}
 
 
         --Start stage 4
@@ -325,6 +330,7 @@ function Boss_1:changeStage()
         b.invincible = true --Can't take damage
         b.behaviour = nil
         b.life = 10
+        LM.giveScore(4000)
 
         --Remove growing tween
         if b.level_handles["grow_quick"] then
@@ -395,7 +401,7 @@ function boss.create()
                             b.long_roar:play()
                             SFX["boss_roar"] = b.long_roar
                             FX.shake(2, 3) --Shake screen
-                            F.circle{x_center = b.pos.x, y_center = b.pos.y, radius = 40, speed_m = 1.1, ind_mode = false, enemy = {SB}, number = 20}
+                            F.circle{x_center = b.pos.x, y_center = b.pos.y, radius = 40, speed_m = 1.1, ind_mode = false, enemy = {SB}, number = 20, score_mul = 0}
 
                             --Start stage 1
                             b.level_handles["begin_stage"] = LEVEL_TIMER:after(2.2,
@@ -449,7 +455,7 @@ Stage_1_and_2 = function(b, dt)
                     e = SB
                     mul = 2.6
                 end
-                F.single{x = b.pos.x, y = b.pos.y, dir_follow = true, ind_mode = false, enemy = e, speed_m = mul}
+                F.single{x = b.pos.x, y = b.pos.y, dir_follow = true, ind_mode = false, enemy = e, speed_m = mul, score_mul = 0}
 
             --Choose to shoot simple ball(40%) or double ball(60%)
             else
@@ -460,7 +466,7 @@ Stage_1_and_2 = function(b, dt)
                     e = SB
                     mul = 2.7
                 end
-                F.single{x = b.pos.x, y = b.pos.y, dir_follow = true, ind_mode = false, enemy = e, speed_m = mul}
+                F.single{x = b.pos.x, y = b.pos.y, dir_follow = true, ind_mode = false, enemy = e, speed_m = mul, score_mul = 0}
             end
 
         end
@@ -491,10 +497,10 @@ Stage_3 = function(b, dt)
     b.spawn_tick = b.spawn_tick + dt
     if b.spawn_tick >= b.spawn_fps then
         b.spawn_tick = b.spawn_tick - b.spawn_fps
-        F.single{x = -25, y = 25, dx = 1, enemy = DB, speed_m = 2, ind_mode = false} --Top left corner, shooting right
-        F.single{x = ORIGINAL_WINDOW_WIDTH - 25, y = - 25, dy = 1, enemy = DB, speed_m = 2, ind_mode = false} --Top right corner, shooting down
-        F.single{x = ORIGINAL_WINDOW_WIDTH + 25, y = ORIGINAL_WINDOW_HEIGHT - 25, dx = -1, enemy = DB, speed_m = 2, ind_mode = false} --Bottom right corner, shooting left
-        F.single{x = 25, y = ORIGINAL_WINDOW_HEIGHT + 25, dy = -1, enemy = DB, speed_m = 2, ind_mode = false} --Bottom left corner, shooting up
+        F.single{x = -25, y = 25, dx = 1, enemy = DB, speed_m = 2, ind_mode = false, score_mul = 0} --Top left corner, shooting right
+        F.single{x = ORIGINAL_WINDOW_WIDTH - 25, y = - 25, dy = 1, enemy = DB, speed_m = 2, ind_mode = false, score_mul = 0} --Top right corner, shooting down
+        F.single{x = ORIGINAL_WINDOW_WIDTH + 25, y = ORIGINAL_WINDOW_HEIGHT - 25, dx = -1, enemy = DB, speed_m = 2, ind_mode = false, score_mul = 0} --Bottom right corner, shooting left
+        F.single{x = 25, y = ORIGINAL_WINDOW_HEIGHT + 25, dy = -1, enemy = DB, speed_m = 2, ind_mode = false, score_mul = 0} --Bottom left corner, shooting up
     end
 
     --Shoot enemies
@@ -508,7 +514,7 @@ Stage_3 = function(b, dt)
                 e = DB
             end
             --Shoot enemies
-            F.single{x = b.pos.x, y = b.pos.y, dx = b.dir.x, dy = b.dir.y, ind_mode = false, enemy = e, speed_m = 2}
+            F.single{x = b.pos.x, y = b.pos.y, dx = b.dir.x, dy = b.dir.y, ind_mode = false, enemy = e, speed_m = 2, score_mul = 0}
 
         end
     end

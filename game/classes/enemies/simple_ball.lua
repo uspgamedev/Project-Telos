@@ -2,6 +2,7 @@ require "classes.primitive"
 local Color = require "classes.color.color"
 local Hsl   = require "classes.color.hsl"
 local Util = require "util"
+local LM = require "level_manager"
 
 --SIMPLE BALL CLASS--
 --[[Simple circle blue enemy that just moves around]]
@@ -10,7 +11,7 @@ local enemy = {}
 
 Simple_Ball = Class{
     __includes = {CIRC},
-    init = function(self, _x, _y, _dir, _speed_m, _radius)
+    init = function(self, _x, _y, _dir, _speed_m, _radius, _score_mul)
         local dx, dy, r, color, color_table
 
         r = _radius or 20 --Radius of enemy
@@ -32,6 +33,9 @@ Simple_Ball = Class{
         self.speed = Vector(_dir.x, _dir.y) --Speed vector
         self.speed = self.speed:normalized()*self.speedv
 
+        self.score_value = 25 --Score this enemy gives when killed without multiplier
+        self.score_mul = _score_mul or 1 --Score multiplier
+
         self.enter = false --If this enemy has already entered the game screen
         self.tp = "simple_ball" --Type of this class
     end
@@ -39,11 +43,19 @@ Simple_Ball = Class{
 
 --CLASS FUNCTIONS--
 
-function Simple_Ball:kill()
+function Simple_Ball:kill(gives_score)
 
     if self.death then return end
+
     self.death = true
+
+    if gives_score == nil then gives_score = true end --If this enemy should give score
+
     FX.explosion(self.pos.x, self.pos.y, self.r, self.color)
+
+    if gives_score then
+        LM.giveScore(math.ceil(self.score_value*self.score_mul))
+    end
 
 end
 
@@ -60,14 +72,14 @@ function Simple_Ball:update(dt)
     if not o.enter then
         if isInside(o) then o.enter = true end
     else
-        if not isInside(o) then o:kill() end
+        if not isInside(o) then o:kill(false) end --Don't give score if enemy is killed by leaving screen
     end
 
 end
 
 --UTILITY FUNCTIONS--
 
-function enemy.create(x, y, dir, speed_m, radius)
+function enemy.create(x, y, dir, speed_m, radius, score_mul)
     local e, direction
 
     if not dir then --Get random direction
@@ -76,7 +88,7 @@ function enemy.create(x, y, dir, speed_m, radius)
         direction.y = love.math.random()*2 - 1 --Rand value between [-1,1]
     end
 
-    e = Simple_Ball(x, y, dir or direction, speed_m, radius)
+    e = Simple_Ball(x, y, dir or direction, speed_m, radius, score_mul)
     e:addElement(DRAW_TABLE.L4)
     e:startColorLoop()
 

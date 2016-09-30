@@ -3,6 +3,7 @@ local Color = require "classes.color.color"
 local Hsl   = require "classes.color.hsl"
 local Util = require "util"
 local SB = require "classes.enemies.simple_ball"
+local LM = require "level_manager"
 
 --DOUBLE BALL CLASS--
 --[[Simple red circle enemy that spawns simple balls when it dies]]
@@ -11,7 +12,7 @@ local enemy = {}
 
 Double_Ball = Class{
     __includes = {CIRC},
-    init = function(self, _x, _y, _dir, _speed_m, _radius)
+    init = function(self, _x, _y, _dir, _speed_m, _radius, _score_mul)
         local dx, dy, r, color, color_table
 
         r = _radius or 20 --Radius of enemy
@@ -33,6 +34,9 @@ Double_Ball = Class{
         self.speed = Vector(_dir.x, _dir.y) --Speed vector
         self.speed = self.speed:normalized()*self.speedv
 
+        self.score_value = 35 --Score this enemy gives when killed without multiplier
+        self.score_mul = _score_mul or 1 --Score multiplier
+
         self.enter = false --If this enemy has already entered the game screen
         self.tp = "double_ball" --Type of this class
     end
@@ -40,18 +44,26 @@ Double_Ball = Class{
 
 --CLASS FUNCTIONS--
 
-function Double_Ball:kill(mode)
+function Double_Ball:kill(gives_score, mode)
     local e
 
     if self.death then return end
+
     self.death = true
+
+    if gives_score == nil then gives_score = true end --If this enemy should give score
+
     FX.explosion(self.pos.x, self.pos.y, self.r, self.color)
+
+    if gives_score then
+        LM.giveScore(math.ceil(self.score_value*self.score_mul))
+    end
 
     if mode ~= "dontspawn" then
         --Create two Simple Balls in a V shape
-        e = SB.create(self.pos.x, self.pos.y, self.speed:rotated(math.pi/12), 1.25*self.speed_m, .75*self.r)
+        e = SB.create(self.pos.x, self.pos.y, self.speed:rotated(math.pi/12), 1.25*self.speed_m, .75*self.r, .5*self.score_mul)
         e.enter = true
-        e = SB.create(self.pos.x, self.pos.y, self.speed:rotated(-math.pi/12), 1.25*self.speed_m, .75*self.r)
+        e = SB.create(self.pos.x, self.pos.y, self.speed:rotated(-math.pi/12), 1.25*self.speed_m, .75*self.r, .5*self.score_mul)
         e.enter = true
     end
 
@@ -70,14 +82,14 @@ function Double_Ball:update(dt)
     if not o.enter then
         if isInside(o) then o.enter = true end
     else
-        if not isInside(o) then o:kill("dontspawn") end
+        if not isInside(o) then o:kill(false, "dontspawn") end --Don't give score or spawn if enemy is killed by leaving screen
     end
 
 end
 
 --UTILITY FUNCTIONS--
 
-function enemy.create(x, y, dir, speed_m, radius)
+function enemy.create(x, y, dir, speed_m, radius, score_mul)
     local e, direction
 
     if not dir then --Get random direction
@@ -86,7 +98,7 @@ function enemy.create(x, y, dir, speed_m, radius)
         direction.y = love.math.random()*2 - 1 --Rand value between [-1,1]
     end
 
-    e = Double_Ball(x, y, dir or direction, speed_m, radius)
+    e = Double_Ball(x, y, dir or direction, speed_m, radius, score_mul)
     e:addElement(DRAW_TABLE.L4)
     e:startColorLoop()
 

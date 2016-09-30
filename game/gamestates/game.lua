@@ -35,13 +35,19 @@ function state:enter()
     SLOWMO = false
 
     --Level part text
-    Txt.create_game_gui(200, 10, "Part PI: Eletric Boogaloo", GUI_MED, nil, nil, nil, "level_part")
+    Txt.create_game_gui(350, 10, "Part PI: Eletric Boogaloo", GUI_MED, nil, nil, nil, "level_part")
 
     --Lives counter text
-    Txt.create_game_gui(5, 10, "lives: ", GUI_MED, p.lives, "down", GUI_MEDPLUS, "lives_counter")
+    Txt.create_game_gui(10, 10, "lives: ", GUI_MED, p.lives, "down", GUI_MEDPLUS, "lives_counter")
 
     --Ultrablast counter text
-    Txt.create_game_gui(5, 80, "Ultrablast: ", GUI_MED, p.ultrablast_counter, "down", GUI_MEDPLUS, "ultrablast_counter")
+    Txt.create_game_gui(10, 75, "Ultrablast: ", GUI_MED, p.ultrablast_counter, "down", GUI_MEDPLUS, "ultrablast_counter")
+
+    --Score counter text
+    Txt.create_game_gui(10, 140, "Score: ", GUI_MED, p.score, "down", GUI_MEDPLUS, "score_counter")
+
+    --Separator 1
+    Txt.create_game_gui(5, 185, "————", GUI_MEDPLUS, nil, nil, nil, "separator_1")
 
     Level.start(level1)
 

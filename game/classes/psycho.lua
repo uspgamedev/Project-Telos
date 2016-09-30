@@ -52,8 +52,14 @@ Psy = Class{
         self.circle_fx_tick = 0 --Circle Effect "cooldown" timer
         self.circle_fx_fps = .2 --How fast to create the circle effect
 
+        self.score = 0 --Score psycho has
+        self.life_score = 0 --How much score psycho has accumulated to win a life
+        self.life_score_target = 10000 --How many points psycho must win to get a life
+        self.ultrablast_score = 0 --How much score psycho has accumulated to win a ultrablast
+        self.ultrablast_score_target = 2000 --How many points psycho must win to get a ultrablast
 
         self.lives = 15 --How many lives psycho by default has
+
         self.ultrablast_counter = 3 --How many ultrablasts psycho has
         self.default_ultrablast_number = 3 --How many ultrablasts psycho by default has in every life
         self.default_ultrablast_power = 50 --Ultrablast power when using right mouse button
@@ -196,10 +202,9 @@ function Psy:kill()
 end
 
 function Psy:keypressed(key)
-    local p, sp
+    local p
 
     p = self --Psycho
-    sp = p.speedv --Speed Value
 
     --Movement
     if key == 'w' or key == 'a' or key == 's' or key == 'd' or
@@ -207,6 +212,10 @@ function Psy:keypressed(key)
         psycho.updateSpeed(self)
     elseif key == 'lshift' then
         p.focused = true
+    elseif key == 'space' then
+        if not p.shootLocked then
+            p:ultrablast(p.default_ultrablast_power)
+        end
     end
 
 end
