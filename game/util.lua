@@ -386,6 +386,9 @@ end
 
 --Makes all collisions
 function util.checkCollision()
+    local p
+
+    p = util.findId("psycho")
 
     if SUBTP_TABLE["enemies"] then
 
@@ -402,7 +405,7 @@ function util.checkCollision()
             end
 
             --Colliding with psycho
-            if not p.invincible and e:collides(p) then
+            if p and not p.death and not p.invincible and e:collides(p) then
                 p:kill()
             end
 
@@ -437,7 +440,7 @@ function util.checkCollision()
     if SUBTP_TABLE["bosses"] then
         for boss in pairs(SUBTP_TABLE["bosses"]) do
             --Colliding with psycho
-            if not p.invincible and boss:collides(p) then
+            if p and not p.death and not p.invincible and boss:collides(p) then
                 p:kill()
             end
         end
