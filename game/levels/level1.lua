@@ -24,13 +24,13 @@ function script()
     LM.level_title("I - THE FALL OF PSYCHO")
     Audio.playBGM(BGM_LEVEL_1)
 
-    --[[1-1: The Start of the End
+    --1-1: The Start of the End
     LM.level_part("Part 1 - The Start of the End")
 
 
     LM.wait(4)
     INDICATOR_DEFAULT = 1.5
-    F.single{enemy = SB, x = -20, y = ORIGINAL_WINDOW_HEIGHT/2, dx = 1, dy = 0, radius = 28, ind_duration = 2, ind_side = 35}
+    F.single{enemy = SB, x = -20, y = ORIGINAL_WINDOW_HEIGHT/2, dx = 1, dy = 0, e_radius = 28, ind_duration = 2, ind_side = 35}
     LM.wait("noenemies")
 
     F.single{enemy = SB, x = -20, y = ORIGINAL_WINDOW_HEIGHT/2, dx = 1, dy = 0}
@@ -67,7 +67,7 @@ function script()
     LM.wait("noenemies")
 
     INDICATOR_DEFAULT = 1.5
-    F.single{enemy = DB, x = ORIGINAL_WINDOW_WIDTH/2, y = ORIGINAL_WINDOW_HEIGHT + 25, dy = -1, radius = 28}
+    F.single{enemy = DB, x = ORIGINAL_WINDOW_WIDTH/2, y = ORIGINAL_WINDOW_HEIGHT + 25, dy = -1, e_radius = 28}
     LM.wait("noenemies")
 
     F.line{enemy = {DB}, x = ORIGINAL_WINDOW_WIDTH + 25, y = ORIGINAL_WINDOW_HEIGHT/2, dx = -1, number = 36, ind_side = 35}
@@ -182,7 +182,7 @@ function script()
     F.fromHorizontal{side = "left", mode = "center", enemy = {SB}, number = 20, enemy_x_margin = 60, enemy_y_margin = 40, speed_m = .6}
     LM.wait("noenemies")
 
-    F.circle{enemy = {SB,DB}, number = 200, radius = 640, enemy_margin = 40, speed_m = .9, ind_mode = "first", ind_duration = 2, ind_side = 35}
+    F.circle{enemy = {SB,DB}, number = 190, radius = 640, enemy_margin = 40, speed_m = .9, ind_mode = "first", ind_duration = 2, ind_side = 35}
 
     LM.wait(3)
     F.fromHorizontal{side = "left", mode = "top", number = 6, enemy = {DB}, speed_m = 1.5}
@@ -269,7 +269,7 @@ function script()
         end
     end
     LM.wait("noenemies")
-    LM.giveLives(3)]]
+    LM.giveLives(3)
 
     --1-4: The Big One
     LM.level_part("Part 4 - The Big One")

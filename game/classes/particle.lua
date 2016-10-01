@@ -36,12 +36,14 @@ function Particle_Batch:update(dt)
 end
 
 function Particle_Batch:destroy()
-    ELEMENT.destroy(self)
+
     if self.batch then
         for _, part in pairs(self.batch) do
             part.death = true
         end
     end
+    ELEMENT.destroy(self)
+
 end
 
 

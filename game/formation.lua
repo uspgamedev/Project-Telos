@@ -30,7 +30,7 @@ e_radius: Radius of enemy being created
 score_mul: multiplier of score for enemies created
 ]]
 function formation.fromHorizontal(a)
-    local x, y, dir, half, p, enemy_table_size, max_r
+    local x, y, dir, half, p, enemy_table_size, max_r, batch
 
 
     enemy_table_size = Util.tableLen(a.enemy)
@@ -64,6 +64,8 @@ function formation.fromHorizontal(a)
         dir = Vector(-1,0)
         x = ORIGINAL_WINDOW_WIDTH + 5 + max_r
     end
+
+    batch = Indicator.create_enemy_batch(a.ind_duration)
     ---------
     --MODES--
     ---------
@@ -94,7 +96,7 @@ function formation.fromHorizontal(a)
 
             if (i == 1 and a.ind_mode == "first") or a.ind_mode == "all" then
                 --Create the indicator, and later, the enemy
-                Indicator.create_enemy(current_enemy, l_pos, l_dir, a.dir_follow, l_side, a.ind_duration, l_speed, a.e_radius, a.score_mul)
+                batch:put(Indicator.create_enemy(current_enemy, l_pos, l_dir, a.dir_follow, l_side, l_speed, a.e_radius, a.score_mul))
             elseif a.ind_mode == "first" then
                 --Create the enemy after duration
                 handle = LEVEL_TIMER:after(a.ind_duration,
@@ -142,7 +144,7 @@ function formation.fromHorizontal(a)
 
             if (i == 1 and a.ind_mode == "first") or a.ind_mode == "all" then
                 --Create the indicator, and later, the enemy
-                Indicator.create_enemy(current_enemy, l_pos, l_dir, a.dir_follow, l_side, a.ind_duration, l_speed, a.e_radius, a.score_mul)
+                batch:put(Indicator.create_enemy(current_enemy, l_pos, l_dir, a.dir_follow, l_side, l_speed, a.e_radius, a.score_mul))
             elseif a.ind_mode == "first" then
                 --Create the enemy after duration
                 handle = LEVEL_TIMER:after(a.ind_duration,
@@ -188,7 +190,7 @@ function formation.fromHorizontal(a)
 
             if (i == 1 and a.ind_mode == "first") or a.ind_mode == "all" then
                 --Create the indicator, and later, the enemy
-                Indicator.create_enemy(current_enemy, l_pos, l_dir, a.dir_follow, l_side, a.ind_duration, l_speed, a.e_radius, a.score_mul)
+                batch:put(Indicator.create_enemy(current_enemy, l_pos, l_dir, a.dir_follow, l_side, l_speed, a.e_radius, a.score_mul))
             elseif a.ind_mode == "first" then
                 --Create the enemy after duration
                 handle = LEVEL_TIMER:after(a.ind_duration,
@@ -237,7 +239,7 @@ function formation.fromHorizontal(a)
 
             if (i == 1 and a.ind_mode == "first") or a.ind_mode == "all" then
                 --Create the indicator, and later, the enemy
-                Indicator.create_enemy(current_enemy, l_pos, l_dir, a.dir_follow, l_side, a.ind_duration, l_speed, a.e_radius, a.score_mul)
+                batch:put(Indicator.create_enemy(current_enemy, l_pos, l_dir, a.dir_follow, l_side, l_speed, a.e_radius, a.score_mul))
             elseif a.ind_mode == "first" then
                 --Create the enemy after duration
                 handle = LEVEL_TIMER:after(a.ind_duration,
@@ -287,7 +289,7 @@ e_radius: Radius of enemy being created
 score_mul: multiplier of score for enemies created
 ]]
 function formation.fromVertical(a)
-    local x, y, dir, half, max_r, enemy_table_size, p
+    local x, y, dir, half, max_r, enemy_table_size, p, batch
 
     enemy_table_size = Util.tableLen(a.enemy)
 
@@ -321,6 +323,8 @@ function formation.fromVertical(a)
         y = ORIGINAL_WINDOW_HEIGHT + 5 + max_r
     end
 
+    batch = Indicator.create_enemy_batch(a.ind_duration)
+
     ---------
     --MODES--
     ---------
@@ -351,7 +355,7 @@ function formation.fromVertical(a)
 
             if (i == 1 and a.ind_mode == "first") or a.ind_mode == "all" then
                 --Create the indicator, and later, the enemy
-                Indicator.create_enemy(current_enemy, l_pos, l_dir, a.dir_follow, l_side, a.ind_duration, l_speed, a.e_radius, a.score_mul)
+                batch:put(Indicator.create_enemy(current_enemy, l_pos, l_dir, a.dir_follow, l_side, l_speed, a.e_radius, a.score_mul))
             elseif a.ind_mode == "first" then
                 --Create the enemy after duration
                 handle = LEVEL_TIMER:after(a.ind_duration,
@@ -399,7 +403,7 @@ function formation.fromVertical(a)
 
             if (i == 1 and a.ind_mode == "first") or a.ind_mode == "all" then
                 --Create the indicator, and later, the enemy
-                Indicator.create_enemy(current_enemy, l_pos, l_dir, a.dir_follow, l_side, a.ind_duration, l_speed, a.e_radius, a.score_mul)
+                batch:put(Indicator.create_enemy(current_enemy, l_pos, l_dir, a.dir_follow, l_side, l_speed, a.e_radius, a.score_mul))
             elseif a.ind_mode == "first" then
                 --Create the enemy after duration
                 handle = LEVEL_TIMER:after(a.ind_duration,
@@ -445,7 +449,7 @@ function formation.fromVertical(a)
 
             if (i == 1 and a.ind_mode == "first") or a.ind_mode == "all" then
                 --Create the indicator, and later, the enemy
-                Indicator.create_enemy(current_enemy, l_pos, l_dir, a.dir_follow, l_side, a.ind_duration, l_speed, a.e_radius, a.score_mul)
+                batch:put(Indicator.create_enemy(current_enemy, l_pos, l_dir, a.dir_follow, l_side, l_speed, a.e_radius, a.score_mul))
             elseif a.ind_mode == "first" then
                 --Create the enemy after duration
                 handle = LEVEL_TIMER:after(a.ind_duration,
@@ -493,7 +497,7 @@ function formation.fromVertical(a)
 
             if (i == 1 and a.ind_mode == "first") or a.ind_mode == "all" then
                 --Create the indicator, and later, the enemy
-                Indicator.create_enemy(current_enemy, l_pos, l_dir, a.dir_follow, l_side, a.ind_duration, l_speed, a.e_radius, a.score_mul)
+                batch:put(Indicator.create_enemy(current_enemy, l_pos, l_dir, a.dir_follow, l_side, l_speed, a.e_radius, a.score_mul))
             elseif a.ind_mode == "first" then
                 --Create the enemy after duration
                 handle = LEVEL_TIMER:after(a.ind_duration,
@@ -539,7 +543,7 @@ e_radius: Radius of enemy being created
 score_mul: multiplier of score for enemies created
 ]]
 function formation.circle(a)
-    local value, x, y, dir, enemy_table_size
+    local value, x, y, dir, enemy_table_size, batch
 
     --Default values
     p = Psycho.get()
@@ -557,6 +561,8 @@ function formation.circle(a)
     end
 
     enemy_table_size = Util.tableLen(a.enemy)
+
+    batch = Indicator.create_enemy_batch(a.ind_duration)
 
     value = 2*math.pi/a.number --Divides the circunference
 
@@ -586,7 +592,7 @@ function formation.circle(a)
 
         if (i == 0 and a.ind_mode == "first") or a.ind_mode == "all" then
             --Create the indicator, and later, the enemy
-            Indicator.create_enemy(current_enemy, l_pos, l_dir, a.dir_follow, l_side, a.ind_duration, l_speed, a.e_radius, a.score_mul)
+            batch:put(Indicator.create_enemy(current_enemy, l_pos, l_dir, a.dir_follow, l_side, l_speed, a.e_radius, a.score_mul))
         elseif a.ind_mode == "first" then
             --Create the enemy after duration
             handle = LEVEL_TIMER:after(a.ind_duration,
@@ -625,7 +631,7 @@ score_mul: multiplier of score for enemies created
 ind_side: side of indicator
 ]]
 function formation.single(a)
-    local p, l_pos, l_speed, l_dir, l_follow, l_side
+    local p, l_pos, l_speed, l_dir, l_follow, l_side, batch
 
     --Default values
     p = Psycho.get()
@@ -650,10 +656,11 @@ function formation.single(a)
         l_dir = Vector(a.dx, a.dy)
     end
 
+    batch = Indicator.create_enemy_batch(a.ind_duration)
 
     if a.ind_mode then
         --Create the indicator, and later, the enemy
-        Indicator.create_enemy(a.enemy, l_pos, l_dir, l_follow, l_side, a.ind_duration, l_speed, a.e_radius, a.score_mul)
+        batch:put(Indicator.create_enemy(a.enemy, l_pos, l_dir, l_follow, l_side, l_speed, a.e_radius, a.score_mul))
     else
         --Just create the enemy
         a.enemy.create(l_pos.x, l_pos.y, l_dir, a.speed_m, a.e_radius, a.score_mul)
@@ -680,7 +687,7 @@ e_radius: Radius of enemy being created
 score_mul: multiplier of score for enemies created
 ]]
 function formation.line(a)
-    local dir, n_dir, enemy_table_size, p
+    local dir, n_dir, enemy_table_size, p, batch
 
     --Default values
     p = Psycho.get()
@@ -698,6 +705,9 @@ function formation.line(a)
     enemy_table_size = Util.tableLen(a.enemy)
     dir = Vector(a.dx, a.dy)
     n_dir = dir:normalized() --Normalized direction
+
+    batch = Indicator.create_enemy_batch(a.ind_duration)
+
     for i=0, a.number-1 do
         local l_pos, l_dir, current_enemy, l_speed, l_follow, l_side --Local values so that enemies are properly created
 
@@ -719,7 +729,7 @@ function formation.line(a)
 
         if (i == 0 and a.ind_mode == "first") or a.ind_mode == "all" then
             --Create the indicator, and later, the enemy
-            Indicator.create_enemy(current_enemy, l_pos, l_dir, a.dir_follow, l_side, a.ind_duration, l_speed, a.e_radius, a.score_mul)
+            batch:put(Indicator.create_enemy(current_enemy, l_pos, l_dir, a.dir_follow, l_side, l_speed, a.e_radius, a.score_mul))
         elseif a.ind_mode == "first" then
             --Create the enemy after duration
             handle = LEVEL_TIMER:after(a.ind_duration,

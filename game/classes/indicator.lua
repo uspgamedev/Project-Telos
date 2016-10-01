@@ -7,6 +7,80 @@ local Aim_Functions = require "classes.psycho_aim"
 
 local indicator = {}
 
+------------------
+--ENEMY INDICATOR BATCH--
+------------------
+
+--Enemy indicator batch that holds a group of enemy_indicators, and deletes them after a while, creating the enemies
+Enemy_Indicator_Batch = Class{
+    __includes = {ELEMENT},
+    init = function(self, _endtime)
+        ELEMENT.init(self)
+
+        self.batch = {}
+        self.endtime = _endtime
+        self.time = 0
+        self.tp = "enemy_indicator_batch"
+
+    end
+}
+
+--CLASS FUNCTIONS--
+
+function Enemy_Indicator_Batch:update(dt)
+
+    if self.death then return end
+
+    self.time = self.time + dt
+    if (self.time >= self.endtime) then
+        self.death = true
+    end
+
+end
+
+--Destroy self, indicators and create enemies
+function Enemy_Indicator_Batch:destroy()
+    local p
+
+    if self.batch then
+        for _, ind in pairs(self.batch) do
+
+            if not ind.death then
+                ind.death = true
+                if not ind.follow_psycho then
+
+                    ind.enemy.create(ind.enemy_pos.x, ind.enemy_pos.y, ind.enemy_dir, ind.enemy_speed_m, ind.enemy_radius, ind.enemy_score_mul)
+
+                else
+
+                    p  = Util.findId("psycho")
+
+                    ind.enemy.create(ind.enemy_pos.x, ind.enemy_pos.y, Vector(p.pos.x - ind.enemy_pos.x, p.pos.y - ind.enemy_pos.y), ind.enemy_speed_m, ind.enemy_radius, ind.enemy_score_mul)
+
+                end
+            end
+        end
+    end
+    ELEMENT.destroy(self)
+end
+
+
+function Enemy_Indicator_Batch:put(indicator)
+    table.insert(self.batch, indicator)
+end
+
+--UTILITY FUNCTIONS--
+
+function indicator.create_enemy_batch(endtime)
+    local batch
+
+    batch = Enemy_Indicator_Batch(endtime)
+    batch:setSubTp("enemy_indicator_batch")
+
+    return batch
+end
+
+
 --------------------
 --Useful Functions--
 --------------------
@@ -33,7 +107,7 @@ end
 --Pass only the center of the triangle, the direction to face, and side length
 Enemy_Indicator = Class{
     __includes = {TRIANGLE},
-    init = function(self, _center_pos, _dir, _side, _color, _duration, _follow_psycho)
+    init = function(self, _center_pos, _dir, _side, _color, _follow_psycho)
         local p1, p2, p3
 
         p1, p2, p3 = getPositions(_center_pos, _dir, _side)
@@ -41,9 +115,6 @@ Enemy_Indicator = Class{
 
         self.center = Vector(_center_pos.x, _center_pos.y)
         self.side = _side
-
-        self.tick = 0 --Time this indicator has been "alive"
-        self.duration = _duration or 1
 
         self.follow_psycho = _follow_psycho or false
 
@@ -66,17 +137,9 @@ function Enemy_Indicator:update(dt)
 
     i = self
 
-    --Ticks the indicator
-    i.tick = i.tick + dt
-
-    if i.tick >= i.duration then
-        i.death = true
-    end
-
     p = Util.findId("psycho")
 
     if not i.follow_psycho or not p then return end
-
 
     dir = Vector(p.pos.x - i.center.x, p.pos.y - i.center.y)
 
@@ -97,7 +160,7 @@ end
 --UTILITY FUNCTIONS--
 
 --Create an enemy indicator from a margin in the screen, and after duration, create the enemy
-function indicator.create_enemy(enemy, pos, dir, following, side, duration, speed_m, radius, score_mul, st)
+function indicator.create_enemy(enemy, pos, dir, following, side, speed_m, radius, score_mul, st)
     local i, center, margin, handle, color
 
     center = Vector(pos.x, pos.y)
@@ -119,7 +182,7 @@ function indicator.create_enemy(enemy, pos, dir, following, side, duration, spee
 
     st = st or "enemy_indicator" --subtype
 
-    i = Enemy_Indicator(center, dir, side, color, duration, following)
+    i = Enemy_Indicator(center, dir, side, color, following)
 
     i:addElement(DRAW_TABLE.L5, st)
 
@@ -127,29 +190,13 @@ function indicator.create_enemy(enemy, pos, dir, following, side, duration, spee
     --Fade in the indicator
     i.level_handles["fadein"] = LEVEL_TIMER:tween(.3, i.color, {a = 255}, 'in-linear')
 
-    if not following then
-        --Create the enemy after duration
-        handle = LEVEL_TIMER:after(duration,
-            function()
-                enemy.create(pos.x, pos.y, dir, speed_m, radius, score_mul)
-            end
-        )
-        table.insert(INDICATOR_HANDLES,handle)
-    else
-        --Create the enemy after duration getting psycho current position
-        handle = LEVEL_TIMER:after(duration,
-            function()
-                local p, position
-
-                p  = Util.findId("psycho")
-                position = Vector(pos.x, pos.y)
-
-                enemy.create(pos.x, pos.y, Vector(p.pos.x - pos.x, p.pos.y - pos.y), speed_m, radius, score_mul)
-            end
-        )
-        table.insert(INDICATOR_HANDLES,handle)
-
-    end
+    --Set up enemy information so it can be later created
+    i.enemy_pos = pos
+    i.enemy_dir = dir
+    i.enemy_speed_m = speed_m
+    i.enemy_radius = radius
+    i.enemy_score_mul = score_mul
+    i.enemy = enemy
 
     return i
 end
