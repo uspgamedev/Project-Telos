@@ -36,7 +36,7 @@ function fx.explosion(x, y, r, color, number, speed, decaying, size, important)
     end
 
     --Create a batch with endtime 5
-    batch = Particle.create_batch(255/decaying + .05)--FAZER CONTA
+    batch = Particle.create_batch(255/decaying + .05)
 
     --Creates all particles of explosion
     for i=1, number do

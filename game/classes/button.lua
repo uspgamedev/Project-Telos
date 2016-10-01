@@ -1,6 +1,7 @@
 require "classes.primitive"
 local Color = require "classes.color.color"
 local FreeRes = require "FreeRes"
+local Particle = require "classes.particle"
 --BUTTON CLASS --
 
 local button = {}
@@ -10,15 +11,22 @@ local button = {}
 ---------------
 
 
---[[Circle button with centralized text]]
+--[[
+Circle button with centralized text
+When mouse is over, a circle ring increses size until it reaches button radius
+]]
 Circle_Button = Class{
     __includes = {CIRC, WTXT},
-    init = function(self, _x, _y, _r, _b_color, _func, _text, _font, _t_color)
-        CIRC.init(self, _x, _y, _r, _b_color, "fill") --Set atributes
+    init = function(self, _x, _y, _r, _func, _text, _font)
+        CIRC.init(self, _x, _y, _r, nil, "fill") --Set atributes
 
         self.func  = _func  --Function to call when pressed
 
-        WTXT.init(self, _text, _font, _t_color) --Set text
+        WTXT.init(self, _text, _font, nil) --Set text
+
+        self.ring_r = 0 --Circle ring radius
+        self.ring_growth_speed = 500 --Speed to increase or decrease radius
+        self.line_width = 6 --Line width for circle ring
 
         self.tp = "circlebutton" --Type of this class
     end
@@ -28,14 +36,18 @@ Circle_Button = Class{
 
 --Draws a given circle button with centralized text
 function Circle_Button:draw()
-    local fwidth, fheight, tx, ty, b
+    local fwidth, fheight, tx, ty, b, color
 
     b = self
 
-    --Draws button box
+    --Draws button circle ring
 
-    Color.set(b.color)
-    love.graphics.circle("fill", b.pos.x, b.pos.y, b.r)
+    color = Color.black()
+    Color.copy(color, UI_COLOR.color)
+    color.h = (color.h + 125)%255
+    Color.set(color)
+    love.graphics.setLineWidth(b.line_width)
+    love.graphics.circle("line", b.pos.x, b.pos.y, b.ring_r)
 
     fwidth  = b.font:getWidth(b.text)  --Width of font
     fheight = b.font:getHeight(b.text) --Height of font
@@ -43,10 +55,70 @@ function Circle_Button:draw()
     ty = fheight/2     --Relative y position of font on textbox
 
     --Draws button text
-    Color.set(b.t_color)
+    Color.set(UI_COLOR.color)
     love.graphics.setFont(b.font)
     love.graphics.print(b.text, b.pos.x - tx , b.pos.y - ty)
 
+end
+
+function Circle_Button:update(dt)
+    local b, x, y, mousepos
+
+    b = self
+    x, y = love.mouse.getPosition()
+    mousepos = Vector(x, y)
+
+    --If mouse is colliding with button total radius, increase ring radius
+    if b.pos:dist(mousepos) <= b.r then
+        if b.ring_r < b.r then
+            b.ring_r = b.ring_r + b.ring_growth_speed*dt
+            if b.ring_r > b.r then b.ring_r = b.r end
+        end
+    else
+        if b.ring_r > 0 then
+            b.ring_r = b.ring_r - b.ring_growth_speed*dt
+            if b.ring_r < 0 then b.ring_r = 0 end
+        end
+    end
+
+    --If ring is big enough, has a small chance to create a decaying particle
+    if b.ring_r > b.r/5 and love.math.random() > .95 then
+        local dir, angle, radius, pos, color, speed
+
+        --Randomize position inside the given circle
+        angle = 2*math.pi*love.math.random()
+        radius = 2*b.r*love.math.random()
+        if radius > b.r then
+            radius = 2*b.r-radius
+        end
+        pos = Vector(0,0)
+        pos.x = b.pos.x + radius*math.cos(angle)
+        pos.y = b.pos.y + radius*math.sin(angle)
+
+        --Make direction outwards from circle
+        dir = Vector(pos.x - b.pos.x, pos.y - b.pos.y)
+
+        --Get color the same as ring
+        color = Color.black()
+        Color.copy(color, UI_COLOR.color)
+        color.h = (color.h + 125)%255
+
+        speed = 150
+
+        Particle.create_decaying(pos, dir, color, speed, 200, 2)
+    end
+end
+
+--UTILITY FUNCTIONS--
+
+function button.create_circle_gui(x, y, r, func, text, font, st)
+    local b
+
+    st = st or "gui"
+    b = Circle_Button(x, y, r, func, text, font)
+    b:addElement(DRAW_TABLE.GUI, st)
+
+    return b
 end
 
 ------------

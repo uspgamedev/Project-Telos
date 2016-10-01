@@ -150,6 +150,7 @@ function Decaying_Particle:update(dt)
 
     p = self
     if p.death then return end
+
     --Update position
     p.pos = p.pos + dt*p.speed
     --Decays the alpha value

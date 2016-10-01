@@ -281,7 +281,9 @@ function util.updateTable(dt, T)
 
     if not T then return end
     for o in pairs(T) do
-        o:update(dt)
+        if o.update then
+            o:update(dt)
+        end
     end
 
 end

@@ -13,17 +13,13 @@ local Audio = require "audio"
 local state = {}
 
 function state:enter()
-    local b
+    local b, func
 
     --GUI--
 
     --Play Button
-    b = Circle_Button(500, 300, 100, Color.purple(),
-            function()
-                SWITCH = "GAME"
-            end,
-        "Play", GUI_BIG, Color.black())
-    b:addElement(DRAW_TABLE.GUI, "gui")
+    func = function() SWITCH = "GAME" end
+    b = Button.create_circle_gui(500, 300, 100, func, "Play", GUI_BIG)
 
     --AUDIO--
     Audio.playBGM(BGM_MENU)
@@ -54,6 +50,9 @@ function state:update(dt)
         SWITCH = nil
         Gamestate.switch(GS.GAME)
     end
+
+    Util.updateSubTp(dt, "gui")
+    Util.updateSubTp(dt, "decaying_particle")
 
     Util.updateTimers(dt)
 
