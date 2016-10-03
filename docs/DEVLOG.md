@@ -8,6 +8,7 @@ DEV LOG
 #### 02/09/2016:
 
 Fixed bug where psycho would die, but enemies would still try to give him score.
+Improved psycho death explosion animation
 
 #### 01/09/2016:
 

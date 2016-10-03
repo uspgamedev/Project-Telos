@@ -64,7 +64,7 @@ end
 
 --Explode Psycho in a cool function when he dies
 function fx.psychoExplosion(p)
-    local d, multi, e, death_func, x, y, dir, pos, speed, c_pos, r, color, handle
+    local d, multi, e, death_func, x, y, dir, pos, speed, c_pos, r, color, handle, part
 
     d = 2 --Duration of effect's first part (expansion)
     multi = 3 --Multiplier of speed in effects second part (going back)
@@ -110,7 +110,10 @@ function fx.psychoExplosion(p)
                 pos = Vector(x + e/2, y + e/2)
                 speed = death_func(pos, c_pos, p.r)
 
-                Particle.create_regular(pos, dir, p.color, speed, r, "psycho_explosion")
+                part = Particle.create_regular(pos, dir, p.color, speed, r, "psycho_explosion")
+                --Fade-out particles
+                part.color.a = 250
+                part.level_handles = LEVEL_TIMER:tween(d/6, part.color, {a = 0}, 'in-linear')
             end
         end
     end
@@ -123,6 +126,8 @@ function fx.psychoExplosion(p)
         function()
             for part in pairs(Util.findSbTp("psycho_explosion")) do
                 part.speed = -part.speed*multi
+                --Fade-in particles
+                part.level_handles = LEVEL_TIMER:tween((d/6)/multi, part.color, {a = 250}, 'in-linear')
             end
         end
     )
