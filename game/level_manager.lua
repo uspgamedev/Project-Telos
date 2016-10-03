@@ -195,6 +195,8 @@ function level_manager.giveLives(number)
 
     p = Util.findId("psycho")
 
+    if not p then return end
+
     p.lives = p.lives + number
     Util.findId("lives_counter").var = p.lives
 end
@@ -204,6 +206,8 @@ function level_manager.giveScore(value)
     local p
 
     p = Util.findId("psycho")
+
+    if not p then return end
 
     --Update main score
     p.score = p.score + value

@@ -5,6 +5,14 @@ GAME DESIGN DOCUMENT
 DEV LOG
 =======
 
+#### 02/09/2016:
+
+Fixed bug where psycho would die, but enemies would still try to give him score.
+
+#### 01/09/2016:
+
+Improved menu buttons and created batch for indicators, so they won't spawn desynched
+
 #### 30/08/2016:
 
 Added score system, and player can get lives and ultrablasts from score.
