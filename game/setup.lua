@@ -134,6 +134,9 @@ function setup.config()
     BGM_MENU = love.audio.newSource("assets/bgm/Flying Carrots 2.mp3")
     BGM_LEVEL_1 = love.audio.newSource("assets/bgm/Limitless.mp3")
     BGM_LEVEL_2 = love.audio.newSource("assets/bgm/Through Hiperboles.ogg")
+    --SFX
+    --SFX_PLAY_BUTTON = love.audio.newSource("assets/sfx/asdas.bla")
+
     --Start UI color transition
     UI_COLOR = UI.create_color()
 
