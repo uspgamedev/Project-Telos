@@ -266,3 +266,44 @@ function CIRC:draw()
     Color.set(p.color)
     love.graphics.circle("fill", p.pos.x, p.pos.y, p.r)
 end
+
+-------------------
+--ENEMY FUNCTIONS--
+-------------------
+
+ENEMY = Class{
+    __includes = {CIRC},
+    init = function(self, _x, _y, _dir, _speed_m, _radius, _score_mul, _color_table, _speedv, _score_value)
+        local dx, dy, r, color, color_table
+
+        r = _radius or 20 --Radius of enemy
+
+        color_table = _color_table or {}
+
+        --Color of enemy
+        if not Util.tableEmpty(color_table) then
+            color = color_table[love.math.random(#color_table)]
+        else
+            color = Color.pink()
+        end
+
+        CIRC.init(self, _x, _y, r, color, color_table, "fill")
+
+        --Set atributes
+        ELEMENT.setSubTp(self, "enemies")
+
+        self.color_duration = 6 --Duration between color transitions
+
+        --Normalize direction and set speed
+        self.speedv = _speedv or 270 --Speed value
+        self.speed_m = _speed_m or 1 --Speed multiplier
+        self.speed = Vector(_dir.x, _dir.y) --Speed vector
+        self.speed = self.speed:normalized()*self.speedv
+
+        self.score_value = _score_value or 25 --Score this enemy gives when killed without multiplier
+        self.score_mul = _score_mul or 1 --Score multiplier
+
+        self.enter = false --If this enemy has already entered the game screen
+        self.tp = "simple_enemy" --Type of this class
+    end
+}

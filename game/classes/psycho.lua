@@ -58,7 +58,7 @@ Psy = Class{
         self.ultrablast_score = 0 --How much score psycho has accumulated to win a ultrablast
         self.ultrablast_score_target = 2000 --How many points psycho must win to get a ultrablast
 
-        self.lives = 15 --How many lives psycho by default has
+        self.lives = 10 --How many lives psycho by default has
 
         self.ultrablast_counter = 3 --How many ultrablasts psycho has
         self.default_ultrablast_number = 3 --How many ultrablasts psycho by default has in every life

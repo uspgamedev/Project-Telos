@@ -78,7 +78,11 @@ function love.resize(w, h)
 
     WINDOW_WIDTH = w
     WINDOW_HEIGHT = h
+
     FreeRes.setScreen(1)
+
+    --Fix camera position to look at the center
+    CAM:lookAt(WINDOW_WIDTH/2, WINDOW_HEIGHT/2)
 
 end
 

@@ -10,33 +10,19 @@ local LM = require "level_manager"
 local enemy = {}
 
 Simple_Ball = Class{
-    __includes = {CIRC},
+    __includes = {ENEMY},
     init = function(self, _x, _y, _dir, _speed_m, _radius, _score_mul)
-        local dx, dy, r, color, color_table
+        local color_table
 
-        r = _radius or 20 --Radius of enemy
         color_table = {
             HSL(Hsl.stdv(201,100,50)),
             HSL(Hsl.stdv(239,100,26)),
             HSL(Hsl.stdv(220,78,30)),
             HSL(Hsl.stdv(213,100,54))
         }
-        color = color_table[love.math.random(#color_table)] --Color of enemy
-        CIRC.init(self, _x, _y, r, color, color_table, "fill") --Set atributes
-        ELEMENT.setSubTp(self, "enemies")
 
-        self.color_duration = 6 --Duration between color transitions
+        ENEMY.init(self,  _x, _y, _dir, _speed_m, _radius, _score_mul, color_table, 270, 25)
 
-        --Normalize direction and set speed
-        self.speedv = 270 --Speed value
-        self.speed_m = _speed_m or 1 --Speed multiplier
-        self.speed = Vector(_dir.x, _dir.y) --Speed vector
-        self.speed = self.speed:normalized()*self.speedv
-
-        self.score_value = 25 --Score this enemy gives when killed without multiplier
-        self.score_mul = _score_mul or 1 --Score multiplier
-
-        self.enter = false --If this enemy has already entered the game screen
         self.tp = "simple_ball" --Type of this class
     end
 }

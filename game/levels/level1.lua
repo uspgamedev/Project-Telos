@@ -90,7 +90,7 @@ function script()
     F.fromVertical{side = "top", mode = "distribute", number = 12, enemy = {DB}, speed_m = .9}
     F.fromVertical{side = "bottom", mode = "distribute", number = 12, enemy = {DB}, speed_m = .9}
     LM.wait("noenemies")
-    LM.giveLives(1)
+    LM.giveLives(2)
 
     --1-2: Circle madness
     LM.level_part("Part 2 - Circle Madness")
@@ -146,7 +146,7 @@ function script()
     LM.wait(1.5)
     F.circle{enemy = {DB}, number = 28, radius = 640}
     LM.wait("noenemies")
-    LM.giveLives(2)
+    LM.giveLives(3)
 
     --1-3: The Betrayal
     LM.level_part("Part 3 - The Betrayal")
@@ -269,7 +269,7 @@ function script()
         end
     end
     LM.wait("noenemies")
-    LM.giveLives(3)
+    LM.giveLives(4)
 
     --1-4: The Big One
     LM.level_part("Part 4 - The Big One")
@@ -279,6 +279,7 @@ function script()
     LM.wait(20)
     LM.wait("nobosses")
     LM.wait(2)
+    LM.giveLives(4)
     LM.stop()
     LM.start(level2)
 
