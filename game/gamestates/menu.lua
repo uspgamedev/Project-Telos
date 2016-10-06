@@ -18,7 +18,7 @@ function state:enter()
     --GUI--
 
     --Play Button
-    func = function() SWITCH = "GAME"; SFX_PLAY_BUTTON:play() end
+    func = function() SWITCH = "GAME" end
     b = Button.create_circle_gui(500, 300, 100, func, "Play", GUI_BIG)
 
     --AUDIO--
