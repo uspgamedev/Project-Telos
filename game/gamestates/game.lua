@@ -49,7 +49,7 @@ function state:enter()
     --Separator 1
     Txt.create_game_gui(5, 185, "————", GUI_MEDPLUS, nil, nil, nil, "separator_1")
 
-    Level.start(level2)
+    Level.start(level1)
 
 
 end
