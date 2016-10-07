@@ -30,6 +30,8 @@ function level_manager.stop()
             LEVEL_TIMER:cancel(h)
         end
     end
+    Util.destroySubtype("enemy_indicator_batch")
+
 
 end
 

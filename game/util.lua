@@ -90,8 +90,8 @@ end
 --Delete a set of objects based on a subtype
 function util.destroySubtype(subtp)
     if SUBTP_TABLE[subtp] then
-        for o in pairs do
-            SUBTP_TABLE[subtp][o]:destroy()
+        for o in pairs(SUBTP_TABLE[subtp]) do
+            o:destroy()
         end
     end
 end
