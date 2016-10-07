@@ -95,6 +95,8 @@ function Psy:shoot(x,y)
     p = self
     if p.shootLocked then return end
 
+    SFX_PSYCHOBALL_SHOT:play()
+
     --Fix mouse position click to respective distance
     w, h = FreeRes.windowDistance()
     scale = FreeRes.scale()

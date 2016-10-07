@@ -15,7 +15,7 @@ local Boss = require "classes.bosses.boss1"
 --Levels
 local level2 = require "levels.level2"
 
---LEVEL 2--
+--LEVEL 1--
 
 --Level script
 function script()
@@ -24,7 +24,7 @@ function script()
     LM.level_title("I - THE FALL OF PSYCHO")
     Audio.playBGM(BGM_LEVEL_1)
 
-    --1-1: The Start of the End
+    --[[1-1: The Start of the End
     LM.level_part("Part 1 - The Start of the End")
 
 
@@ -269,7 +269,7 @@ function script()
         end
     end
     LM.wait("noenemies")
-    LM.giveLives(4)
+    LM.giveLives(4)]]
 
     --1-4: The Big One
     LM.level_part("Part 4 - The Big One")
