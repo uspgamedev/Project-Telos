@@ -216,6 +216,10 @@ function util.gameElementException(mode)
         util.addExceptionSubtype("game_gui")
     end
 
+    if util.findId("boss_title") then
+        util.addExceptionId("boss_title")
+    end
+
 end
 
 ---------------------------
