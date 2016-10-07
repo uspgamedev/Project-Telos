@@ -229,7 +229,7 @@ if key == 'w' or key == 'a' or key == 's' or key == 'd' or
    key == 'up' or key == 'left' or key == 'down' or key == 'right' then
       psycho.updateSpeed(self)
 elseif key == 'lshift' then
-    p.focused = false
+    self.focused = false
 end
 
 end

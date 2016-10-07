@@ -4,6 +4,8 @@ local Color = require "classes.color.color"
 local Audio = require "audio"
 local Util = require "util"
 
+local level_functions = {}
+
 --Enemies
 local SB = require "classes.enemies.simple_ball"
 local DB = require "classes.enemies.double_ball"
@@ -11,14 +13,23 @@ local DB = require "classes.enemies.double_ball"
 --LEVEL 2--
 
 --Level script
-function script()
+function level_functions.script()
     local p
 
     p = Util.findId("psycho")
 
     --Start Level
-    LM.level_title("THERE AND BACK AGAIN")
+    LM.level_title("LOST IN DARKNESS")
     Audio.playBGM(BGM_LEVEL_2)
+    if not p then
+        if love.math.random() >= .5 then
+            x, y = 662, 424 --'O' of Psycho
+        else
+            x, y = 662, 424 --'O' of Psycho
+        end
+
+        p = Psycho.create(x,y)
+    end
 
     --2-1: A Cross the Planes
     LM.level_part("Part 1 - A Cross the Planes")
@@ -208,5 +219,14 @@ function script()
 
 end
 
+
+function level_functions.startPositions()
+    local x, y
+
+    x, y = 404, 323 --'O' of "Lost"
+
+    return x,y
+end
+
 --Return level function
-return script
+return level_functions

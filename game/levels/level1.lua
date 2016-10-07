@@ -8,8 +8,9 @@ local Audio = require "audio"
 local SB = require "classes.enemies.simple_ball"
 local DB = require "classes.enemies.double_ball"
 
---Boss
+local level_functions = {}
 
+--Boss
 local Boss = require "classes.bosses.boss1"
 
 --Levels
@@ -18,13 +19,13 @@ local level2 = require "levels.level2"
 --LEVEL 1--
 
 --Level script
-function script()
+function level_functions.script()
     local t
     --Start Level
     LM.level_title("I - THE FALL OF PSYCHO")
     Audio.playBGM(BGM_LEVEL_1)
 
-    --[[1-1: The Start of the End
+    --1-1: The Start of the End
     LM.level_part("Part 1 - The Start of the End")
 
 
@@ -269,7 +270,7 @@ function script()
         end
     end
     LM.wait("noenemies")
-    LM.giveLives(4)]]
+    LM.giveLives(4)
 
     --1-4: The Big One
     LM.level_part("Part 4 - The Big One")
@@ -281,9 +282,21 @@ function script()
     LM.wait(2)
     LM.giveLives(4)
     LM.stop()
-    LM.start(level2)
+    LM.start(level2.script)
 
 end
 
+function level_functions.startPositions()
+    local x, y
+
+    if love.math.random() >= .9 then
+        x, y = 787, 321 --'O' of "Of"
+    else
+        x, y = 662, 424 --'O' of "Psycho"
+    end
+
+    return x,y
+end
+
 --Return level function
-return script
+return level_functions

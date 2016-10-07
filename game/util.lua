@@ -524,6 +524,9 @@ function util.defaultKeyPressed(key)
         p = util.findId("psycho")
         p.ultrablast_counter = p.ultrablast_counter + 10
         util.findId("ultrablast_counter").var = p.ultrablast_counter
+    elseif key == '6' then
+        p = util.findId("psycho")
+        print("psycho position",p.pos.x, p.pos.y)
     end
 
 end
