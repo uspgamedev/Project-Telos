@@ -54,9 +54,11 @@ function Enemy_Indicator_Batch:destroy()
                 else
 
                     p  = Util.findId("psycho")
-
-                    ind.enemy.create(ind.enemy_pos.x, ind.enemy_pos.y, Vector(p.pos.x - ind.enemy_pos.x, p.pos.y - ind.enemy_pos.y), ind.enemy_speed_m, ind.enemy_radius, ind.enemy_score_mul)
-
+                    if p then
+                        ind.enemy.create(ind.enemy_pos.x, ind.enemy_pos.y, Vector(p.pos.x - ind.enemy_pos.x, p.pos.y - ind.enemy_pos.y), ind.enemy_speed_m, ind.enemy_radius, ind.enemy_score_mul)
+                    else
+                        ind.enemy.create(ind.enemy_pos.x, ind.enemy_pos.y, Vector(ORIGINAL_WINDOW_WIDTH/2 - ind.enemy_pos.x, ORIGINAL_WINDOW_HEIGHT/2 - ind.enemy_pos.y), ind.enemy_speed_m, ind.enemy_radius, ind.enemy_score_mul)
+                    end
                 end
             end
         end
@@ -216,7 +218,11 @@ Rotating_Indicator = Class{
         p = Util.findId("psycho")
         self.radius = _radius --Radius of circle this indicator is rotating from
         self.circle_center = Vector(_circle_center.x, _circle_center.y) --Center of circle this indicator is rotating from
-        self.dir = Vector(p.pos.x - self.circle_center.x, p.pos.y - self.circle_center.y)
+        if p then
+            self.dir = Vector(p.pos.x - self.circle_center.x, p.pos.y - self.circle_center.y)
+        else
+            self.dir = Vector(ORIGINAL_WINDOW_WIDTH/2 - self.circle_center.x, ORIGINAL_WINDOW_HEIGHT/2 - self.circle_center.y)
+        end
         self.center = Vector(self.circle_center.x + self.radius*self.dir:normalized().x, self.circle_center.y + self.radius*self.dir:normalized().y)--Center of triangle
         self.side = _side
 
@@ -251,8 +257,11 @@ function Rotating_Indicator:update(dt)
     end
 
     p = Util.findId("psycho")
-
-    i.dir = Vector(p.pos.x - i.circle_center.x, p.pos.y - i.circle_center.y)
+    if p then
+        i.dir = Vector(p.pos.x - i.circle_center.x, p.pos.y - i.circle_center.y)
+    else
+        i.dir = Vector(ORIGINAL_WINDOW_WIDTH/2 - i.circle_center.x, ORIGINAL_WINDOW_HEIGHT/2 - i.circle_center.y)
+    end
     i.center = Vector(i.circle_center.x + i.radius*i.dir:normalized().x, i.circle_center.y + i.radius*i.dir:normalized().y)--Center of triangle
 
     i.p1, i.p2, i.p3 = getPositions(i.center, i.dir, i.side)
