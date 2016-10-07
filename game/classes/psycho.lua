@@ -30,7 +30,7 @@ Psy = Class{
         } --Color table
         color = color_table[love.math.random(#color_table)] --Color of enemy
         r = 24 --Radius of psycho
-        self.collision_r = 19 --Radius of psycho that detects collision, and radius when psyho is focused
+        self.collision_r = 18 --Radius of psycho that detects collision, and radius when psyho is focused
         self.normal_radius = r --Radius when psycho is not focused
         CIRC.init(self, _x, _y, r, color, color_table, "fill") --Set atributes
 

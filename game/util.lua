@@ -388,8 +388,12 @@ function util.checkCollision()
             if SUBTP_TABLE["player_bullet"] then
                 for bullet in pairs(SUBTP_TABLE["player_bullet"]) do
                     if not bullet.death and e:collides(bullet) then
-                        e:kill()
-                        bullet:kill()
+                        if e.tp ~= "grey_ball" and e.tp ~= "glitch_ball" then --Don't kill enemy if its grey or glitch ball
+                            e:kill()
+                        end
+                        if e.tp ~= "glitch_ball" then --Don't kill bullet if its glitch ball
+                            bullet:kill()
+                        end
                     end
                 end
             end
@@ -402,7 +406,7 @@ function util.checkCollision()
             --Checking ultrablast collision
             if SUBTP_TABLE["ultrablast"] then
                 for ultra in pairs(SUBTP_TABLE["ultrablast"]) do
-                    if not ultra.death and not e.death and ultra:collides(e) then
+                    if not ultra.death and e.tp ~= "grey_ball" and e.tp ~= "glitch_ball" and not e.death and ultra:collides(e) then
                         e:kill(false) --Don't give score if enemy is killed by ultrablast
                         ultra:takeHit()
                     end

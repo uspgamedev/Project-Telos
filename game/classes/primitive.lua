@@ -264,7 +264,10 @@ function CIRC:draw()
 
     --Draws the circle
     Color.set(p.color)
-    love.graphics.circle("fill", p.pos.x, p.pos.y, p.r)
+    if p.mode == "line" then
+        love.graphics.setLineWidth(p.line_width)
+    end
+    love.graphics.circle(p.mode, p.pos.x, p.pos.y, p.r)
 end
 
 -------------------

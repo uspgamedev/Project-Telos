@@ -270,7 +270,7 @@ function level_functions.script()
         end
     end
     LM.wait("noenemies")
-    LM.giveLives(4)
+    LM.giveLives(5)
 
     --1-4: The Big One
     LM.level_part("Part 4 - The Big One")
@@ -280,7 +280,7 @@ function level_functions.script()
     LM.wait(20)
     LM.wait("nobosses")
     LM.wait(2)
-    LM.giveLives(4)
+    LM.giveLives(5)
     LM.stop()
     LM.start(level2.script)
 

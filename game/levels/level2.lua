@@ -9,6 +9,8 @@ local level_functions = {}
 --Enemies
 local SB = require "classes.enemies.simple_ball"
 local DB = require "classes.enemies.double_ball"
+local GrB = require "classes.enemies.grey_ball"
+local GlB = require "classes.enemies.glitch_ball"
 
 --LEVEL 2--
 
@@ -21,17 +23,8 @@ function level_functions.script()
     --Start Level
     LM.level_title("LOST IN DARKNESS")
     Audio.playBGM(BGM_LEVEL_2)
-    if not p then
-        if love.math.random() >= .5 then
-            x, y = 662, 424 --'O' of Psycho
-        else
-            x, y = 662, 424 --'O' of Psycho
-        end
 
-        p = Psycho.create(x,y)
-    end
-
-    --2-1: A Cross the Planes
+    --[[2-1: A Cross the Planes
     LM.level_part("Part 1 - A Cross the Planes")
     LM.wait(3)
     F.fromHorizontal{enemy = {DB}, side = "left", mode = "top" , number = 7, ind_duration = 2.5, ind_side = 40, speed_m = 1.5}
@@ -211,10 +204,116 @@ function level_functions.script()
         F.fromVertical{enemy = {DB}, speed_m = 1.7, side = "bottom", mode = "right", number = 9, ind_mode = false, screen_margin = 10}
         F.fromHorizontal{enemy = {DB}, speed_m = 1.7, side = "right", mode = "bottom" , number = 7, ind_mode = false}
     end
+    LM.wait("noenemies")]]
+    LM.giveLives(4)
+    LM.wait(2)
+
+    --2-2: The Outsider
+    LM.level_part("Part 2 - The Outsider")
+
+    LM.wait(1)
+    --F.single{enemy = GrB, x = -20, y = ORIGINAL_WINDOW_HEIGHT/2, dx = 1, dy = 0, ind_duration = 2, ind_side = 35, speed_m = .7}
+    --LM.wait("noenemies")
+
+    INDICATOR_DEFAULT = 1.5
+    F.fromVertical{enemy = {GrB}, speed_m = 1.7, side = "top", mode = "left", number = 8, screen_margin = 10}
+    F.fromHorizontal{enemy = {GrB}, speed_m = 1.7, side = "left", mode = "top" , number = 6}
+    F.fromVertical{enemy = {GrB}, speed_m = 1.7, side = "top", mode = "right", number = 8, screen_margin = 10}
+    F.fromHorizontal{enemy = {GrB}, speed_m = 1.7, side = "right", mode = "top" , number = 6}
+    F.fromVertical{enemy = {GrB}, speed_m = 1.7, side = "bottom", mode = "left", number = 8, screen_margin = 10}
+    F.fromHorizontal{enemy = {GrB}, speed_m = 1.7, side = "left", mode = "bottom" , number = 6}
+    F.fromVertical{enemy = {GrB}, speed_m = 1.7, side = "bottom", mode = "right", number = 8, screen_margin = 10}
+    F.fromHorizontal{enemy = {GrB}, speed_m = 1.7, side = "right", mode = "bottom" , number = 6}
+    LM.wait(.5)
+
+    F.fromHorizontal{side = "left", mode = "distribute", enemy = {GrB}, number = 6, speed_m = .85}
+    F.fromHorizontal{side = "left", mode = "top", enemy = {GrB}, number = 1, speed_m = .85}
+    F.fromHorizontal{side = "left", mode = "bottom", enemy = {GrB}, number = 1, speed_m = .85}
+    F.fromHorizontal{side = "right", mode = "distribute", enemy = {GrB}, number = 6, speed_m = .85}
+    F.fromHorizontal{side = "right", mode = "top", enemy = {GrB}, number = 1, speed_m = .85}
+    F.fromHorizontal{side = "right", mode = "bottom", enemy = {GrB}, number = 1, speed_m = .85}
+    LM.wait(1)
+    F.fromHorizontal{side = "left", mode = "distribute", enemy = {GrB}, number = 5, screen_margin = -20, speed_m = .85}
+    F.fromHorizontal{side = "left", mode = "top", enemy = {GrB}, number = 1, speed_m = .85}
+    F.fromHorizontal{side = "left", mode = "bottom", enemy = {GrB}, number = 1, speed_m = .85}
+    F.fromHorizontal{side = "right", mode = "distribute", enemy = {GrB}, number = 5, screen_margin = -20, speed_m = .85}
+    F.fromHorizontal{side = "right", mode = "top", enemy = {GrB}, number = 1, speed_m = .85}
+    F.fromHorizontal{side = "right", mode = "bottom", enemy = {GrB}, number = 1, speed_m = .85}
+    LM.wait(1)
+    F.fromHorizontal{side = "left", mode = "distribute", enemy = {GrB}, number = 6, screen_margin = -20, speed_m = .85}
+    F.fromHorizontal{side = "left", mode = "top", enemy = {GrB}, number = 1, speed_m = .85}
+    F.fromHorizontal{side = "left", mode = "bottom", enemy = {GrB}, number = 1, speed_m = .85}
+    F.fromHorizontal{side = "right", mode = "distribute", enemy = {GrB}, number = 6, screen_margin = -20, speed_m = .85}
+    F.fromHorizontal{side = "right", mode = "top", enemy = {GrB}, number = 1, speed_m = .85}
+    F.fromHorizontal{side = "right", mode = "bottom", enemy = {GrB}, number = 1, speed_m = .85}
+    LM.wait(1)
+    F.fromHorizontal{side = "left", mode = "distribute", enemy = {GrB}, number = 5, screen_margin = 20, speed_m = .85}
+    F.fromHorizontal{side = "left", mode = "top", enemy = {GrB}, number = 1, speed_m = .85}
+    F.fromHorizontal{side = "left", mode = "bottom", enemy = {GrB}, number = 1, speed_m = .85}
+    F.fromHorizontal{side = "right", mode = "distribute", enemy = {GrB}, number = 5, screen_margin = 20, speed_m = .85}
+    F.fromHorizontal{side = "right", mode = "top", enemy = {GrB}, number = 1, speed_m = .85}
+    F.fromHorizontal{side = "right", mode = "bottom", enemy = {GrB}, number = 1, speed_m = .85}
+    LM.wait(.9)
+    F.fromHorizontal{side = "left", mode = "distribute", enemy = {GrB}, number = 6, speed_m = .85}
+    F.fromHorizontal{side = "left", mode = "top", enemy = {GrB}, number = 1, speed_m = .85}
+    F.fromHorizontal{side = "left", mode = "bottom", enemy = {GrB}, number = 1, speed_m = .85}
+    F.fromHorizontal{side = "right", mode = "distribute", enemy = {GrB}, number = 6, speed_m = .85}
+    F.fromHorizontal{side = "right", mode = "top", enemy = {GrB}, number = 1, speed_m = .85}
+    F.fromHorizontal{side = "right", mode = "bottom", enemy = {GrB}, number = 1, speed_m = .85}
+    LM.wait(.9)
+    F.fromHorizontal{side = "left", mode = "distribute", enemy = {GrB}, number = 5, screen_margin = -20, speed_m = .85}
+    F.fromHorizontal{side = "left", mode = "top", enemy = {GrB}, number = 1, speed_m = .85}
+    F.fromHorizontal{side = "left", mode = "bottom", enemy = {GrB}, number = 1, speed_m = .85}
+    F.fromHorizontal{side = "right", mode = "distribute", enemy = {GrB}, number = 5, screen_margin = -20, speed_m = .85}
+    F.fromHorizontal{side = "right", mode = "top", enemy = {GrB}, number = 1, speed_m = .85}
+    F.fromHorizontal{side = "right", mode = "bottom", enemy = {GrB}, number = 1, speed_m = .85}
+    LM.wait(.9)
+    F.fromHorizontal{side = "left", mode = "distribute", enemy = {GrB}, number = 6, screen_margin = -20, speed_m = .85}
+    F.fromHorizontal{side = "left", mode = "top", enemy = {GrB}, number = 1, speed_m = .85}
+    F.fromHorizontal{side = "left", mode = "bottom", enemy = {GrB}, number = 1, speed_m = .85}
+    F.fromHorizontal{side = "right", mode = "distribute", enemy = {GrB}, number = 6, screen_margin = -20, speed_m = .85}
+    F.fromHorizontal{side = "right", mode = "top", enemy = {GrB}, number = 1, speed_m = .85}
+    F.fromHorizontal{side = "right", mode = "bottom", enemy = {GrB}, number = 1, speed_m = .85}
+    LM.wait(.9)
+    F.fromHorizontal{side = "left", mode = "distribute", enemy = {GrB}, number = 5, screen_margin = 20, speed_m = .85}
+    F.fromHorizontal{side = "left", mode = "top", enemy = {GrB}, number = 1, speed_m = .85}
+    F.fromHorizontal{side = "left", mode = "bottom", enemy = {GrB}, number = 1, speed_m = .85}
+    F.fromHorizontal{side = "right", mode = "distribute", enemy = {GrB}, number = 5, screen_margin = 20, speed_m = .85}
+    F.fromHorizontal{side = "right", mode = "top", enemy = {GrB}, number = 1, speed_m = .85}
+    F.fromHorizontal{side = "right", mode = "bottom", enemy = {GrB}, number = 1, speed_m = .85}
+    --Get harder
+    LM.wait(.7)
+    F.fromHorizontal{side = "left", mode = "distribute", enemy = {GrB}, number = 6, speed_m = .85}
+    F.fromHorizontal{side = "left", mode = "top", enemy = {GrB}, number = 1, speed_m = .85}
+    F.fromHorizontal{side = "left", mode = "bottom", enemy = {GrB}, number = 1, speed_m = .85}
+    F.fromHorizontal{side = "right", mode = "distribute", enemy = {GrB}, number = 6, speed_m = .85}
+    F.fromHorizontal{side = "right", mode = "top", enemy = {GrB}, number = 1, speed_m = .85}
+    F.fromHorizontal{side = "right", mode = "bottom", enemy = {GrB}, number = 1, speed_m = .85}
+    LM.wait(.7)
+    F.fromHorizontal{side = "left", mode = "distribute", enemy = {GrB}, number = 5, screen_margin = -20, speed_m = .85}
+    F.fromHorizontal{side = "left", mode = "top", enemy = {GrB}, number = 1, speed_m = .85}
+    F.fromHorizontal{side = "left", mode = "bottom", enemy = {GrB}, number = 1, speed_m = .85}
+    F.fromHorizontal{side = "right", mode = "distribute", enemy = {GrB}, number = 5, screen_margin = -20, speed_m = .85}
+    F.fromHorizontal{side = "right", mode = "top", enemy = {GrB}, number = 1, speed_m = .85}
+    F.fromHorizontal{side = "right", mode = "bottom", enemy = {GrB}, number = 1, speed_m = .85}
+    LM.wait(.7)
+    F.fromHorizontal{side = "left", mode = "distribute", enemy = {GrB}, number = 6, screen_margin = -20, speed_m = .85}
+    F.fromHorizontal{side = "left", mode = "top", enemy = {GrB}, number = 1, speed_m = .85}
+    F.fromHorizontal{side = "left", mode = "bottom", enemy = {GrB}, number = 1, speed_m = .85}
+    F.fromHorizontal{side = "right", mode = "distribute", enemy = {GrB}, number = 6, screen_margin = -20, speed_m = .85}
+    F.fromHorizontal{side = "right", mode = "top", enemy = {GrB}, number = 1, speed_m = .85}
+    F.fromHorizontal{side = "right", mode = "bottom", enemy = {GrB}, number = 1, speed_m = .85}
+    LM.wait(.7)
+    F.fromHorizontal{side = "left", mode = "distribute", enemy = {GrB}, number = 5, screen_margin = 20, speed_m = .85}
+    F.fromHorizontal{side = "left", mode = "top", enemy = {GrB}, number = 1, speed_m = .85}
+    F.fromHorizontal{side = "left", mode = "bottom", enemy = {GrB}, number = 1, speed_m = .85}
+    F.fromHorizontal{side = "right", mode = "distribute", enemy = {GrB}, number = 5, screen_margin = 20, speed_m = .85}
+    F.fromHorizontal{side = "right", mode = "top", enemy = {GrB}, number = 1, speed_m = .85}
+    F.fromHorizontal{side = "right", mode = "bottom", enemy = {GrB}, number = 1, speed_m = .85}
     LM.wait("noenemies")
 
+    LM.wait("noenemies")
     print("end of level")
-
     LM.stop()
 
 end
@@ -223,7 +322,7 @@ end
 function level_functions.startPositions()
     local x, y
 
-    x, y = 404, 323 --'O' of "Lost"
+    x, y = 404, 322 --'O' of "Lost"
 
     return x,y
 end
