@@ -4,49 +4,45 @@ local Hsl   = require "classes.color.hsl"
 local Util = require "util"
 local LM = require "level_manager"
 
---SIMPLE BALL CLASS--
---[[Simple circle blue enemy that just moves around]]
+--GREY BALL CLASS--
+--[[circle grey enemy that just moves around]]
 
 local enemy = {}
 
-Simple_Ball = Class{
+Grey_Ball = Class{
     __includes = {ENEMY},
-    init = function(self, _x, _y, _dir, _speed_m, _radius, _score_mul)
+    init = function(self, _x, _y, _dir, _speed_m, _radius)
         local color_table
 
         color_table = {
-            HSL(Hsl.stdv(201,100,50)),
-            HSL(Hsl.stdv(239,100,26)),
-            HSL(Hsl.stdv(220,78,30)),
-            HSL(Hsl.stdv(213,100,54))
+            HSL(Hsl.stdv(0,0,40)),
+            HSL(Hsl.stdv(0,0,45)),
+            HSL(Hsl.stdv(0,0,50)),
+            HSL(Hsl.stdv(0,0,55))
         }
 
         ENEMY.init(self,  _x, _y, _dir, _speed_m, _radius, _score_mul, color_table, 270, 25)
 
-        self.tp = "simple_ball" --Type of this class
+        self.color_duration = 1 --Time to loop colors
+
+        self.tp = "grey_ball" --Type of this class
     end
 }
 
 --CLASS FUNCTIONS--
 
-function Simple_Ball:kill(gives_score)
+function Grey_Ball:kill(gives_score)
 
     if self.death then return end
 
     self.death = true
 
-    if gives_score == nil then gives_score = true end --If this enemy should give score
-
     FX.explosion(self.pos.x, self.pos.y, self.r, self.color)
-
-    if gives_score then
-        LM.giveScore(math.ceil(self.score_value*self.score_mul))
-    end
 
 end
 
 --Update this enemy
-function Simple_Ball:update(dt)
+function Grey_Ball:update(dt)
     local o
 
     o = self
@@ -65,7 +61,7 @@ end
 
 --UTILITY FUNCTIONS--
 
-function enemy.create(x, y, dir, speed_m, radius, score_mul)
+function enemy.create(x, y, dir, speed_m, radius)
     local e, direction
 
     if not dir then --Get random direction
@@ -74,7 +70,7 @@ function enemy.create(x, y, dir, speed_m, radius, score_mul)
         direction.y = love.math.random()*2 - 1 --Rand value between [-1,1]
     end
 
-    e = Simple_Ball(x, y, dir or direction, speed_m, radius, score_mul)
+    e = Grey_Ball(x, y, dir or direction, speed_m, radius)
     e:addElement(DRAW_TABLE.L4)
     e:startColorLoop()
 
@@ -88,7 +84,7 @@ end
 
 --Return the color for this enemy indicator
 function enemy.indColor()
-    return HSL(Hsl.stdv(227,88.8,49.2))
+    return HSL(Hsl.stdv(0,0,45))
 end
 
 --LOCAL FUNCTION--

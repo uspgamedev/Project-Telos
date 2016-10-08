@@ -30,6 +30,8 @@ function level_manager.stop()
             LEVEL_TIMER:cancel(h)
         end
     end
+    Util.destroySubtype("enemy_indicator_batch")
+
 
 end
 
@@ -145,9 +147,9 @@ function level_manager.boss_title(name)
     fy = font:getHeight(name)*  math.ceil(font:getWidth(name)/fx) --Height of text
     x = ORIGINAL_WINDOW_WIDTH/2 - fx/2
     y = ORIGINAL_WINDOW_HEIGHT/5 - fy/2
+
     --Create level title
     txt = Txt.create_gui(x, y, name, font, nil, "format", nil, "boss_title", "center", fx)
-    --in the future, make a "PAAAM" sound here
 
     --After two seconds, fades-out the title
     Level_Handle1 = LEVEL_TIMER:after(2,

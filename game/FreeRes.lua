@@ -86,5 +86,16 @@ function FreeRes.windowDistance()
 
 end
 
+function FreeRes.windowDimensions()
+
+    --Left/Right letterbox case
+    if yLetter == 0 then
+        return WINDOW_WIDTH - 2*letterWidth, WINDOW_HEIGHT
+    --Top/Bottom letterbox case
+    else
+        return WINDOW_WIDTH, WINDOW_HEIGHT - 2*letterHeight
+    end
+end
+
 --Return functions
 return FreeRes

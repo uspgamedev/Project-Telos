@@ -4,6 +4,18 @@ THE HISTORY OF PSYCHO: THE BALL
 
 #### (xx/xx/2016) Version 0.0.0.7    -  XXXXXXXXXXX
 
+- Bug fixes galore!
+- Psycho new moves!
+    - Psycho can unleash a powerful ultrablast to save him in letal situations
+    - Psycho can focus, moving slower, for those tight situations (his size shrinks to actual hitbox)
+- Score!
+    - Get score by blasting enemies into oblivion
+    - Win some lives and ultrablast while you're at it
+- Level 2!
+    - Just more awesome
+- Sound effects!
+    - Who doesn't love blimps, plims and tchpows?
+
 #### (27/08/2016) Version 0.0.0.6    -  The Big One
 - Juiyness! Explosions!
     - Cool death explosions for things to explode.

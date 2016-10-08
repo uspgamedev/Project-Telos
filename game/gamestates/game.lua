@@ -22,13 +22,11 @@ local state = {}
 local p --Psycho
 
 function state:enter()
-    local x, y
+    local x, y, level
 
-    if love.math.random() >= .5 then
-        x, y = 662, 424 --'O' of Psycho
-    else
-        x, y = 662, 424 --'O' of Psycho
-    end
+    level = level1
+
+    x, y = level.startPositions()
 
     p = Psycho.create(x,y)
 
@@ -49,7 +47,7 @@ function state:enter()
     --Separator 1
     Txt.create_game_gui(5, 185, "————", GUI_MEDPLUS, nil, nil, nil, "separator_1")
 
-    Level.start(level1)
+    Level.start(level.script)
 
 
 end

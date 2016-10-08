@@ -543,8 +543,11 @@ Stage_3 = function(b, dt)
         end
 
         p = Util.findId("psycho")
-
-        b.dir = Vector(p.pos.x - b.pos.x, p.pos.y - b.pos.y):normalized() --At first, point at psycho
+        if p then
+            b.dir = Vector(p.pos.x - b.pos.x, p.pos.y - b.pos.y):normalized() --At first, point at psycho
+        else
+            b.dir = Vector(1,0)
+        end
         --Rotates the direction
         b.level_handles["spin"] = LEVEL_TIMER:every(turn_ratio,
             function()
@@ -553,12 +556,12 @@ Stage_3 = function(b, dt)
                     clockwise =  -clockwise
                 --Directions tries to follow psycho using cross product on vectors
                 elseif b.enemy_2_shoot == DB then
-                    if b.dir:cross(Vector(p.pos.x - b.pos.x, p.pos.y - b.pos.y)) > 0 then
+                    p = Util.findId("psycho")
+                    if p and b.dir:cross(Vector(p.pos.x - b.pos.x, p.pos.y - b.pos.y)) > 0 then
                         clockwise = 1
                     else
                         clockwise = -1
                     end
-                    p = Util.findId("psycho")
                 end
                 b.dir = b.dir:rotated(clockwise*math.pi/turn_angle)
             end,

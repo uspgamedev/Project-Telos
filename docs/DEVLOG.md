@@ -5,6 +5,25 @@ GAME DESIGN DOCUMENT
 DEV LOG
 =======
 
+#### 07/09/2016:
+
+Started working on level 2-2. For that, created grey ball and glitch ball.
+Tweaked psycho stats based on player feedback.
+Change psycho staring position to be relevant to each level.
+
+#### 06/09/2016:
+
+Finished level 2-1 and fixed some bugs
+
+#### 05/09/2016:
+
+Improvements on level 2-1, made and included song for level 2 and fixed resolutions bugs.
+Rodrigo Passos came today and started helping with the game. He will focus on making bgms and sfx.
+
+#### 03/09/2016:
+
+Fixed bug where enemies would give out score when psycho is dead and improved death animation with some fade-in and outs.
+
 #### 02/09/2016:
 
 Fixed bug where psycho would die, but enemies would still try to give him score.

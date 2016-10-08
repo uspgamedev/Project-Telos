@@ -88,8 +88,10 @@ function formation.fromHorizontal(a)
             l_side = a.ind_side
 
             --Make direction equal to current position of psycho, if desired
-            if a.dir_follow then
+            if p and a.dir_follow then
                 l_dir = Vector(p.pos.x - x, p.pos.y - y)
+            elseif not p and a.dir_follow then
+                l_dir = Vector(ORIGINAL_WINDOW_WIDTH/2 - x, ORIGINAL_WINDOW_HEIGHT/2 - y):normalized()
             else
                 l_dir = Vector(dir.x, dir.y)
             end
@@ -104,7 +106,7 @@ function formation.fromHorizontal(a)
                         local p
 
                         p  = Util.findId("psycho")
-                        if l_follow then
+                        if p and l_follow then
                             l_dir = Vector(p.pos.x - l_pos.x, p.pos.y - l_pos.y)
                         end
                         current_enemy.create(l_pos.x, l_pos.y, l_dir, a.speed_m, a.e_radius, a.score_mul)
@@ -130,8 +132,10 @@ function formation.fromHorizontal(a)
             y = i* (ORIGINAL_WINDOW_HEIGHT/(a.number+1))
 
             --Make direction equal to current position of psycho, if desired
-            if a.dir_follow then
+            if p and a.dir_follow then
                 l_dir = Vector(p.pos.x - x, p.pos.y - y)
+            elseif not p and a.dir_follow then
+                l_dir = Vector(ORIGINAL_WINDOW_WIDTH/2 - x, ORIGINAL_WINDOW_HEIGHT/2 - y):normalized()
             else
                 l_dir = Vector(dir.x, dir.y)
             end
@@ -152,7 +156,7 @@ function formation.fromHorizontal(a)
                         local p
 
                         p  = Util.findId("psycho")
-                        if l_follow then
+                        if p and l_follow then
                             l_dir = Vector(p.pos.x - l_pos.x, p.pos.y - l_pos.y)
                         end
                         current_enemy.create(l_pos.x, l_pos.y, l_dir, a.speed_m, a.e_radius, a.score_mul)
@@ -176,8 +180,10 @@ function formation.fromHorizontal(a)
             current_enemy = a.enemy[(i-1)%enemy_table_size + 1]
 
             --Make direction equal to current position of psycho, if desired
-            if a.dir_follow then
+            if p and a.dir_follow then
                 l_dir = Vector(p.pos.x - x, p.pos.y - y)
+            elseif not p and a.dir_follow then
+                l_dir = Vector(ORIGINAL_WINDOW_WIDTH/2 - x, ORIGINAL_WINDOW_HEIGHT/2 - y):normalized()
             else
                 l_dir = Vector(dir.x, dir.y)
             end
@@ -198,7 +204,7 @@ function formation.fromHorizontal(a)
                         local p
 
                         p  = Util.findId("psycho")
-                        if l_follow then
+                        if p and l_follow then
                             l_dir = Vector(p.pos.x - l_pos.x, p.pos.y - l_pos.y)
                         end
                         current_enemy.create(l_pos.x, l_pos.y, l_dir, a.speed_m, a.e_radius, a.score_mul)
@@ -225,8 +231,10 @@ function formation.fromHorizontal(a)
             current_enemy = a.enemy[(i-1)%enemy_table_size + 1]
 
             --Make direction equal to current position of psycho, if desired
-            if a.dir_follow then
+            if p and a.dir_follow then
                 l_dir = Vector(p.pos.x - x, p.pos.y - y)
+            elseif not p and a.dir_follow then
+                l_dir = Vector(ORIGINAL_WINDOW_WIDTH/2 - x, ORIGINAL_WINDOW_HEIGHT/2 - y):normalized()
             else
                 l_dir = Vector(dir.x, dir.y)
             end
@@ -247,7 +255,7 @@ function formation.fromHorizontal(a)
                         local p
 
                         p  = Util.findId("psycho")
-                        if l_follow then
+                        if p and l_follow then
                             l_dir = Vector(p.pos.x - l_pos.x, p.pos.y - l_pos.y)
                         end
                         current_enemy.create(l_pos.x, l_pos.y, l_dir, a.speed_m, a.e_radius, a.score_mul)
@@ -341,8 +349,10 @@ function formation.fromVertical(a)
             current_enemy = a.enemy[(i-1)%enemy_table_size + 1]
 
             --Make direction equal to current position of psycho, if desired
-            if a.dir_follow then
+            if p and a.dir_follow then
                 l_dir = Vector(p.pos.x - x, p.pos.y - y)
+            elseif not p and a.dir_follow then
+                l_dir = Vector(ORIGINAL_WINDOW_WIDTH/2 - x, ORIGINAL_WINDOW_HEIGHT/2 - y):normalized()
             else
                 l_dir = Vector(dir.x, dir.y)
             end
@@ -363,7 +373,7 @@ function formation.fromVertical(a)
                         local p
 
                         p  = Util.findId("psycho")
-                        if l_follow then
+                        if p and l_follow then
                             l_dir = Vector(p.pos.x - l_pos.x, p.pos.y - l_pos.y)
                         end
                         current_enemy.create(l_pos.x, l_pos.y, l_dir, a.speed_m, a.e_radius, a.score_mul)
@@ -389,8 +399,10 @@ function formation.fromVertical(a)
             x = i* (ORIGINAL_WINDOW_WIDTH/(a.number+1))
 
             --Make direction equal to current position of psycho, if desired
-            if a.dir_follow then
+            if p and a.dir_follow then
                 l_dir = Vector(p.pos.x - x, p.pos.y - y)
+            elseif not p and a.dir_follow then
+                l_dir = Vector(ORIGINAL_WINDOW_WIDTH/2 - x, ORIGINAL_WINDOW_HEIGHT/2 - y):normalized()
             else
                 l_dir = Vector(dir.x, dir.y)
             end
@@ -411,7 +423,7 @@ function formation.fromVertical(a)
                         local p
 
                         p  = Util.findId("psycho")
-                        if l_follow then
+                        if p and l_follow then
                             l_dir = Vector(p.pos.x - l_pos.x, p.pos.y - l_pos.y)
                         end
                         current_enemy.create(l_pos.x, l_pos.y, l_dir, a.speed_m, a.e_radius, a.score_mul)
@@ -435,8 +447,10 @@ function formation.fromVertical(a)
             current_enemy = a.enemy[(i-1)%enemy_table_size + 1]
 
             --Make direction equal to current position of psycho, if desired
-            if a.dir_follow then
+            if p and a.dir_follow then
                 l_dir = Vector(p.pos.x - x, p.pos.y - y)
+            elseif not p and a.dir_follow then
+                l_dir = Vector(ORIGINAL_WINDOW_WIDTH/2 - x, ORIGINAL_WINDOW_HEIGHT/2 - y):normalized()
             else
                 l_dir = Vector(dir.x, dir.y)
             end
@@ -457,7 +471,7 @@ function formation.fromVertical(a)
                         local p
 
                         p  = Util.findId("psycho")
-                        if l_follow then
+                        if p and l_follow then
                             l_dir = Vector(p.pos.x - l_pos.x, p.pos.y - l_pos.y)
                         end
                         current_enemy.create(l_pos.x, l_pos.y, l_dir, a.speed_m, a.e_radius, a.score_mul)
@@ -483,8 +497,10 @@ function formation.fromVertical(a)
             current_enemy = a.enemy[(i-1)%enemy_table_size + 1]
 
             --Make direction equal to current position of psycho, if desired
-            if a.dir_follow then
+            if p and a.dir_follow then
                 l_dir = Vector(p.pos.x - x, p.pos.y - y)
+            elseif not p and a.dir_follow then
+                l_dir = Vector(ORIGINAL_WINDOW_WIDTH/2 - x, ORIGINAL_WINDOW_HEIGHT/2 - y):normalized()
             else
                 l_dir = Vector(dir.x, dir.y)
             end
@@ -505,7 +521,7 @@ function formation.fromVertical(a)
                         local p
 
                         p  = Util.findId("psycho")
-                        if l_follow then
+                        if p and l_follow then
                             l_dir = Vector(p.pos.x - l_pos.x, p.pos.y - l_pos.y)
                         end
                         current_enemy.create(l_pos.x, l_pos.y, l_dir, a.speed_m, a.e_radius, a.score_mul)
@@ -584,8 +600,10 @@ function formation.circle(a)
         l_side = a.ind_side
 
         --Make direction equal to current position of psycho, if desired
-        if a.dir_follow then
+        if p and a.dir_follow then
             l_dir = Vector(p.pos.x - x, p.pos.y - y)
+        elseif not p and a.dir_follow then
+            l_dir = Vector(ORIGINAL_WINDOW_WIDTH/2 - x, ORIGINAL_WINDOW_HEIGHT/2 - y):normalized()
         else
             l_dir = Vector(dir.x, dir.y)
         end
@@ -600,7 +618,7 @@ function formation.circle(a)
                     local p
 
                     p  = Util.findId("psycho")
-                    if l_follow then
+                    if p and l_follow then
                         l_dir = Vector(p.pos.x - l_pos.x, p.pos.y - l_pos.y)
                     end
                     current_enemy.create(l_pos.x, l_pos.y, l_dir, a.speed_m, a.e_radius, a.score_mul)
@@ -650,8 +668,10 @@ function formation.single(a)
     l_side = a.ind_side
 
     --Make direction equal to current position of psycho, if desired
-    if a.dir_follow then
+    if p and a.dir_follow then
         l_dir = Vector(p.pos.x - a.x, p.pos.y - a.y)
+    elseif not p and a.dir_follow then
+        l_dir = Vector(ORIGINAL_WINDOW_WIDTH/2 - x, ORIGINAL_WINDOW_HEIGHT/2 - y):normalized()
     else
         l_dir = Vector(a.dx, a.dy)
     end
@@ -721,8 +741,10 @@ function formation.line(a)
         l_side = a.ind_side
 
         --Make direction equal to current position of psycho, if desired
-        if a.dir_follow then
+        if p and a.dir_follow then
             l_dir = Vector(p.pos.x - a.x, p.pos.y - a.y)
+        elseif not p and a.dir_follow then
+            l_dir = Vector(ORIGINAL_WINDOW_WIDTH/2 - x, ORIGINAL_WINDOW_HEIGHT/2 - y):normalized()
         else
             l_dir = Vector(a.dx, a.dy)
         end
@@ -736,8 +758,8 @@ function formation.line(a)
                 function()
                     local p
 
-                    p  = Util.findId("psycho")
-                    if l_follow then
+                    p = Util.findId("psycho")
+                    if p and l_follow then
                         l_dir = Vector(p.pos.x - l_pos.x, p.pos.y - l_pos.y)
                     end
                     current_enemy.create(l_pos.x, l_pos.y, l_dir, a.speed_m, a.e_radius, a.score_mul)

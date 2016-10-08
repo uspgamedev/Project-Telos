@@ -35,7 +35,7 @@ Want to know about incoming projects, new releases and other cool stuff? Of cour
 + Checkout: http://uspgamedev.org/
 
 ==============================  
-Want to see where is the developing process of PsyChObALL, and get a sneak peek on future content?
+Want to see where is the developing process of PsyChO: The Ball, and get a sneak peek on future content?
 
 + Checkout: https://github.com/uspgamedev/Project-Telos
 
@@ -46,6 +46,9 @@ Want to see where is the developing process of PsyChObALL, and get a sneak peek 
 
 ***Wilson Kazuo Mizutani***  
 for the guidance and being there when we most needed
+
+***Rodigo Passos***  
+for the smiles and being the music sensei
 
 ***Akira Mizutani***  
 for the warm hugs and helping with the design

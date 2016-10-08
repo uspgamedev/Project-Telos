@@ -90,8 +90,8 @@ end
 --Delete a set of objects based on a subtype
 function util.destroySubtype(subtp)
     if SUBTP_TABLE[subtp] then
-        for o in pairs do
-            SUBTP_TABLE[subtp][o]:destroy()
+        for o in pairs(SUBTP_TABLE[subtp]) do
+            o:destroy()
         end
     end
 end
@@ -214,6 +214,10 @@ function util.gameElementException(mode)
 
     if util.findSbTp("game_gui") then
         util.addExceptionSubtype("game_gui")
+    end
+
+    if util.findId("boss_title") then
+        util.addExceptionId("boss_title")
     end
 
 end
@@ -388,8 +392,12 @@ function util.checkCollision()
             if SUBTP_TABLE["player_bullet"] then
                 for bullet in pairs(SUBTP_TABLE["player_bullet"]) do
                     if not bullet.death and e:collides(bullet) then
-                        e:kill()
-                        bullet:kill()
+                        if e.tp ~= "grey_ball" and e.tp ~= "glitch_ball" then --Don't kill enemy if its grey or glitch ball
+                            e:kill()
+                        end
+                        if e.tp ~= "glitch_ball" then --Don't kill bullet if its glitch ball
+                            bullet:kill()
+                        end
                     end
                 end
             end
@@ -402,7 +410,7 @@ function util.checkCollision()
             --Checking ultrablast collision
             if SUBTP_TABLE["ultrablast"] then
                 for ultra in pairs(SUBTP_TABLE["ultrablast"]) do
-                    if not ultra.death and not e.death and ultra:collides(e) then
+                    if not ultra.death and e.tp ~= "grey_ball" and e.tp ~= "glitch_ball" and not e.death and ultra:collides(e) then
                         e:kill(false) --Don't give score if enemy is killed by ultrablast
                         ultra:takeHit()
                     end
@@ -476,7 +484,12 @@ function util.toggleFullscreen()
         WINDOW_WIDTH = PREVIOUS_WINDOW_WIDTH
         WINDOW_HEIGHT = PREVIOUS_WINDOW_HEIGHT
         love.window.setMode(WINDOW_WIDTH, WINDOW_HEIGHT, {resizable = true, minwidth = 800, minheight = 600})
-        FreeRes.setScreen(1)
+
+        FreeRes.setScreen()
+
+        --Fix camera position to look at the center
+        CAM:lookAt(WINDOW_WIDTH/2, WINDOW_HEIGHT/2)
+
     else
         --Go to fullscreen mode, saving last configuration for eventual return
         PREVIOUS_WINDOW_WIDTH = WINDOW_WIDTH
@@ -484,7 +497,12 @@ function util.toggleFullscreen()
         love.window.setFullscreen(true)
         WINDOW_WIDTH = love.graphics.getWidth()
         WINDOW_HEIGHT = love.graphics.getHeight()
-        FreeRes.setScreen(1)
+
+        FreeRes.setScreen()
+
+        --Fix camera position to look at the center
+        CAM:lookAt(WINDOW_WIDTH/2, WINDOW_HEIGHT/2)
+
     end
 
 
@@ -514,6 +532,9 @@ function util.defaultKeyPressed(key)
         p = util.findId("psycho")
         p.ultrablast_counter = p.ultrablast_counter + 10
         util.findId("ultrablast_counter").var = p.ultrablast_counter
+    elseif key == '6' then
+        p = util.findId("psycho")
+        print("psycho position",p.pos.x, p.pos.y)
     end
 
 end

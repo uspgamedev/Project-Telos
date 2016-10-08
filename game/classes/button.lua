@@ -65,7 +65,16 @@ function Circle_Button:update(dt)
     local b, x, y, mousepos
 
     b = self
+
+    --Fix mouse position click to respective distance
     x, y = love.mouse.getPosition()
+    w, h = FreeRes.windowDistance()
+    scale = FreeRes.scale()
+    x = x - w
+    x = x*(1/scale)
+    y = y - h
+    y = y*(1/scale)
+
     mousepos = Vector(x, y)
 
     --If mouse is colliding with button total radius, increase ring radius

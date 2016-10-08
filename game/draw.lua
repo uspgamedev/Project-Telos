@@ -17,7 +17,7 @@ function draw.allTables()
         love.graphics.setBlendMode("alpha") --Set alpha mode properly
     end
 
-    --Makes transformations regarding screen curretn size
+    --Makes transformations regarding screen current size
     FreeRes.transform()
 
     DrawTable(DRAW_TABLE.BG) --Background

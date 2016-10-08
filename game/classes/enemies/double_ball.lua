@@ -15,29 +15,16 @@ Double_Ball = Class{
     init = function(self, _x, _y, _dir, _speed_m, _radius, _score_mul)
         local dx, dy, r, color, color_table
 
-        r = _radius or 20 --Radius of enemy
         color_table = {
             HSL(Hsl.stdv(0,100,44.9)), --Ku Crimson
             HSL(Hsl.stdv(14,100,46)), --Coquelicot
             HSL(Hsl.stdv(1,84,55)), --Deep Carmine Red
             HSL(Hsl.stdv(12,100,38.8)) --Candy Apple Red
         }
-        color = color_table[love.math.random(#color_table)] --Color of enemy
-        CIRC.init(self, _x, _y, r, color, color_table, "fill") --Set atributes
-        ELEMENT.setSubTp(self, "enemies")
 
-        self.color_duration = 6 --Duration between color transitions
 
-        --Normalize direction and set speed
-        self.speedv = 270 --Speed value
-        self.speed_m = _speed_m or 1 --Speed multiplier
-        self.speed = Vector(_dir.x, _dir.y) --Speed vector
-        self.speed = self.speed:normalized()*self.speedv
+        ENEMY.init(self,  _x, _y, _dir, _speed_m, _radius, _score_mul, color_table, 270, 35)
 
-        self.score_value = 35 --Score this enemy gives when killed without multiplier
-        self.score_mul = _score_mul or 1 --Score multiplier
-
-        self.enter = false --If this enemy has already entered the game screen
         self.tp = "double_ball" --Type of this class
     end
 }

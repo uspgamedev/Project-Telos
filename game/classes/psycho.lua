@@ -30,7 +30,7 @@ Psy = Class{
         } --Color table
         color = color_table[love.math.random(#color_table)] --Color of enemy
         r = 24 --Radius of psycho
-        self.collision_r = 19 --Radius of psycho that detects collision, and radius when psyho is focused
+        self.collision_r = 18 --Radius of psycho that detects collision, and radius when psyho is focused
         self.normal_radius = r --Radius when psycho is not focused
         CIRC.init(self, _x, _y, r, color, color_table, "fill") --Set atributes
 
@@ -58,7 +58,7 @@ Psy = Class{
         self.ultrablast_score = 0 --How much score psycho has accumulated to win a ultrablast
         self.ultrablast_score_target = 2000 --How many points psycho must win to get a ultrablast
 
-        self.lives = 15 --How many lives psycho by default has
+        self.lives = 10 --How many lives psycho by default has
 
         self.ultrablast_counter = 3 --How many ultrablasts psycho has
         self.default_ultrablast_number = 3 --How many ultrablasts psycho by default has in every life
@@ -94,6 +94,8 @@ function Psy:shoot(x,y)
 
     p = self
     if p.shootLocked then return end
+
+    SFX_PSYCHOBALL_SHOT:play()
 
     --Fix mouse position click to respective distance
     w, h = FreeRes.windowDistance()
@@ -227,7 +229,7 @@ if key == 'w' or key == 'a' or key == 's' or key == 'd' or
    key == 'up' or key == 'left' or key == 'down' or key == 'right' then
       psycho.updateSpeed(self)
 elseif key == 'lshift' then
-    p.focused = false
+    self.focused = false
 end
 
 end
