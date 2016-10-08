@@ -5,6 +5,12 @@ GAME DESIGN DOCUMENT
 DEV LOG
 =======
 
+#### 07/09/2016:
+
+Started working on level 2-2. For that, created grey ball and glitch ball.
+Tweaked psycho stats based on player feedback.
+Change psycho staring position to be relevant to each level.
+
 #### 06/09/2016:
 
 Finished level 2-1 and fixed some bugs
