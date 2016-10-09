@@ -137,6 +137,11 @@ function setup.config()
     --SFX
     SFX_PLAY_BUTTON = love.audio.newSource("assets/sfx/general_sfxs/snd_button_play.mp3")
     SFX_PSYCHOBALL_SHOT = love.audio.newSource("assets/sfx/general_sfxs/snd_psychoball_shot.mp3")
+    SFX_PSYCHOBALL_DIES = love.audio.newSource("assets/sfx/general_sfxs/snd_psychoball_dies.mp3")
+    SFX_HIT_SIMPLE = love.audio.newSource("assets/sfx/general_sfxs/snd_hit_simple_ball.mp3")
+    SFX_HIT_DOUBLE = love.audio.newSource("assets/sfx/general_sfxs/snd_hit_double_ball.mp3")
+    SFX_GENERIC_BUTTON = love.audio.newSource ("assets/sfx/general_sfxs/snd_generic_button.mp3")
+    SFX_BACK_BUTTON = love.audio.newSource ("assets/sfx/general_sfxs/snd_back_button.mp3")
 
     --Start UI color transition
     UI_COLOR = UI.create_color()

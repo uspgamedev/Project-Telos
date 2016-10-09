@@ -87,6 +87,8 @@ function state:mousepressed(x, y, button)
         Button.checkCollision(x,y)
     end
 
+    SFX_PLAY_BUTTON:play()
+
 end
 
 --Return state functions

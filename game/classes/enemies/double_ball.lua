@@ -44,6 +44,9 @@ function Double_Ball:kill(gives_score, mode)
 
     if gives_score then
         LM.giveScore(math.ceil(self.score_value*self.score_mul))
+
+        SFX_HIT_DOUBLE:play()
+
     end
 
     if mode ~= "dontspawn" then
