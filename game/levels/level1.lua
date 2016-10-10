@@ -272,6 +272,7 @@ function level_functions.script()
     LM.wait("noenemies")
     LM.giveLives(5)
 
+
     --1-4: The Big One
     LM.level_part("Part 4 - The Big One")
 

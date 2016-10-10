@@ -188,6 +188,8 @@ function Psy:kill()
 
     if p.lives == 0 then return end
 
+    SFX_PSYCHOBALL_DIES:play()
+
     p.lives = p.lives - 1 --Reduces psycho's lives
     Util.findId("lives_counter").var = p.lives
     p.ultrablast_counter = p.default_ultrablast_number --Reset ultrablast counter
@@ -202,6 +204,8 @@ function Psy:kill()
         FX.psychoExplosion(p)
     end
 end
+
+
 
 function Psy:keypressed(key)
     local p
