@@ -212,8 +212,8 @@ function level_functions.script()
     LM.level_part("Part 2 - The Outsider")
 
     LM.wait(1)
-    --F.single{enemy = GrB, x = -20, y = ORIGINAL_WINDOW_HEIGHT/2, dx = 1, dy = 0, ind_duration = 2, ind_side = 35, speed_m = .7}
-    --LM.wait("noenemies")
+    --[[F.single{enemy = GrB, x = -20, y = ORIGINAL_WINDOW_HEIGHT/2, dx = 1, dy = 0, ind_duration = 2, ind_side = 35, speed_m = .7}
+    LM.wait("noenemies")
 
     INDICATOR_DEFAULT = 1.5
     F.fromVertical{enemy = {GrB}, speed_m = 1.7, side = "top", mode = "left", number = 8, screen_margin = 10}
@@ -310,9 +310,145 @@ function level_functions.script()
     F.fromHorizontal{side = "right", mode = "distribute", enemy = {GrB}, number = 5, screen_margin = 20, speed_m = .85}
     F.fromHorizontal{side = "right", mode = "top", enemy = {GrB}, number = 1, speed_m = .85}
     F.fromHorizontal{side = "right", mode = "bottom", enemy = {GrB}, number = 1, speed_m = .85}
+    LM.wait("noenemies")]]
+
+    --F.single{enemy = GlB, x = ORIGINAL_WINDOW_WIDTH + 20, y = ORIGINAL_WINDOW_HEIGHT/2, dx = -1, dy = 0, ind_duration = 2, ind_side = 35, speed_m = .7}
+    --LM.wait("noenemies")
+
+    --Lines trapping psycho in the middle
+    F.line{enemy = {GlB}, x = ORIGINAL_WINDOW_WIDTH + 20, y = ORIGINAL_WINDOW_HEIGHT/2 + 57, number = 412, dx = -1}
+    F.line{enemy = {GlB}, x = - 20, y = ORIGINAL_WINDOW_HEIGHT/2 - 57, number = 412, dx = 1}
+    F.fromHorizontal{side = "left", mode = "top", number = 6, enemy = {GlB}}
+    F.fromHorizontal{side = "right", mode = "top", number = 7, enemy = {GlB}}
+    F.fromHorizontal{side = "left", mode = "bottom", number = 7, enemy = {GlB}}
+    F.fromHorizontal{side = "right", mode = "bottom", number = 6, enemy = {GlB}}
+    LM.wait(4)
+
+    INDICATOR_DEFAULT = 2.5
+    local wait
+    wait = 1.5
+    for i = 1, 67 do
+
+        LM.wait(wait)
+        F.fromHorizontal{side = "left", mode = "top", number = 6, enemy = {GlB}, ind_mode = false}
+        F.fromHorizontal{side = "right", mode = "bottom", number = 6, enemy = {GlB}, ind_mode = false}
+
+        if i == 1 then
+            F.fromVertical{side = "bottom", mode = "right", number =  18, enemy_y_margin = 20, enemy = {GrB}}
+            INDICATOR_DEFAULT = 2
+        elseif i == 4 then
+            F.fromVertical{side = "bottom", mode = "left", number =  18, enemy_y_margin = 20, enemy = {GrB}}
+            INDICATOR_DEFAULT = 1.7
+        elseif i == 7 then
+            F.fromVertical{side = "bottom", mode = "right", number =  18, enemy_y_margin = 20, enemy = {GrB}}
+        elseif i == 9 then
+            F.fromVertical{side = "top", mode = "left", number =  9, enemy = {GrB}, speed_m = .9}
+            F.fromVertical{side = "top", mode = "right", number =  10, enemy = {GrB}, speed_m = .9}
+            INDICATOR_DEFAULT = .5
+        elseif i == 11 then
+            F.fromVertical{side = "top", mode = "left", number =  7, enemy = {GrB}}
+            F.fromVertical{side = "top", mode = "right", number =  12, enemy = {GrB}}
+        elseif i == 12 then
+            F.fromVertical{side = "top", mode = "left", number =  6, enemy = {GrB}}
+            F.fromVertical{side = "top", mode = "right", number =  13, enemy = {GrB}}
+        elseif i == 13 then
+            F.fromVertical{side = "top", mode = "left", number =  6, enemy = {GrB}}
+            F.fromVertical{side = "top", mode = "right", number =  13, enemy = {GrB}}
+            wait = 1
+        elseif i == 14 then
+            F.fromVertical{side = "top", mode = "left", number =  3, enemy = {GrB}}
+            F.fromVertical{side = "top", mode = "right", number =  16, enemy = {GrB}}
+        elseif i == 15 then
+            F.fromVertical{side = "top", mode = "left", number =  7, enemy = {GrB}}
+            F.fromVertical{side = "top", mode = "right", number =  12, enemy = {GrB}}
+        elseif i == 16 then
+            F.fromVertical{side = "top", mode = "left", number =  11, enemy = {GrB}}
+            F.fromVertical{side = "top", mode = "right", number =  8, enemy = {GrB}}
+        elseif i == 17 then
+            F.fromVertical{side = "top", mode = "left", number =  14, enemy = {GrB}}
+            F.fromVertical{side = "top", mode = "right", number =  5, enemy = {GrB}}
+        elseif i == 18 then
+            F.fromVertical{side = "top", mode = "center", number =  20, enemy = {SB}}
+        elseif i == 19 then
+            F.fromVertical{side = "top", mode = "center", number =  20, enemy = {SB}}
+        elseif i == 20 then
+            F.fromVertical{side = "top", mode = "center", number =  20, enemy = {SB}}
+        elseif i == 21 then
+            F.fromVertical{side = "top", mode = "left", number =  10, enemy = {GrB}}
+            F.fromVertical{side = "top", mode = "right", number =  9, enemy = {GrB}}
+        elseif i == 22 then
+            F.fromVertical{side = "top", mode = "center", number =  20, enemy = {SB}}
+        elseif i == 23 then
+            F.fromVertical{side = "top", mode = "left", number =  14, enemy = {GrB}}
+            F.fromVertical{side = "top", mode = "right", number =  5, enemy = {GrB}}
+        elseif i == 24 then
+            F.fromVertical{side = "top", mode = "center", number =  20, enemy = {SB}}
+        elseif i == 25 then
+            F.fromVertical{side = "top", mode = "left", number =  11, enemy = {GrB}}
+            F.fromVertical{side = "top", mode = "right", number =  8, enemy = {GrB}}
+        elseif i == 26 then
+            F.fromVertical{side = "top", mode = "center", number =  20, enemy = {SB}}
+        elseif i == 27 then
+            F.fromVertical{side = "top", mode = "left", number =  7, enemy = {GrB}}
+            F.fromVertical{side = "top", mode = "right", number =  12, enemy = {GrB}}
+        elseif i == 28 then
+            F.fromVertical{side = "top", mode = "center", number =  20, enemy = {SB}}
+        elseif i == 29 then
+            F.fromVertical{side = "top", mode = "left", number =  11, enemy = {GrB}}
+            F.fromVertical{side = "top", mode = "right", number =  8, enemy = {GrB}}
+        elseif i == 30 then
+            F.fromVertical{side = "top", mode = "center", number =  20, enemy = {SB}}
+        elseif i == 31 then
+            F.fromVertical{side = "top", mode = "left", number =  6, enemy = {GrB}}
+            F.fromVertical{side = "top", mode = "right", number =  13, enemy = {GrB}}
+        elseif i == 32 then
+            F.fromVertical{side = "top", mode = "center", number =  20, enemy = {SB}}
+        elseif i == 33 then
+            F.fromVertical{side = "top", mode = "left", number =  10, enemy = {GrB}}
+            F.fromVertical{side = "top", mode = "right", number =  9, enemy = {GrB}}
+        elseif i == 34 then
+            F.fromVertical{side = "top", mode = "center", number =  20, enemy = {SB}}
+        elseif i == 35 then
+            F.fromVertical{side = "top", mode = "left", number =  6, enemy = {GrB}}
+            F.fromVertical{side = "top", mode = "right", number =  13, enemy = {GrB}}
+        elseif i == 36 then
+            F.fromVertical{side = "top", mode = "center", number =  20, enemy = {SB}}
+        elseif i == 37 then
+            F.fromVertical{side = "top", mode = "right", number =  14, enemy = {GrB}}
+            F.fromVertical{side = "top", mode = "left", number =  6, enemy = {SB}}
+            wait = 1.5
+        elseif i == 38 then
+            F.fromVertical{side = "top", mode = "center", number =  20, enemy = {SB,DB}}
+        elseif i == 39 then
+            F.fromVertical{side = "top", mode = "left", number =  5, enemy = {GrB}}
+            F.fromVertical{side = "top", mode = "right", number =  14, enemy = {GrB}}
+        elseif i == 40 then
+            F.fromVertical{side = "top", mode = "center", number =  20, enemy = {DB}}
+        elseif i == 41 then
+            F.fromVertical{side = "top", mode = "left", number =  9, enemy = {GrB}}
+            F.fromVertical{side = "top", mode = "right", number =  10, enemy = {GrB}}
+        elseif i == 42 then
+            F.fromVertical{side = "top", mode = "center", number =  20, enemy = {SB,GrB,SB}}
+        elseif i == 43 then
+            F.fromVertical{side = "top", mode = "center", number =  20, enemy = {SB,GrB,GrB}}
+        elseif i == 44 then
+            F.fromVertical{side = "top", mode = "center", number =  20, enemy = {DB,GrB,DB,GrB,GrB,SB,GrB,GrB}}
+            INDICATOR_DEFAULT = 1.5
+        elseif i == 46 then
+            F.circle{radius = 640, dir_follow = true, number = 20, enemy = {SB}, ind_duration = 4, ind_side = 35}
+        elseif i == 50 then
+            F.circle{radius = 640, dir_follow = true, number = 20, enemy = {DB,SB}, ind_duration = 4, ind_side = 35}
+        elseif i == 54 then
+            F.circle{radius = 640, number = 20, enemy = {DB,SB}, ind_duration = 2, ind_side = 35}
+        elseif i == 58 then
+            F.line{x = -20, y = ORIGINAL_WINDOW_HEIGHT/2, dx = 1, number = 30, enemy = {SB}, ind_duration = 5, ind_side = 35, speed_m = .85}
+            F.line{x = ORIGINAL_WINDOW_WIDTH + 20, y = ORIGINAL_WINDOW_HEIGHT/2, dx = -1, number = 30, enemy = {SB}, ind_duration = 5, ind_side = 35, speed_m = .85}
+        end
+    end
     LM.wait("noenemies")
 
-    LM.wait("noenemies")
+    LM.giveLives(5)
+    LM.wait(2)
     print("end of level")
     LM.stop()
 

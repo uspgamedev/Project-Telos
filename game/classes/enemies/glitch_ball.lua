@@ -33,7 +33,7 @@ Glitch_Ball = Class{
 
 --CLASS FUNCTIONS--
 
-function Glitch_Ball:kill(gives_score)
+function Glitch_Ball:kill()
 
     if self.death then return end
 
@@ -56,7 +56,7 @@ function Glitch_Ball:update(dt)
     if not o.enter then
         if isInside(o) then o.enter = true end
     else
-        if not isInside(o) then o:kill(false) end --Don't give score if enemy is killed by leaving screen
+        if not isInside(o) then o:kill() end --Don't give score if enemy is killed by leaving screen
     end
 
 end

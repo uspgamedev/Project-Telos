@@ -31,12 +31,12 @@ Grey_Ball = Class{
 
 --CLASS FUNCTIONS--
 
-function Grey_Ball:kill(gives_score)
+function Grey_Ball:kill()
 
     if self.death then return end
 
     self.death = true
-
+    
     FX.explosion(self.pos.x, self.pos.y, self.r, self.color)
 
 end
@@ -54,7 +54,7 @@ function Grey_Ball:update(dt)
     if not o.enter then
         if isInside(o) then o.enter = true end
     else
-        if not isInside(o) then o:kill(false) end --Don't give score if enemy is killed by leaving screen
+        if not isInside(o) then o:kill() end --Don't give score if enemy is killed by leaving screen
     end
 
 end

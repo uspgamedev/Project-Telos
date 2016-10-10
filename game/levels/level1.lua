@@ -25,7 +25,7 @@ function level_functions.script()
     LM.level_title("I - THE FALL OF PSYCHO")
     Audio.playBGM(BGM_LEVEL_1)
 
-    --[[1-1: The Start of the End
+    --1-1: The Start of the End
     LM.level_part("Part 1 - The Start of the End")
 
 
@@ -270,7 +270,7 @@ function level_functions.script()
         end
     end
     LM.wait("noenemies")
-    LM.giveLives(5)]]
+    LM.giveLives(5)
 
     --1-4: The Big One
     LM.level_part("Part 4 - The Big One")

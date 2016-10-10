@@ -262,6 +262,14 @@ function CIRC:draw()
 
     p = self
 
+    --Don't draw if its off-screen
+    if p.pos.x < - p.r or
+       p.pos.x > ORIGINAL_WINDOW_WIDTH + p.r or
+       p.pos.y < - p.r or
+       p.pos.y > ORIGINAL_WINDOW_HEIGHT + p.r then
+           return
+    end
+
     --Draws the circle
     Color.set(p.color)
     if p.mode == "line" then

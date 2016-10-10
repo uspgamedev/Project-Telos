@@ -380,43 +380,40 @@ end
 
 --Makes all collisions
 function util.checkCollision()
-    local p
+    local p, cont
 
     p = util.findId("psycho")
 
     if SUBTP_TABLE["enemies"] then
-
         for e in pairs(SUBTP_TABLE["enemies"]) do
-
-            --Checking player bullet collision
-            if SUBTP_TABLE["player_bullet"] then
-                for bullet in pairs(SUBTP_TABLE["player_bullet"]) do
-                    if not bullet.death and e:collides(bullet) then
-                        if e.tp ~= "grey_ball" and e.tp ~= "glitch_ball" then --Don't kill enemy if its grey or glitch ball
-                            e:kill()
-                        end
-                        if e.tp ~= "glitch_ball" then --Don't kill bullet if its glitch ball
+            if e.enter then
+                --Checking player bullet collision
+                if SUBTP_TABLE["player_bullet"] then
+                    for bullet in pairs(SUBTP_TABLE["player_bullet"]) do
+                        if not bullet.death and e.tp ~= "glitch_ball" and e:collides(bullet) then
+                            if e.tp ~= "grey_ball" then --Don't kill enemy if its grey or glitch ball
+                                e:kill()
+                            end
                             bullet:kill()
                         end
                     end
                 end
-            end
 
-            --Colliding with psycho
-            if p and not p.death and not p.invincible and e:collides(p) then
-                p:kill()
-            end
+                --Colliding with psycho
+                if p and not p.death and not p.invincible and e:collides(p) then
+                    p:kill()
+                end
 
-            --Checking ultrablast collision
-            if SUBTP_TABLE["ultrablast"] then
-                for ultra in pairs(SUBTP_TABLE["ultrablast"]) do
-                    if not ultra.death and e.tp ~= "grey_ball" and e.tp ~= "glitch_ball" and not e.death and ultra:collides(e) then
-                        e:kill(false) --Don't give score if enemy is killed by ultrablast
-                        ultra:takeHit()
+                --Checking ultrablast collision
+                if SUBTP_TABLE["ultrablast"] then
+                    for ultra in pairs(SUBTP_TABLE["ultrablast"]) do
+                        if not ultra.death and e.tp ~= "grey_ball" and e.tp ~= "glitch_ball" and not e.death and ultra:collides(e) then
+                            e:kill(false) --Don't give score if enemy is killed by ultrablast
+                            ultra:takeHit()
+                        end
                     end
                 end
             end
-
         end
     end
 
@@ -471,7 +468,12 @@ end
 
 --Count all elements being drawn
 function util.countDrawables()
+    local cont
 
+    cont = 0
+    cont = cont + util.tableLen(DRAW_TABLE.L4)
+
+    print("number of elements in draw table", cont)
 end
 
 --Toggles fullscreen
@@ -535,6 +537,8 @@ function util.defaultKeyPressed(key)
     elseif key == '6' then
         p = util.findId("psycho")
         print("psycho position",p.pos.x, p.pos.y)
+    elseif key == '5' then
+        util.countDrawables()
     end
 
 end
