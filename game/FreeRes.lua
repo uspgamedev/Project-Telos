@@ -1,3 +1,5 @@
+local Color = require "classes.color.color"
+
 --[[
     FreeRes - An easy way to resize your game.
      FreeRes is a library that makes adding multiple aspect ratio support to your game
@@ -56,10 +58,15 @@ end
 param color = {r, g, b, a} (defaults to black)
 --]]
 function FreeRes.letterbox(color)
-  c = color or {255, 0, 0, 255}
+  local c, temp
+
+  c = Color.black()
+  temp = color or UI_COLOR.color
+  Color.copy(c, temp)
+  c.l = 10
 
   love.graphics.pop()
-  love.graphics.setColor(c)
+  Color.set(c)
   -- Upper / Left letterbox
   love.graphics.rectangle("fill", 0, 0, letterWidth, letterHeight)
 

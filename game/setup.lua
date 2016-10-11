@@ -130,8 +130,8 @@ function setup.config()
 		vec4 effect(vec4 color, sampler2D tex, vec2 tex_coords, vec2 pos) {
 			color = texture2D(tex, tex_coords) * kernel[0];
 			for(int i = 1; i < 5; i++) {
-				color += texture2D(tex, vec2(tex_coords.x + i * win_width, tex_coords.y)) * kernel[i];
-				color += texture2D(tex, vec2(tex_coords.x - i * win_width, tex_coords.y)) * kernel[i];
+				color += texture2D(tex, vec2(tex_coords.x + 2*i * win_width, tex_coords.y)) * kernel[i];
+				color += texture2D(tex, vec2(tex_coords.x - 2*i * win_width, tex_coords.y)) * kernel[i];
 			}
 			return color;
 		}
@@ -144,8 +144,8 @@ function setup.config()
 		vec4 effect(vec4 color, sampler2D tex, vec2 tex_coords, vec2 pos) {
 			color = texture2D(tex, tex_coords) * kernel[0];
 			for(int i = 1; i < 5; i++) {
-				color += texture2D(tex, vec2(tex_coords.x, tex_coords.y + i * win_height)) * kernel[i];
-				color += texture2D(tex, vec2(tex_coords.x, tex_coords.y - i * win_height)) * kernel[i];
+				color += texture2D(tex, vec2(tex_coords.x, tex_coords.y + 2*i * win_height)) * kernel[i];
+				color += texture2D(tex, vec2(tex_coords.x, tex_coords.y - 2*i * win_height)) * kernel[i];
 			}
 			return color;
 		}
