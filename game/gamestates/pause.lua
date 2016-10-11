@@ -17,6 +17,8 @@ local state = {}
 function state:enter()
     local t, b
 
+    USE_BLUR_CANVAS = true
+
     --GUI--
 
     --Main pause text
@@ -44,6 +46,8 @@ function state:enter()
 end
 
 function state:leave()
+
+    USE_BLUR_CANVAS = false
 
     Psycho.updateSpeed(Psycho.get())
 

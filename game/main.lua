@@ -83,6 +83,10 @@ function love.resize(w, h)
 
     FreeRes.setScreen(1)
 
+    --Fix shaders
+    Horizontal_Blur_Shader:send("win_width", 1/WINDOW_WIDTH)
+    Vertical_Blur_Shader:send("win_height", 1/WINDOW_HEIGHT)
+
     --Fix camera position to look at the center
     CAM:lookAt(WINDOW_WIDTH/2, WINDOW_HEIGHT/2)
 

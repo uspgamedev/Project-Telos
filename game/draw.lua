@@ -17,12 +17,19 @@ function draw.allTables()
         love.graphics.setBlendMode("alpha") --Set alpha mode properly
     end
 
+    if USE_BLUR_CANVAS then
+        BLUR_CANVAS_1 = love.graphics.newCanvas(WINDOW_WIDTH, WINDOW_HEIGHT)
+        love.graphics.setCanvas(BLUR_CANVAS_1)
+        love.graphics.setBlendMode("alpha") --Set alpha mode properly
+    end
+
     --Makes transformations regarding screen current size
     FreeRes.transform()
 
     DrawTable(DRAW_TABLE.BG) --Background
 
     CAM:attach() --Start tracking camera
+
 
     DrawTable(DRAW_TABLE.L1) --Circle effect
 
@@ -44,8 +51,34 @@ function draw.allTables()
 
     CAM:detach() --Stop tracking camera
 
+    if USE_BLUR_CANVAS then
+        love.graphics.pop() --Stop tracking effects on screen transformations for the canvas
+
+        --Draws the first canvas into the second, using horizontal blur shader
+        BLUR_CANVAS_2 = love.graphics.newCanvas(WINDOW_WIDTH, WINDOW_HEIGHT)
+        love.graphics.setCanvas(BLUR_CANVAS_2)
+        love.graphics.setShader(Horizontal_Blur_Shader)
+        love.graphics.setBlendMode("alpha", "premultiplied")
+        love.graphics.draw(BLUR_CANVAS_1)
+
+        --Draws the second canvas into the scren or main canvas, using vertical blur shader
+        love.graphics.setCanvas()
+        if USE_CANVAS then
+            love.graphics.setCanvas(SCREEN_CANVAS)
+        end
+        love.graphics.setShader(Vertical_Blur_Shader)
+        love.graphics.draw(BLUR_CANVAS_2)
+        love.graphics.setBlendMode("alpha") --Set alpha mode properly
+
+        FreeRes.transform() --Return transformations onscreen
+    end
+
+
     DrawTable(DRAW_TABLE.GUI) --Top GUI
 
+    --Creates letterbox at the sides of the screenm if needed
+    FreeRes.letterbox(color)
+    
     --Stop using canvas
     if USE_CANVAS then
         love.graphics.setCanvas() -- Stop tracking canvas
@@ -58,8 +91,6 @@ function draw.allTables()
         love.graphics.setBlendMode("alpha")
     end
 
-    --Creates letterbox at the sides of the screenm if needed
-    FreeRes.letterbox(color)
 
 end
 

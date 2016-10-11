@@ -35,6 +35,10 @@ function setup.config()
     SCREEN_CANVAS = nil --Screen canvas that can be draw or apllied effects
     USE_CANVAS = false --If game should draw the SCREEN_CANVAS
 
+    BLUR_CANVAS_1 = nil --First canvas for blur effect
+    BLUR_CANVAS_2 = nil --Second canvas for blur effect
+    USE_BLUR_CANVAS = false --If game should draw the BLUR_CANVAS
+
     FOCUS = true --If game screen is focused
     SWITCH = nil --What state to go next
 
@@ -120,6 +124,33 @@ function setup.config()
         }
     ]]
 
+    Horizontal_Blur_Shader = ([[
+        extern number win_width; //1 / (screen width)
+		const float kernel[5] = float[](0.2270270270, 0.1945945946, 0.1216216216, 0.0540540541, 0.0162162162);
+		vec4 effect(vec4 color, sampler2D tex, vec2 tex_coords, vec2 pos) {
+			color = texture2D(tex, tex_coords) * kernel[0];
+			for(int i = 1; i < 5; i++) {
+				color += texture2D(tex, vec2(tex_coords.x + i * win_width, tex_coords.y)) * kernel[i];
+				color += texture2D(tex, vec2(tex_coords.x - i * win_width, tex_coords.y)) * kernel[i];
+			}
+			return color;
+		}
+	]]):format(1 / love.graphics.getWidth(), 1 / love.graphics.getWidth())
+	Horizontal_Blur_Shader = love.graphics.newShader(Horizontal_Blur_Shader)
+
+	Vertical_Blur_Shader = love.graphics.newShader[[
+        extern number win_height; //1 / (screen height)
+		const float kernel[5] = float[](0.2270270270, 0.1945945946, 0.1216216216, 0.0540540541, 0.0162162162);
+		vec4 effect(vec4 color, sampler2D tex, vec2 tex_coords, vec2 pos) {
+			color = texture2D(tex, tex_coords) * kernel[0];
+			for(int i = 1; i < 5; i++) {
+				color += texture2D(tex, vec2(tex_coords.x, tex_coords.y + i * win_height)) * kernel[i];
+				color += texture2D(tex, vec2(tex_coords.x, tex_coords.y - i * win_height)) * kernel[i];
+			}
+			return color;
+		}
+	]]
+
     --AUDIO--
     SOUNDTRACK = {}
     SOUNDTRACK["current"] = nil --Current soudntrack playing
@@ -146,12 +177,16 @@ function setup.config()
     --Start UI color transition
     UI_COLOR = UI.create_color()
 
-
     --Background start
     BG.create()
 
     --FPS Counter
     Txt.create_gui(ORIGINAL_WINDOW_WIDTH - 100, 10, "FPS: ", GUI_MED, love.timer.getFPS(), "right", GUI_MED, "fps_counter")
+
+
+    --SHADERS SETUP
+    Horizontal_Blur_Shader:send("win_width", 1/WINDOW_WIDTH)
+    Vertical_Blur_Shader:send("win_height", 1/WINDOW_HEIGHT)
 end
 
 --Return functions
