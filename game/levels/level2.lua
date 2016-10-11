@@ -24,9 +24,10 @@ function level_functions.script()
     LM.level_title("LOST IN DARKNESS")
     Audio.playBGM(BGM_LEVEL_2)
 
-    --[[2-1: A Cross the Planes
+    --2-1: A Cross the Planes
     LM.level_part("Part 1 - A Cross the Planes")
     LM.wait(3)
+
     F.fromHorizontal{enemy = {DB}, side = "left", mode = "top" , number = 7, ind_duration = 2.5, ind_side = 40, speed_m = 1.5}
     LM.wait(2.5)
     for i = 1,10 do
@@ -204,15 +205,14 @@ function level_functions.script()
         F.fromVertical{enemy = {DB}, speed_m = 1.7, side = "bottom", mode = "right", number = 9, ind_mode = false, screen_margin = 10}
         F.fromHorizontal{enemy = {DB}, speed_m = 1.7, side = "right", mode = "bottom" , number = 7, ind_mode = false}
     end
-    LM.wait("noenemies")]]
+    LM.wait("noenemies")
     LM.giveLives(4)
-    LM.wait(2)
 
     --2-2: The Outsider
     LM.level_part("Part 2 - The Outsider")
 
-    LM.wait(1)
-    --[[F.single{enemy = GrB, x = -20, y = ORIGINAL_WINDOW_HEIGHT/2, dx = 1, dy = 0, ind_duration = 2, ind_side = 35, speed_m = .7}
+    LM.wait(3)
+    F.single{enemy = GrB, x = -20, y = ORIGINAL_WINDOW_HEIGHT/2, dx = 1, dy = 0, ind_duration = 2, ind_side = 35, speed_m = .7}
     LM.wait("noenemies")
 
     INDICATOR_DEFAULT = 1.5
@@ -310,14 +310,14 @@ function level_functions.script()
     F.fromHorizontal{side = "right", mode = "distribute", enemy = {GrB}, number = 5, screen_margin = 20, speed_m = .85}
     F.fromHorizontal{side = "right", mode = "top", enemy = {GrB}, number = 1, speed_m = .85}
     F.fromHorizontal{side = "right", mode = "bottom", enemy = {GrB}, number = 1, speed_m = .85}
-    LM.wait("noenemies")]]
+    LM.wait("noenemies")
 
-    --F.single{enemy = GlB, x = ORIGINAL_WINDOW_WIDTH + 20, y = ORIGINAL_WINDOW_HEIGHT/2, dx = -1, dy = 0, ind_duration = 2, ind_side = 35, speed_m = .7}
-    --LM.wait("noenemies")
+    F.single{enemy = GlB, x = ORIGINAL_WINDOW_WIDTH + 20, y = ORIGINAL_WINDOW_HEIGHT/2, dx = -1, dy = 0, ind_duration = 2, ind_side = 35, speed_m = .7}
+    LM.wait("noenemies")
 
     --Lines trapping psycho in the middle
-    F.line{enemy = {GlB}, x = ORIGINAL_WINDOW_WIDTH + 20, y = ORIGINAL_WINDOW_HEIGHT/2 + 57, number = 412, dx = -1}
-    F.line{enemy = {GlB}, x = - 20, y = ORIGINAL_WINDOW_HEIGHT/2 - 57, number = 412, dx = 1}
+    F.line{enemy = {GlB}, x = ORIGINAL_WINDOW_WIDTH + 20, y = ORIGINAL_WINDOW_HEIGHT/2 + 57, number = 103, dx = -1}
+    F.line{enemy = {GlB}, x = - 20, y = ORIGINAL_WINDOW_HEIGHT/2 - 57, number = 103, dx = 1}
     F.fromHorizontal{side = "left", mode = "top", number = 6, enemy = {GlB}}
     F.fromHorizontal{side = "right", mode = "top", number = 7, enemy = {GlB}}
     F.fromHorizontal{side = "left", mode = "bottom", number = 7, enemy = {GlB}}
@@ -354,8 +354,12 @@ function level_functions.script()
         elseif i == 13 then
             F.fromVertical{side = "top", mode = "left", number =  6, enemy = {GrB}}
             F.fromVertical{side = "top", mode = "right", number =  13, enemy = {GrB}}
-            wait = 1
+            LM.wait(.5)
+            F.line{enemy = {GlB}, x = ORIGINAL_WINDOW_WIDTH + 20, y = ORIGINAL_WINDOW_HEIGHT/2 + 57, number = 103, dx = -1}
+            F.line{enemy = {GlB}, x = - 20, y = ORIGINAL_WINDOW_HEIGHT/2 - 57, number = 103, dx = 1}
+            wait = .5
         elseif i == 14 then
+            wait = 1
             F.fromVertical{side = "top", mode = "left", number =  3, enemy = {GrB}}
             F.fromVertical{side = "top", mode = "right", number =  16, enemy = {GrB}}
         elseif i == 15 then
@@ -413,7 +417,13 @@ function level_functions.script()
             F.fromVertical{side = "top", mode = "right", number =  13, enemy = {GrB}}
         elseif i == 36 then
             F.fromVertical{side = "top", mode = "center", number =  20, enemy = {SB}}
+            LM.wait(.25)
+            F.line{enemy = {GlB}, x = ORIGINAL_WINDOW_WIDTH + 20, y = ORIGINAL_WINDOW_HEIGHT/2 + 57, number = 103, dx = -1}
+            F.line{enemy = {GlB}, x = - 20, y = ORIGINAL_WINDOW_HEIGHT/2 - 57, number = 103, dx = 1}
+            wait = wait -.25
+            --Continue stream
         elseif i == 37 then
+            wait = wait + .25
             F.fromVertical{side = "top", mode = "right", number =  14, enemy = {GrB}}
             F.fromVertical{side = "top", mode = "left", number =  6, enemy = {SB}}
             wait = 1.5
@@ -438,7 +448,13 @@ function level_functions.script()
             F.circle{radius = 640, dir_follow = true, number = 20, enemy = {SB}, ind_duration = 4, ind_side = 35}
         elseif i == 50 then
             F.circle{radius = 640, dir_follow = true, number = 20, enemy = {DB,SB}, ind_duration = 4, ind_side = 35}
+        elseif i == 51 then
+            LM.wait(.1)
+            F.line{enemy = {GlB}, x = ORIGINAL_WINDOW_WIDTH + 20, y = ORIGINAL_WINDOW_HEIGHT/2 + 57, number = 103, dx = -1}
+            F.line{enemy = {GlB}, x = - 20, y = ORIGINAL_WINDOW_HEIGHT/2 - 57, number = 103, dx = 1}
+            wait = wait - .1
         elseif i == 54 then
+            wait = wait + .1
             F.circle{radius = 640, number = 20, enemy = {DB,SB}, ind_duration = 2, ind_side = 35}
         elseif i == 58 then
             F.line{x = -20, y = ORIGINAL_WINDOW_HEIGHT/2, dx = 1, number = 30, enemy = {SB}, ind_duration = 5, ind_side = 35, speed_m = .85}
@@ -446,9 +462,12 @@ function level_functions.script()
         end
     end
     LM.wait("noenemies")
-
     LM.giveLives(5)
-    LM.wait(2)
+
+    --2-3: TUTS TUTS QUERO VE
+    LM.level_part("Part 3 - PRAZER, CHINELO")
+    LM.wait(3)
+
     print("end of level")
     LM.stop()
 
