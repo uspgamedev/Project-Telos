@@ -5,49 +5,53 @@ GAME DESIGN DOCUMENT
 DEV LOG
 =======
 
-#### 07/09/2016:
+#### 10/10/2016:
+
+Finished 2-2 and this iteration
+
+#### 07/10/2016:
 
 Started working on level 2-2. For that, created grey ball and glitch ball.
 Tweaked psycho stats based on player feedback.
 Change psycho staring position to be relevant to each level.
 
-#### 06/09/2016:
+#### 06/10/2016:
 
 Finished level 2-1 and fixed some bugs
 
-#### 05/09/2016:
+#### 05/10/2016:
 
 Improvements on level 2-1, made and included song for level 2 and fixed resolutions bugs.
 Rodrigo Passos came today and started helping with the game. He will focus on making bgms and sfx.
 
-#### 03/09/2016:
+#### 03/10/2016:
 
 Fixed bug where enemies would give out score when psycho is dead and improved death animation with some fade-in and outs.
 
-#### 02/09/2016:
+#### 02/10/2016:
 
 Fixed bug where psycho would die, but enemies would still try to give him score.
 Improved psycho death explosion animation
 
-#### 01/09/2016:
+#### 01/10/2016:
 
 Improved menu buttons and created batch for indicators, so they won't spawn desynched
 
-#### 30/08/2016:
+#### 30/09/2016:
 
 Added score system, and player can get lives and ultrablasts from score.
 Still need to balanced, which might take a while and lots of playtesting.
 Deciding which other issues to complete before the next iteration, probably make the menu screen better and add control for sound.
 
-#### 29/08/2016:
+#### 29/09/2016:
 
 Made focused mode and fixed some Ultrablast bugs
 
-#### 28/08/2016:
+#### 28/09/2016:
 
 Made Ultrablast mode!
 
-#### 27/08/2016:
+#### 27/09/2016:
 
 Created a milestone for this week until next monday, to make some useful bug correction and refactoring.
 If I have time, will make score system and save.
@@ -55,42 +59,42 @@ If I have time, will make score system and save.
 Fixed "screen flashing black" bug using canvas.
 Refactored particle system to avoid potential lag.
 
-#### 24-27/08/2016:
+#### 24-27/09/2016:
 
 Finished Boss 1!!
 Also finished all issues for this iteration, including level 1 ^^
 
-#### 19-23/08/2016:
+#### 19-23/09/2016:
 
 Finishing remaining issues for this iteration.
 Aim and circle effects added.
 Enemy indicator working.
 
-#### 12-16/08/2016:
+#### 12-16/09/2016:
 
 Working on level scripts, removing bugs and lags.
 Part 1-1 and 1-2 are basicaly finished.
 See more at the commits.
 
-#### 11/08/2016:
+#### 11/09/2016:
 
 Finishing making COOL DEATH EXPLOSIONS!
 
 Now psycho dies in cool ways. Stiil need to add more death functions to create
 different patterns.
 
-#### 07/08/2016:
+#### 07/09/2016:
 
 Made a simple background with color transitions, initial steps to psycho lives counter and added a different radius for psycho's collision.
 Considered finish current iteration (way ahead of schedule haha), and doing small things.
 
-#### 06/08/2016:
+#### 06/09/2016:
 
 Made improvements to the test level (but already imagining to be the level1).
 
 Added particle explosions when enemies die.
 
-#### 05/08/2016:
+#### 05/09/2016:
 
 Forgot to register, but some days ago did all the base for level script!!
 Now we can easily make levels using enemies formations.

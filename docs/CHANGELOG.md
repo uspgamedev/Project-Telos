@@ -2,7 +2,9 @@
 THE HISTORY OF PSYCHO: THE BALL
 ===============================
 
-#### (xx/xx/2016) Version 0.0.0.7    -  XXXXXXXXXXX
+#### (10/10/2016) Version 0.0.0.7.5  -  XXXXXXXXXXXXXXXXXXX
+
+#### (10/10/2016) Version 0.0.0.7    -  Darkness all around
 
 - Bug fixes galore!
 - Psycho new moves!
@@ -11,7 +13,7 @@ THE HISTORY OF PSYCHO: THE BALL
 - Score!
     - Get score by blasting enemies into oblivion
     - Win some lives and ultrablast while you're at it
-- Level 2!
+- Level 2-1 and 2-2!
     - Just more awesome
 - Sound effects!
     - Who doesn't love blimps, plims and tchpows?
