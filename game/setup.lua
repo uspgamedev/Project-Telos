@@ -168,7 +168,7 @@ function setup.config()
     BGM_LEVEL_2 = love.audio.newSource("assets/bgm/Through Hiperboles.ogg")
     --SFX
     SFX_PSYCHOBALL_SHOT = love.audio.newSource("assets/sfx/general_sfxs/snd_psychoball_shot.mp3")
-    SFX_PSYCHOBALL_SHOT:setVolume(.5*SFX_VOLUME_MULT)
+    SFX_PSYCHOBALL_SHOT:setVolume(.2*SFX_VOLUME_MULT)
     SFX_PSYCHOBALL_DIES = love.audio.newSource("assets/sfx/general_sfxs/snd_psychoball_dies.mp3")
     SFX_PSYCHOBALL_DIES:setVolume(1*SFX_VOLUME_MULT)
     SFX_HIT_SIMPLE = love.audio.newSource("assets/sfx/general_sfxs/snd_hit_simple_ball.mp3")
