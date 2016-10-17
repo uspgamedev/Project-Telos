@@ -29,6 +29,8 @@ function state:enter()
         LEVEL_TIMER:cancel(SHAKE_HANDLE)
     end
 
+    love.mouse.setGrabbed(false) --Stop mouse capture
+
 end
 
 function state:leave()

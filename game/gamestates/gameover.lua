@@ -38,6 +38,8 @@ function state:enter()
     --Add slowmotion effect
     SLOWMO_M = .2
 
+    love.mouse.setGrabbed(false) --Stop mouse capture
+
 end
 
 function state:leave()

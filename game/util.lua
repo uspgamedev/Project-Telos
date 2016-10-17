@@ -550,6 +550,10 @@ function util.defaultKeyPressed(key)
         print("psycho position",p.pos.x, p.pos.y)
     elseif key == '5' then
         util.countDrawables()
+    elseif key == "tab" then
+        local state = not love.mouse.isGrabbed()   -- the opposite of whatever it currently is
+        love.mouse.setGrabbed(state)
+        print("MOUSE CAPTURE IS", state)
     end
 
 end

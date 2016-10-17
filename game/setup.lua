@@ -191,10 +191,10 @@ function setup.config()
     --FPS Counter
     Txt.create_gui(ORIGINAL_WINDOW_WIDTH - 100, 10, "FPS: ", GUI_MED, love.timer.getFPS(), "right", GUI_MED, "fps_counter")
 
-
     --SHADERS SETUP
     Horizontal_Blur_Shader:send("win_width", 1/WINDOW_WIDTH)
     Vertical_Blur_Shader:send("win_height", 1/WINDOW_HEIGHT)
+
 end
 
 --Return functions

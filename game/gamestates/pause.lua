@@ -43,11 +43,16 @@ function state:enter()
     --AUDIO--
     Audio.pauseSFX()
 
+    love.mouse.setVisible(true) --Make cursor visible
+    love.mouse.setGrabbed(false) --Stop mouse capture
+
 end
 
 function state:leave()
 
     USE_BLUR_CANVAS = false
+    BLUR_CANVAS_1 = nil
+    BLUR_CANVAS_2 = nil
 
     Psycho.updateSpeed(Psycho.get())
 
@@ -56,6 +61,9 @@ function state:leave()
     Util.clearAllTables("remove")
 
     Audio.resumeSFX()
+
+    love.mouse.setVisible(false) --Make cursor invisible
+    love.mouse.setGrabbed(true) --Resume mouse capture
 
 end
 

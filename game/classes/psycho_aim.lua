@@ -52,8 +52,11 @@ function Aim:draw()
     love.graphics.line(aim.pos.x, aim.pos.y, aim.pos.x + aim.distance*aim.dir.x, aim.pos.y + aim.distance*aim.dir.y)
 
     --Draw the circle
+    color.h = (color.h + 127)%255
+    color.a = math.min(aim.alpha*3,255)
+    Color.set(color)
     love.graphics.setLineWidth(aim.circle_thickness)
-    love.graphics.circle("line", aim.mouse_pos.x, aim.mouse_pos.y, aim.circle_size)
+    love.graphics.circle("fill", aim.mouse_pos.x, aim.mouse_pos.y, aim.circle_size)
 end
 
 function Aim:update(dt)
