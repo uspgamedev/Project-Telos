@@ -97,7 +97,7 @@ function fx.psychoExplosion(p)
     c_pos = Vector(p.pos.x, p.pos.y) --Position of psycho's center
 
     --Create particles in a grid divided by 'e' distances
-    --Each particleadasa
+    --Each particle --olhar no git
     for x = c_pos.x - p.r, c_pos.x + p.r - e, e do
         for y = c_pos.y - p.r, c_pos.y + p.r - e, e do
             --If inside psycho radius, and not dead center, create particle

@@ -35,28 +35,41 @@ Aim = Class{
 --CLASS FUNCTIONS--
 
 function Aim:draw()
-    local aim, color
+    local aim, color, p, size
 
-    --Don't draw if psycho is exploding
-    if Util.findId("psycho").shootLocked and Util.findId("psycho").controlsLocked then return end
+    p = Util.findId("psycho")
+
+    if not p then return end
 
     aim = self
     color = Color.black()
-    Color.copy(color, Util.findId("psycho").color)
-    color.a = aim.alpha
+    if not p.ui_color then
+        Color.copy(color, p.color)
+    else
+        Color.copy(color, UI_COLOR.color)
+    end
+    color.a = (not p.invisible) and aim.alpha or 0 --Make aim line invisible when psycho is blinking
 
 
     --Draw the line
-    Color.set(color)
-    love.graphics.setLineWidth(aim.line_width)
-    love.graphics.line(aim.pos.x, aim.pos.y, aim.pos.x + aim.distance*aim.dir.x, aim.pos.y + aim.distance*aim.dir.y)
+
+    --Don't draw line if psycho is exploding
+    if not p.shootLocked or not p.controlsLocked then
+        Color.set(color)
+        love.graphics.setLineWidth(aim.line_width)
+        love.graphics.line(aim.pos.x, aim.pos.y, aim.pos.x + aim.distance*aim.dir.x, aim.pos.y + aim.distance*aim.dir.y)
+    end
 
     --Draw the circle
     color.h = (color.h + 127)%255
-    color.a = math.min(aim.alpha*3,255)
+    color.a = 255
+
     Color.set(color)
     love.graphics.setLineWidth(aim.circle_thickness)
-    love.graphics.circle("fill", aim.mouse_pos.x, aim.mouse_pos.y, aim.circle_size)
+    size = aim.circle_size
+    --Shrink size of aim when psycho is exploding
+    if p.shootLocked and p.controlsLocked then size = 3 end
+    love.graphics.circle("fill", aim.mouse_pos.x, aim.mouse_pos.y, size)
 end
 
 function Aim:update(dt)
@@ -94,7 +107,7 @@ function aim_functions.create(id)
 
     aim = Aim()
 
-    aim:addElement(DRAW_TABLE.L2, nil, id)
+    aim:addElement(DRAW_TABLE.L5, nil, id)
 
     --Fade in the aim
     LEVEL_TIMER:after(2.2,

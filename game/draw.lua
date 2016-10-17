@@ -49,7 +49,7 @@ function draw.allTables()
 
     CAM:attach() --Start tracking camera
 
-    DrawTable(DRAW_TABLE.L5) --Indicators
+    DrawTable(DRAW_TABLE.L5) --Indicators and aim circle
 
     CAM:detach() --Stop tracking camera
 
