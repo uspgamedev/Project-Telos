@@ -18,7 +18,9 @@ function draw.allTables()
     end
 
     if USE_BLUR_CANVAS then
-        BLUR_CANVAS_1 = love.graphics.newCanvas(WINDOW_WIDTH, WINDOW_HEIGHT)
+        if not BLUR_CANVAS_1 then
+            BLUR_CANVAS_1 = love.graphics.newCanvas(WINDOW_WIDTH, WINDOW_HEIGHT)
+        end
         love.graphics.setCanvas(BLUR_CANVAS_1)
         love.graphics.setBlendMode("alpha") --Set alpha mode properly
     end
@@ -55,7 +57,9 @@ function draw.allTables()
         love.graphics.pop() --Stop tracking effects on screen transformations for the canvas
 
         --Draws the first canvas into the second, using horizontal blur shader
-        BLUR_CANVAS_2 = love.graphics.newCanvas(WINDOW_WIDTH, WINDOW_HEIGHT)
+        if not BLUR_CANVAS_2 then
+            BLUR_CANVAS_2 = love.graphics.newCanvas(WINDOW_WIDTH, WINDOW_HEIGHT)
+        end
         love.graphics.setCanvas(BLUR_CANVAS_2)
         love.graphics.setShader(Horizontal_Blur_Shader)
         love.graphics.setBlendMode("alpha", "premultiplied")
@@ -78,7 +82,7 @@ function draw.allTables()
 
     --Creates letterbox at the sides of the screenm if needed
     FreeRes.letterbox(color)
-    
+
     --Stop using canvas
     if USE_CANVAS then
         love.graphics.setCanvas() -- Stop tracking canvas

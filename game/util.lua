@@ -510,6 +510,9 @@ function util.toggleFullscreen()
         Horizontal_Blur_Shader:send("win_width", 1/WINDOW_WIDTH)
         Vertical_Blur_Shader:send("win_height", 1/WINDOW_HEIGHT)
 
+        if BLUR_CANVAS_1 then BLUR_CANVAS_1 = nil end
+        if BLUR_CANVAS_2 then BLUR_CANVAS_2 = nil end
+
         --Fix camera position to look at the center
         CAM:lookAt(WINDOW_WIDTH/2, WINDOW_HEIGHT/2)
 
