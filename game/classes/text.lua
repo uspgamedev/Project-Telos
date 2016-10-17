@@ -25,6 +25,10 @@ Text = Class{
         self.limit = _limit or ORIGINAL_WINDOW_WIDTH/2
 
         self.alpha = 255 --This object alpha
+
+        ELEMENT.init(self)
+
+        self.tp = "text"
     end
 }
 

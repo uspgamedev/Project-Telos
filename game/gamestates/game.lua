@@ -37,18 +37,12 @@ function state:enter()
 
     --Lives counter text
     Txt.create_game_gui(10, 10, "lives: ", GUI_MED, p.lives, "down", GUI_MEDPLUS, "lives_counter")
-    --Lives change text
-    --t = Txt.create_game_gui(60, 43, "+5 banana", GUI_MED, nil, "right", nil, "lives_change")
 
     --Ultrablast counter text
     Txt.create_game_gui(10, 75, "Ultrablast: ", GUI_MED, p.ultrablast_counter, "down", GUI_MEDPLUS, "ultrablast_counter")
-    --Ultrablast change text
---    t = Txt.create_game_gui(60, 108, "+6 OH NICE", GUI_MED, nil, "right", nil, "ultrablast_change")
 
     --Score counter text
     Txt.create_game_gui(10, 140, "Score: ", GUI_MED, p.score, "down", GUI_MEDPLUS, "score_counter")
-    --Score change text
---    t = Txt.create_game_gui(60, 173, "+6 OH NICE", GUI_MED, nil, "right", nil, "score_change")
 
     --Separator 1
     Txt.create_game_gui(5, 185, "————", GUI_MEDPLUS, nil, nil, nil, "separator_1")

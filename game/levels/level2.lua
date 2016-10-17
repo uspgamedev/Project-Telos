@@ -206,7 +206,7 @@ function level_functions.script()
         F.fromHorizontal{enemy = {DB}, speed_m = 1.7, side = "right", mode = "bottom" , number = 7, ind_mode = false}
     end
     LM.wait("noenemies")
-    LM.giveLives(4)
+    LM.giveLives(4, "finished part")
 
     --2-2: The Outsider
     LM.level_part("Part 2 - The Outsider")
@@ -462,7 +462,7 @@ function level_functions.script()
         end
     end
     LM.wait("noenemies")
-    LM.giveLives(5)
+    LM.giveLives(5, "finished part")
 
     --2-3: TUTS TUTS QUERO VE
     LM.level_part("Part 3 - PRAZER, CHINELO")

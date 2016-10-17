@@ -1,4 +1,5 @@
 require "classes.primitive"
+local LM = require "level_manager"
 local Aim = require "classes.psycho_aim"
 local Bullet = require "classes.bullet"
 local Color = require "classes.color.color"
@@ -128,8 +129,7 @@ function Psy:ultrablast(power)
     if p.ultrablast_counter <= 0 then return end
 
     --Update ultrablast counter
-    p.ultrablast_counter = p.ultrablast_counter - 1
-    Util.findId("ultrablast_counter").var = p.ultrablast_counter
+    LM.giveUltrablast(-1)
 
     Ultra.create(p.pos.x, p.pos.y, p.color, power)
 
@@ -180,7 +180,7 @@ function Psy:update(dt)
 end
 
 function Psy:kill()
-    local p
+    local p, temp
 
     if GODMODE then return end --GODMODE cheat
 
@@ -190,10 +190,12 @@ function Psy:kill()
 
     SFX_PSYCHOBALL_DIES:play()
 
-    p.lives = p.lives - 1 --Reduces psycho's lives
-    Util.findId("lives_counter").var = p.lives
-    p.ultrablast_counter = p.default_ultrablast_number --Reset ultrablast counter
-    Util.findId("ultrablast_counter").var = p.ultrablast_counter
+    LM.giveLives(-1)
+    temp = p.default_ultrablast_number - p.ultrablast_counter
+    if temp ~= 0 then
+        LM.giveUltrablast(p.default_ultrablast_number - p.ultrablast_counter, "reset") --Reset ultrablast counter if its not the default
+    end
+
 
     if not p.death and p.lives == 0 then
         FX.explosion(p.pos.x, p.pos.y, p.r, p.color, 100, 450, 250, 4)

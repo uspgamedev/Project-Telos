@@ -192,8 +192,8 @@ function level_manager.outsidePosition(dist)
 end
 
 --Increase psycho's lives
-function level_manager.giveLives(number)
-    local p
+function level_manager.giveLives(number, text)
+    local p, t, counter, dist, signal, handle
 
     p = Util.findId("psycho")
 
@@ -201,38 +201,159 @@ function level_manager.giveLives(number)
 
     p.lives = p.lives + number
     Util.findId("lives_counter").var = p.lives
+
+    t = Util.findId("lives_change")
+    counter = Util.findId("lives_counter")
+    dist = counter.var_font:getWidth(counter.var) --Get distance to draw the indicator
+    if number >= 0 then signal = "+" else signal = "" end --Get correct sign
+    if text then separator = "   " else separator = "" end
+    text = text or '' --Correct text
+
+    --Create indicator, if there isn't one
+    if not t then
+        t = Txt.create_game_gui(15 + dist, 43, signal..number..separator..text, GUI_MED, nil, "right", nil, "lives_change")
+    --Else update the one already existing
+    else
+        --Remove previous effect
+        if t.level_handles["effect"] then
+            LEVEL_TIMER:cancel(t.level_handles["effect"])
+            t.level_handles["effect"] = nil
+        end
+        t.alpha = 255
+        t.pos.x = 15 + dist
+        t.text = signal..number.." "..text
+    end
+    --Make text stay still for a while, then fade-out
+    handle = LEVEL_TIMER:after(1,
+                function()
+                    local handle
+                    handle = LEVEL_TIMER:tween(1, t, {alpha = 0}, 'in-linear',
+                                function()
+                                    t.death = true
+                                end
+                            )
+                    t.level_handles["effect"] = handle
+                end
+            )
+    t.level_handles["effect"] = handle
+
 end
 
 --Increase psycho's score by 'value'
-function level_manager.giveScore(value)
-    local p
+function level_manager.giveScore(number, text)
+    local p, t, counter, handle, dist, signal
 
     p = Util.findId("psycho")
 
     if not p then return end
 
     --Update main score
-    p.score = p.score + value
+    p.score = p.score + number
     Util.findId("score_counter").var = p.score
 
     --Update life score
-    p.life_score = p.life_score + value
+    p.life_score = p.life_score + number
     while p.life_score >= p.life_score_target do
         p.life_score = p.life_score - p.life_score_target
-        p.lives = p.lives + 1
-        Util.findId("lives_counter").var = p.lives
+        level_manager.giveLives(1, "score bonus")
     end
 
     --Update ultrablast score
-    p.ultrablast_score = p.ultrablast_score + value
+    p.ultrablast_score = p.ultrablast_score + number
     while p.ultrablast_score >= p.ultrablast_score_target do
         p.ultrablast_score = p.ultrablast_score - p.ultrablast_score_target
-        p.ultrablast_counter = p.ultrablast_counter + 1
-        Util.findId("ultrablast_counter").var = p.ultrablast_counter
+        level_manager.giveUltrablast(1, "score bonus")
     end
+
+    --Indicators
+
+    --Score
+    t = Util.findId("score_change")
+    counter = Util.findId("score_counter")
+    dist = counter.var_font:getWidth(counter.var) --Get distance to draw the indicator
+    if number >= 0 then signal = "+" else signal = "" end --Get correct sign
+    if text then separator = "   " else separator = "" end
+    text = text or '' --Correct text
+
+    --Create indicator, if there isn't one
+    if not t then
+        t = Txt.create_game_gui(15 + dist, 173, signal..number..separator..text, GUI_MED, nil, "right", nil, "score_change")
+    --Else update the one already existing
+    else
+        --Remove previous effect
+        if t.level_handles["effect"] then
+            LEVEL_TIMER:cancel(t.level_handles["effect"])
+            t.level_handles["effect"] = nil
+        end
+        t.alpha = 255
+        t.pos.x = 15 + dist
+        t.text = signal..number.." "..text
+    end
+
+    --Make text stay still for a while, then fade-out
+    handle = LEVEL_TIMER:after(1,
+                function()
+                    local handle
+                    handle = LEVEL_TIMER:tween(1, t, {alpha = 0}, 'in-linear',
+                                function()
+                                    t.death = true
+                                end
+                            )
+                    t.level_handles["effect"] = handle
+                end
+            )
+    t.level_handles["effect"] = handle
 
 end
 
+--Increase psycho's ultrablast
+function level_manager.giveUltrablast(number, text)
+    local p, t, counter, dist, signal, handle
+
+    p = Util.findId("psycho")
+
+    if not p then return end
+
+    p.ultrablast_counter = p.ultrablast_counter + number
+    Util.findId("ultrablast_counter").var = p.ultrablast_counter
+
+    t = Util.findId("ultrablast_change")
+    counter = Util.findId("ultrablast_counter")
+    dist = counter.var_font:getWidth(counter.var) --Get distance to draw the indicator
+    if number >= 0 then signal = "+" else signal = "" end --Get correct sign
+    if text then separator = "   " else separator = "" end
+    text = text or '' --Correct text
+
+    --Create indicator, if there isn't one
+    if not t then
+        t = Txt.create_game_gui(15 + dist, 108, signal..number..separator..text, GUI_MED, nil, "right", nil, "ultrablast_change")
+    --Else update the one already existing
+    else
+        --Remove previous effect
+        if t.level_handles["effect"] then
+            LEVEL_TIMER:cancel(t.level_handles["effect"])
+            t.level_handles["effect"] = nil
+        end
+        t.alpha = 255
+        t.pos.x = 15 + dist
+        t.text = signal..number.." "..text
+    end
+
+    --Make text stay still for a while, then fade-out
+    handle = LEVEL_TIMER:after(1,
+                function()
+                    local handle
+                    handle = LEVEL_TIMER:tween(1, t, {alpha = 0}, 'in-linear',
+                                function()
+                                    t.death = true
+                                end
+                            )
+                    t.level_handles["effect"] = handle
+                end
+            )
+    t.level_handles["effect"] = handle
+
+end
 
 --Return functions
 return level_manager

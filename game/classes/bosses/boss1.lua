@@ -219,7 +219,7 @@ function Boss_1:changeStage()
         b.isShooting = false --Stop shooting
         b.shoot_tick = 0
         b.shoot_fps = .45
-        LM.giveScore(1000)
+        LM.giveScore(1000, "boss hurted")
 
         --Stop moving
         b.static = true
@@ -261,7 +261,7 @@ function Boss_1:changeStage()
         b.static = true
         b.isShooting = false
         b.shoot_tick = 0
-        LM.giveScore(1000)
+        LM.giveScore(1000, "boss hurted")
 
         if b.level_handles["move"] then
             LEVEL_TIMER:cancel(b.level_handles["move"])
@@ -295,7 +295,7 @@ function Boss_1:changeStage()
         b.invincible = true --Can't take damage
         b.behaviour = Stage_4
         b.life = 18 --Increase boss max life
-        LM.giveScore(1000)
+        LM.giveScore(1000, "boss killed")
 
 
         --Stop moving
@@ -330,7 +330,7 @@ function Boss_1:changeStage()
         b.invincible = true --Can't take damage
         b.behaviour = nil
         b.life = 10
-        LM.giveScore(4000)
+        LM.giveScore(4000, "boss killed for real this time")
 
         --Remove growing tween
         if b.level_handles["grow_quick"] then
