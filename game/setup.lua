@@ -157,6 +157,7 @@ function setup.config()
     SOUNDTRACK["next"] = nil  --Next soundtrack to play (for cross-fading)
     SFX = {} --Table with all sound effects playing
     BGM_VOLUME_LEVEL = 1 --Volume of BGM
+    SFX_VOLUME_MULT = 1 --Volume multiplier for SFX
     --Useful handles for audio manipulation
     FADE_IN_HANDLE = nil
     FADE_OUT_HANDLE = nil
@@ -166,13 +167,20 @@ function setup.config()
     BGM_LEVEL_1 = love.audio.newSource("assets/bgm/Limitless.mp3")
     BGM_LEVEL_2 = love.audio.newSource("assets/bgm/Through Hiperboles.ogg")
     --SFX
-    SFX_PLAY_BUTTON = love.audio.newSource("assets/sfx/general_sfxs/snd_button_play.mp3")
     SFX_PSYCHOBALL_SHOT = love.audio.newSource("assets/sfx/general_sfxs/snd_psychoball_shot.mp3")
+    SFX_PSYCHOBALL_SHOT:setVolume(.5*SFX_VOLUME_MULT)
     SFX_PSYCHOBALL_DIES = love.audio.newSource("assets/sfx/general_sfxs/snd_psychoball_dies.mp3")
+    SFX_PSYCHOBALL_DIES:setVolume(1*SFX_VOLUME_MULT)
     SFX_HIT_SIMPLE = love.audio.newSource("assets/sfx/general_sfxs/snd_hit_simple_ball.mp3")
+    SFX_HIT_SIMPLE:setVolume(.5*SFX_VOLUME_MULT)
     SFX_HIT_DOUBLE = love.audio.newSource("assets/sfx/general_sfxs/snd_hit_double_ball.mp3")
+    SFX_HIT_DOUBLE:setVolume(.5*SFX_VOLUME_MULT)
     SFX_GENERIC_BUTTON = love.audio.newSource ("assets/sfx/general_sfxs/snd_generic_button.mp3")
+    SFX_GENERIC_BUTTON:setVolume(.5*SFX_VOLUME_MULT)
     SFX_BACK_BUTTON = love.audio.newSource ("assets/sfx/general_sfxs/snd_back_button.mp3")
+    SFX_BACK_BUTTON:setVolume(.5*SFX_VOLUME_MULT)
+    SFX_PLAY_BUTTON = love.audio.newSource("assets/sfx/general_sfxs/snd_button_play.mp3")
+    SFX_PLAY_BUTTON:setVolume(.3*SFX_VOLUME_MULT)
 
     --Start UI color transition
     UI_COLOR = UI.create_color()
