@@ -468,13 +468,44 @@ function level_functions.script()
     LM.level_part("Part 3 - PRAZER, CHINELO")
 
     LM.wait(3)
-    F.turret{x = -60, y = ORIGINAL_WINDOW_HEIGHT/2, t_x = ORIGINAL_WINDOW_WIDTH/2, t_y = ORIGINAL_WINDOW_HEIGHT/2, enemy = SB, number = 8, life = 30, duration = 15, rot_angle = math.pi/4, speed_m = 3}
+    INDICATOR_DEFAULT = 1.5
+    F.turret{x = -60, y = ORIGINAL_WINDOW_HEIGHT/2, t_x = ORIGINAL_WINDOW_WIDTH/2, t_y = ORIGINAL_WINDOW_HEIGHT/2, enemy = SB, number = 8, life = 30, duration = 15, rot_angle = math.pi/4, speed_m = 2, ind_duration = 2.5}
     LM.wait("noenemies")
 
     F.turret{x = ORIGINAL_WINDOW_WIDTH/2, y = -60, t_x = ORIGINAL_WINDOW_WIDTH/2, t_y = 2*ORIGINAL_WINDOW_HEIGHT/5, enemy = DB, number = 6, life = 20, duration = 15, rot_angle = math.pi/3, speed_m = 1.5}
     F.turret{x = ORIGINAL_WINDOW_WIDTH/2, y = ORIGINAL_WINDOW_HEIGHT + 60, t_x = ORIGINAL_WINDOW_WIDTH/2, t_y = 3*ORIGINAL_WINDOW_HEIGHT/5, enemy = DB, number = 6, life = 20, duration = 15, rot_angle = math.pi/3, speed_m = 1.5}
+    LM.wait(5)
+    F.fromHorizontal{side = "left", mode = "distribute", number = 10, enemy = {SB}}
+    LM.wait(3)
+    F.fromHorizontal{side = "right", mode = "distribute", number = 10, enemy = {SB}}
+    LM.wait(3)
+    F.fromVertical{side = "top", mode = "distribute", number = 15, enemy = {SB}}
+    LM.wait(3)
+    F.fromVertical{side = "bottom", mode = "distribute", number = 15, enemy = {SB}}
     LM.wait("noenemies")
 
+    F.turret{x = -60, y = -60, t_x = 60, t_y = 60, enemy = DB, number = 3, life = 15, duration = 30, start_angle = math.pi/2, rot_angle = -math.pi/4, speed_m = 1.5, ind_duration = 1, e_speed_m = 1.2}
+    F.turret{x = ORIGINAL_WINDOW_WIDTH + 60, y = -60, t_x = ORIGINAL_WINDOW_WIDTH - 60, t_y = 60, enemy = DB, number = 3, life = 15, duration = 30, start_angle = -math.pi/2, rot_angle = math.pi/4, speed_m = 1.5, ind_duration = 1, e_speed_m = 1.2}
+    F.turret{x = ORIGINAL_WINDOW_WIDTH + 60, y = ORIGINAL_WINDOW_HEIGHT + 60, t_x = ORIGINAL_WINDOW_WIDTH  - 60, t_y = ORIGINAL_WINDOW_HEIGHT - 60, enemy = DB, number = 3, life = 15, duration = 30, start_angle = math.pi, rot_angle = math.pi/4, speed_m = 1.5, ind_duration = 1, e_speed_m = 1.2}
+    F.turret{x = -60, y = ORIGINAL_WINDOW_HEIGHT + 60, t_x = 60, t_y = ORIGINAL_WINDOW_HEIGHT - 60, enemy = DB, number = 3, life = 15, duration = 30, start_angle = math.pi, rot_angle = -math.pi/4, speed_m = 1.5, ind_duration = 1, e_speed_m = 1.2}
+    LM.wait(5)
+    F.fromHorizontal{side = "left", mode = "distribute", number = 10, enemy = {SB}}
+    LM.wait(3)
+    F.fromHorizontal{side = "right", mode = "distribute", number = 10, enemy = {SB}}
+    LM.wait(3)
+    F.fromVertical{side = "top", mode = "distribute", number = 15, enemy = {SB}}
+    LM.wait(3)
+    F.fromVertical{side = "bottom", mode = "distribute", number = 15, enemy = {SB}}
+    LM.wait(5)
+    INDICATOR_DEFAULT = 3
+    F.fromHorizontal{side = "left", mode = "distribute", number = 10, enemy = {SB}, speed_m = .8}
+    F.fromHorizontal{side = "right", mode = "distribute", number = 10, enemy = {SB}, speed_m = .8}
+    F.fromVertical{side = "top", mode = "distribute", number = 15, enemy = {SB}, speed_m = .8}
+    F.fromVertical{side = "bottom", mode = "distribute", number = 15, enemy = {SB}, speed_m = .8}
+
+    LM.wait(5)
+    F.circle{radius = 640, number = 20, enemy = {SB}, dir_follow = true, ind_side = 40}
+    LM.wait("noenemies")
 
     print("end of level")
     LM.stop()
