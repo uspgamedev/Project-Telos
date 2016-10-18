@@ -24,7 +24,7 @@ local p --Psycho
 function state:enter()
     local x, y, level, t
 
-    level = level1
+    level = level2
 
     x, y = level.startPositions()
 

@@ -18,6 +18,7 @@ require "classes.enemies.simple_ball"
 require "classes.enemies.double_ball"
 require "classes.enemies.grey_ball"
 require "classes.enemies.glitch_ball"
+require "classes.enemies.turret"
 
 --bosses
 require "classes.bosses.boss1"

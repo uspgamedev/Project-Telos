@@ -7,9 +7,27 @@ local Aim_Functions = require "classes.psycho_aim"
 
 local indicator = {}
 
-------------------
+--------------------
+--Useful Functions--
+--------------------
+
+--Get the center, direction to face and side length of a triangle. Return all vertex positions
+function getPositions(center, dir, side)
+    local p1, p2, p3, ndir
+
+    ndir = dir:normalized() --Normalized direction
+
+    --Get vertex positions
+    p1 = Vector(center.x + ndir.x * ((1.8*side)/math.sqrt(3)), center.y + ndir.y * (1.8*side/math.sqrt(3)) ) --"Pointing" vertex
+    p2 = Vector(center.x + ndir:rotated((2*math.pi)/3).x*(side/math.sqrt(3)), center.y + ndir:rotated((2*math.pi)/3).y*(side/math.sqrt(3))) --Other vertex
+    p3 = Vector(center.x + ndir:rotated((-2*math.pi)/3).x*(side/math.sqrt(3)), center.y + ndir:rotated((-2*math.pi)/3).y*(side/math.sqrt(3))) --Remaining vertex
+
+    return p1,p2,p3
+end
+
+-------------------------
 --ENEMY INDICATOR BATCH--
-------------------
+-------------------------
 
 --Enemy indicator batch that holds a group of enemy_indicators, and deletes them after a while, creating the enemies
 Enemy_Indicator_Batch = Class{
@@ -80,25 +98,6 @@ function indicator.create_enemy_batch(endtime)
     batch:setSubTp("enemy_indicator_batch")
 
     return batch
-end
-
-
---------------------
---Useful Functions--
---------------------
-
---Get the center, direction to face and side length of a triangle. Return all vertex positions
-function getPositions(center, dir, side)
-    local p1, p2, p3, ndir
-
-    ndir = dir:normalized() --Normalized direction
-
-    --Get vertex positions
-    p1 = Vector(center.x + ndir.x * ((1.8*side)/math.sqrt(3)), center.y + ndir.y * (1.8*side/math.sqrt(3)) ) --"Pointing" vertex
-    p2 = Vector(center.x + ndir:rotated((2*math.pi)/3).x*(side/math.sqrt(3)), center.y + ndir:rotated((2*math.pi)/3).y*(side/math.sqrt(3))) --Other vertex
-    p3 = Vector(center.x + ndir:rotated((-2*math.pi)/3).x*(side/math.sqrt(3)), center.y + ndir:rotated((-2*math.pi)/3).y*(side/math.sqrt(3))) --Remaining vertex
-
-    return p1,p2,p3
 end
 
 -------------------
@@ -199,6 +198,47 @@ function indicator.create_enemy(enemy, pos, dir, following, side, speed_m, radiu
     i.enemy_radius = radius
     i.enemy_score_mul = score_mul
     i.enemy = enemy
+
+    return i
+end
+
+--Create an enemy indicator from a margin in the screen, and after duration, create the turret enemy
+function indicator.create_enemy_turret(turret, pos, speed_m, radius, score_mul, enemy, target_pos, duration, life, number, start_angle, rot_angle, fps, side, ind_duration, st)
+    local i, center, margin, handle, color
+
+    center = Vector(pos.x, pos.y)
+    side = side or 20
+    margin = side/2 + 1
+    color = turret.indColor()
+
+    --Put indicator center inside the screen
+    if pos.x < margin then
+        center.x = margin
+    elseif pos.x > ORIGINAL_WINDOW_WIDTH - margin then
+        center.x = ORIGINAL_WINDOW_WIDTH - margin
+    end
+    if pos.y < margin then
+        center.y = margin
+    elseif pos.y > ORIGINAL_WINDOW_HEIGHT - margin then
+        center.y = ORIGINAL_WINDOW_HEIGHT - margin
+    end
+
+    st = st or "enemy_indicator" --subtype
+
+    i = Enemy_Indicator(center, Vector(target_pos.x - pos.x, target_pos.y - pos.y), side, color, false)
+
+    i:addElement(DRAW_TABLE.L5, st)
+
+    i.color.a = 0
+    --Fade in the indicator
+    i.level_handles["fadein"] = LEVEL_TIMER:tween(.3, i.color, {a = 255}, 'in-linear')
+
+    i.level_handles["create_enemy"] = LEVEL_TIMER:after(ind_duration,
+        function()
+            i.death = true --Remove the indicator
+            turret.create(pos.x, pos.y, speed_m, radius, score_mul, enemy, target_pos, duration, life, number, start_angle, rot_angle, fps) --Create the turret
+        end
+    )
 
     return i
 end

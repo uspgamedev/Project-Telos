@@ -24,7 +24,7 @@ function level_functions.script()
     LM.level_title("LOST IN DARKNESS")
     Audio.playBGM(BGM_LEVEL_2)
 
-    --2-1: A Cross the Planes
+    --[[2-1: A Cross the Planes
     LM.level_part("Part 1 - A Cross the Planes")
     LM.wait(3)
 
@@ -462,11 +462,14 @@ function level_functions.script()
         end
     end
     LM.wait("noenemies")
-    LM.giveLives(5, "finished part")
+    LM.giveLives(5, "finished part")]]
 
     --2-3: TUTS TUTS QUERO VE
     LM.level_part("Part 3 - PRAZER, CHINELO")
+
     LM.wait(3)
+    F.turret{x = -60, y = -60, t_x = 100, t_y = 100, enemy = SB, number = 4}
+    LM.wait("noenemies")
 
     print("end of level")
     LM.stop()

@@ -36,7 +36,7 @@ function Grey_Ball:kill()
     if self.death then return end
 
     self.death = true
-    
+
     FX.explosion(self.pos.x, self.pos.y, self.r, self.color)
 
 end
@@ -62,15 +62,9 @@ end
 --UTILITY FUNCTIONS--
 
 function enemy.create(x, y, dir, speed_m, radius)
-    local e, direction
+    local e
 
-    if not dir then --Get random direction
-        direction = Vector()
-        direction.x = love.math.random()*2 - 1 --Rand value between [-1,1]
-        direction.y = love.math.random()*2 - 1 --Rand value between [-1,1]
-    end
-
-    e = Grey_Ball(x, y, dir or direction, speed_m, radius)
+    e = Grey_Ball(x, y, dir, speed_m, radius)
     e:addElement(DRAW_TABLE.L4)
     e:startColorLoop()
 

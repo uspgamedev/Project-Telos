@@ -325,4 +325,5 @@ function ENEMY:draw()
         love.graphics.setLineWidth(p.line_width)
     end
     love.graphics.circle(p.mode, p.pos.x, p.pos.y, p.r)
+    
 end

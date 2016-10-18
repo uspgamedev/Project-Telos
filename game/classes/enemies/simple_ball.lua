@@ -44,8 +44,6 @@ function Simple_Ball:kill(gives_score)
         SFX_HIT_SIMPLE:play()
     end
 
-
-
 end
 
 --Update this enemy
@@ -69,15 +67,9 @@ end
 --UTILITY FUNCTIONS--
 
 function enemy.create(x, y, dir, speed_m, radius, score_mul)
-    local e, direction
+    local e
 
-    if not dir then --Get random direction
-        direction = Vector()
-        direction.x = love.math.random()*2 - 1 --Rand value between [-1,1]
-        direction.y = love.math.random()*2 - 1 --Rand value between [-1,1]
-    end
-
-    e = Simple_Ball(x, y, dir or direction, speed_m, radius, score_mul)
+    e = Simple_Ball(x, y, dir, speed_m, radius, score_mul)
     e:addElement(DRAW_TABLE.L4)
     e:startColorLoop()
 

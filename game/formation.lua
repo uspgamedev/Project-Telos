@@ -7,7 +7,10 @@ local formation = {}
 
 
 --[[
-Formation of a line of enemies coming from the left or right. with several
+Formation of a line of enemies coming from the left or right.
+
+Arguments
+
 side: "left" ('l') or "right" ('r'), side that the enemies come from
 mode: mode to apply the formation. As follows:
     --center (default): place enemies from the center of the screen, spaced with enemy margin and can be moved with screen_margin
@@ -274,7 +277,10 @@ function formation.fromHorizontal(a)
 end
 
 --[[
-Formation of a line of enemies coming from the top or bottom. with several
+Formation of a line of enemies coming from the top or bottom.
+
+Arguments
+
 side: "top" ('t') or "bottom" ('b'), side that the enemies come from
 mode: mode to apply the formation. As follows:
     --center (default): place enemies from the center of the screen, spaced with enemy margin and can be moved with screen_margin
@@ -541,6 +547,9 @@ end
 
 --[[
 Create an evenly distributed circle of enemies, with a specific radius
+
+Arguments
+
 number: number of enemies in the formation
 radius: radius of the circle
 enemy: enemy (or enemies) to be created
@@ -635,6 +644,9 @@ end
 
 --[[
 Create a single enemy starting in a (x,y) position and moving in a direction
+
+Arguments
+
 enemy: enemy (or enemies) to be created
 x: x position of enemy
 y: y position of enemy
@@ -644,7 +656,7 @@ speed_m: speed multiplier applied to the enemies created
 dir_follow: whether the enemies' dir is facing towards psycho, or not
 ind_mode: if true, create an indicator for the enemy being created
 ind_duration: duration to display indicator before creating the enemy
-e_e_radius: Radius of enemy being created
+e_radius: Radius of enemy being created
 score_mul: multiplier of score for enemies created
 ind_side: side of indicator
 ]]
@@ -689,6 +701,9 @@ function formation.single(a)
 end
 
 --[[Create a line of enemies starting in a (x,y) position and moving in a direction
+
+Arguments
+
 enemy: enemy (or enemies) to be created
 number: number of enemies to be created
 x: x start position of enemy line
@@ -772,6 +787,72 @@ function formation.line(a)
             current_enemy.create(l_pos.x, l_pos.y, l_dir, a.speed_m, a.e_radius, a.score_mul)
         end
     end
+end
+
+--[[
+Create a single turrt enemy starting in a (x,y) position, moving to a target position, spawn a given enemy, then leaving after duration
+
+Arguments
+
+enemy: enemy to be spawned
+x: x position of turret
+y: y position of turret
+t_x: x value of target position
+t_y: y value of target position
+duration: duration the turret will stay at the target
+life: how many hits the turret can take before dying
+number: number of enemies to spawn
+start_angle: starting angle for spawn (in radians)
+rot_angle: rotating angle after spawning an enemy (in radians)
+fps: how many seconds between every "wave" of spawning
+speed_m: speed multiplier applied to the turret
+ind_mode: if true, create an indicator for the enemy being created
+ind_duration: duration to display indicator before creating the enemy
+e_radius: Radius of turret being created
+score_mul: multiplier of score for turret and enemies created
+ind_side: side of indicator
+]]
+function formation.turret(a)
+    local p, l_pos, l_speed, l_duration, l_life, l_number, l_start_angle, l_rot_angle, l_fps, l_side, l_radius, l_score, l_enemy, l_target, batch, turret
+
+    turret = require "classes.enemies.turret"
+
+    --Default values
+    p = Psycho.get()
+    a.duration = a.duration or 10
+    a.life = a.life or 10
+    a.start_angle = a.start_angle or 0
+    a.rot_angle = a.rot_angle or math.pi/2
+    a.fps = a.fps or 1
+    a.speed_m = a.speed_m or 1
+    if a.ind_mode == nil then a.ind_mode = true end
+    a.ind_duration = a.ind_duration or INDICATOR_DEFAULT
+    a.e_radius = a.e_radius or turret.radius()
+    a.score_mul = a.score_mul or 1
+    a.ind_side = a.ind_side or 35
+    --Setting local variables
+    l_pos = Vector(a.x, a.y)
+    l_target = Vector(a.t_x, a.t_y)
+    l_speed = a.speed_m
+    l_duration = a.duration
+    l_life = a.life
+    l_radius = a.e_radius
+    l_number = a.number
+    l_start_angle = a.start_angle
+    l_rot_angle = a.rot_angle
+    l_fps = a.fps
+    l_side = a.ind_side
+    l_score = a.score_mul
+    l_enemy = a.enemy
+
+    if a.ind_mode then
+        --Create the indicator, that will later create the enemy
+        Indicator.create_enemy_turret(turret, l_pos, l_speed, l_radius, l_score, l_enemy, l_target, l_duration, l_life, l_number, l_start_angle, l_rot_angle, l_fps, l_side, a.ind_duration)
+    else
+        --Just create the enemy
+        turret.create(l_pos.x, l_pos.y,l_speed, l_radius, l_score, l_enemy, l_target, l_duration, l_life, l_number, l_start_angle, l_rot_angle, l_fps)
+    end
+
 end
 
 --Return functions

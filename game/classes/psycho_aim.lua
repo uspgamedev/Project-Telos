@@ -23,7 +23,7 @@ Aim = Class{
         self.distance = math.sqrt(ORIGINAL_WINDOW_WIDTH^2 + ORIGINAL_WINDOW_HEIGHT^2)
         self.line_width = 1 --Thickness of aim line
         self.circle_thickness = 1 --Thickness of aim circle
-        self.circle_size = 5
+        self.circle_size = 6
         self.mouse_pos = Vector(0,0)
 
         self.alpha = 0 --Alpha of aim
