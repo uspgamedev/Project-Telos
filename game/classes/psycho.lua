@@ -77,7 +77,7 @@ Psy = Class{
 --CLASS FUNCTIONS--
 
 function Psy:draw()
-    local p
+    local p, size
 
     p = self
 
@@ -87,7 +87,8 @@ function Psy:draw()
     else
         Color.set(UI_COLOR.color)
     end
-    love.graphics.circle("fill", p.pos.x, p.pos.y, p.r)
+
+    Draw_Smooth_Circle(p.pos.x, p.pos.y, p.r)
 end
 
 function Psy:shoot(x,y)

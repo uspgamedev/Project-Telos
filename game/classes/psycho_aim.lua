@@ -22,9 +22,8 @@ Aim = Class{
         self.dir = Vector(0,0)
         self.distance = math.sqrt(ORIGINAL_WINDOW_WIDTH^2 + ORIGINAL_WINDOW_HEIGHT^2)
         self.line_width = 1 --Thickness of aim line
-        self.circle_thickness = 1 --Thickness of aim circle
-        self.circle_size = 6
-        self.mouse_pos = Vector(0,0)
+        self.circle_size = 6 --Radius of aim circle
+        self.mouse_pos = Vector(0,0) --Position the mouse is
 
         self.alpha = 0 --Alpha of aim
 
@@ -65,11 +64,11 @@ function Aim:draw()
     color.a = 255
 
     Color.set(color)
-    love.graphics.setLineWidth(aim.circle_thickness)
     size = aim.circle_size
     --Shrink size of aim when psycho is exploding
     if p.shootLocked and p.controlsLocked then size = 3 end
-    love.graphics.circle("fill", aim.mouse_pos.x, aim.mouse_pos.y, size)
+    Draw_Smooth_Circle(aim.mouse_pos.x, aim.mouse_pos.y, size)
+
 end
 
 function Aim:update(dt)

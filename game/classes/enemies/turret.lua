@@ -87,14 +87,14 @@ function Turret:draw()
 
     --Draws the outer circle
     Color.set(p.outer_color)
-    love.graphics.circle("fill", p.pos.x, p.pos.y, p.r)
+    Draw_Smooth_Circle(p.pos.x, p.pos.y, p.r)
 
     --Draws the inner circle (80% of radius)
 
      --Find the quarter of life the turret has, and get the correspondent color
     color = p.color_stages[math.min(math.floor((p.damage_taken/p.life)/.25) + 1, 4)]
     Color.set(color)
-    love.graphics.circle("fill", p.pos.x, p.pos.y, p.r*.8)
+    Draw_Smooth_Circle(p.pos.x, p.pos.y, p.r*.8)
 
 end
 

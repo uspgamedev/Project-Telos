@@ -480,7 +480,7 @@ end
 function level_functions.startPositions()
     local x, y
 
-    x, y = 404, 322 --'O' of "Lost"
+    x, y = 404, 321 --'O' of "Lost"
 
     return x,y
 end

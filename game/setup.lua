@@ -15,7 +15,7 @@ local setup = {}
 function setup.config()
 
     --IMAGES--
-    --PIXEL = love.graphics.newImage("assets/pixel.png") --Example image
+    PIXEL = love.graphics.newImage("assets/images/pixel.png") -- Pixel for shaders
 
     --RANDOM SEED--
     love.math.setRandomSeed( os.time() )
@@ -107,6 +107,21 @@ function setup.config()
     CAM = Camera(love.graphics.getWidth()/2, love.graphics.getHeight()/2) --Set camera position to center of screen
 
     --SHADERS--
+
+    --Default Smooth Circle Shader
+    Smooth_Circle_Shader = ([[
+      vec4 effect( vec4 color, Image texture, vec2 texture_coords, vec2 screen_coords ){
+        vec4 pixel = Texel(texture, texture_coords );//This is the current pixel color
+        vec2 center = vec2(0.5,0.5);
+        pixel.a = 1 - smoothstep(.5 - 1/%f, .5, distance(center, texture_coords));
+        return pixel * color;
+      }
+    ]])
+
+    --Table containing smooth circle shaders created
+    SMOOTH_CIRCLE_TABLE = {}
+
+
     --Example shader for drawing glow effect
     Glow_Shader = love.graphics.newShader[[
         vec4 effect( vec4 color, Image texture, vec2 texture_coords, vec2 screen_coords ){
@@ -192,8 +207,18 @@ function setup.config()
     Txt.create_gui(ORIGINAL_WINDOW_WIDTH - 100, 10, "FPS: ", GUI_MED, love.timer.getFPS(), "right", GUI_MED, "fps_counter")
 
     --SHADERS SETUP
+    print("Setting up shaders")
     Horizontal_Blur_Shader:send("win_width", 1/WINDOW_WIDTH)
     Vertical_Blur_Shader:send("win_height", 1/WINDOW_HEIGHT)
+    --Create some pre-made smooth circle
+    for size = 36, 49 do
+        SMOOTH_CIRCLE_TABLE[size] = love.graphics.newShader(Smooth_Circle_Shader:format(size))
+    end
+    SMOOTH_CIRCLE_TABLE[6] = love.graphics.newShader(Smooth_Circle_Shader:format(10))
+    SMOOTH_CIRCLE_TABLE[10] = love.graphics.newShader(Smooth_Circle_Shader:format(10))
+    SMOOTH_CIRCLE_TABLE[12] = love.graphics.newShader(Smooth_Circle_Shader:format(12))
+    SMOOTH_CIRCLE_TABLE[60] = love.graphics.newShader(Smooth_Circle_Shader:format(60))
+    print("Finished setting up shaders")
 
 end
 
