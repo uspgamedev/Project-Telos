@@ -806,6 +806,7 @@ start_angle: starting angle for spawn (in radians)
 rot_angle: rotating angle after spawning an enemy (in radians)
 fps: how many seconds between every "wave" of spawning
 speed_m: speed multiplier applied to the turret
+e_speed_m: speed multiplier applied to the enemies spawned
 ind_mode: if true, create an indicator for the enemy being created
 ind_duration: duration to display indicator before creating the enemy
 e_radius: Radius of turret being created
@@ -813,7 +814,7 @@ score_mul: multiplier of score for turret and enemies created
 ind_side: side of indicator
 ]]
 function formation.turret(a)
-    local p, l_pos, l_speed, l_duration, l_life, l_number, l_start_angle, l_rot_angle, l_fps, l_side, l_radius, l_score, l_enemy, l_target, batch, turret
+    local p, l_pos, l_speed, l_e_speed, l_duration, l_life, l_number, l_start_angle, l_rot_angle, l_fps, l_side, l_radius, l_score, l_enemy, l_target, batch, turret, l_ind_duration
 
     turret = require "classes.enemies.turret"
 
@@ -825,15 +826,18 @@ function formation.turret(a)
     a.rot_angle = a.rot_angle or math.pi/2
     a.fps = a.fps or 1
     a.speed_m = a.speed_m or 1
+    a.e_speed_m = a.e_speed_m or 1
     if a.ind_mode == nil then a.ind_mode = true end
     a.ind_duration = a.ind_duration or INDICATOR_DEFAULT
     a.e_radius = a.e_radius or turret.radius()
     a.score_mul = a.score_mul or 1
     a.ind_side = a.ind_side or 35
+
     --Setting local variables
     l_pos = Vector(a.x, a.y)
     l_target = Vector(a.t_x, a.t_y)
     l_speed = a.speed_m
+    l_e_speed = a.e_speed_m
     l_duration = a.duration
     l_life = a.life
     l_radius = a.e_radius
@@ -844,13 +848,14 @@ function formation.turret(a)
     l_side = a.ind_side
     l_score = a.score_mul
     l_enemy = a.enemy
+    l_ind_duration = a.ind_duration
 
     if a.ind_mode then
         --Create the indicator, that will later create the enemy
-        Indicator.create_enemy_turret(turret, l_pos, l_speed, l_radius, l_score, l_enemy, l_target, l_duration, l_life, l_number, l_start_angle, l_rot_angle, l_fps, l_side, a.ind_duration)
+        Indicator.create_enemy_turret(turret, l_pos, l_speed, l_e_speed, l_radius, l_score, l_enemy, l_target, l_duration, l_life, l_number, l_start_angle, l_rot_angle, l_fps, l_side, l_ind_duration)
     else
         --Just create the enemy
-        turret.create(l_pos.x, l_pos.y,l_speed, l_radius, l_score, l_enemy, l_target, l_duration, l_life, l_number, l_start_angle, l_rot_angle, l_fps)
+        turret.create(l_pos.x, l_pos.y, l_speed, l_e_speed, l_radius, l_score, l_enemy, l_target, l_duration, l_life, l_number, l_start_angle, l_rot_angle, l_fps)
     end
 
 end

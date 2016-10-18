@@ -468,8 +468,13 @@ function level_functions.script()
     LM.level_part("Part 3 - PRAZER, CHINELO")
 
     LM.wait(3)
-    F.turret{x = -60, y = -60, t_x = 100, t_y = 100, enemy = SB, number = 4}
+    F.turret{x = -60, y = ORIGINAL_WINDOW_HEIGHT/2, t_x = ORIGINAL_WINDOW_WIDTH/2, t_y = ORIGINAL_WINDOW_HEIGHT/2, enemy = SB, number = 8, life = 30, duration = 15, rot_angle = math.pi/4, speed_m = 3}
     LM.wait("noenemies")
+
+    F.turret{x = ORIGINAL_WINDOW_WIDTH/2, y = -60, t_x = ORIGINAL_WINDOW_WIDTH/2, t_y = 2*ORIGINAL_WINDOW_HEIGHT/5, enemy = DB, number = 6, life = 20, duration = 15, rot_angle = math.pi/3, speed_m = 1.5}
+    F.turret{x = ORIGINAL_WINDOW_WIDTH/2, y = ORIGINAL_WINDOW_HEIGHT + 60, t_x = ORIGINAL_WINDOW_WIDTH/2, t_y = 3*ORIGINAL_WINDOW_HEIGHT/5, enemy = DB, number = 6, life = 20, duration = 15, rot_angle = math.pi/3, speed_m = 1.5}
+    LM.wait("noenemies")
+
 
     print("end of level")
     LM.stop()

@@ -12,7 +12,7 @@ local enemy = {}
 --Turret will got to a given target, stay for duration, then leave in the direction it came from
 Turret = Class{
     __includes = {ENEMY},
-    init = function(self, _x, _y, _speed_m, _radius, _score_mul, _enemy_spawn, _target_pos, _duration, _life, _number, _starting_angle, _rotation_angle, _shoot_fps)
+    init = function(self, _x, _y, _speed_m, _e_speed_m, _radius, _score_mul, _enemy_spawn, _target_pos, _duration, _life, _number, _starting_angle, _rotation_angle, _shoot_fps)
         local color_table, score_value, dir
 
         self.color_stages = {
@@ -25,6 +25,7 @@ Turret = Class{
         self.enemy_spawn = _enemy_spawn --Enemy to shoot
         score_value = 100 --Score the turret will give
         self.number = _number --Number of enemies to spawn
+        self.e_speed_m = _e_speed_m
 
         self.starting_angle = _starting_angle --Starting angle to start shooting
         self.rotation_angle = _rotation_angle --Angle to rotate before spawning another enemy
@@ -32,7 +33,7 @@ Turret = Class{
         self.life = _life --How many hits this enemy can take before dying
         self.damage_taken = 0 --How many hits this enemy has taken
 
-        self.shoot_tick = 2*(_shoot_fps/3) --Enemy spawn "cooldown" timer
+        self.shoot_tick = _shoot_fps/3 --Enemy spawn "cooldown" timer
         self.shoot_fps = _shoot_fps --How fast to shoot enemies
 
         self.duration = _duration --How many seconds this enemy will stay in target before leaving (-1 if it will never leave)
@@ -42,10 +43,12 @@ Turret = Class{
         self.reach_target = false --If enemy has reached its target
         self.leaving = false --If enemy should leave the screen
 
-        self.outer_color = _enemy_spawn.indColor() --Color of outer circle (20% of radius)
-
         dir = Vector(_x - _target_pos.x, _y - _target_pos.y) --Direction to leave the screen
         ENEMY.init(self, _x, _y, dir, _speed_m, _radius, _score_mul, nil, 270, score_value)
+
+        self.outer_color = _enemy_spawn.indColor() --Color of outer circle (20% of radius)
+        self.current_color = HSL(Hsl.stdv(278,89,39))
+        self.color = HSL(Hsl.stdv(278,89,39))
 
         self.tp = "turret" --Type of this class
     end
@@ -53,17 +56,64 @@ Turret = Class{
 
 --CLASS FUNCTIONS--
 
+function Turret:getHitAnimation()
+    local t
+
+    t = self
+
+    --Remove previous transition
+    if t.level_handles["gethithue"] then
+        LEVEL_TIMER:cancel(t.level_handles["gethithue"])
+    end
+    if t.level_handles["gethitsaturation"] then
+        LEVEL_TIMER:cancel(t.level_handles["gethitsaturation"])
+    end
+    if t.level_handles["gethittimer"] then
+        LEVEL_TIMER:cancel(t.level_handles["gethittimer"])
+    end
+    if t.level_handles["gethitlightness"] then
+        LEVEL_TIMER:cancel(t.level_handles["gethitlightness"])
+    end
+
+    --Make boss red when hit
+    t.color.h = 255
+    t.color.s = 226.95
+    t.color.l = 125
+
+    --Stay red for .05 seconds
+    t.level_handles["gethittimer"] = LEVEL_TIMER:after(.05,
+        function()
+            --Go back to original lightness (99.45)
+            t.level_handles["gethitlightness"] = LEVEL_TIMER:tween(.5, t.color, {l = 99.45}, 'in-linear')
+
+            --Transition current onhit hue to boss stage current hue when saturation is 0
+            t.level_handles["gethithue"] = LEVEL_TIMER:after(.25,
+                function()
+                    t.color.h = t.current_color.h
+                end)
+            --Drops saturation, then go to original saturation (226.95)
+            t.level_handles["gethitsaturation"] = LEVEL_TIMER:tween(.25, t.color, {s = 0}, 'in-linear',
+               function()
+                   t.level_handles["gethitsaturation"] = LEVEL_TIMER:tween(.25, t.color, {s = 226.95}, 'in-linear')
+                end
+            )
+        end
+    )
+end
+
 function Turret:kill(gives_score)
 
     if self.death then return end
 
     self.damage_taken = self.damage_taken + 1
-    --play get hit animation
+    --Find the quarter of life the turret has, and get the correspondent color
+    self.current_color = self.color_stages[math.min(math.floor((self.damage_taken/self.life)/.25) + 1, 4)]
+    self:getHitAnimation()
 
     --If turret is dead
     if self.damage_taken >= self.life then
         self.death = true
-
+        self.color = HSL(Hsl.stdv(278,89,39)) --Reset color for the explosion
         if gives_score == nil then gives_score = true end --If this enemy should give score
 
         if gives_score then
@@ -90,10 +140,7 @@ function Turret:draw()
     Draw_Smooth_Circle(p.pos.x, p.pos.y, p.r)
 
     --Draws the inner circle (80% of radius)
-
-     --Find the quarter of life the turret has, and get the correspondent color
-    color = p.color_stages[math.min(math.floor((p.damage_taken/p.life)/.25) + 1, 4)]
-    Color.set(color)
+    Color.set(p.color)
     Draw_Smooth_Circle(p.pos.x, p.pos.y, p.r*.8)
 
 end
@@ -126,7 +173,7 @@ function Turret:update(dt)
             angle = o.starting_angle
             for i = 1, o.number do
                 --Spawn the enemy with normal radius and same score multiplier as turret
-                enemy = o.enemy_spawn.create(o.pos.x, o.pos.y, Vector(math.sin(angle), math.cos(angle)), o.speed_m, o.enemy_spawn.radius(), o.score_mul)
+                enemy = o.enemy_spawn.create(o.pos.x, o.pos.y, Vector(math.sin(angle), math.cos(angle)), o.e_speed_m, o.enemy_spawn.radius(), o.score_mul)
                 enemy.enter = true
                 angle = angle + o.rotation_angle --Rotate angle
             end
@@ -145,14 +192,14 @@ end
 
 --UTILITY FUNCTIONS--
 
-function enemy.create(x, y, speed_m, radius, score_mul, enemy_spawn, target_pos, duration, life, number, starting_angle, rotation_angle, shoot_fps)
+function enemy.create(x, y, speed_m, e_speed_m,radius, score_mul, enemy_spawn, target_pos, duration, life, number, starting_angle, rotation_angle, shoot_fps)
     local e
 
-    e = Turret(x, y, speed_m, radius, score_mul, enemy_spawn, target_pos, duration, life, number, starting_angle, rotation_angle, shoot_fps)
+    e = Turret(x, y, speed_m, e_speed_m, radius, score_mul, enemy_spawn, target_pos, duration, life, number, starting_angle, rotation_angle, shoot_fps)
     e:addElement(DRAW_TABLE.L4)
 
     --Move turret to target position
-    e.level_handles["go_to_target"] = LEVEL_TIMER:tween(e.pos:dist(e.target_pos)/e.speedv, e.pos, {x = e.target_pos.x, y = e.target_pos.y}, 'in-linear', function() e.reach_target = true end)
+    e.level_handles["go_to_target"] = LEVEL_TIMER:tween(e.pos:dist(e.target_pos)/(e.speedv*e.speed_m), e.pos, {x = e.target_pos.x, y = e.target_pos.y}, 'in-linear', function() e.reach_target = true end)
 
     return e
 end

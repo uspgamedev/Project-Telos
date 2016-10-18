@@ -5,6 +5,28 @@ GAME DESIGN DOCUMENT
 DEV LOG
 =======
 
+#### 18/10/2016:
+
+Finally changed the way Circles are drawn, using shaders with smoothstep.
+Still need to change the way "line" circles are drawn in the future
+
+#### 17/10/2016:
+@yancouto, @renatogeh
+
+Group meeting today. Discussed what to do for next iteration.
+
+Started doing the turrets, and almost finished (still need some indicator when its taking damage).
+Made lots of changes on aim and mouse, so now th mouse is captured and invisible while in the game
+gamestate.
+
+Made some small changes to the SFX @rodrigopassos helped make, and fix a blur bug where
+I was creating too many canvas.
+
+#### 11/10/2016:
+
+Made screen blur on pause. Had some difficult to manage the canvas, but while
+doing the blur, fixed a bug where the blinking screen bug still happened on the letterboxes
+
 #### 10/10/2016:
 
 Finished 2-2 and this iteration

@@ -161,7 +161,7 @@ function Boss_1:getHitAnimation()
     diff = b.damage_taken/b.life * (b.color_dying_target_saturation - b.initial_saturation) --Calculate how much of the difference between target saturation and initial stage color saturation the boss has reached
     b.color_stage_current_saturation = b.initial_saturation + diff --Make current saturation the proper saturation
 
-    --Stay red for .03 seconds
+    --Stay red for .05 seconds
     b.level_handles["gethittimer"] = LEVEL_TIMER:after(.05,
         function()
             --Transition current onhit hue to boss stage current hue when saturation is 0

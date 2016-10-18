@@ -203,7 +203,7 @@ function indicator.create_enemy(enemy, pos, dir, following, side, speed_m, radiu
 end
 
 --Create an enemy indicator from a margin in the screen, and after duration, create the turret enemy
-function indicator.create_enemy_turret(turret, pos, speed_m, radius, score_mul, enemy, target_pos, duration, life, number, start_angle, rot_angle, fps, side, ind_duration, st)
+function indicator.create_enemy_turret(turret, pos, speed_m, e_speed_m, radius, score_mul, enemy, target_pos, duration, life, number, start_angle, rot_angle, fps, side, ind_duration, st)
     local i, center, margin, handle, color
 
     center = Vector(pos.x, pos.y)
@@ -236,7 +236,9 @@ function indicator.create_enemy_turret(turret, pos, speed_m, radius, score_mul, 
     i.level_handles["create_enemy"] = LEVEL_TIMER:after(ind_duration,
         function()
             i.death = true --Remove the indicator
-            turret.create(pos.x, pos.y, speed_m, radius, score_mul, enemy, target_pos, duration, life, number, start_angle, rot_angle, fps) --Create the turret
+
+            turret.create(pos.x, pos.y, speed_m, e_speed_m, radius, score_mul, enemy, target_pos, duration, life, number, start_angle, rot_angle, fps) --Create the turret
+
         end
     )
 
