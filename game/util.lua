@@ -380,7 +380,7 @@ end
 
 --Makes all collisions
 function util.checkCollision()
-    local p, cont
+    local p, cont, arg, col
 
     p = util.findId("psycho")
 
@@ -424,9 +424,12 @@ function util.checkCollision()
         for bullet in pairs(SUBTP_TABLE["player_bullet"]) do
             if SUBTP_TABLE["bosses"] then
                 for boss in pairs(SUBTP_TABLE["bosses"]) do
-                    if not bullet.death and bullet:collides(boss) then
-                        bullet:kill()
-                        if not boss.invincible then boss:getHit() end
+                    if not bullet.death then
+                        col, arg = boss:collides(bullet)
+                        if col then
+                            bullet:kill()
+                            if not boss.invincible then boss:getHit(arg) end
+                        end
                     end
                 end
             end

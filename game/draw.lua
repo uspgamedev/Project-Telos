@@ -45,6 +45,8 @@ function draw.allTables()
 
     DrawTable(DRAW_TABLE.BOSS) --Bosses
 
+    DrawTable(DRAW_TABLE.BOSSu) --Bosses
+
     CAM:detach() --Stop tracking camera
 
     DrawTable(DRAW_TABLE.GAME_GUI) --Game GUI

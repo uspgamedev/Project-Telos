@@ -72,6 +72,7 @@ function setup.config()
     L4  = {}, --Layer 4
     L4u = {}, --Layer 4 upper
     BOSS = {}, --Bosses
+    BOSSu = {}, --Bosses upper
     GAME_GUI = {}, --Game User Interface
     L5  = {}, --Layer 5
     L5u = {}, --Layer 5 upper

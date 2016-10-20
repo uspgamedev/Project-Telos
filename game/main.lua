@@ -22,6 +22,7 @@ Trt = require "classes.enemies.turret"
 
 --bosses
 require "classes.bosses.boss1"
+require "classes.bosses.boss2"
 
 --levels
 
