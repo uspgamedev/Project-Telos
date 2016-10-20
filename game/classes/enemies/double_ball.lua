@@ -52,9 +52,9 @@ function Double_Ball:kill(gives_score, mode)
 
     if mode ~= "dontspawn" then
         --Create two Simple Balls in a V shape
-        e = SB.create(self.pos.x, self.pos.y, self.speed:rotated(math.pi/12), 1.25*self.speed_m, .75*self.r, .5*self.score_mul)
+        e = SB.create(self.pos.x, self.pos.y, self.speed:rotated(math.pi/12), 1.12*self.speed_m, .75*self.r, .5*self.score_mul)
         e.enter = true
-        e = SB.create(self.pos.x, self.pos.y, self.speed:rotated(-math.pi/12), 1.25*self.speed_m, .75*self.r, .5*self.score_mul)
+        e = SB.create(self.pos.x, self.pos.y, self.speed:rotated(-math.pi/12), 1.12*self.speed_m, .75*self.r, .5*self.score_mul)
         e.enter = true
     end
 

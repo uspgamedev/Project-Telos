@@ -71,6 +71,15 @@ end
 
 --UTILITY FUNCTIONS--
 
+--Create a regular text in the L2 layer, with an optional subtype st and id
+function text.create_text(x, y, text, font, st, id)
+    local txt
+
+    txt = Text(x, y, text, font)
+    txt:addElement(DRAW_TABLE.L2, st, id)
+    return txt
+end
+
 --Create a text in the gui draw table
 function text.create_gui(x, y, text, font, var, mode, var_font, id, align, limit)
     local txt

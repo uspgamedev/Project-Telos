@@ -615,6 +615,8 @@ function level_functions.part_3()
     F.fromHorizontal{side = "right", mode = "bottom", number = 5, enemy = {DB,SB}, speed_m = .9}
     LM.wait("noenemies")
 
+    --Manzo's Pyramid Adaptation (original "pyramid" idea by manzo)
+
     local spaceship = --The big spaceship made of enemies, that will later be translated from text to an enemy table
     {
         "rrrrrrrrrdsrrrrrrrr",
@@ -684,10 +686,39 @@ function level_functions.part_3()
 
 end
 
+--Part 4 - Violent Love with Friends
 function level_functions.part_4()
+    local p
 
-    LM.level_title("RENATO PLEASE MAKE BOSS ASAP")
-    LM.wait(5)
+    p = Util.findId("psycho")
+
+    LM.level_part("Part 4 - Violent Love with Friends")
+    LM.wait(3)
+
+    LM.text(300, 260, "he's running away!!", 1, 150)
+    LM.wait(2)
+    LM.text(500, 460, "go get him!!", 1, 150)
+    LM.wait(3)
+
+    --Penguin shooter adaptation (original idea by yan)
+    INDICATOR_DEFAULT = 1.25
+    local all = 2*ORIGINAL_WINDOW_WIDTH+2*ORIGINAL_WINDOW_HEIGHT
+    for i = 1, 60 do
+        local _x, _y = LM.outsidePosition(all * i / 60)
+        local en = {SB, DB}
+        local p = (i % 2) + 1
+        F.single{enemy = en[p], x = _x, y = _y, dir_follow = true, speed_m = 3, ind_side = 25}
+        _x, _y = LM.outsidePosition(all * (60 - i) / 60)
+        F.single{enemy = en[3 - p], x = _x, y = _y, dir_follow = true, speed_m = 3, ind_side = 25}
+        LM.wait(.8)
+    end
+
+    LM.wait("noenemies")
+    LM.wait(1)
+    LM.text(600, 260, "nevermind", 1, 150)
+    LM.wait(2)
+    LM.text(ORIGINAL_WINDOW_WIDTH/2 - 70, ORIGINAL_WINDOW_HEIGHT/2 - 10, "I'LL GET HIM", 1.5, 230, GUI_MEDPLUS)
+
     print("end of level")
     LM.stop()
 

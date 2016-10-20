@@ -168,6 +168,37 @@ function level_manager.boss_title(name)
 
 end
 
+--Create a text in position (x,y), that fades in, and then fades out after d seconds
+function level_manager.text(x, y, text, d, max_alpha, font)
+    local txt, font
+
+    d = d or 3
+    max_alpha = max_alpha or 255
+
+    font = font or GUI_MED
+
+    --Create text
+    txt = Txt.create_text(x, y, text, font, "in-game_text")
+
+    txt.alpha = 0
+
+    --After two seconds, fades-out the title
+    txt.level_handles["fade-in"] = LEVEL_TIMER:tween(1, txt, {alpha = max_alpha}, 'in-linear',
+        function()
+            txt.level_handles["stay_effect"] = LEVEL_TIMER:after(d,
+                function()
+                    txt.level_handles["fade-out"] = LEVEL_TIMER:tween(1, txt, {alpha = 0}, 'in-linear',
+                        function()
+                            txt.death = true
+                        end
+                    )
+                end
+            )
+        end
+    )
+
+end
+
 ---------------------
 --UTILITY FUNCTIONS--
 ---------------------
