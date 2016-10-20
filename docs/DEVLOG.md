@@ -5,10 +5,16 @@ GAME DESIGN DOCUMENT
 DEV LOG
 =======
 
+#### 19/10/2016:
+
+Finished level 2-3 and made some changes on turrets (they are now drawn above other enemies and
+give out score depending on the number and type of enemies they are spawning)
+
 #### 18/10/2016:
 
 Finally changed the way Circles are drawn, using shaders with smoothstep.
-Still need to change the way "line" circles are drawn in the future
+Still need to change the way "line" circles are drawn in the future.
+Finished turrets and start of level 2-3.
 
 #### 17/10/2016:
 @yancouto, @renatogeh

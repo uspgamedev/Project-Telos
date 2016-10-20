@@ -33,13 +33,15 @@ function draw.allTables()
     CAM:attach() --Start tracking camera
 
 
-    DrawTable(DRAW_TABLE.L1) --Circle effect
+    DrawTable(DRAW_TABLE.L1)  --Circle effect
 
-    DrawTable(DRAW_TABLE.L2) --Game particle effects
+    DrawTable(DRAW_TABLE.L2)  --Game particle effects
 
-    DrawTable(DRAW_TABLE.L3) --Bullets, projectiles
+    DrawTable(DRAW_TABLE.L3)  --Bullets, projectiles
 
-    DrawTable(DRAW_TABLE.L4) --Psycho, enemies and ultrablast
+    DrawTable(DRAW_TABLE.L4)  --Psycho, enemies and ultrablast
+
+    DrawTable(DRAW_TABLE.L4u) --Above regular enemies and psycho
 
     DrawTable(DRAW_TABLE.BOSS) --Bosses
 

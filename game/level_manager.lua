@@ -3,9 +3,11 @@ local Txt = require "classes.text"
 
 local level_manager = {}
 local Level_Handle1, Level_Handle2, Level_Handle3
+
 --------------------
 --SCRIPT FUNCTIONS--
 --------------------
+--[[Functions to manipulate level script]]
 
 --Starts a coroutine with a level script
 function level_manager.start(level_script)
@@ -96,9 +98,10 @@ function level_manager.resume()
     end
 end
 
--------------------
---OTHER FUNCTIONS--
--------------------
+------------------
+--TEXT FUNCTIONS--
+------------------
+--[[Utility functions that create or manipulate text in-game]]--
 
 --Changes the level part text
 function level_manager.level_part(name)
@@ -165,6 +168,11 @@ function level_manager.boss_title(name)
 
 end
 
+---------------------
+--UTILITY FUNCTIONS--
+---------------------
+--[[Utility functions to help creating cool formations]]--
+
 --Function takes a distance between [0 ,2*'screen_width'+2*'screen_height'] and returns a position x,y outside the screen.
 --it cycles the screen going from the upmost left position to the screen and spins clockwise.
 function level_manager.outsidePosition(dist)
@@ -190,6 +198,43 @@ function level_manager.outsidePosition(dist)
 
     return x, y
 end
+
+--[[
+Function receives a text, and returns a translated enemy table represening the text for each char in order
+Translations:
+    's': Simple Ball
+    'd': Double Ball
+    'r': Grey Ball
+    'l': Glitch Ball
+    Other characters, such as spaces, are just ignored
+]]--
+function level_manager.textToEnemies(text)
+    local t, char, enemy
+
+    t = {} --Our table containing the enemies
+
+    for i = 1, string.len(text) do
+        char = string.sub(text,i,i)
+
+        if char == 's' then
+            table.insert(t, SB)
+        elseif char == 'd' then
+            table.insert(t, DB)
+        elseif char == 'r' then
+            table.insert(t, GrB)
+        elseif char == 'l' then
+            table.insert(t, GlB)
+        end
+
+    end
+
+    return t
+end
+
+--------------------
+--PSYCHO FUNCTIONS--
+--------------------
+--[[Functions to manipulate psycho stats in-game]]--
 
 --Increase psycho's lives
 function level_manager.giveLives(number, text)

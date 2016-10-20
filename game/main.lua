@@ -14,11 +14,11 @@ require "classes.color.rgb"
 require "classes.color.hsl"
 
 --enemies
-require "classes.enemies.simple_ball"
-require "classes.enemies.double_ball"
-require "classes.enemies.grey_ball"
-require "classes.enemies.glitch_ball"
-require "classes.enemies.turret"
+SB = require "classes.enemies.simple_ball"
+DB = require "classes.enemies.double_ball"
+GrB = require "classes.enemies.grey_ball"
+GlB = require "classes.enemies.glitch_ball"
+Trt = require "classes.enemies.turret"
 
 --bosses
 require "classes.bosses.boss1"

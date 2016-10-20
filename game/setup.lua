@@ -65,11 +65,12 @@ function setup.config()
     --INITIALIZING TABLES--
     --Drawing Tables
     DRAW_TABLE = {
-    BG = {}, --Background (bottom layer, first to draw)
-    L1 = {}, --Layer 1
-    L2 = {}, --Layer 2
-    L3 = {}, --Layer 3
-    L4 = {}, --Layer 4
+    BG  = {}, --Background (bottom layer, first to draw)
+    L1  = {}, --Layer 1
+    L2  = {}, --Layer 2
+    L3  = {}, --Layer 3
+    L4  = {}, --Layer 4
+    L4u = {}, --Layer 4 upper
     BOSS = {}, --Bosses
     GAME_GUI = {}, --Game User Interface
     L5 = {}, --Layer 5
@@ -217,6 +218,7 @@ function setup.config()
     SMOOTH_CIRCLE_TABLE[6] = love.graphics.newShader(Smooth_Circle_Shader:format(10))
     SMOOTH_CIRCLE_TABLE[10] = love.graphics.newShader(Smooth_Circle_Shader:format(10))
     SMOOTH_CIRCLE_TABLE[12] = love.graphics.newShader(Smooth_Circle_Shader:format(12))
+    SMOOTH_CIRCLE_TABLE[30] = love.graphics.newShader(Smooth_Circle_Shader:format(30))
     SMOOTH_CIRCLE_TABLE[60] = love.graphics.newShader(Smooth_Circle_Shader:format(60))
     print("Finished setting up shaders")
 

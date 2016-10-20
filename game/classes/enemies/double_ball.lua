@@ -99,6 +99,11 @@ function enemy.indColor()
     return HSL(Hsl.stdv(1,84,55))
 end
 
+--Return the default score this enemy gives when killed
+function enemy.score()
+    return 35
+end
+
 --LOCAL FUNCTION--
 
 --Checks if a circular enemy has entered (even if partially) inside the game screen

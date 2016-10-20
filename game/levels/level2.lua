@@ -24,7 +24,7 @@ function level_functions.script()
     LM.level_title("LOST IN DARKNESS")
     Audio.playBGM(BGM_LEVEL_2)
 
-    --[[2-1: A Cross the Planes
+    --2-1: A Cross the Planes
     LM.level_part("Part 1 - A Cross the Planes")
     LM.wait(3)
 
@@ -378,8 +378,8 @@ function level_functions.script()
         elseif i == 20 then
             F.fromVertical{side = "top", mode = "center", number =  20, enemy = {SB}}
         elseif i == 21 then
-            F.fromVertical{side = "top", mode = "left", number =  10, enemy = {GrB}}
-            F.fromVertical{side = "top", mode = "right", number =  9, enemy = {GrB}}
+            F.fromVertical{side = "top", mode = "left", number =  9, enemy = {GrB}}
+            F.fromVertical{side = "top", mode = "right", number =  10, enemy = {GrB}}
         elseif i == 22 then
             F.fromVertical{side = "top", mode = "center", number =  20, enemy = {SB}}
         elseif i == 23 then
@@ -462,10 +462,10 @@ function level_functions.script()
         end
     end
     LM.wait("noenemies")
-    LM.giveLives(5, "finished part")]]
+    LM.giveLives(5, "finished part")
 
-    --2-3: TUTS TUTS QUERO VE
-    LM.level_part("Part 3 - PRAZER, CHINELO")
+    --2-3: STANDING STILL
+    LM.level_part("Part 3 - Standing Still")
 
     LM.wait(3)
     INDICATOR_DEFAULT = 1.5
@@ -484,10 +484,11 @@ function level_functions.script()
     F.fromVertical{side = "bottom", mode = "distribute", number = 15, enemy = {SB}}
     LM.wait("noenemies")
 
-    F.turret{x = -60, y = -60, t_x = 60, t_y = 60, enemy = DB, number = 3, life = 15, duration = 30, start_angle = math.pi/2, rot_angle = -math.pi/4, speed_m = 1.5, ind_duration = 1, e_speed_m = 1.2}
-    F.turret{x = ORIGINAL_WINDOW_WIDTH + 60, y = -60, t_x = ORIGINAL_WINDOW_WIDTH - 60, t_y = 60, enemy = DB, number = 3, life = 15, duration = 30, start_angle = -math.pi/2, rot_angle = math.pi/4, speed_m = 1.5, ind_duration = 1, e_speed_m = 1.2}
-    F.turret{x = ORIGINAL_WINDOW_WIDTH + 60, y = ORIGINAL_WINDOW_HEIGHT + 60, t_x = ORIGINAL_WINDOW_WIDTH  - 60, t_y = ORIGINAL_WINDOW_HEIGHT - 60, enemy = DB, number = 3, life = 15, duration = 30, start_angle = math.pi, rot_angle = math.pi/4, speed_m = 1.5, ind_duration = 1, e_speed_m = 1.2}
-    F.turret{x = -60, y = ORIGINAL_WINDOW_HEIGHT + 60, t_x = 60, t_y = ORIGINAL_WINDOW_HEIGHT - 60, enemy = DB, number = 3, life = 15, duration = 30, start_angle = math.pi, rot_angle = -math.pi/4, speed_m = 1.5, ind_duration = 1, e_speed_m = 1.2}
+    F.turret{x = -60, y = -60, t_x = 60, t_y = 60, enemy = DB, number = 3, life = 15, duration = 32, start_angle = math.pi/2, rot_angle = -math.pi/4, speed_m = 1.5, ind_duration = 1, e_speed_m = 1.1}
+    F.turret{x = ORIGINAL_WINDOW_WIDTH + 60, y = -60, t_x = ORIGINAL_WINDOW_WIDTH - 60, t_y = 60, enemy = DB, number = 3, life = 15, duration = 32, start_angle = -math.pi/2, rot_angle = math.pi/4, speed_m = 1.5, ind_duration = 1, e_speed_m = 1.1}
+    F.turret{x = ORIGINAL_WINDOW_WIDTH + 60, y = ORIGINAL_WINDOW_HEIGHT + 60, t_x = ORIGINAL_WINDOW_WIDTH  - 60, t_y = ORIGINAL_WINDOW_HEIGHT - 60, enemy = DB, number = 3, life = 15, duration = 32, start_angle = math.pi, rot_angle = math.pi/4, speed_m = 1.5, ind_duration = 1, e_speed_m = 1.1}
+    F.turret{x = -60, y = ORIGINAL_WINDOW_HEIGHT + 60, t_x = 60, t_y = ORIGINAL_WINDOW_HEIGHT - 60, enemy = DB, number = 3, life = 15, duration = 32, start_angle = math.pi, rot_angle = -math.
+    pi/4, speed_m = 1.5, ind_duration = 1, e_speed_m = 1.1}
     LM.wait(5)
     F.fromHorizontal{side = "left", mode = "distribute", number = 10, enemy = {SB}}
     LM.wait(3)
@@ -498,13 +499,173 @@ function level_functions.script()
     F.fromVertical{side = "bottom", mode = "distribute", number = 15, enemy = {SB}}
     LM.wait(5)
     INDICATOR_DEFAULT = 3
-    F.fromHorizontal{side = "left", mode = "distribute", number = 10, enemy = {SB}, speed_m = .8}
-    F.fromHorizontal{side = "right", mode = "distribute", number = 10, enemy = {SB}, speed_m = .8}
-    F.fromVertical{side = "top", mode = "distribute", number = 15, enemy = {SB}, speed_m = .8}
-    F.fromVertical{side = "bottom", mode = "distribute", number = 15, enemy = {SB}, speed_m = .8}
+    F.fromHorizontal{side = "left", mode = "distribute", number = 10, enemy = {SB}, speed_m = .7}
+    F.fromHorizontal{side = "right", mode = "distribute", number = 10, enemy = {SB}, speed_m = .7}
+    F.fromVertical{side = "top", mode = "distribute", number = 15, enemy = {SB}, speed_m = .7}
+    F.fromVertical{side = "bottom", mode = "distribute", number = 15, enemy = {SB}, speed_m = .7}
 
+    LM.wait(6)
+    F.circle{radius = 640, number = 12, enemy = {SB}, dir_follow = true, ind_side = 40}
+    LM.wait("noenemies")
+
+    INDICATOR_DEFAULT = 1.5
+    F.turret{x = -60, y = -60, t_x = 2*ORIGINAL_WINDOW_WIDTH/7, t_y = ORIGINAL_WINDOW_HEIGHT/2, enemy = GrB, number = 2, life = 12, duration = 11, start_angle = 0, rot_angle = math.pi, speed_m = 1.5, e_speed_m = 2, fps = .2}
+    F.turret{x = ORIGINAL_WINDOW_WIDTH + 60, y = ORIGINAL_WINDOW_HEIGHT + 60, t_x = 5*ORIGINAL_WINDOW_WIDTH/7, t_y = ORIGINAL_WINDOW_HEIGHT/2, enemy = GrB, number = 2, life = 12, duration = 11, start_angle = 0, rot_angle = math.pi, speed_m = 1.5, e_speed_m = 2, fps = .2}
+
+    LM.wait(3)
+
+    local pos1, pos2 --Positions the psycho can be ("left" for left, "center" for middle and "right" for right)
+    local num --Number of enemies to create
+
+    if p.pos.x <= 2*ORIGINAL_WINDOW_WIDTH/7 then
+        pos1 = "left"
+        num = 6
+    elseif p.pos.x <= 5*ORIGINAL_WINDOW_WIDTH/7 then
+        pos1 = "center"
+        num = 7
+    else
+        pos1 = "right"
+        num = 6
+    end
+
+    F.fromVertical{side = "top", mode = pos1, number = num, speed_m = .9, enemy = {GlB}}
+    LM.wait(2)
+    F.fromVertical{side = "top", mode = pos1, number = num, speed_m = .9, enemy = {GlB}, ind_mode = false}
+    LM.wait(.5)
+    F.fromVertical{side = "top", mode = pos1, number = num, speed_m = .9, enemy = {GlB}, ind_mode = false}
+    LM.wait(.5)
+    F.fromVertical{side = "top", mode = pos1, number = num, speed_m = .9, enemy = {GlB}, ind_mode = false}
+    LM.wait(2)
+
+    if p.pos.x <= 2*ORIGINAL_WINDOW_WIDTH/7 then
+        pos2 = "left"
+    elseif p.pos.x <= 5*ORIGINAL_WINDOW_WIDTH/7 then
+        pos2 = "center"
+    else
+        pos2 = "right"
+    end
+
+    --If psycho is in the same position, get another close position (or choose one at random if he is at the center)
+    if pos1 == pos2 then
+        if pos1 == "right" or pos1 == "left" then
+            pos2 = "center"
+        elseif love.math.random() > .5 then
+            pos2 = "left"
+        else
+            pos2 = "right"
+        end
+    end
+
+    F.fromVertical{side = "bottom", mode = pos1, number = 7, speed_m = 1, enemy = {GlB}}
+    F.fromVertical{side = "bottom", mode = pos2, number = 7, speed_m = 1, enemy = {GlB}}
+    LM.wait(2)
+    F.fromVertical{side = "bottom", mode = pos1, number = 7, speed_m = 1, enemy = {GlB}, ind_mode = false}
+    F.fromVertical{side = "bottom", mode = pos2, number = 7, speed_m = 1, enemy = {GlB}, ind_mode = false}
+    LM.wait(.5)
+    F.fromVertical{side = "bottom", mode = pos1, number = 7, speed_m = 1, enemy = {GlB}, ind_mode = false}
+    F.fromVertical{side = "bottom", mode = pos2, number = 7, speed_m = 1, enemy = {GlB}, ind_mode = false}
+    LM.wait(.5)
+    F.fromVertical{side = "bottom", mode = pos1, number = 7, speed_m = 1, enemy = {GlB}, ind_mode = false}
+    F.fromVertical{side = "bottom", mode = pos2, number = 7, speed_m = 1, enemy = {GlB}, ind_mode = false}
+    LM.wait("noenemies")
+
+    INDICATOR_DEFAULT = 1.5
+    F.turret{x = -60, y = -60, t_x = ORIGINAL_WINDOW_WIDTH/3, t_y = ORIGINAL_WINDOW_HEIGHT/3, enemy = SB, number = 2, life = 30, duration = 28, start_angle = 0, rot_angle = math.pi, fps = .3}
+    F.turret{x = ORIGINAL_WINDOW_WIDTH + 60, y = -60, t_x = 2*ORIGINAL_WINDOW_WIDTH/3, t_y = ORIGINAL_WINDOW_HEIGHT/3, enemy = SB, number = 2, life = 30, duration = 28, start_angle = math.pi/2, rot_angle = math.pi, fps = .3}
+    F.turret{x = ORIGINAL_WINDOW_WIDTH + 60, y = ORIGINAL_WINDOW_HEIGHT + 60, t_x = 2*ORIGINAL_WINDOW_WIDTH/3, t_y = 2*ORIGINAL_WINDOW_HEIGHT/3, enemy = SB, number = 2, life = 30, duration = 28, start_angle = 0, rot_angle = math.pi, fps = .3}
+    F.turret{x = -60, y = ORIGINAL_WINDOW_HEIGHT + 60, t_x = ORIGINAL_WINDOW_WIDTH/3, t_y = 2*ORIGINAL_WINDOW_HEIGHT/3, enemy = SB, number = 2, life = 30, duration = 28, start_angle = math.pi/2, rot_angle = math.pi, fps = .3}
+    LM.wait(6)
+
+    INDICATOR_DEFAULT = 2
+    F.fromVertical{side = "top", mode = "center", number = 6, enemy = {GrB}, speed_m = 1.3}
+    F.fromVertical{side = "bottom", mode = "center", number = 6, enemy = {GrB}, speed_m = 1.3}
     LM.wait(5)
-    F.circle{radius = 640, number = 20, enemy = {SB}, dir_follow = true, ind_side = 40}
+    INDICATOR_DEFAULT = 2.5
+    F.fromHorizontal{side = "left", mode = "top", number = 5, enemy = {DB}, speed_m = 1.3}
+    F.fromHorizontal{side = "left", mode = "bottom", number = 5, enemy = {DB}, speed_m = 1.3}
+    F.fromHorizontal{side = "right", mode = "top", number = 5, enemy = {DB}, speed_m = 1.3}
+    F.fromHorizontal{side = "right", mode = "bottom", number = 5, enemy = {DB}, speed_m = 1.3}
+    F.fromVertical{side = "top", mode = "left", number = 5, enemy = {DB}, speed_m = 1.3}
+    F.fromVertical{side = "top", mode = "right", number = 5, enemy = {DB}, speed_m = 1.3}
+    F.fromVertical{side = "bottom", mode = "left", number = 5, enemy = {DB}, speed_m = 1.3}
+    F.fromVertical{side = "bottom", mode = "right", number = 5, enemy = {DB}, speed_m = 1.3}
+    LM.wait(6)
+    F.fromVertical{side = "top", mode = "center", number = 6, enemy = {GrB}, speed_m = 1.3}
+    F.fromVertical{side = "bottom", mode = "center", number = 6, enemy = {GrB}, speed_m = 1.3}
+    F.fromHorizontal{side = "left", mode = "center", number = 5, enemy = {GrB}, speed_m = 1.3}
+    F.fromHorizontal{side = "right", mode = "center", number = 5, enemy = {GrB}, speed_m = 1.3}
+    LM.wait(6)
+    INDICATOR_DEFAULT = 4
+    F.fromVertical{side = "top", mode = "center", number = 6, enemy = {SB}, speed_m = .9}
+    F.fromVertical{side = "bottom", mode = "center", number = 6, enemy = {SB}, speed_m = .9}
+    F.fromHorizontal{side = "left", mode = "center", number = 5, enemy = {SB}, speed_m = .9}
+    F.fromHorizontal{side = "right", mode = "center", number = 5, enemy = {SB}, speed_m = .9}
+    F.fromHorizontal{side = "left", mode = "top", number = 5, enemy = {DB,SB}, speed_m = .9}
+    F.fromHorizontal{side = "left", mode = "bottom", number = 5, enemy = {DB,SB}, speed_m = .9}
+    F.fromHorizontal{side = "right", mode = "top", number = 5, enemy = {DB,SB}, speed_m = .9}
+    F.fromHorizontal{side = "right", mode = "bottom", number = 5, enemy = {DB,SB}, speed_m = .9}
+    LM.wait("noenemies")
+
+    local spaceship = --The big spaceship made of enemies, that will later be translated from text to an enemy table
+    {
+        "rrrrrrrrrdsrrrrrrrr",
+        "rrrrrrrrrdsrrrrrrrr",
+        "rdddddddddsssrrsssr",
+        "rddrrrrrrrrrssssrsr",
+        "rdddddddrrrrrrrrrsr",
+        "rrrrrrddrrrsssssssr",
+        "rrrdddddrrrsrrrrrrr",
+        "rrrddrrrrrrsrsssssr",
+        "rrrdddddddrsrsrrrsr",
+        "rrrrrrrrddrsrsrsrsr",
+        "rrrrrdddddrsrsrsrsr",
+        "rddddddrrrrsssrsrsr",
+        "rddrrrrrrrrrrrrsrsr",
+        "rddddddddrssssssssr",
+        "rrrrrrrddrsrrrrrrrr",
+        "rrdddddddrsssssssrr",
+        "rrdddddddrrrrrrrsrr",
+        "rrddrrrrrrsssssssrr",
+        "rrdddddddrsrrrrrrrr",
+        "rrdddddddrsrsssssrr",
+        "rrrrrrrddrsrsrrssrr",
+        "rrrrdddddrsrsrrssrr",
+        "rrrrddrrrrsrsrsssrr",
+        "rrrrddrrrrsrsrsrrrr",
+        "rrrrddrrrrsssrsrrrr",
+        " rrrddddrrrrrrsrrr ",
+        "  rrrrddrrrrrrsrr  ",
+        "   rrrddrrrssssr   ",
+        "    rrdddsssrrr    ",
+        "     rrrrsrrrr     ",
+        "      rrrsrrr      ",
+        "       rrsrr       ",
+        "        rsr        ",
+        "         s         ",
+
+    }
+    --Create spaceship
+    for i = Util.tableLen(spaceship), 1, -1 do
+        local enemy_table
+
+        enemy_table = LM.textToEnemies(spaceship[i])
+
+        LM.wait(1.8)
+        F.fromVertical{side = "bottom", mode = "center", speed_m = .1, enemy_x_margin = 52, number = Util.tableLen(enemy_table), enemy = enemy_table, ind_duration = 8, ind_side = 30}
+    end
+
+    LM.wait(10)
+    INDICATOR_DEFAULT = 1
+    --After spaceship
+    for j = 1, 28 do
+        local m
+
+        if j%2 == 0 then m = 0 else m = 30 end
+
+        F.fromHorizontal{side = "left", mode = "bottom", number = j/2, enemy = {SB}, screen_margin = m, enemy_y_margin = 60, speed_m = .7}
+        F.fromHorizontal{side = "right", mode = "bottom", number = j/2, enemy = {SB}, screen_margin = m, enemy_y_margin = 60, speed_m = .7}
+        LM.wait(1)
+    end
     LM.wait("noenemies")
 
     print("end of level")

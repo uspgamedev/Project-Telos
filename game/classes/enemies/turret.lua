@@ -23,8 +23,8 @@ Turret = Class{
         } --Colors the turret has in each % of life range
 
         self.enemy_spawn = _enemy_spawn --Enemy to shoot
-        score_value = 100 --Score the turret will give
         self.number = _number --Number of enemies to spawn
+        score_value = self.number * self.enemy_spawn.score() --Score the turret will give
         self.e_speed_m = _e_speed_m
 
         self.starting_angle = _starting_angle --Starting angle to start shooting
@@ -196,7 +196,7 @@ function enemy.create(x, y, speed_m, e_speed_m,radius, score_mul, enemy_spawn, t
     local e
 
     e = Turret(x, y, speed_m, e_speed_m, radius, score_mul, enemy_spawn, target_pos, duration, life, number, starting_angle, rotation_angle, shoot_fps)
-    e:addElement(DRAW_TABLE.L4)
+    e:addElement(DRAW_TABLE.L4u)
 
     --Move turret to target position
     e.level_handles["go_to_target"] = LEVEL_TIMER:tween(e.pos:dist(e.target_pos)/(e.speedv*e.speed_m), e.pos, {x = e.target_pos.x, y = e.target_pos.y}, 'in-linear', function() e.reach_target = true end)
