@@ -24,7 +24,7 @@ function level_functions.script()
     LM.level_title("LOST IN DARKNESS")
     Audio.playBGM(BGM_LEVEL_2)
 
-    --2-1: A Cross the Planes
+    --[[2-1: A Cross the Planes
     LM.level_part("Part 1 - A Cross the Planes")
     LM.wait(3)
 
@@ -313,7 +313,7 @@ function level_functions.script()
     LM.wait("noenemies")
 
     F.single{enemy = GlB, x = ORIGINAL_WINDOW_WIDTH + 20, y = ORIGINAL_WINDOW_HEIGHT/2, dx = -1, dy = 0, ind_duration = 2, ind_side = 35, speed_m = .7}
-    LM.wait("noenemies")
+    LM.wait("noenemies")]]
 
     --Lines trapping psycho in the middle
     F.line{enemy = {GlB}, x = ORIGINAL_WINDOW_WIDTH + 20, y = ORIGINAL_WINDOW_HEIGHT/2 + 57, number = 103, dx = -1}
@@ -378,8 +378,8 @@ function level_functions.script()
         elseif i == 20 then
             F.fromVertical{side = "top", mode = "center", number =  20, enemy = {SB}}
         elseif i == 21 then
-            F.fromVertical{side = "top", mode = "left", number =  9, enemy = {GrB}}
-            F.fromVertical{side = "top", mode = "right", number =  10, enemy = {GrB}}
+            F.fromVertical{side = "top", mode = "left", number =  10, enemy = {GrB}}
+            F.fromVertical{side = "top", mode = "right", number =  9, enemy = {GrB}}
         elseif i == 22 then
             F.fromVertical{side = "top", mode = "center", number =  20, enemy = {SB}}
         elseif i == 23 then
@@ -403,13 +403,13 @@ function level_functions.script()
         elseif i == 30 then
             F.fromVertical{side = "top", mode = "center", number =  20, enemy = {SB}}
         elseif i == 31 then
-            F.fromVertical{side = "top", mode = "left", number =  6, enemy = {GrB}}
-            F.fromVertical{side = "top", mode = "right", number =  13, enemy = {GrB}}
+            F.fromVertical{side = "top", mode = "left", number =  7, enemy = {GrB}}
+            F.fromVertical{side = "top", mode = "right", number =  12, enemy = {GrB}}
         elseif i == 32 then
             F.fromVertical{side = "top", mode = "center", number =  20, enemy = {SB}}
         elseif i == 33 then
-            F.fromVertical{side = "top", mode = "left", number =  10, enemy = {GrB}}
-            F.fromVertical{side = "top", mode = "right", number =  9, enemy = {GrB}}
+            F.fromVertical{side = "top", mode = "left", number =  9, enemy = {GrB}}
+            F.fromVertical{side = "top", mode = "right", number =  10, enemy = {GrB}}
         elseif i == 34 then
             F.fromVertical{side = "top", mode = "center", number =  20, enemy = {SB}}
         elseif i == 35 then
@@ -457,8 +457,8 @@ function level_functions.script()
             wait = wait + .1
             F.circle{radius = 640, number = 20, enemy = {DB,SB}, ind_duration = 2, ind_side = 35}
         elseif i == 58 then
-            F.line{x = -20, y = ORIGINAL_WINDOW_HEIGHT/2, dx = 1, number = 30, enemy = {SB}, ind_duration = 5, ind_side = 35, speed_m = .85}
-            F.line{x = ORIGINAL_WINDOW_WIDTH + 20, y = ORIGINAL_WINDOW_HEIGHT/2, dx = -1, number = 30, enemy = {SB}, ind_duration = 5, ind_side = 35, speed_m = .85}
+            F.line{x = -20, y = ORIGINAL_WINDOW_HEIGHT/2, dx = 1, number = 28, enemy = {SB}, ind_duration = 5, ind_side = 35, speed_m = .85}
+            F.line{x = ORIGINAL_WINDOW_WIDTH + 20, y = ORIGINAL_WINDOW_HEIGHT/2, dx = -1, number = 28, enemy = {SB}, ind_duration = 5, ind_side = 35, speed_m = .85}
         end
     end
     LM.wait("noenemies")
@@ -644,6 +644,7 @@ function level_functions.script()
         "         s         ",
 
     }
+
     --Create spaceship
     for i = Util.tableLen(spaceship), 1, -1 do
         local enemy_table
@@ -662,11 +663,12 @@ function level_functions.script()
 
         if j%2 == 0 then m = 0 else m = 30 end
 
-        F.fromHorizontal{side = "left", mode = "bottom", number = j/2, enemy = {SB}, screen_margin = m, enemy_y_margin = 60, speed_m = .7}
-        F.fromHorizontal{side = "right", mode = "bottom", number = j/2, enemy = {SB}, screen_margin = m, enemy_y_margin = 60, speed_m = .7}
+        F.fromHorizontal{side = "left", mode = "bottom", number = j/2, enemy = {SB}, screen_margin = m, enemy_y_margin = 60, speed_m = .5}
+        F.fromHorizontal{side = "right", mode = "bottom", number = j/2, enemy = {SB}, screen_margin = m, enemy_y_margin = 60, speed_m = .5}
         LM.wait(1)
     end
     LM.wait("noenemies")
+    LM.giveLives(5, "finished part")
 
     print("end of level")
     LM.stop()
