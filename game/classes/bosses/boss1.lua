@@ -7,9 +7,6 @@ local Audio = require "audio"
 local Indicator = require "classes.indicator"
 local LM = require "level_manager"
 
-local SB = require "classes.enemies.simple_ball"
-local DB = require "classes.enemies.double_ball"
-
 --BOSS #1 CLASS--
 --[[GORGAMAX]]
 
@@ -88,6 +85,23 @@ Boss_1 = Class{
 
 --CLASS FUNCTIONS--
 
+function Boss_1:draw()
+    local p, x, y
+
+    p = self
+
+    Color.set(p.color)
+
+    x = p.pos.x - p.r
+    y = p.pos.y - p.r
+
+    --Draw the circle
+    love.graphics.setShader(Generic_Smooth_Circle_Shader)
+    love.graphics.draw(PIXEL, x, y, 0, 2*p.r)
+    love.graphics.setShader()
+
+end
+
 function Boss_1:kill()
     local b
 
@@ -96,7 +110,7 @@ function Boss_1:kill()
     if b.death then return end
     b.death = true
 
-    FX.explosion(self.pos.x, self.pos.y, 500, self.color, 600, 200, 200, 4, true)
+    FX.explosion(self.pos.x, self.pos.y, 20, self.color, 600, 600, 400, 4, true)
 
 end
 
@@ -213,7 +227,7 @@ function Boss_1:changeStage()
         b.upper_lightness = 130 --Reset upper color lightness (in %)
         b:colorLightnessLoop() --Start transition all over again
         b.color_stage_current_saturation = b.initial_saturation
-        b.speedv = 450 --Make boss faster
+        b.speedv = 400 --Make boss faster
         b.damage_taken = 0 --Reset boss life
         b.invincible = true --Can't take damage
         b.isShooting = false --Stop shooting
@@ -305,7 +319,7 @@ function Boss_1:changeStage()
         b.angry_af_roar:play()
         SFX["boss_roar"] = b.angry_af_roar
         FX.shake(3, 4) --Shake screen
-        F.circle{x_center = b.pos.x, y_center = b.pos.y, radius = 40, speed_m = 1.1, ind_mode = false, enemy = {DB}, number = 20, score_mul = 0}
+        F.circle{x_center = b.pos.x, y_center = b.pos.y, radius = 40, ind_mode = false, enemy = {SB}, number = 20, score_mul = 0}
 
 
         --Start stage 4
@@ -346,6 +360,24 @@ end
 
 --UTILITY FUNCTIONS--
 
+--Draw function for shadow
+function shadow_draw(self)
+    local p, x, y
+
+    p = self
+
+    Color.set(p.color)
+
+    x = p.pos.x - p.r
+    y = p.pos.y - p.r
+
+    --Draw the circle
+    love.graphics.setShader(Generic_Smooth_Circle_Shader)
+    love.graphics.draw(PIXEL, x, y, 0, 2*p.r)
+    love.graphics.setShader()
+
+end
+
 function boss.create()
     local b, shadow, volume, bgm
 
@@ -353,7 +385,8 @@ function boss.create()
 
     --Create shadow of boss
     shadow = CIRC(ORIGINAL_WINDOW_WIDTH/2, -1200, 800, HSL(0,0,8,200))
-    shadow:addElement(DRAW_TABLE.BOSS, "boss_effect")
+    shadow:addElement(DRAW_TABLE.L5u, "boss_effect")
+    shadow.draw = shadow_draw --Change draw function of shadow
 
     --Lower music volume
     bgm = SOUNDTRACK["next"] or SOUNDTRACK["current"]
@@ -509,7 +542,7 @@ Stage_3 = function(b, dt)
         if b.shoot_tick >= b.shoot_fps then
             b.shoot_tick = b.shoot_tick - b.shoot_fps --Update tick
             if b.enemy_2_shoot == SB then
-                e = (love.math.random()>.1 and SB or DB) --Choose to shoot SB(90%) or DB(10%)
+                e = SB
             else
                 e = DB
             end
@@ -534,8 +567,8 @@ Stage_3 = function(b, dt)
 
         if b.enemy_2_shoot == SB then
             turn_angle = 18
-            turn_ratio = .04
-            b.shoot_fps = .04
+            turn_ratio = .06
+            b.shoot_fps = .06
         else
             turn_angle = 40
             turn_ratio = .07
@@ -551,12 +584,17 @@ Stage_3 = function(b, dt)
         --Rotates the direction
         b.level_handles["spin"] = LEVEL_TIMER:every(turn_ratio,
             function()
-                --2% chance of inverting clock direction if on SB spin attack
-                if b.enemy_2_shoot == SB and love.math.random() >.98 then
-                    clockwise =  -clockwise
+                p = Util.findId("psycho")
                 --Directions tries to follow psycho using cross product on vectors
-                elseif b.enemy_2_shoot == DB then
-                    p = Util.findId("psycho")
+                if b.enemy_2_shoot == DB then
+                    if p and b.dir:cross(Vector(p.pos.x - b.pos.x, p.pos.y - b.pos.y)) > 0 then
+                        clockwise = 1
+                    else
+                        clockwise = -1
+                    end
+                end
+                --On SB spin attack, don't make spread too far away from psycho
+                if p and b.enemy_2_shoot == SB and math.abs(b.dir:angleTo(Vector(p.pos.x - b.pos.x, p.pos.y - b.pos.y))) > math.pi/4 then
                     if p and b.dir:cross(Vector(p.pos.x - b.pos.x, p.pos.y - b.pos.y)) > 0 then
                         clockwise = 1
                     else

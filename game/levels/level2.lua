@@ -6,28 +6,17 @@ local Util = require "util"
 
 local level_functions = {}
 
---Enemies
-local SB = require "classes.enemies.simple_ball"
-local DB = require "classes.enemies.double_ball"
-local GrB = require "classes.enemies.grey_ball"
-local GlB = require "classes.enemies.glitch_ball"
-
 --LEVEL 2--
 
---Level script
-function level_functions.script()
+--2-1: A Cross the Planes
+function level_functions.part_1()
     local p
 
     p = Util.findId("psycho")
 
-    --Start Level
-    LM.level_title("LOST IN DARKNESS")
-    Audio.playBGM(BGM_LEVEL_2)
-
-    --[[2-1: A Cross the Planes
     LM.level_part("Part 1 - A Cross the Planes")
-    LM.wait(3)
 
+    LM.wait(3)
     F.fromHorizontal{enemy = {DB}, side = "left", mode = "top" , number = 7, ind_duration = 2.5, ind_side = 40, speed_m = 1.5}
     LM.wait(2.5)
     for i = 1,10 do
@@ -208,7 +197,17 @@ function level_functions.script()
     LM.wait("noenemies")
     LM.giveLives(4, "finished part")
 
-    --2-2: The Outsider
+    LM.stop()
+    LM.start(level_functions.part_2)
+
+end
+
+--2-2: The Outsider
+function level_functions.part_2()
+    local p
+
+    p = Util.findId("psycho")
+
     LM.level_part("Part 2 - The Outsider")
 
     LM.wait(3)
@@ -313,7 +312,7 @@ function level_functions.script()
     LM.wait("noenemies")
 
     F.single{enemy = GlB, x = ORIGINAL_WINDOW_WIDTH + 20, y = ORIGINAL_WINDOW_HEIGHT/2, dx = -1, dy = 0, ind_duration = 2, ind_side = 35, speed_m = .7}
-    LM.wait("noenemies")]]
+    LM.wait("noenemies")
 
     --Lines trapping psycho in the middle
     F.line{enemy = {GlB}, x = ORIGINAL_WINDOW_WIDTH + 20, y = ORIGINAL_WINDOW_HEIGHT/2 + 57, number = 103, dx = -1}
@@ -464,7 +463,17 @@ function level_functions.script()
     LM.wait("noenemies")
     LM.giveLives(5, "finished part")
 
-    --2-3: STANDING STILL
+    LM.stop()
+    LM.start(level_functions.part_3)
+
+end
+
+--2-3: Standing Still
+function level_functions.part_3()
+    local p
+
+    p = Util.findId("psycho")
+
     LM.level_part("Part 3 - Standing Still")
 
     LM.wait(3)
@@ -670,8 +679,30 @@ function level_functions.script()
     LM.wait("noenemies")
     LM.giveLives(5, "finished part")
 
+    LM.stop()
+    LM.start(level_functions.part_4)
+
+end
+
+function level_functions.part_4()
+
+    LM.level_title("RENATO PLEASE MAKE BOSS ASAP")
+    LM.wait(5)
     print("end of level")
     LM.stop()
+
+end
+
+---------------------
+--UTILITY FUNCTIONS--
+---------------------
+
+--Level setp
+function level_functions.setup()
+
+    --Start Level
+    LM.level_title("LOST IN DARKNESS")
+    Audio.playBGM(BGM_LEVEL_2)
 
 end
 

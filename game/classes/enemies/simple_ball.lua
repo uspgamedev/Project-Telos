@@ -40,7 +40,11 @@ function Simple_Ball:kill(gives_score)
     FX.explosion(self.pos.x, self.pos.y, self.r, self.color)
 
     if gives_score then
-        LM.giveScore(math.ceil(self.score_value*self.score_mul))
+
+        if self.score_value*self.score_mul > 0 then
+            LM.giveScore(math.ceil(self.score_value*self.score_mul))
+        end
+
         SFX_HIT_SIMPLE:play()
     end
 

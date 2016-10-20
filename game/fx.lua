@@ -15,7 +15,7 @@ function fx.explosion(x, y, r, color, number, speed, decaying, size, important)
 
     --Default Values
     number = number or 25  --Number of particles created in a explosion
-    speed    = speed    or 150  --Particles speed
+    speed  = speed    or 150  --Particles speed
     decaying = decaying or 400  --Particles decaying alpha speed (decreases this amunt per second, when reaching 0, it will be deleted)
     size = size or 4
     important = important or false --If an explosion is important, it will always be drawn intact, despite current number of particles already on screen
@@ -54,8 +54,8 @@ function fx.explosion(x, y, r, color, number, speed, decaying, size, important)
         pos = Vector(0,0)
         pos.x = x + radius*math.cos(angle)
         pos.y = y + radius*math.sin(angle)
-
-        particle = Particle.create_decaying(pos, dir, color, speed, decaying, size)
+        
+        particle = Particle.create_decaying(pos, dir, color, speed * (1 - love.math.random()*.5), decaying, size)
         batch:put(particle)
 
     end

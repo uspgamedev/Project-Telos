@@ -4,10 +4,6 @@ local Color = require "classes.color.color"
 local Util = require "util"
 local Audio = require "audio"
 
---Enemies
-local SB = require "classes.enemies.simple_ball"
-local DB = require "classes.enemies.double_ball"
-
 local level_functions = {}
 
 --Boss
@@ -18,16 +14,10 @@ local level2 = require "levels.level2"
 
 --LEVEL 1--
 
---Level script
-function level_functions.script()
-    local t
-    --Start Level
-    LM.level_title("I - THE FALL OF PSYCHO")
-    Audio.playBGM(BGM_LEVEL_1)
+--1-1: The Start of the End
+function level_functions.part_1()
 
-    --1-1: The Start of the End
     LM.level_part("Part 1 - The Start of the End")
-
 
     LM.wait(4)
     INDICATOR_DEFAULT = 1.5
@@ -93,7 +83,14 @@ function level_functions.script()
     LM.wait("noenemies")
     LM.giveLives(2, "finished part")
 
-    --1-2: Circle madness
+    LM.stop()
+    LM.start(level_functions.part_2)
+
+end
+
+--1-2: Circle madness
+function level_functions.part_2()
+
     LM.level_part("Part 2 - Circle Madness")
 
     LM.wait(1.5)
@@ -149,7 +146,15 @@ function level_functions.script()
     LM.wait("noenemies")
     LM.giveLives(3, "finished part")
 
-    --1-3: The Betrayal
+    LM.stop()
+    LM.start(level_functions.part_3)
+
+
+end
+
+--1-3: The Betrayal
+function level_functions.part_3()
+
     LM.level_part("Part 3 - The Betrayal")
 
     LM.wait(2)
@@ -272,8 +277,14 @@ function level_functions.script()
     LM.wait("noenemies")
     LM.giveLives(5, "finished part")
 
+    LM.stop()
+    LM.start(level_functions.part_4)
 
-    --1-4: The Big One
+end
+
+--1-4: The Big One
+function level_functions.part_4()
+
     LM.level_part("Part 4 - The Big One")
 
     LM.wait(2)
@@ -282,8 +293,23 @@ function level_functions.script()
     LM.wait("nobosses")
     LM.wait(2)
     LM.giveLives(5, "finished level")
+
     LM.stop()
-    LM.start(level2.script)
+    level2.setup()
+    LM.start(level2.part_1)
+
+end
+
+---------------------
+--UTILITY FUNCTIONS--
+---------------------
+
+--Level setup
+function level_functions.setup()
+
+    --Start Level
+    LM.level_title("I - THE FALL OF PSYCHO")
+    Audio.playBGM(BGM_LEVEL_1)
 
 end
 

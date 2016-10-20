@@ -73,7 +73,8 @@ function setup.config()
     L4u = {}, --Layer 4 upper
     BOSS = {}, --Bosses
     GAME_GUI = {}, --Game User Interface
-    L5 = {}, --Layer 5
+    L5  = {}, --Layer 5
+    L5u = {}, --Layer 5 upper
     GUI = {}  --Graphic User Interface (top layer, last to draw)
     }
 
@@ -118,6 +119,16 @@ function setup.config()
         return pixel * color;
       }
     ]])
+
+    --Generic Smooth Circle Shader (for objects that change size a lot)
+    Generic_Smooth_Circle_Shader = love.graphics.newShader[[
+      vec4 effect( vec4 color, Image texture, vec2 texture_coords, vec2 screen_coords ){
+        vec4 pixel = Texel(texture, texture_coords );//This is the current pixel color
+        vec2 center = vec2(0.5,0.5);
+        pixel.a = 1 - smoothstep(.49, .5, distance(center, texture_coords));
+        return pixel * color;
+      }
+    ]]
 
     --Table containing smooth circle shaders created
     SMOOTH_CIRCLE_TABLE = {}

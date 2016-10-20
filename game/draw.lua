@@ -53,6 +53,8 @@ function draw.allTables()
 
     DrawTable(DRAW_TABLE.L5) --Indicators and aim circle
 
+    DrawTable(DRAW_TABLE.L5u) --Shadows and other effects
+
     CAM:detach() --Stop tracking camera
 
     if USE_BLUR_CANVAS then
@@ -75,6 +77,7 @@ function draw.allTables()
         love.graphics.setShader(Vertical_Blur_Shader)
         love.graphics.draw(BLUR_CANVAS_2)
         love.graphics.setBlendMode("alpha") --Set alpha mode properly
+        love.graphics.setShader()
 
         FreeRes.transform() --Return transformations onscreen
     end
@@ -82,7 +85,7 @@ function draw.allTables()
 
     DrawTable(DRAW_TABLE.GUI) --Top GUI
 
-    --Creates letterbox at the sides of the screenm if needed
+    --Creates letterbox at the sides of the screen if needed
     FreeRes.letterbox(color)
 
     --Stop using canvas

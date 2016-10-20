@@ -2,7 +2,6 @@ require "classes.primitive"
 local Color = require "classes.color.color"
 local Hsl   = require "classes.color.hsl"
 local Util = require "util"
-local SB = require "classes.enemies.simple_ball"
 local LM = require "level_manager"
 
 --DOUBLE BALL CLASS--
@@ -43,7 +42,9 @@ function Double_Ball:kill(gives_score, mode)
     FX.explosion(self.pos.x, self.pos.y, self.r, self.color)
 
     if gives_score then
-        LM.giveScore(math.ceil(self.score_value*self.score_mul))
+        if self.score_value*self.score_mul > 0 then
+            LM.giveScore(math.ceil(self.score_value*self.score_mul))
+        end
 
         SFX_HIT_DOUBLE:play()
 

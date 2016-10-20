@@ -7,9 +7,6 @@ local Txt = require "classes.text"
 local Audio = require "audio"
 --MODULE FOR THE GAMESTATE: GAME--
 
---ENEMIES--
-local SB = require "classes.enemies.simple_ball"
-
 --LEVEL FUNCTIONS--
 
 local level1 = require "levels.level1"
@@ -24,7 +21,7 @@ local p --Psycho
 function state:enter()
     local x, y, level, t
 
-    level = level2
+    level = level1
 
     x, y = level.startPositions()
 
@@ -47,7 +44,8 @@ function state:enter()
     --Separator 1
     Txt.create_game_gui(5, 185, "————", GUI_MEDPLUS, nil, nil, nil, "separator_1")
 
-    Level.start(level.script)
+    level.setup() --Make title and start BGM
+    Level.start(level.part_4) --Start first part of level
 
     love.mouse.setVisible(false) --Make cursor invisible
     love.mouse.setGrabbed(true) --Resume mouse capture
@@ -147,10 +145,6 @@ function state:keypressed(key)
 
     if key == 'escape' or key == 'p' then --Pause game
         SWITCH = "PAUSE"
-    elseif key == 'o' then
-        x = 50 + love.math.random()*(ORIGINAL_WINDOW_WIDTH-100)
-        y = 50 + love.math.random()*(ORIGINAL_WINDOW_HEIGHT-100)
-        SB.create(x, y)
     else
         Util.defaultKeyPressed(key)
     end

@@ -353,5 +353,6 @@ function Draw_Smooth_Circle(x, y, r)
     --Draw the circle
     love.graphics.setShader(SMOOTH_CIRCLE_TABLE[size])
     love.graphics.draw(PIXEL, x, y, 0, 2*r)
+    love.graphics.setShader()
 
 end
