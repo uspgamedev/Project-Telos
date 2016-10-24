@@ -7,6 +7,36 @@ local Audio = require "audio"
 local Indicator = require "classes.indicator"
 local LM = require "level_manager"
 
+--Stencil functions for drawing the boss
+local stencil = {
+
+    --Stencil function for top left part of main bosd
+    function()
+        b = Util.findId("boss_2_main")
+        love.graphics.rectangle("fill", b.pos.x - 2*b.r, b.pos.y - 2*b.r, 2*b.r, 2*b.r)
+    end,
+
+    --Stencil function for top right part of main_boss
+    function()
+        b = Util.findId("boss_2_main")
+        love.graphics.rectangle("fill", b.pos.x, b.pos.y - 2*b.r, 2*b.r, 2*b.r)
+    end,
+
+    --Stencil function for bottom part of main bosd
+    function()
+        b = Util.findId("boss_2_main")
+        love.graphics.rectangle("fill", b.pos.x, b.pos.y, 2*b.r, 2*b.r)
+    end,
+
+    --Stencil function for bottom left part of main bosd
+    function()
+        b = Util.findId("boss_2_main")
+        love.graphics.rectangle("fill", b.pos.x - 2*b.r, b.pos.y, 2*b.r, 2*b.r)
+    end
+
+}
+
+
 --BOSS #2 CLASS--
 --[[Name of Boss here]]
 
@@ -97,10 +127,19 @@ function Boss_2_Main:draw()
         x = p.pos.x - p.r + p.positions[i].x
         y = p.pos.y - p.r + p.positions[i].y
 
+        -- Draw a rectangle as a stencil. Each pixel touched by the rectangle will have its stencil value set to 1. The rest will be 0.
+        love.graphics.stencil(stencil[i], "replace", 1)
+
+        -- Only allow rendering on pixels which have a stencil value greater than 0, so will only draw pixels inside the rectangle
+        love.graphics.setStencilTest("greater", 0)
+
         --Draw the circle
         love.graphics.setShader(Generic_Smooth_Circle_Shader)
         love.graphics.draw(PIXEL, x, y, 0, 2*p.r)
         love.graphics.setShader()
+
+        --Stop using stencil
+        love.graphics.setStencilTest()
 
     end
 
@@ -313,7 +352,7 @@ function boss.create()
 
     b = Boss_2_Main()
 
-    b:addElement(DRAW_TABLE.BOSSu, "bosses") --make boss appear
+    b:addElement(DRAW_TABLE.BOSSu, "bosses", "boss_2_main") --make boss appear
     for i = 1,4 do
         b:colorLightnessLoop(i) --Start color transition
     end
