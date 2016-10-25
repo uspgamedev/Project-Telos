@@ -5,10 +5,14 @@ GAME DESIGN DOCUMENT
 DEV LOG
 =======
 
+#### 25/10/2016:
+
+Made part 2 and 3 of the boss. Seems fully working, but still needs some balancing.
+
 #### 24/10/2016:
 @yancouto, virtual @renatogeh
 
-Finished all remaining issues for the iteration.
+Finished all remaining issues for the iteration, and also learned hwo to use stencil to draw the boss properly.
 
 The group got together (renato geh by messenger), and decided next iteration:
 

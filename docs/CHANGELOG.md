@@ -2,7 +2,17 @@
 THE HISTORY OF PSYCHO: THE BALL
 ===============================
 
-#### (10/10/2016) Version 0.0.0.7.5  -  XXXXXXXXXXXXXXXXXXX
+#### (xx/xx/2016) Version 0.0.0.9  -  XXXXXXXXXXX
+
+#### (25/10/2016) Version 0.0.0.8  -  Roundness
+
+- Level 2-3!
+    - Turrets are evil!
+
+- Juiciness returns:
+    - Circles are smooth
+    - Pause is blurry
+    - Everyone is happy
 
 #### (10/10/2016) Version 0.0.0.7    -  Darkness all around
 
