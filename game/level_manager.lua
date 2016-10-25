@@ -76,7 +76,6 @@ function level_manager.resume()
         if COROUTINE_HANDLE then
             LEVEL_TIMER:cancel(COROUTINE_HANDLE)
         end
-
         COROUTINE_HANDLE = LEVEL_TIMER:after(arg, level_manager.resume)
     --Waits for all enemies to die, then wait .5 second more
     elseif arg == "nobosses" then

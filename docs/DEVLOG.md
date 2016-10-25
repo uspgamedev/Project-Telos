@@ -5,6 +5,25 @@ GAME DESIGN DOCUMENT
 DEV LOG
 =======
 
+#### 24/10/2016:
+@yancouto, virtual @renatogeh
+
+Finished all remaining issues for the iteration.
+
+The group got together (renato geh by messenger), and decided next iteration:
+
+Two weeks to make boss 2, and as filler, make death messages, some preparations for 3-1 and make some fist steps on the save system.
+
+
+#### 20/10/2016:
+
+Focused on  last issues for iteration:
+Made boss 2 intro and the start of the first part.
+
+Also made some balances on level2 based on feedback.
+
+
+
 #### 19/10/2016:
 
 Finished level 2-3 and made some changes on turrets (they are now drawn above other enemies and

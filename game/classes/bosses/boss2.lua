@@ -36,12 +36,14 @@ local stencil = {
 
 }
 
-
 --BOSS #2 CLASS--
 --[[Name of Boss here]]
 
---Behaviours--
-local Stage_0, Stage_1, Stage_3, Stage_4
+--Behaviours for main part--
+local Stage_1, Stage_2, Stage_3, Stage_4
+
+--Behaviours for turret part--
+local Stage_1_t, Stage_2_t, Stage_3_t, Stage_4_t
 
 local boss = {}
 
@@ -91,14 +93,16 @@ Boss_2_Main = Class{
 
         }
 
+        self.turrets = {} --All turrets the main boss has
+
         --Boss speed value
         self.speedv = 350 --Speed value
-        self.target = _target --Target to move
+        self.target = nil --Target to move
 
         self.life = {} --How many hits this boss can take before changing state (this value is for stage 1)
         self.damage_taken = {} --How many hits this boss has taken
         for i = 1, 4 do
-            self.life[i] = 10
+            self.life[i] = 25 --Inicial life for stage 1
             self.damage_taken[i] = 0
         end
 
@@ -108,8 +112,10 @@ Boss_2_Main = Class{
         self.static = false --If boss can move
         self.stage = 0 --Stage this boss is
 
+        self.shoot_tick = 2.4 --Enemy shooter "cooldown" timer (for shooting repeatedly)
+        self.shoot_fps = 2.4 --How fast to shoot enemies
 
-        self.behaviour = Stage_0 --What behaviour this boss is following
+        self.behaviour = nil --What behaviour this boss is following
         self.tp = "boss_two_main" --Type of this class
     end
 }
@@ -176,6 +182,7 @@ function Boss_2_Main:kill()
     b = self
 
     if b.death then return end
+
     b.death = true
 
     FX.explosion(self.pos.x, self.pos.y, 20, self.color, 600, 600, 100, 4, true)
@@ -205,11 +212,10 @@ function Boss_2_Main:getHit(id)
 
     if b.damage_taken[id] >= b.life[id] then return end
 
-    if b.stage >= 5 then return end
+    if b.stage >= 7 then return end
 
-    b.damage_taken[id] = b.damage_taken[id] + 1
-    b.bottom_lightness[id] = b.bottom_lightness[id] - .2
-    b.upper_lightness[id] = b.upper_lightness[id] - .2
+    b.damage_taken[id] = b.damage_taken[id] + 1 --Make part take damage
+    b.bottom_lightness[id] = b.bottom_lightness[id] - .6 --Make part glow darker
     b:getHitAnimation(id)
 
     if b.damage_taken[id] >= b.life[id] then
@@ -219,7 +225,6 @@ function Boss_2_Main:getHit(id)
 
         if b.parts_alive <= 0 then
             b.stage = b.stage + 1
-
             b:changeStage() --Change boss stage
         end
 
@@ -229,9 +234,12 @@ end
 
 --Color animation when boss gets hit
 function Boss_2_Main:getHitAnimation(id)
-    local b, diff
+    local b, diff, color
 
     b = self
+
+    color = b.color_stage_hue[b.stage+1]
+
     --Remove previous transition
     if b.level_handles["gethithue"..id] then
         LEVEL_TIMER:cancel(b.level_handles["gethithue"..id])
@@ -257,7 +265,7 @@ function Boss_2_Main:getHitAnimation(id)
             --Transition current onhit hue to boss stage current hue when saturation is 0
             b.level_handles["gethithue"..id] = LEVEL_TIMER:after(.25,
                 function()
-                    b.part_colors[id].h = b.color_stage_hue[b.stage+1]
+                    b.part_colors[id].h = color
                 end)
             --Drops saturation, then go to stage current saturation
             b.level_handles["gethitsaturation"..id] = LEVEL_TIMER:tween(.25, b.part_colors[id], {s = 0}, 'in-linear',
@@ -279,6 +287,7 @@ function Boss_2_Main:changeStage()
     if b.stage == 1 then
         b.behaviour = Stage_1
     elseif b.stage == 2 then
+        FX.shake(1,3) --Shake screen
         --Reset stats
         for i = 1,4 do
             b.color_stage_current_saturation[i] = b.initial_saturation
@@ -287,6 +296,8 @@ function Boss_2_Main:changeStage()
             b.part_colors[i] = HSL(b.color_stage_hue[3], 0, b.bottom_lightness[i])
             b.level_handles["no_more_saturation"..i] = LEVEL_TIMER:tween(1, b.part_colors[i], {s = 255}, 'in-linear')
             b.damage_taken[i] = 0
+            b.life[i] = 30
+            b.parts_alive = 4
 
             --Remove previous transitions
             if b.level_handles["gethithue"..i] then
@@ -300,17 +311,147 @@ function Boss_2_Main:changeStage()
             end
 
             b:colorLightnessLoop(i) --Start transition all over again
+
+            b.turrets[i].static = true
+
         end
 
+        b.shoot_fps = .9 --Make main boss shoot faster
+        b.shoot_tick = 0 --Reset tick
         b.invincible = true --Can't take damage
 
         --Stop moving
         b.static = true
 
+        b.level_handles["start_stage2"] = LEVEL_TIMER:after(1,
+            function()
+                b.invincible = false --Make boss "hittable"
+                b.static = false --Make boss shoot player
+                b.behaviour = Stage_2
+                --Change turrets behaviour
+                for i = 1, 4 do
+                    local turret
+                    turret = b.turrets[i]
+                    turret.behaviour = Stage_2_t --Change their behaviour
+                    turret.static = false --Make turrets move
+                    turret.target = nil --Make them choose a target
+                    turret.shoot_fps = 1.3 --Make turrets shoot slower
+                    turret.shoot_tick = 0 --Reset tick
+                    turret.speedv = 150 --Make turret slower
+
+                    if i == 1 then
+                        --From left to top left
+                        turret.target = Vector(70, 70)
+                    elseif i == 2 then
+                        --From top to top right
+                        turret.target = Vector(ORIGINAL_WINDOW_WIDTH - 70, 70)
+                    elseif i == 3 then
+                        --From right to bottom right
+                        turret.target = Vector(ORIGINAL_WINDOW_WIDTH - 70, ORIGINAL_WINDOW_HEIGHT - 70)
+                    else
+                        --From bottom to bottom left
+                        turret.target = Vector(70, ORIGINAL_WINDOW_HEIGHT - 70)
+                    end
+
+                    --Move turret to target position
+                    turret.level_handles["moving_to_target"] = LEVEL_TIMER:tween(turret.pos:dist(turret.target)/turret.speedv, turret.pos, {x = turret.target.x, y = turret.target.y}, 'in-linear',
+                        function()
+                            turret.target = nil
+                        end
+                    )
+
+                end
+            end
+        )
 
     elseif b.stage == 3 then
 
+        --Reset stats
+        for i = 1,4 do
+            FX.shake(1,3) --Shake screen
+            b.color_stage_current_saturation[i] = b.initial_saturation
+            b.bottom_lightness[i] = 100 --Bottom color lightness in %
+            b.upper_lightness[i] = 130 --Upper color lightness in %
+            b.part_colors[i] = HSL(b.color_stage_hue[4], 0, b.bottom_lightness[i])
+            b.level_handles["timer_saturation"..i] = LEVEL_TIMER:after(3,
+                function()
+                    b.level_handles["no_more_saturation"..i] = LEVEL_TIMER:tween(1, b.part_colors[i], {s = 255}, 'in-linear',
+                        function()
+                            b.behaviour = Stage_3
+                            b.invincible = false
+                            b.static = false
+                        end
+                    )
+                end
+            )
+            b.damage_taken[i] = 0
+            b.life[i] = 40
+            b.parts_alive = 4
+            b.shoot_tick = 0 --Reset tick
+            b.invincible = true --Can't take damage
+            b.static = true --Stop moving
+            b.shoot_fps = .6 --Make boss shoot faster
+
+            --Remove previous transitions
+            if b.level_handles["gethithue"..i] then
+                LEVEL_TIMER:cancel(b.level_handles["gethithue"..i])
+            end
+            if b.level_handles["gethitsaturation"..i] then
+                LEVEL_TIMER:cancel(b.level_handles["gethitsaturation"..i])
+            end
+            if b.level_handles["gethittimer"..i] then
+                LEVEL_TIMER:cancel(b.level_handles["gethittimer"..i])
+            end
+
+            b:colorLightnessLoop(i) --Start transition all over again
+
+            local turret = b.turrets[i]
+            turret.shoot_fps = 1 --Make turrets shoot faster
+            turret.shoot_tick = 0 --Reset tick
+            turret.static = true --Stop turrets action
+            turret.speedv = 200 --Make turret faster
+
+            if turret.level_handles["moving_to_target"] then
+                LEVEL_TIMER:cancel(turret.level_handles["moving_to_target"])
+            end
+
+
+            --Move turret to the middle
+            turret.target = Vector(ORIGINAL_WINDOW_WIDTH/2, ORIGINAL_WINDOW_HEIGHT/2)
+            turret.level_handles["moving_to_target"] = LEVEL_TIMER:tween(2, turret.pos, {x = turret.target.x, y = turret.target.y}, 'in-linear',
+                function()
+                    FX.shake(.3,3)
+                    --Get turret target position
+                    if turret.identification == 1 then
+                        turret.target = Vector(70, ORIGINAL_WINDOW_HEIGHT/2) --Left
+                    elseif turret.identification == 2 then
+                        turret.target = Vector(ORIGINAL_WINDOW_WIDTH/2, 70)  --Up
+                    elseif turret.identification == 3 then
+                        turret.target = Vector(ORIGINAL_WINDOW_WIDTH - 70, ORIGINAL_WINDOW_HEIGHT/2) --Right
+                    else
+                        turret.target = Vector(ORIGINAL_WINDOW_WIDTH/2, ORIGINAL_WINDOW_HEIGHT - 70) --Bottom
+                    end
+
+                    --Move turret to target position
+                    turret.level_handles["moving_to_target"] = LEVEL_TIMER:tween(2, turret.pos, {x = turret.target.x, y = turret.target.y}, 'in-linear',
+                        function()
+                            turret.static = false
+                            turret.behaviour = Stage_3_t
+                            turret.target = nil
+                        end
+                    )
+                end
+            )
+
+        end
+
     elseif b.stage == 4 then
+
+        for i = 1, 4 do
+            b.turrets[i]:kill()
+        end
+
+        b:kill()
 
     elseif b.stage == 5 then
 
@@ -344,11 +485,192 @@ function Boss_2_Main:colorLightnessLoop(id)
 
 end
 
+--------------------
+--BOSS TURRET PART--
+--------------------
+
+Boss_2_Turret = Class{
+    __includes = {CIRC},
+    init = function(self, x, y, id)
+        local r, color
+
+        r = 40 --Radius of central turret part
+        self.red_circles_r = {20,20,20,20} --Radius of red circles around
+        self.outer_radius = r --Radius for final part
+        self.bottom_lightness = 100
+        self.upper_lightness = 130
+        self.color_pulse_duration = 1 --Duration between color saturation transitions
+
+        self.second_color = HSL(250, 100, 150)
+        color = HSL(120, 0, self.bottom_lightness)
+
+        CIRC.init(self, x, y, r, color, nil, "fill") --Set atributes
+
+        self.identification = id --This turret id
+
+
+        self.positions = { --Relative position each parts of the poss has
+            Vector(-r, 0), --Left
+            Vector(0, -r), --Top
+            Vector(r, 0),  --Right
+            Vector(0, r),  --Bottom
+
+        }
+
+        --Boss speed value
+        self.speedv = 350 --Speed value
+        self.target = nil --Target to move
+
+        self.counter = 0 --Counter for stage 3
+
+        self.parts_alive = {true,true,true,true} --Secondary parts alive (true if its alive)
+
+        self.invincible = true --If boss can get hit
+        self.static = false --If turret can "act"
+
+        self.shoot_tick = 1.2 --Enemy shooter "cooldown" timer (for shooting repeatedly)
+        self.shoot_fps = 1.2 --How fast to shoot enemies
+
+        self.behaviour = nil --What behaviour this turret is following
+        self.tp = "boss_two_turret" --Type of this class
+    end
+}
+
+--CLASS FUNCTIONS--
+
+function Boss_2_Turret:draw()
+    local p, x, y
+
+    p = self
+
+    --Draw the small red circles
+    Color.set(p.second_color)
+    for i = 1, 4 do
+        if p.parts_alive[i] then
+            x = p.pos.x - p.red_circles_r[i] + p.positions[i].x
+            y = p.pos.y - p.red_circles_r[i] + p.positions[i].y
+
+
+            --Draw the circle
+            love.graphics.setShader(Generic_Smooth_Circle_Shader)
+            love.graphics.draw(PIXEL, x, y, 0, 2*p.red_circles_r[i])
+            love.graphics.setShader()
+        end
+    end
+
+    Color.set(p.color)
+    --Draw the big center circle
+    love.graphics.setShader(Generic_Smooth_Circle_Shader)
+    love.graphics.draw(PIXEL, p.pos.x - p.r, p.pos.y - p.r, 0, 2*p.r)
+    love.graphics.setShader()
+
+end
+
+function Boss_2_Turret:collides(o)
+    local col
+
+    e = self
+    for i = 1, 4 do
+        if e.parts_alive[i] then
+            dx = e.pos.x + e.positions[i].x - o.pos.x
+            dy = e.pos.y + e.positions[i].y - o.pos.y
+
+            --In case of psycho, check collision with his collision radius
+            if o.tp == "psycho" then
+                dr = e.red_circles_r[i] + o.collision_r
+            else
+                dr = e.red_circles_r[i] + o.r
+            end
+
+            if ((dx*dx + dy*dy) < dr*dr) then
+                return true, i
+            end
+        end
+    end
+
+    --Collision with center
+
+    dx = e.pos.x - o.pos.x
+    dy = e.pos.y - o.pos.y
+
+    --In case of psycho, check collision with his collision radius
+    if o.tp == "psycho" then
+        dr = e.r + o.collision_r
+    else
+        dr = e.r + o.r
+    end
+
+    if ((dx*dx + dy*dy) < dr*dr) then
+        return true, 5
+    end
+
+    return false
+
+end
+
+function Boss_2_Turret:getHit(id)
+
+end
+
+function Boss_2_Turret:kill()
+    local b
+
+    b = self
+
+    if b.death then return end
+    b.death = true
+
+    FX.explosion(self.pos.x, self.pos.y, 20, self.color, 600, 600, 100, 4, true)
+
+end
+
+--Update this boss
+function Boss_2_Turret:update(dt)
+    local b
+
+    b = self
+    --Boss won't move if static
+    if b.static then return end
+
+    if b.behaviour then
+        b:behaviour(dt) --Make boss current stage behaviour
+    end
+
+end
+
+
+--Keeps transitioning boss color saturation from values bottom_lightness to upper_lightness, and vice-versa
+function Boss_2_Turret:colorLightnessLoop(id)
+    local b
+
+    b = self
+
+    --Remove previous timer
+    if b.level_handles["lightness"..id] then
+        COLOR_TIMER:cancel(b.level_handles["lightness"..id])
+    end
+
+    --Start saturation transition from bottom_lightness to upper_lightness
+    b.level_handles["lightness"..id] = COLOR_TIMER:tween(b.color_pulse_duration/2, b.second_color, {l = b.upper_lightness[id]}, 'in-linear',
+        --After reaching upper_lightness, start lightness transition from upper_lightness to bottom_lightness
+        function()
+            b.level_handles["lightness"..id] = COLOR_TIMER:tween(b.color_pulse_duration/2, b.second_color, {l = b.bottom_lightness[id]}, 'in-linear',
+                --After reaching bottom_lightness, start eveything again
+                function()
+                    b:colorLightnessLoop(id)
+                end
+            )
+        end
+    )
+
+end
+
+
 
 --UTILITY FUNCTIONS--
 
 function boss.create()
-    local b
+    local b, a
 
     b = Boss_2_Main()
 
@@ -357,11 +679,24 @@ function boss.create()
         b:colorLightnessLoop(i) --Start color transition
     end
 
+    b.turrets[1] = Boss_2_Turret(b.pos.x - math.sqrt(3)*b.r/2, b.pos.y, 1) --Left
+    b.turrets[1]:addElement(DRAW_TABLE.BOSS, "bosses")
+    b.turrets[2] = Boss_2_Turret(b.pos.x, b.pos.y - math.sqrt(3)*b.r/2, 2) --Top
+    b.turrets[2]:addElement(DRAW_TABLE.BOSS, "bosses")
+    b.turrets[3] = Boss_2_Turret(b.pos.x + math.sqrt(3)*b.r/2, b.pos.y, 3) --Right
+    b.turrets[3]:addElement(DRAW_TABLE.BOSS, "bosses")
+    b.turrets[4] = Boss_2_Turret(b.pos.x, b.pos.y + math.sqrt(3)*b.r/2, 4) --Bottom
+    b.turrets[4]:addElement(DRAW_TABLE.BOSS, "bosses")
+
+
+
     b.target = Vector(ORIGINAL_WINDOW_WIDTH/2, ORIGINAL_WINDOW_HEIGHT/2)
 
     --Make boss move to the center
     b.level_handles["moving"] = LEVEL_TIMER:tween(b.pos:dist(b.target)/b.speedv, b.pos, {x = b.target.x, y = b.target.y}, 'in-linear',
         function()
+
+            FX.shake(.5, 5) --Shake screen
 
             LM.boss_title("WILSO KAZUO MIZUTANI") --Boss title
 
@@ -373,12 +708,22 @@ function boss.create()
                     for id = 1, 4 do
                         local _x, _y
                         _x, _y = 2*(b.positions[id].x) / 3, 2*(b.positions[id].y) / 3
-                        b.level_handles["shrink"..id] = LEVEL_TIMER:tween(1, b.positions[id], {x = _x, y = _y})
-                        b.level_handles["turn_green"..id] = LEVEL_TIMER:tween(1, b.part_colors[id], {s = 255}, 'in-linear')
+                        b.level_handles["shrink"..id] = LEVEL_TIMER:tween(.8, b.positions[id], {x = _x, y = _y}, 'in-linear',
+                            function()
+                                --Shake screen
+                                b.level_handles["shake_screen"] = LEVEL_TIMER:after(1,
+                                    function()
+                                        FX.shake(1,2)
+                                    end
+                                )
+                                --Turn green
+                                b.level_handles["turn_green"..id] = LEVEL_TIMER:tween(1.7, b.part_colors[id], {s = 255}, 'in-expo')
+                            end
+                        )
                     end
-                    b.level_handles["shrink_radius"] = LEVEL_TIMER:tween(1, b, {r = _r}, 'in-linear')
+                    b.level_handles["shrink_radius"] = LEVEL_TIMER:tween(.8, b, {r = _r}, 'in-linear')
                     --After shrinking, make boss vincible
-                    b.level_handles["after_shrink"] = LEVEL_TIMER:after(1.1,
+                    b.level_handles["after_shrink"] = LEVEL_TIMER:after(2.5,
                         function ()
                             b.invincible = false
                             b.stage = 1
@@ -390,6 +735,45 @@ function boss.create()
         end
     )
 
+    --Make turrets move to the center
+    for i = 1, 4 do
+        b.turrets[i].target = Vector(b.turrets[i].pos.x, b.turrets[i].pos.y + 500 + ORIGINAL_WINDOW_HEIGHT/2)
+        b.turrets[i].level_handles["moving"] = LEVEL_TIMER:tween(b.turrets[i].pos:dist(b.turrets[i].target)/b.speedv, b.turrets[i].pos, {x = b.turrets[i].target.x, y = b.turrets[i].target.y}, 'in-linear',
+            function()
+
+                --After 2 seconds, make turret go to respective side in 1 second
+                b.turrets[i].level_handles["moving_2"] = LEVEL_TIMER:after(2,
+                    function()
+
+
+                        _x, _y = b.turrets[i].pos.x, b.turrets[i].pos.y
+
+                        if i == 1 then --Left
+                            _x = 70
+                        elseif i == 2 then --Top
+                            _y = 70
+                        elseif i == 3 then --Right
+                            _x = ORIGINAL_WINDOW_WIDTH - 70
+                        elseif i == 4 then --Bottom
+                            _y = ORIGINAL_WINDOW_HEIGHT - 70
+                        end
+
+                        --Move turret to side
+                        b.turrets[i].level_handles["moving_3"] = LEVEL_TIMER:tween(1.5, b.turrets[i].pos, {x = _x, y = _y}, 'in-linear')
+
+                        --After waiting 2.1s (boss time to begins), start turrets stage 1
+                        b.turrets[i].level_handles["after_move"] = LEVEL_TIMER:after(2.5,
+                            function ()
+                                b.turrets[i].stage = 1
+                                b.turrets[i].behaviour = Stage_1_t
+                            end
+                        )
+                    end
+                )
+            end
+        )
+    end
+
 
     return
 end
@@ -399,16 +783,192 @@ end
 
 --STAGES--
 
---Does nothing
-Stage_0 = function(b, dt)
-    --Does nothing
-end
-
---Does nothing
+--Shoots at the player with double balls
 Stage_1 = function(b, dt)
-    --Does nothing
+
+    b.shoot_tick = b.shoot_tick + dt
+
+    while b.shoot_tick >= b.shoot_fps do
+
+        b.shoot_tick = b.shoot_tick - b.shoot_fps --Update tick
+
+
+        F.single{x = b.pos.x, y = b.pos.y, dir_follow = true, ind_mode = false, enemy = DB, score_mul = 0}
+
+    end
+
 end
 
+--Shoots at the player with simple balls
+Stage_1_t = function(b, dt)
+
+    b.shoot_tick = b.shoot_tick + dt
+
+    while b.shoot_tick >= b.shoot_fps do
+
+        b.shoot_tick = b.shoot_tick - b.shoot_fps --Update tick
+
+        F.single{x = b.pos.x, y = b.pos.y, dir_follow = true, ind_mode = false, enemy = SB, speed_m = 1, score_mul = 0}
+
+    end
+
+end
+
+--Shoots at the player with Grey Balls
+Stage_2 = function(b, dt)
+
+    b.shoot_tick = b.shoot_tick + dt
+
+    while b.shoot_tick >= b.shoot_fps do
+
+        b.shoot_tick = b.shoot_tick - b.shoot_fps --Update tick
+
+        F.single{x = b.pos.x, y = b.pos.y, dir_follow = true, ind_mode = false, enemy = GrB, score_mul = 0}
+
+    end
+
+end
+
+--Shoots at the player with double balls while moving clockwise in the corners
+Stage_2_t = function(b, dt)
+
+    b.shoot_tick = b.shoot_tick + dt
+
+    while b.shoot_tick >= b.shoot_fps do
+
+        b.shoot_tick = b.shoot_tick - b.shoot_fps --Update tick
+
+        F.single{x = b.pos.x, y = b.pos.y, dir_follow = true, ind_mode = false, enemy = DB, speed_m = .8, score_mul = 0}
+
+    end
+
+    if b.target == nil then
+        --Get target position
+        if b.pos.x <= ORIGINAL_WINDOW_WIDTH/2 then
+            if b.pos.y < ORIGINAL_WINDOW_HEIGHT/2 then
+                --From top left to top right
+                b.target = Vector(ORIGINAL_WINDOW_WIDTH - 70, 70)
+            else
+                --From bottom left to top left
+                b.target = Vector(70, 70)
+            end
+        else
+            if b.pos.y < ORIGINAL_WINDOW_HEIGHT/2 then
+                --From top right to bottom right
+                b.target = Vector(ORIGINAL_WINDOW_WIDTH - 70, ORIGINAL_WINDOW_HEIGHT - 70)
+            else
+                --From bottom right to bottom left
+                b.target = Vector(70, ORIGINAL_WINDOW_HEIGHT - 70)
+            end
+        end
+
+        --Move turret to target position
+        b.level_handles["moving_to_target"] = LEVEL_TIMER:tween(b.pos:dist(b.target)/b.speedv, b.pos, {x = b.target.x, y = b.target.y}, 'in-linear',
+            function()
+                b.target = nil
+            end
+        )
+    end
+
+end
+
+--Shoots at the player with big Grey or Glitch Balls
+Stage_3 = function(b, dt)
+    local e
+
+    --40% of shooting grey balls and 60% of shooting glitch balls
+    if love.math.random() < .4 then
+        e = GrB
+    else
+        e = GlB
+    end
+
+    b.shoot_tick = b.shoot_tick + dt
+
+    while b.shoot_tick >= b.shoot_fps do
+
+        b.shoot_tick = b.shoot_tick - b.shoot_fps --Update tick
+
+        F.single{x = b.pos.x, y = b.pos.y, dir_follow = true, ind_mode = false, enemy = e, score_mul = 0, e_radius = 30}
+
+    end
+
+end
+
+--Shoots at the player with Glitch Balls
+Stage_3_t = function(b, dt)
+
+    b.shoot_tick = b.shoot_tick + dt
+
+    if b.shoot_tick >= b.shoot_fps then
+
+        b.shoot_tick = b.shoot_tick - b.shoot_fps --Update tick
+
+        F.single{x = b.pos.x, y = b.pos.y, dir_follow = true, ind_mode = false, enemy = GlB, speed_m = .8, score_mul = 0}
+
+    end
+
+    if b.target == nil then
+        --Get target position
+        if b.pos.x <= ORIGINAL_WINDOW_WIDTH/2 - 80  then
+            --From left to top
+            b.target = Vector(ORIGINAL_WINDOW_WIDTH/2, 70)
+        elseif b.pos.y <= ORIGINAL_WINDOW_HEIGHT/2 - 80 then
+            --From top to right
+            b.target = Vector(ORIGINAL_WINDOW_WIDTH - 70, ORIGINAL_WINDOW_HEIGHT/2)
+        elseif b.pos.x >= ORIGINAL_WINDOW_WIDTH/2 + 80 then
+            --From right to bottom
+            b.target = Vector(ORIGINAL_WINDOW_WIDTH/2, ORIGINAL_WINDOW_HEIGHT - 70)
+        else
+            --From bottom to left
+            b.target = Vector(70, ORIGINAL_WINDOW_HEIGHT/2)
+        end
+
+        --Move turret to target position 4 times, the goes to the center and back
+        b.level_handles["moving_to_target"] = LEVEL_TIMER:tween(b.pos:dist(b.target)/b.speedv, b.pos, {x = b.target.x, y = b.target.y}, 'in-linear',
+            function()
+                b.counter = b.counter + 1
+                if b.counter < 3 then
+                    b.target = nil
+                else
+                    b.static = true
+                    --Move turret to the middle
+                    b.target = Vector(ORIGINAL_WINDOW_WIDTH/2, ORIGINAL_WINDOW_HEIGHT/2)
+                    b.level_handles["moving_to_target"] = LEVEL_TIMER:tween(2, b.pos, {x = b.target.x, y = b.target.y}, 'in-linear',
+                        function()
+                            FX.shake(3,1)
+                            --Wait 3 seconds before going out
+                            b.level_handles["moving_to_target"] = LEVEL_TIMER:after(3,
+                                function()
+                                    --Get turret inicial position
+                                    if b.identification == 1 then
+                                        b.target = Vector(70, ORIGINAL_WINDOW_HEIGHT/2) --Left
+                                    elseif b.identification == 2 then
+                                        b.target = Vector(ORIGINAL_WINDOW_WIDTH/2, 70)  --Up
+                                    elseif b.identification == 3 then
+                                        b.target = Vector(ORIGINAL_WINDOW_WIDTH - 70, ORIGINAL_WINDOW_HEIGHT/2) --Right
+                                    else
+                                        b.target = Vector(ORIGINAL_WINDOW_WIDTH/2, ORIGINAL_WINDOW_HEIGHT - 70) --Bottom
+                                    end
+
+                                    --Restart turret movement
+                                    b.level_handles["moving_to_target"] = LEVEL_TIMER:tween(2, b.pos, {x = b.target.x, y = b.target.y}, 'in-linear',
+                                        function()
+                                            b.static = false
+                                            b.counter = 0
+                                            b.target = nil
+                                        end
+                                    )
+                                end
+                            )
+                        end
+                    )
+                end
+            end
+        )
+    end
+
+end
 
 --return function
 return boss

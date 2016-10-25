@@ -481,7 +481,7 @@ function level_functions.part_3()
 
     LM.wait(3)
     INDICATOR_DEFAULT = 1.5
-    F.turret{x = -60, y = ORIGINAL_WINDOW_HEIGHT/2, t_x = ORIGINAL_WINDOW_WIDTH/2, t_y = ORIGINAL_WINDOW_HEIGHT/2, enemy = SB, number = 8, life = 30, duration = 15, rot_angle = math.pi/4, speed_m = 2, ind_duration = 2.5}
+    F.turret{x = -60, y = ORIGINAL_WINDOW_HEIGHT/2, t_x = ORIGINAL_WINDOW_WIDTH/2, t_y = ORIGINAL_WINDOW_HEIGHT/2, enemy = SB, number = 8, life = 20, duration = 15, rot_angle = math.pi/4, speed_m = 2, ind_duration = 2.5}
     LM.wait("noenemies")
 
     F.turret{x = ORIGINAL_WINDOW_WIDTH/2, y = -60, t_x = ORIGINAL_WINDOW_WIDTH/2, t_y = 2*ORIGINAL_WINDOW_HEIGHT/5, enemy = DB, number = 6, life = 20, duration = 15, rot_angle = math.pi/3, speed_m = 1.5}
@@ -549,36 +549,48 @@ function level_functions.part_3()
     F.fromVertical{side = "top", mode = pos1, number = num, speed_m = .9, enemy = {GlB}, ind_mode = false}
     LM.wait(2)
 
+    local dist1, dist2
+
+    dist1, dist2 = nil, nil
+
     if p.pos.x <= 2*ORIGINAL_WINDOW_WIDTH/7 then
         pos2 = "left"
+        dist2 = 60
     elseif p.pos.x <= 5*ORIGINAL_WINDOW_WIDTH/7 then
         pos2 = "center"
     else
         pos2 = "right"
+        dist2 = 60
     end
 
     --If psycho is in the same position, get another close position (or choose one at random if he is at the center)
     if pos1 == pos2 then
         if pos1 == "right" or pos1 == "left" then
             pos2 = "center"
+            dist2 = nil
         elseif love.math.random() > .5 then
             pos2 = "left"
+            dist2 = 60
         else
             pos2 = "right"
+            dist2 = 60
         end
     end
 
-    F.fromVertical{side = "bottom", mode = pos1, number = 7, speed_m = 1, enemy = {GlB}}
-    F.fromVertical{side = "bottom", mode = pos2, number = 7, speed_m = 1, enemy = {GlB}}
+    if pos1 == "left" or pos1 == "right" then dist1 = 60 end
+
+
+    F.fromVertical{side = "bottom", mode = pos1, number = 6, speed_m = 1, enemy = {GlB}, enemy_x_margin = dist1}
+    F.fromVertical{side = "bottom", mode = pos2, number = 6, speed_m = 1, enemy = {GlB}, enemy_x_margin = dist2}
     LM.wait(2)
-    F.fromVertical{side = "bottom", mode = pos1, number = 7, speed_m = 1, enemy = {GlB}, ind_mode = false}
-    F.fromVertical{side = "bottom", mode = pos2, number = 7, speed_m = 1, enemy = {GlB}, ind_mode = false}
+    F.fromVertical{side = "bottom", mode = pos1, number = 6, speed_m = 1, enemy = {GlB}, ind_mode = false, enemy_x_margin = dist1}
+    F.fromVertical{side = "bottom", mode = pos2, number = 6, speed_m = 1, enemy = {GlB}, ind_mode = false, enemy_x_margin = dist2}
     LM.wait(.5)
-    F.fromVertical{side = "bottom", mode = pos1, number = 7, speed_m = 1, enemy = {GlB}, ind_mode = false}
-    F.fromVertical{side = "bottom", mode = pos2, number = 7, speed_m = 1, enemy = {GlB}, ind_mode = false}
+    F.fromVertical{side = "bottom", mode = pos1, number = 6, speed_m = 1, enemy = {GlB}, ind_mode = false, enemy_x_margin = dist1}
+    F.fromVertical{side = "bottom", mode = pos2, number = 6, speed_m = 1, enemy = {GlB}, ind_mode = false, enemy_x_margin = dist2}
     LM.wait(.5)
-    F.fromVertical{side = "bottom", mode = pos1, number = 7, speed_m = 1, enemy = {GlB}, ind_mode = false}
-    F.fromVertical{side = "bottom", mode = pos2, number = 7, speed_m = 1, enemy = {GlB}, ind_mode = false}
+    F.fromVertical{side = "bottom", mode = pos1, number = 6, speed_m = 1, enemy = {GlB}, ind_mode = false, enemy_x_margin = dist1}
+    F.fromVertical{side = "bottom", mode = pos2, number = 6, speed_m = 1, enemy = {GlB}, ind_mode = false, enemy_x_margin = dist2}
     LM.wait("noenemies")
 
     INDICATOR_DEFAULT = 1.5
@@ -607,6 +619,7 @@ function level_functions.part_3()
     F.fromHorizontal{side = "left", mode = "center", number = 5, enemy = {GrB}, speed_m = 1.3}
     F.fromHorizontal{side = "right", mode = "center", number = 5, enemy = {GrB}, speed_m = 1.3}
     LM.wait(6)
+
     INDICATOR_DEFAULT = 4
     F.fromVertical{side = "top", mode = "center", number = 6, enemy = {SB}, speed_m = .9}
     F.fromVertical{side = "bottom", mode = "center", number = 6, enemy = {SB}, speed_m = .9}
@@ -672,13 +685,13 @@ function level_functions.part_3()
     LM.wait(10)
     INDICATOR_DEFAULT = 1
     --After spaceship
-    for j = 1, 28 do
+    for j = 1, 26 do
         local m
 
         if j%2 == 0 then m = 0 else m = 30 end
 
-        F.fromHorizontal{side = "left", mode = "bottom", number = j/2, enemy = {SB}, screen_margin = m, enemy_y_margin = 60, speed_m = .5}
-        F.fromHorizontal{side = "right", mode = "bottom", number = j/2, enemy = {SB}, screen_margin = m, enemy_y_margin = 60, speed_m = .5}
+        F.fromHorizontal{side = "left", mode = "bottom", number = j/2, enemy = {SB}, screen_margin = m, enemy_y_margin = 60, speed_m = .4}
+        F.fromHorizontal{side = "right", mode = "bottom", number = j/2, enemy = {SB}, screen_margin = m, enemy_y_margin = 60, speed_m = .4}
         LM.wait(1)
     end
     LM.wait("noenemies")
@@ -720,10 +733,12 @@ function level_functions.part_4()
     LM.wait(1)
     LM.text(600, 260, "nevermind", 1, 150)
     LM.wait(2)
-    LM.text(ORIGINAL_WINDOW_WIDTH/2 - 70, ORIGINAL_WINDOW_HEIGHT/2 - 10, "I'LL GET HIM", 1.5, 230, GUI_MEDPLUS)]]
-    LM.wait(3)
+    LM.text(ORIGINAL_WINDOW_WIDTH/2 - 70, ORIGINAL_WINDOW_HEIGHT/2 - 10, "I'LL GET HIM", 1.5, 230, GUI_MEDPLUS)
+    LM.wait(3)]]
     Boss.create()
 
+    LM.wait(10)
+    LM.wait("nobosses")
     print("end of level")
     LM.stop()
 
