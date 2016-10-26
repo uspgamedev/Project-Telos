@@ -42,16 +42,6 @@ function util.clearTable(T, mode)
 
 end
 
-function util.clearTimerTable(T, TIMER)
-
-    if not T then return end --If table is empty
-    --Clear T table
-    for _,o in pairs (T) do
-        TIMER:cancel(o)
-    end
-
-end
-
 --Clear all Drawable Tables (and respective Id/Subtype tables) with an optional argument mode:
 --  mode == "force": clear all tables, ignoring exceptions
 --  mode == "remove": apply all exceptions, but removes them afterwards
@@ -62,6 +52,39 @@ function util.clearAllTables(mode)
         util.clearTable(T, mode)
     end
 
+end
+
+function util.clearTimerTable(T, TIMER)
+
+    if not T then return end --If table is empty
+    --Clear T table
+    for _,o in pairs (T) do
+        TIMER:cancel(o)
+    end
+
+end
+
+--Return a random element from a given table.
+--You can give an optional table argument 'tp', so it only returns elements that share a type with the table strings
+--Obs: if you provide a tp table, and there isn't any suitable element available, the program will be trapped here forever (FIX THIS SOMETIME)
+function util.randomElement(T, tp)
+    local e
+
+    while not e do
+        e = T[love.math.random(util.tableLen(T))] --Get random element
+
+        --If tp table isn't empty, compare
+        if not util.tableEmpty(tp) then
+            for i, k in pairs(tp) do
+                if k == e.tp then
+                    return e
+                end
+            end
+            e = nil
+        end
+    end
+
+    return e
 end
 
 --------------

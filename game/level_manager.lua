@@ -2,7 +2,6 @@ local Util = require "util"
 local Txt = require "classes.text"
 
 local level_manager = {}
-local Level_Handle1, Level_Handle2, Level_Handle3
 
 --------------------
 --SCRIPT FUNCTIONS--
@@ -24,9 +23,6 @@ function level_manager.stop()
     COROUTINE = nil
 
     if COROUTINE_HANDLE then LEVEL_TIMER:cancel(COROUTINE_HANDLE) end
-    if Level_Handle1 then LEVEL_TIMER:cancel(Level_Handle1) end
-    if Level_Handle2 then LEVEL_TIMER:cancel(Level_Handle2) end
-    if Level_Handle3 then LEVEL_TIMER:cancel(Level_Handle3) end
     if not Util.tableEmpty(INDICATOR_HANDLES) then
         for _,h in pairs(INDICATOR_HANDLES) do
             LEVEL_TIMER:cancel(h)
@@ -124,10 +120,9 @@ function level_manager.level_title(name)
     --in the future, make a "PAAAM" sound here
 
     --After two seconds, fades-out the title
-    Level_Handle1 = LEVEL_TIMER:after(2,
+    txt.level_handles["fade-in"] = LEVEL_TIMER:after(2,
         function()
-            Level_Handle2 = LEVEL_TIMER:tween(1, Util.findId("game_title"), {alpha = 0}, 'in-linear')
-            Level_Handle3 = LEVEL_TIMER:after(1,
+            txt.level_handles["fade-in"] = LEVEL_TIMER:tween(1, Util.findId("game_title"), {alpha = 0}, 'in-linear',
                 function()
                     Util.findId("game_title").death = true
                 end
@@ -154,10 +149,9 @@ function level_manager.boss_title(name)
     txt = Txt.create_gui(x, y, name, font, nil, "format", nil, "boss_title", "center", fx)
 
     --After two seconds, fades-out the title
-    Level_Handle1 = LEVEL_TIMER:after(2,
+    txt.level_handles["fade-in"] = LEVEL_TIMER:after(2,
         function()
-            Level_Handle2 = LEVEL_TIMER:tween(1, Util.findId("boss_title"), {alpha = 0}, 'in-linear')
-            Level_Handle3 = LEVEL_TIMER:after(1,
+            txt.level_handles["fade-in"] = LEVEL_TIMER:tween(1, Util.findId("boss_title"), {alpha = 0}, 'in-linear',
                 function()
                     Util.findId("boss_title").death = true
                 end

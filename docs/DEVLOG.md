@@ -5,9 +5,17 @@ GAME DESIGN DOCUMENT
 DEV LOG
 =======
 
+#### 26/10/2016:
+
+Made death messages!
+
+Also fix a bug where boss titles (and probably level titles, but didn't test) would stay
+forever after gameover screen.
+
 #### 25/10/2016:
 
 Made part 2 and 3 of the boss. Seems fully working, but still needs some balancing.
+Also, forgot to merge with master for version 0.0.0.8. Did this now. Oops.
 
 #### 24/10/2016:
 @yancouto, virtual @renatogeh

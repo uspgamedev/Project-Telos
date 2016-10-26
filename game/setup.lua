@@ -210,6 +210,17 @@ function setup.config()
     SFX_PLAY_BUTTON = love.audio.newSource("assets/sfx/general_sfxs/snd_button_play.mp3")
     SFX_PLAY_BUTTON:setVolume(.3*SFX_VOLUME_MULT)
 
+    --DEATH MESSAGE
+    DEATH_TEXTS = {"Game Over", "No one will miss you", "You now lay with the dead",
+     "You ceased to exist", "Your mother wouldn't be proud","Snake? Snake? Snaaaaaaaaaake",
+     "Already?", "All your base are belong to BALLS", "You wake up and realize it was all a nightmare",
+     "MIND BLOWN", "Just one more", "USPGameDev Rulez", "A winner is not you", "Have a nice death",
+     "There is no cake also you died", "You have died of dysentery", "You failed", "BAD END", "Embrace your defeat",
+     "Balls have no mercy", "You have no balls left", "Nevermore...", "Rest in Peace", "Die in shame",
+     "You've found your end", "KIA", "Status: Deceased", "Requiescat in Pace", "Valar Morghulis",
+     "What is dead may never die", "Mission Failed", "It's dead Jim", "Arrivederci",
+     "FRANKIE SAYS RELAX, YOU DIED"}
+
     --Start UI color transition
     UI_COLOR = UI.create_color()
 
