@@ -31,7 +31,7 @@ Psy = Class{
         } --Color table
         color = color_table[love.math.random(#color_table)] --Color of enemy
         r = 24 --Radius of psycho
-        self.collision_r = 18 --Radius of psycho that detects collision, and radius when psyho is focused
+        self.collision_r = 17 --Radius of psycho that detects collision, and radius when psyho is focused
         self.normal_radius = r --Radius when psycho is not focused
         CIRC.init(self, _x, _y, r, color, color_table, "fill") --Set atributes
 
@@ -142,10 +142,12 @@ function Psy:update(dt)
     p = self
 
     --Update psycho radius
-    if p.focused and p.r > p.collision_r then
+    if p.focused and p.r > p.collision_r + 2 then
         p.r = p.r - 20*dt
+        if p.r <  p.collision_r + 2 then p.r =  p.collision_r + 2 end --Cap radius to collision radius + 1
     elseif not p.focused and p.r < p.normal_radius then
         p.r = p.r + 20*dt
+        if p.r >  p.normal_radius then p.r =  p.normal_radius end --Cap radius to normal_radius
     end
 
     --Update shooting
