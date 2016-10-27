@@ -21,7 +21,7 @@ local p --Psycho
 function state:enter()
     local x, y, level, t
 
-    level = level1
+    level = level2
 
     x, y = level.startPositions()
 
@@ -45,7 +45,7 @@ function state:enter()
     Txt.create_game_gui(5, 185, "————", GUI_MEDPLUS, nil, nil, nil, "separator_1")
 
     level.setup() --Make title and start BGM
-    Level.start(level.part_1) --Start first part of level
+    Level.start(level.part_2) --Start first part of level
 
     love.mouse.setVisible(false) --Make cursor invisible
     love.mouse.setGrabbed(true) --Resume mouse capture
