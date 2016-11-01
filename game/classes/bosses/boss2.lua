@@ -63,10 +63,10 @@ Boss_2_Main = Class{
         self.color_stage_hue = {}
         self.color_stage_hue[1] = 188.32 --Color hue for stage 0 (purple)
         self.color_stage_hue[2] = 188.32 --Color hue for stage 1 (purple)
-        self.color_stage_hue[3] = 162.22  --Color hue for stage 2
-        self.color_stage_hue[4] = 142.22 --Color hue for stage 3
-        self.color_stage_hue[5] = 138.32 --Color hue for stage 4
-        self.color_stage_hue[6] = 128.79 --Color hue for stage 5
+        self.color_stage_hue[3] = 162.22  --Color hue for stage 2 (deep blue)
+        self.color_stage_hue[4] = 142.22 --Color hue for stage 3 (light blue)
+        self.color_stage_hue[5] = 132.32 --Color hue for stage 4
+        self.color_stage_hue[6] = 122.79 --Color hue for stage 5
         self.color_onhit_hue = 254 --Color hue for when boss is hit (red)
         self.color_onhit_saturation = 255 --Color saturation for when boss is hit
         self.color_stage_current_saturation = {}  --Current stage color saturation this boss has
@@ -102,7 +102,7 @@ Boss_2_Main = Class{
         self.life = {} --How many hits this boss can take before changing state (this value is for stage 1)
         self.damage_taken = {} --How many hits this boss has taken
         for i = 1, 4 do
-            self.life[i] = 2 --25 --Inicial life for stage 1
+            self.life[i] = 25 --25 --Inicial life for stage 1
             self.damage_taken[i] = 0
         end
 
@@ -296,7 +296,7 @@ function Boss_2_Main:changeStage()
             b.part_colors[i] = HSL(b.color_stage_hue[3], 0, b.bottom_lightness[i])
             b.level_handles["no_more_saturation"..i] = LEVEL_TIMER:tween(1, b.part_colors[i], {s = 255}, 'in-linear')
             b.damage_taken[i] = 0
-            b.life[i] = 3 --30
+            b.life[i] = 30 --30
             b.parts_alive = 4
 
             --Remove previous transitions
@@ -316,7 +316,7 @@ function Boss_2_Main:changeStage()
 
         end
 
-        b.shoot_fps = .9 --Make main boss shoot faster
+        b.shoot_fps = 1 --Update boss fps
         b.shoot_tick = 0 --Reset tick
         b.invincible = true --Can't take damage
 
@@ -335,7 +335,7 @@ function Boss_2_Main:changeStage()
                     turret.behaviour = Stage_2_t --Change their behaviour
                     turret.static = false --Make turrets move
                     turret.target = nil --Make them choose a target
-                    turret.shoot_fps = 1.3 --Make turrets shoot slower
+                    turret.shoot_fps = 1.5 --Make turrets shoot slower
                     turret.shoot_tick = 0 --Reset tick
                     turret.speedv = 150 --Make turret slower
 
@@ -385,12 +385,12 @@ function Boss_2_Main:changeStage()
                 end
             )
             b.damage_taken[i] = 0
-            b.life[i] = 4 --40
+            b.life[i] = 40
             b.parts_alive = 4
             b.shoot_tick = 0 --Reset tick
             b.invincible = true --Can't take damage
             b.static = true --Stop moving
-            b.shoot_fps = .6 --Make boss shoot faster
+            b.shoot_fps = .5 --Make boss shoot faster
 
             --Remove previous transitions
             if b.level_handles["gethithue"..i] then
@@ -453,22 +453,23 @@ function Boss_2_Main:changeStage()
             b.color_stage_current_saturation[i] = b.initial_saturation
             b.bottom_lightness[i] = 100 --Bottom color lightness in %
             b.upper_lightness[i] = 130 --Upper color lightness in %
-            b.part_colors[i] = HSL(b.color_stage_hue[3], 0, b.bottom_lightness[i])
+            b.part_colors[i] = HSL(b.color_stage_hue[5], 0, b.bottom_lightness[i])
             --Wait 3 seconds, then turn the correct color and start stage
-            b.level_handles["wait"..i] = LEVEL_TIMER:after(3,
+            b.level_handles["wait"..i] = LEVEL_TIMER:after(6,
                 function()
-                    b.level_handles["no_more_saturation"..i] = LEVEL_TIMER:tween(1, b.part_colors[i], {s = 255}, 'in-linear',
+                    b.level_handles["no_more_saturation"..i] = LEVEL_TIMER:tween(2.5, b.part_colors[i], {s = 255}, 'in-linear',
                         function()
                             b.static = false
+                            b.invincible = false
                             b.behaviour = Stage_4
                         end
                     )
                 end
             )
             b.damage_taken[i] = 0
-            b.life[i] = 30
+            b.life[i] = 20
             b.parts_alive = 4
-            b.shoot_fps = .6 --Make main boss shoot faster
+            b.shoot_fps = .7 --Make main boss shoot faster
             b.shoot_tick = 0 --Reset tick
             b.invincible = true --Can't take damage
             b.static = true --Stop moving
@@ -490,6 +491,9 @@ function Boss_2_Main:changeStage()
 
             turret.static = true
             turret.behaviour = Stage_4_t
+            turret.stage = 4
+            turret.shoot_fps = 2 --Make turrets shoot slower
+
             --Stop movement of turreet
             if turret.level_handles["moving_to_target"] then
                 LEVEL_TIMER:cancel(turret.level_handles["moving_to_target"])
@@ -501,13 +505,13 @@ function Boss_2_Main:changeStage()
                 function()
                     --Get turret inicial position
                     if turret.identification == 1 then
-                        turret.target = Vector(ORIGINAL_WINDOW_WIDTH/2 - 120, ORIGINAL_WINDOW_HEIGHT/2) --Left
+                        turret.target = Vector(ORIGINAL_WINDOW_WIDTH/2 - 115, ORIGINAL_WINDOW_HEIGHT/2) --Left
                     elseif turret.identification == 2 then
-                        turret.target = Vector(ORIGINAL_WINDOW_WIDTH/2, ORIGINAL_WINDOW_HEIGHT/2 - 120)  --Up
+                        turret.target = Vector(ORIGINAL_WINDOW_WIDTH/2, ORIGINAL_WINDOW_HEIGHT/2 - 115)  --Up
                     elseif turret.identification == 3 then
-                        turret.target = Vector(ORIGINAL_WINDOW_WIDTH/2 + 120, ORIGINAL_WINDOW_HEIGHT/2) --Right
+                        turret.target = Vector(ORIGINAL_WINDOW_WIDTH/2 + 115, ORIGINAL_WINDOW_HEIGHT/2) --Right
                     else
-                        turret.target = Vector(ORIGINAL_WINDOW_WIDTH/2, ORIGINAL_WINDOW_HEIGHT/2 + 120) --Bottom
+                        turret.target = Vector(ORIGINAL_WINDOW_WIDTH/2, ORIGINAL_WINDOW_HEIGHT/2 + 115) --Bottom
                     end
 
                     --Restart turret movement
@@ -523,13 +527,14 @@ function Boss_2_Main:changeStage()
                             turret.parts_alive[ball1] = false
                             turret.parts_alive[ball3] = false
                             turret.active_ball1 = ball2
-                            turret.red_circle_tick1 = red_circle_time1
+                            turret.red_circle_tick1 = turret.red_circle_time1
                             turret.active_ball2 = ball4
-                            turret.red_circle_tick2 = red_circle_time2
+                            turret.red_circle_tick2 = turret.red_circle_time2
 
+                            turret.static = false --Make turret red circle grow/shrink
 
                             --Make red of balls more saturated, then make them hittable
-                            turret.level_handles["increase_sat"] = LEVEL_TIMER:tween(2, turret.second_color, {s = 255}, 'in-linear', function() turret.static = false end)
+                            turret.level_handles["increase_sat"] = LEVEL_TIMER:tween(2.5, turret.second_color, {s = 255}, 'in-linear', function() turret.invincible = false end)
 
                         end
                     )
@@ -539,12 +544,28 @@ function Boss_2_Main:changeStage()
         end
 
     elseif b.stage == 5 then
+        local x, y
 
         for i = 1, 4 do
             b.turrets[i]:kill()
         end
 
+        --Make circles explode
+
+        --Make main parts become one
+
+        --Move turrets to position, then grow ring and become blue. After that they can be hittable
+
+        --get red circles positions
+        --x = p.pos.x - p.red_circles_r[i] + p.positions[i].x
+        --y = p.pos.y - p.red_circles_r[i] + p.positions[i].y
+
         b:kill()
+
+    elseif b.stage == 6 then
+
+
+    elseif b.stage == 7 then
 
     end
 
@@ -587,13 +608,13 @@ Boss_2_Turret = Class{
 
         r = 40 --Radius of central turret part
         self.red_circles_r = {20,20,20,20} --Radius of red circles around
-        self.max_red_circle_r = 80 --Max radius for red circles (for stage 4)
+        self.max_red_circle_r = 57 --Max radius for red circles (for stage 4)
         self.active_ball1 = nil --First active red circle (for stage 4)
         self.active_ball2 = nil --Second active red circle (for stage 4)
         self.red_circle_tick1 = 0 --Tick to increase red circle size (first active cicle) (for stage 4)
-        self.red_circle_time1 = 2 --Time necessary for red circle to start increasing size (first active cicle) (for stage 4)
+        self.red_circle_time1 = 3 --Time necessary for red circle to start increasing size (first active cicle) (for stage 4)
         self.red_circle_tick2 = 0 --Tick to increase red circle size (second active cicle) (for stage 4)
-        self.red_circle_time2 = 2 --Time necessary for red circle to start increasing size (second active cicle) (for stage 4)
+        self.red_circle_time2 = 3 --Time necessary for red circle to start increasing size (second active cicle) (for stage 4)
 
 
         self.outer_radius = r --Radius for final part
@@ -601,7 +622,7 @@ Boss_2_Turret = Class{
         self.upper_lightness = 130
         self.color_pulse_duration = 1 --Duration between color saturation transitions
 
-        self.second_color = HSL(250, 100, 150)
+        self.second_color = HSL(250, 90, 150) --"Grey Red"
         color = HSL(120, 0, self.bottom_lightness)
 
         CIRC.init(self, x, y, r, color, nil, "fill") --Set atributes
@@ -631,6 +652,7 @@ Boss_2_Turret = Class{
         self.shoot_tick = 1.2 --Enemy shooter "cooldown" timer (for shooting repeatedly)
         self.shoot_fps = 1.2 --How fast to shoot enemies
 
+        self.stage = 0
         self.behaviour = nil --What behaviour this turret is following
         self.tp = "boss_two_turret" --Type of this class
     end
@@ -712,14 +734,15 @@ function Boss_2_Turret:getHit(id)
     local t
 
     t = self
-
     if t.stage == 4 then
         if id == t.active_ball1 then
             t.red_circle_tick1 = 0 --Reset tick that increases the circle
-            t.red_circles_r[id] = t.red_circles_r[id] - 5 --Reduces the circle size
+            t.red_circles_r[id] = t.red_circles_r[id] - 4 --Reduces the circle size
+            if t.red_circles_r[id] < 0 then t.red_circles_r[id] = 0 end --Cap radius at 0
         elseif id == t.active_ball2 then
             t.red_circle_tick2 = 0 --Reset tick that increases the circle
-            t.red_circles_r[id] = t.red_circles_r[id] - 5 --Reduces the circle size
+            t.red_circles_r[id] = t.red_circles_r[id] - 4 --Reduces the circle size
+            if t.red_circles_r[id] < 0 then t.red_circles_r[id] = 0 end --Cap radius at 0
         end
     end
 
@@ -906,7 +929,7 @@ Stage_1 = function(b, dt)
         b.shoot_tick = b.shoot_tick - b.shoot_fps --Update tick
 
 
-        F.single{x = b.pos.x, y = b.pos.y, dir_follow = true, ind_mode = false, enemy = DB, score_mul = 0}
+        F.single{x = b.pos.x, y = b.pos.y, dir_follow = true, ind_mode = false, enemy = DB, score_mul = 0, e_radius = 30}
 
     end
 
@@ -936,7 +959,7 @@ Stage_2 = function(b, dt)
 
         b.shoot_tick = b.shoot_tick - b.shoot_fps --Update tick
 
-        F.single{x = b.pos.x, y = b.pos.y, dir_follow = true, ind_mode = false, enemy = GrB, score_mul = 0}
+        F.single{x = b.pos.x, y = b.pos.y, dir_follow = true, ind_mode = false, enemy = GrB, score_mul = 0, e_radius = 30}
 
     end
 
@@ -1083,8 +1106,9 @@ Stage_3_t = function(b, dt)
 
 end
 
---Shoots at the player with double balls
+--Shoots at the player with grey or glitch balls
 Stage_4 = function(b, dt)
+    local e
 
     b.shoot_tick = b.shoot_tick + dt
 
@@ -1092,15 +1116,17 @@ Stage_4 = function(b, dt)
 
         b.shoot_tick = b.shoot_tick - b.shoot_fps --Update tick
 
-
-        F.single{x = b.pos.x, y = b.pos.y, dir_follow = true, ind_mode = false, enemy = DB, score_mul = 0}
+        if love.math.random() > .8 then e = GrB else e = GlB end --Shoot randomly Glitch balls (80%) or Grey Balls (20%)
+        F.single{x = b.pos.x, y = b.pos.y, dir_follow = true, ind_mode = false, enemy = e, score_mul = 0, e_radius = 30}
 
     end
 
 end
 
---Decreases "dead" red circles, and increases size after some time
+--Decreases "dead" red circles, and increases size after some time.
+--Also shoot randomly glitch or double balls at the player
 Stage_4_t = function(b, dt)
+    local e
 
     for i = 1, 4 do
         --Circles dead
@@ -1108,16 +1134,13 @@ Stage_4_t = function(b, dt)
             b.red_circles_r[i] = b.red_circles_r[i] - 20*dt
             if b.red_circles_r[i] < 0 then b.red_circles_r[i] = 0 end
         --Circles alive
-        elseif b.red_circles_r[i] == true then
+    elseif b.parts_alive[i] == true then
             --First active ball
             if i == b.active_ball1 then
-                print("is active1")
                 --If tick has reached the necessary time to start increasing...
                 if b.red_circle_tick1 > b.red_circle_time1 then
-                    print("will grow")
                     --Tries to increase radius, if possible
                     if b.red_circles_r[i] < b.max_red_circle_r then
-                        print("growing")
                         b.red_circles_r[i] = b.red_circles_r[i] + 10*dt
                         if b.red_circles_r[i] > b.max_red_circle_r then b.red_circles_r[i] = b.max_red_circle_r end
                     end
@@ -1131,7 +1154,7 @@ Stage_4_t = function(b, dt)
                 if b.red_circle_tick2 > b.red_circle_time2 then
                     --Tries to increase radius, if possible
                     if b.red_circles_r[i] < b.max_red_circle_r then
-                        b.red_circles_r[i] = b.red_circles_r[i] + 2*dt
+                        b.red_circles_r[i] = b.red_circles_r[i] + 10*dt
                         if b.red_circles_r[i] > b.max_red_circle_r then b.red_circles_r[i] = b.max_red_circle_r end
                     end
                 --Else, increase the tick for second active circle
@@ -1149,7 +1172,19 @@ Stage_4_t = function(b, dt)
 
         b.shoot_tick = b.shoot_tick - b.shoot_fps --Update tick
 
-        F.single{x = b.pos.x, y = b.pos.y, dir_follow = true, ind_mode = false, enemy = SB, speed_m = 1, score_mul = 0}
+        if love.math.random() > .1 then e = GlB else e = DB end --Shoot randomly Glitch balls (90%) or Double Balls (10%)
+
+        F.single{x = b.pos.x, y = b.pos.y, dir_follow = true, ind_mode = false, enemy = e, speed_m = 1, score_mul = 0}
+
+        --Randomly can make a following enemy to appear
+        if love.math.random() < .1 then
+            local _x, _y
+
+            _x, _y = LM.outsidePosition(love.math.random(2*ORIGINAL_WINDOW_WIDTH+2*ORIGINAL_WINDOW_HEIGHT+1)-1)
+
+            F.single{enemy = SB, x = _x, y = _y, dir_follow = true, speed_m = 5, ind_side = 40, ind_duration = 2.5}
+
+        end
 
     end
 
