@@ -70,7 +70,7 @@ Boss_2_Main = Class{
         self.color_stage_hue[3] = 162.22  --Color hue for stage 2 (deep blue)
         self.color_stage_hue[4] = 142.22 --Color hue for stage 3 (light blue)
         self.color_stage_hue[5] = 132.32 --Color hue for stage 4
-        self.color_stage_hue[6] = 122.79 --Color hue for stage 5
+        self.color_stage_hue[6] = 112.79 --Color hue for stage 5
         self.color_onhit_hue = 254 --Color hue for when boss is hit (red)
         self.color_onhit_saturation = 255 --Color saturation for when boss is hit
         self.color_stage_current_saturation = {}  --Current stage color saturation this boss has
@@ -100,6 +100,8 @@ Boss_2_Main = Class{
         self.turrets = {} --All turrets the main boss has
         self.turret_alive = 4 --Number of turrets alive (for stage 5)
 
+        self.random_enemies = false --If main boss should shoot random enemies (Stage 5)
+
         --Boss speed value
         self.speedv = 350 --Speed value
         self.target = nil --Target to move
@@ -107,7 +109,7 @@ Boss_2_Main = Class{
         self.life = {} --How many hits this boss can take before changing state (this value is for stage 1)
         self.damage_taken = {} --How many hits this boss has taken
         for i = 1, 4 do
-            self.life[i] = 2 --25 --Inicial life for stage 1
+            self.life[i] = 25 --25 --Inicial life for stage 1
             self.damage_taken[i] = 0
         end
 
@@ -227,12 +229,18 @@ function Boss_2_Main:getHit(id)
 
     b.damage_taken[id] = b.damage_taken[id] + 1 --Make part take damage
     b.bottom_lightness[id] = b.bottom_lightness[id] - .6 --Make part glow darker
-    b:getHitAnimation(id)
+    if b.stage ~= 6 then
+        b:getHitAnimation(id)
+    else
+        b.r = b.r - 2 --For last stage, make boss smaller
+    end
 
     if b.damage_taken[id] >= b.life[id] then
         b.parts_alive = b.parts_alive - 1
 
-        b.level_handles["become_grey"..id] = LEVEL_TIMER:tween(1, b.part_colors[id], {s = 0}, 'in-linear')
+        if b.stage ~= 6 then
+            b.level_handles["become_grey"..id] = LEVEL_TIMER:tween(1, b.part_colors[id], {s = 0}, 'in-linear')
+        end
 
         if b.parts_alive <= 0 then
             b.stage = b.stage + 1
@@ -307,7 +315,7 @@ function Boss_2_Main:changeStage()
             b.part_colors[i] = HSL(b.color_stage_hue[3], 0, b.bottom_lightness[i])
             b.level_handles["no_more_saturation"..i] = LEVEL_TIMER:tween(1, b.part_colors[i], {s = 255}, 'in-linear')
             b.damage_taken[i] = 0
-            b.life[i] = 3 --30
+            b.life[i] = 30 --30
             b.parts_alive = 4
 
             --Remove previous transitions
@@ -396,7 +404,7 @@ function Boss_2_Main:changeStage()
                 end
             )
             b.damage_taken[i] = 0
-            b.life[i] = 4 --40 (change to 30?)
+            b.life[i] = 30 --40 (change to 30?)
             b.parts_alive = 4
             b.shoot_tick = 0 --Reset tick
             b.invincible = true --Can't take damage
@@ -478,7 +486,7 @@ function Boss_2_Main:changeStage()
                 end
             )
             b.damage_taken[i] = 0
-            b.life[i] = 2 --20
+            b.life[i] = 20 --20
             b.parts_alive = 4
             b.shoot_fps = .7 --Make main boss shoot faster
             b.shoot_tick = 0 --Reset tick
@@ -620,6 +628,7 @@ function Boss_2_Main:changeStage()
             turret.invincible = true
             turret.behaviour = Stage_5_t
             turret.stage = 5
+            turret.speedv = 250
             Stage_5_fps = 2 --Set fps for both turret and main
 
             if i == 1 then
@@ -654,9 +663,22 @@ function Boss_2_Main:changeStage()
 
     elseif b.stage == 6 then
 
-        b:kill()
+        b.static = true
+
+        b.level_handles["text_appear"] = LEVEL_TIMER:after(.5, function() LM.text(ORIGINAL_WINDOW_WIDTH/2 - 120, ORIGINAL_WINDOW_HEIGHT/2 - 90, "please don't kill me", 4.5, 110) end)
+        b.level_handles["wait"] = LEVEL_TIMER:after(2,
+            function()
+                b.level_handles["no_more_saturation"] = LEVEL_TIMER:tween(1.5, b.part_colors[1], {s = 255}, 'in-linear',
+                    function()
+                        b.invincible = false
+                    end
+                )
+            end
+        )
 
     elseif b.stage == 7 then
+
+        b:kill()
 
     end
 
@@ -736,6 +758,10 @@ Boss_2_Turret = Class{
         self.target = nil --Target to move
 
         self.dir = nil --Direction to move (Stage 5)
+
+        self.getDir = false --If turret should get a direction to shoot itself to player
+        self.getIndicator = false --If turret create a indicator following psycho
+        self.shoot_to_player = false --If turret should shoot itself to player
 
         self.counter = 0 --Counter for stage 3
 
@@ -871,8 +897,18 @@ function Boss_2_Turret:getHit(id)
                     Stage_5_fps = 1
                     Increase_Radius(20)
                 elseif main.turret_alive == 1 then
-                    Stage_5_fps = .6
-                    Increase_Radius(30)
+                    Stage_5_fps = .8
+                    Stage_5_bounce = false --Stop bouncing
+                    for turret in pairs(Util.findSbTp("bosses")) do
+
+                        if turret.tp == "boss_two_turret" then
+                            turret.getIndicator = true
+                            turret.speedv = 700 --Increase turret speed
+                        end
+
+                    end
+                    main.random_enemies = true --Start shooting random enemies
+                    Increase_Radius(40)
                 elseif main.turret_alive == 0 then
                     main.stage = main.stage + 1
                     main:changeStage() --Change boss to last stage
@@ -970,7 +1006,7 @@ function boss.create()
 
             FX.shake(.5, 5) --Shake screen
 
-            LM.boss_title("OMAR THE CONE") --Boss title
+            LM.boss_title("NATHAN, THE ETERNAL BEAUTY") --Boss title
 
             --After 2 seconds, make boss smaller in 1 second
             b.level_handles["moving_2"] = LEVEL_TIMER:after(2,
@@ -1326,16 +1362,20 @@ Stage_4_t = function(b, dt)
 
 end
 
+--Shoot at the player. If there is only one turret left, it may shoot Glitch Balls
 Stage_5 = function(b, dt)
-
+    local e
     b.shoot_tick = b.shoot_tick + dt
 
     while b.shoot_tick >= Stage_5_fps do
 
         b.shoot_tick = b.shoot_tick - Stage_5_fps --Update tick
 
+        e = GrB
+        --If random enemies, boss shoot randomly glitch or grey balls
+        if b.random_enemies and love.math.random() > .5 then e = GlB end
 
-        F.single{x = b.pos.x, y = b.pos.y, dir_follow = true, ind_mode = false, enemy = GrB, score_mul = 0, e_radius = 35}
+        F.single{x = b.pos.x, y = b.pos.y, dir_follow = true, ind_mode = false, enemy = e, score_mul = 0, e_radius = 35}
 
     end
 
@@ -1356,9 +1396,9 @@ Stage_5_t = function(b, dt)
 
         end
 
-        --Move turret (speed == 300)
-        b.pos.x = b.pos.x + dt*b.dir.x*300
-        b.pos.y = b.pos.y + dt*b.dir.y*300
+        --Move turret
+        b.pos.x = b.pos.x + dt*b.dir.x*b.speedv
+        b.pos.y = b.pos.y + dt*b.dir.y*b.speedv
 
         --Fix horizontal direction if leave screen
         if b.pos.x < b.r + b.outer_ring then b.dir.x = math.abs(b.dir.x)
@@ -1371,6 +1411,46 @@ Stage_5_t = function(b, dt)
 
     end
 
+    if b.getIndicator then
+        b.getIndicator = false
+        Indicator.create_rotating(50, b.color, 1, b.r + b.outer_ring + 50, Vector(b.pos.x, b.pos.y))
+        b.level_handles["get_direction"] = LEVEL_TIMER:after(1, function() b.getDir = true end)
+    end
+
+    if b.getDir then
+        local p
+        b.getDir = false
+        p = Util.findId("psycho")
+
+        --Get direction to psycho
+        if p then
+            b.dir = Vector(p.pos.x - b.pos.x, p.pos.y - b.pos.y)
+        else
+            b.dir = Vector(ORIGINAL_WINDOW_WIDTH/2 - b.pos.x, ORIGINAL_WINDOW_HEIGHT/2 - b.pos.y)
+        end
+
+        b.dir = b.dir:normalized()
+
+        b.shoot_to_player = true --Will shoot at player
+    end
+
+    if b.shoot_to_player then
+        --Move turret
+        b.pos.x = b.pos.x + dt*b.dir.x*b.speedv
+        b.pos.y = b.pos.y + dt*b.dir.y*b.speedv
+
+        --Stop turret if it reaches the edge of the screen
+        if b.pos.x < b.r + b.outer_ring or
+           b.pos.x > ORIGINAL_WINDOW_WIDTH - (b.r + b.outer_ring) or
+           b.pos.y < b.r + b.outer_ring or
+           b.pos.y > ORIGINAL_WINDOW_HEIGHT - (b.r + b.outer_ring) then
+               FX.shake(.5,4)
+               b.shoot_to_player = false
+               --Restart cycle of getting an indicator
+               b.level_handles["resume_indicator"] = LEVEL_TIMER:after(.3, function() b.getIndicator = true end)
+        end
+
+    end
 
 
     b.shoot_tick = b.shoot_tick + dt
@@ -1395,7 +1475,7 @@ Increase_Radius = function(i)
         if turret.tp == "boss_two_turret" then
             turret.level_handles["increase"..i] = LEVEL_TIMER:tween(.5, turret, {outer_ring = turret.outer_ring + i}, 'in-linear')
         end
-        
+
     end
 
 end
