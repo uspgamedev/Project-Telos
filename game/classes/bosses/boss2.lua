@@ -43,7 +43,11 @@ local stencil = {
 local Stage_1, Stage_2, Stage_3, Stage_4
 
 --Behaviours for turret part--
-local Stage_1_t, Stage_2_t, Stage_3_t, Stage_4_t
+local Stage_1_t, Stage_2_t, Stage_3_t, Stage_4_t, Increase_Radius
+
+--Utility variables for boss
+local Stage_5_fps, Stage_5_bounce
+Stage_5_bounce = false
 
 local boss = {}
 
@@ -552,7 +556,7 @@ function Boss_2_Main:changeStage()
 
     elseif b.stage == 5 then
 
-        FX.shake(1,3) --Shake screen
+        FX.shake(2,3) --Shake screen
         --Reset stats
         for i = 1,4 do
             b.color_stage_current_saturation[i] = b.initial_saturation
@@ -562,7 +566,6 @@ function Boss_2_Main:changeStage()
             b.damage_taken[i] = 0
             b.life[i] = 20
             b.parts_alive = 4
-            b.shoot_fps = .7 --Make main boss shoot faster
             b.shoot_tick = 0 --Reset tick
             b.invincible = true --Can't take damage
             b.static = true --Stop moving
@@ -604,7 +607,7 @@ function Boss_2_Main:changeStage()
                     _y = turret.pos.y - turret.red_circles_r[j] + turret.positions[j].y
 
                     --Create explosion
-                    FX.explosion(_x, _y, turret.red_circles_r[j], turret.second_color, 10, nil, nil, nil, true)
+                    FX.explosion(_x, _y, turret.red_circles_r[j], Color.red(), 50, nil, 300, 3, true)
 
                     --"Remove" red circle
                     turret.red_circles_r[j] = 0
@@ -617,7 +620,7 @@ function Boss_2_Main:changeStage()
             turret.invincible = true
             turret.behaviour = Stage_5_t
             turret.stage = 5
-            turret.shoot_fps = 2 --Make turrets shoot slower
+            Stage_5_fps = 2 --Set fps for both turret and main
 
             if i == 1 then
                 --From left to top left
@@ -634,10 +637,10 @@ function Boss_2_Main:changeStage()
             end
 
             --Move turret to respective position
-            turret.level_handles["move_to_position"] = LEVEL_TIMER:tween(1, turret.pos, {x = turret.target.x, y = turret.target.y}, 'in-linear',
+            turret.level_handles["move_to_position"] = LEVEL_TIMER:tween(2, turret.pos, {x = turret.target.x, y = turret.target.y}, 'in-linear',
                 function()
                     --Increase ring size, thank make turret hittable/active
-                    turret.level_handles["grow_ring"] = LEVEL_TIMER:tween(2, turret, {outer_ring = 30}, 'in-linear',
+                    turret.level_handles["grow_ring"] = LEVEL_TIMER:tween(2, turret, {outer_ring = turret.initial_outer_ring_size}, 'in-linear',
                         function()
                             turret.static = false
                             turret.invincible = false
@@ -650,17 +653,6 @@ function Boss_2_Main:changeStage()
         end
 
     elseif b.stage == 6 then
-
-
-        for i = 1, 4 do
-            b.turrets[i]:kill()
-        end
-
-        --Make circles explode
-
-        --Make main parts become one
-
-        --Move turrets to position, then grow ring and become blue. After that they can be hittable
 
         b:kill()
 
@@ -716,6 +708,7 @@ Boss_2_Turret = Class{
         self.red_circle_time2 = 3 --Time necessary for red circle to start increasing size (second active cicle) (for stage 4)
 
         self.outer_ring = 0 --Radius of ring for turrets (for stage 5)
+        self.initial_outer_ring_size = 40 --Inicial radius for the outer ring (Stage 5)
 
         self.outer_radius = r --Radius for final part
         self.bottom_lightness = 100
@@ -723,7 +716,7 @@ Boss_2_Turret = Class{
         self.color_pulse_duration = 1 --Duration between color saturation transitions
 
         self.second_color = HSL(250, 90, 150) --"Grey Red"
-        color = HSL(120, 0, self.bottom_lightness)
+        color = HSL(250, 0, self.bottom_lightness)
 
         CIRC.init(self, x, y, r, color, nil, "fill") --Set atributes
 
@@ -741,6 +734,8 @@ Boss_2_Turret = Class{
         --Boss speed value
         self.speedv = 350 --Speed value
         self.target = nil --Target to move
+
+        self.dir = nil --Direction to move (Stage 5)
 
         self.counter = 0 --Counter for stage 3
 
@@ -859,8 +854,29 @@ function Boss_2_Turret:getHit(id)
             if t.outer_ring <= 0 then
                 t:kill() --Kill this turret
 
+                FX.shake(1,3) --Shake screen
+
+                --Reduced number of turrets alive, and do stuff
                 local main = Util.findId("boss_2_main")
-                main.turret_alive = main.turret_alive - 1
+
+                main.turret_alive = main.turret_alive - 1 --Update turret counter
+
+                --Make boss shoot faster
+                if main.turret_alive == 3 then
+                    Stage_5_fps = 1.5
+                    Increase_Radius(10)
+                --Make boss shoot faster and turrets start bouncing on the screen
+                elseif main.turret_alive == 2 then
+                    Stage_5_bounce = true
+                    Stage_5_fps = 1
+                    Increase_Radius(20)
+                elseif main.turret_alive == 1 then
+                    Stage_5_fps = .6
+                    Increase_Radius(30)
+                elseif main.turret_alive == 0 then
+                    main.stage = main.stage + 1
+                    main:changeStage() --Change boss to last stage
+                end
 
             end
         end
@@ -1314,32 +1330,73 @@ Stage_5 = function(b, dt)
 
     b.shoot_tick = b.shoot_tick + dt
 
-    while b.shoot_tick >= b.shoot_fps do
+    while b.shoot_tick >= Stage_5_fps do
 
-        b.shoot_tick = b.shoot_tick - b.shoot_fps --Update tick
+        b.shoot_tick = b.shoot_tick - Stage_5_fps --Update tick
 
 
-        F.single{x = b.pos.x, y = b.pos.y, dir_follow = true, ind_mode = false, enemy = DB, score_mul = 0, e_radius = 30}
+        F.single{x = b.pos.x, y = b.pos.y, dir_follow = true, ind_mode = false, enemy = GrB, score_mul = 0, e_radius = 35}
 
     end
-
-    if b.turret_alive == 4 then b.kill() end
 
 end
 
 Stage_5_t = function(b, dt)
 
-    b.shoot_tick = b.shoot_tick + dt
+    if Stage_5_bounce then
+        --Get dir for turret if there isn't one
+        if not b.dir then
+            local dx, dy
 
-    while b.shoot_tick >= b.shoot_fps do
+            --Get random direction
+            dx = math.cos(love.math.random()*2*math.pi)
+            dy = math.sin(love.math.random()*2*math.pi)
 
-        b.shoot_tick = b.shoot_tick - b.shoot_fps --Update tick
+            b.dir = Vector(dx,dy)
 
+        end
 
-        F.single{x = b.pos.x, y = b.pos.y, dir_follow = true, ind_mode = false, enemy = DB, score_mul = 0, e_radius = 30}
+        --Move turret (speed == 300)
+        b.pos.x = b.pos.x + dt*b.dir.x*300
+        b.pos.y = b.pos.y + dt*b.dir.y*300
+
+        --Fix horizontal direction if leave screen
+        if b.pos.x < b.r + b.outer_ring then b.dir.x = math.abs(b.dir.x)
+        elseif b.pos.x > ORIGINAL_WINDOW_WIDTH - (b.r + b.outer_ring)  then b.dir.x = -math.abs(b.dir.x) end
+
+        --Fix vertical direction if leave screen
+        if b.pos.y < b.r + b.outer_ring then b.dir.y = math.abs(b.dir.y)
+        elseif b.pos.y > ORIGINAL_WINDOW_HEIGHT - (b.r + b.outer_ring)  then b.dir.y = -math.abs(b.dir.y) end
+
 
     end
 
+
+
+    b.shoot_tick = b.shoot_tick + dt
+
+    while b.shoot_tick >= 2*Stage_5_fps/3 do
+
+        b.shoot_tick = b.shoot_tick - 2*Stage_5_fps/3 --Update tick
+
+
+        F.single{x = b.pos.x, y = b.pos.y, dir_follow = true, ind_mode = false, enemy = DB, score_mul = 0, e_radius = 25, speed_m = 1.2}
+
+    end
+
+
+end
+
+--Increase for all alive turrets their outer ring radius by i
+Increase_Radius = function(i)
+
+    for turret in pairs(Util.findSbTp("bosses")) do
+
+        if turret.tp == "boss_two_turret" then
+            turret.level_handles["increase"..i] = LEVEL_TIMER:tween(.5, turret, {outer_ring = turret.outer_ring + i}, 'in-linear')
+        end
+        
+    end
 
 end
 
