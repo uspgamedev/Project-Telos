@@ -307,6 +307,7 @@ function Boss_2_Main:changeStage()
         b.behaviour = Stage_1
     elseif b.stage == 2 then
         FX.shake(1,3) --Shake screen
+        LM.giveScore(1500, "boss hurted")
         --Reset stats
         for i = 1,4 do
             b.color_stage_current_saturation[i] = b.initial_saturation
@@ -384,10 +385,10 @@ function Boss_2_Main:changeStage()
         )
 
     elseif b.stage == 3 then
-
+        LM.giveScore(2000, "boss hurted")
+        FX.shake(1,3) --Shake screen
         --Reset stats
         for i = 1,4 do
-            FX.shake(1,3) --Shake screen
             b.color_stage_current_saturation[i] = b.initial_saturation
             b.bottom_lightness[i] = 100 --Bottom color lightness in %
             b.upper_lightness[i] = 130 --Upper color lightness in %
@@ -465,7 +466,7 @@ function Boss_2_Main:changeStage()
         end
 
     elseif b.stage == 4 then
-
+        LM.giveScore(2500, "boss hurted")
         FX.shake(1,3) --Shake screen
         --Reset stats
         for i = 1,4 do
@@ -563,7 +564,7 @@ function Boss_2_Main:changeStage()
         end
 
     elseif b.stage == 5 then
-
+        LM.giveScore(3000, "boss hurted")
         FX.shake(2,3) --Shake screen
         --Reset stats
         for i = 1,4 do
@@ -662,10 +663,10 @@ function Boss_2_Main:changeStage()
         end
 
     elseif b.stage == 6 then
-
+        LM.giveScore(4000, "boss defeated")
         b.static = true
 
-        b.level_handles["text_appear"] = LEVEL_TIMER:after(.5, function() LM.text(ORIGINAL_WINDOW_WIDTH/2 - 120, ORIGINAL_WINDOW_HEIGHT/2 - 90, "please don't kill me", 4.5, 110) end)
+        b.level_handles["text_appear"] = LEVEL_TIMER:after(.5, function() LM.text(ORIGINAL_WINDOW_WIDTH/2 - 105, ORIGINAL_WINDOW_HEIGHT/2 - 90, "please don't kill me", 4.5, 110) end)
         b.level_handles["wait"] = LEVEL_TIMER:after(2,
             function()
                 b.level_handles["no_more_saturation"] = LEVEL_TIMER:tween(1.5, b.part_colors[1], {s = 255}, 'in-linear',
@@ -677,7 +678,7 @@ function Boss_2_Main:changeStage()
         )
 
     elseif b.stage == 7 then
-
+        LM.giveScore(666, "boss killed")
         b:kill()
 
     end
@@ -890,12 +891,12 @@ function Boss_2_Turret:getHit(id)
                 --Make boss shoot faster
                 if main.turret_alive == 3 then
                     Stage_5_fps = 1.5
-                    Increase_Radius(10)
+                    Increase_Radius(20)
                 --Make boss shoot faster and turrets start bouncing on the screen
                 elseif main.turret_alive == 2 then
                     Stage_5_bounce = true
                     Stage_5_fps = 1
-                    Increase_Radius(20)
+                    Increase_Radius(40)
                 elseif main.turret_alive == 1 then
                     Stage_5_fps = .8
                     Stage_5_bounce = false --Stop bouncing
@@ -908,7 +909,7 @@ function Boss_2_Turret:getHit(id)
 
                     end
                     main.random_enemies = true --Start shooting random enemies
-                    Increase_Radius(40)
+                    Increase_Radius(80)
                 elseif main.turret_alive == 0 then
                     main.stage = main.stage + 1
                     main:changeStage() --Change boss to last stage
@@ -1349,12 +1350,12 @@ Stage_4_t = function(b, dt)
         F.single{x = b.pos.x, y = b.pos.y, dir_follow = true, ind_mode = false, enemy = e, speed_m = 1, score_mul = 0}
 
         --Randomly can make a following enemy to appear
-        if love.math.random() < .1 then
+        if love.math.random() < .15 then
             local _x, _y
 
             _x, _y = LM.outsidePosition(love.math.random(2*ORIGINAL_WINDOW_WIDTH+2*ORIGINAL_WINDOW_HEIGHT+1)-1)
 
-            F.single{enemy = SB, x = _x, y = _y, dir_follow = true, speed_m = 5, ind_side = 40, ind_duration = 2.5}
+            F.single{enemy = SB, x = _x, y = _y, dir_follow = true, speed_m = 5, ind_side = 50, ind_duration = 2.5}
 
         end
 

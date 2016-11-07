@@ -557,7 +557,7 @@ end
 function util.defaultKeyPressed(key)
     local p
 
-    if  key == 'x' then
+    if  key == 'f1' then
         util.quit()
     elseif key == 'f11' then
         util.toggleFullscreen()

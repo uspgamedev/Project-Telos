@@ -145,6 +145,11 @@ function state:keypressed(key)
 
     if key == 'escape' or key == 'p' then --Pause game
         SWITCH = "PAUSE"
+    elseif key == 'x' then
+        p = Util.findId("psycho")
+        if not p.shootLocked then
+            p:ultrablast(p.default_ultrablast_power)
+        end
     else
         Util.defaultKeyPressed(key)
     end

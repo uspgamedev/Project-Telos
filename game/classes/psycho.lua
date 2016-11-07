@@ -42,6 +42,7 @@ Psy = Class{
         self.ui_color = false --If its color should be the same as the ui
 
         self.speedv = 265 --Speed value
+        self.speed_multiplier = 0 --Multiplier for speed
         self.speed = Vector(0,0) --Speed vector
 
         self.focused = false --If psycho is focused or not
@@ -152,7 +153,7 @@ function Psy:update(dt)
 
     --Update shooting
     p.shoot_tick = p.shoot_tick - dt
-    if love.mouse.isDown(1) then
+    if love.mouse.isDown(1) or love.keyboard.isDown('z') then
         if p.shoot_tick <= 0 then
             p.shoot_tick = p.shoot_tick + p.shoot_fps
             p:shoot(love.mouse.getPosition())
@@ -172,11 +173,25 @@ function Psy:update(dt)
         C_FX.create(p.pos)
     end
 
+    --Psycho is moving, then accelerate
+    if p.speed:len() > 0 then
+        if p.speed_multiplier < 1 then
+            p.speed_multiplier = p.speed_multiplier + 7*dt
+            if p.speed_multiplier > 1 then p.speed_multiplier = 1 end
+        end
+    --Psycho is not moving, slow down
+    else
+        if p.speed_multiplier > 0 then
+            p.speed_multiplier = p.speed_multiplier - 7*dt
+            if p.speed_multiplier < 0 then p.speed_multiplier = 0 end
+        end
+    end
+
     --Update movement
     if not p.focused then
-        p.pos = p.pos + dt*p.speed
+        p.pos = p.pos + dt*p.speed*p.speed_multiplier
     else
-        p.pos = p.pos + dt*p.speed*p.speedvm_focus
+        p.pos = p.pos + dt*p.speed*p.speedvm_focus*p.speed_multiplier
     end
     --Fixes if psycho leaves screen
     p.pos.x, p.pos.y = isOutside(p)
