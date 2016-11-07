@@ -771,8 +771,8 @@ Boss_2_Turret = Class{
         self.invincible = true --If boss can get hit
         self.static = false --If turret can "act"
 
-        self.shoot_tick = 1.2 --Enemy shooter "cooldown" timer (for shooting repeatedly)
-        self.shoot_fps = 1.2 --How fast to shoot enemies
+        self.shoot_tick = 1.4 --Enemy shooter "cooldown" timer (for shooting repeatedly)
+        self.shoot_fps = 1.4 --How fast to shoot enemies
 
         self.stage = 0
         self.behaviour = nil --What behaviour this turret is following

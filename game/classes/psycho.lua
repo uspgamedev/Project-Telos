@@ -67,6 +67,8 @@ Psy = Class{
         self.default_ultrablast_power = 50 --Ultrablast power when using right mouse button
 
         self.invincible = false --If psycho can't collide with enemies
+        self.ultrablast_invincibility_timer = 0 --If its <= 0, then psycho can die (used for invincibility when using ultrablast)
+        self.ultrablast_invincibility_timer_max = .5 --How much time psychoball is invincible when using ultrablast
         self.controlsLocked = false --If psycho cant move or shoot
         self.shootLocked = true --If psycho cant shoot or ultrablast
 
@@ -130,6 +132,8 @@ function Psy:ultrablast(power)
 
     if p.ultrablast_counter <= 0 then return end
 
+    p.ultrablast_invincibility_timer = p.ultrablast_invincibility_timer_max
+
     --Update ultrablast counter
     LM.giveUltrablast(-1)
 
@@ -141,6 +145,10 @@ function Psy:update(dt)
     local p
 
     p = self
+
+    if p.ultrablast_invincibility_timer > 0 then
+        p.ultrablast_invincibility_timer = p.ultrablast_invincibility_timer - dt
+    end
 
     --Update psycho radius
     if p.focused and p.r > p.collision_r + 2 then
@@ -204,7 +212,7 @@ function Psy:kill()
 
     p = self
 
-    if p.lives == 0 then return end
+    if p.ultrablast_invincibility_timer > 0 or p.lives == 0 then return end
 
     SFX_PSYCHOBALL_DIES:play()
 
