@@ -2,7 +2,17 @@
 THE HISTORY OF PSYCHO: THE BALL
 ===============================
 
-#### (xx/xx/2016) Version 0.0.0.9  -  XXXXXXXXXXX
+#### (xx/xx/201x) Version 0.0.0.10 (indev)  -  XXXXXXXXXXXXXXXX
+
+#### (07/11/2016) Version 0.0.0.9  -  Violent Boss +4
+
+- Level 2 finished!
+    - Awesome and intense boss (still need some tweaks)
+- Improvements on gameplay
+    - Psycho now moves better
+    - Using ultrablast gives psycho a small invincibility time
+- From beyond
+    - Random death messages when you die
 
 #### (25/10/2016) Version 0.0.0.8  -  Roundness
 

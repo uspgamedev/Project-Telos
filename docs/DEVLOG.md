@@ -5,6 +5,14 @@ GAME DESIGN DOCUMENT
 DEV LOG
 =======
 
+#### 27/10/2016 - 07/10/2016:
+
+Finished boss 2, and made lots of tweaks on psycho to make him more enjoyable to play with.
+
+Started save and filesystem, but still needs work.
+
+Th group decided on a short iteration, because later I will have to focus on the poster and report for the project.
+
 #### 26/10/2016:
 
 Made death messages!
