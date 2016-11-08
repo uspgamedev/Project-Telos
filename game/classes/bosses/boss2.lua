@@ -307,7 +307,7 @@ function Boss_2_Main:changeStage()
         b.behaviour = Stage_1
     elseif b.stage == 2 then
         FX.shake(1,3) --Shake screen
-        LM.giveScore(1500, "boss hurted")
+        LM.giveScore(1500, "boss hurt")
         --Reset stats
         for i = 1,4 do
             b.color_stage_current_saturation[i] = b.initial_saturation
@@ -385,7 +385,7 @@ function Boss_2_Main:changeStage()
         )
 
     elseif b.stage == 3 then
-        LM.giveScore(2000, "boss hurted")
+        LM.giveScore(2000, "boss hurt")
         FX.shake(1,3) --Shake screen
         --Reset stats
         for i = 1,4 do
@@ -466,7 +466,7 @@ function Boss_2_Main:changeStage()
         end
 
     elseif b.stage == 4 then
-        LM.giveScore(2500, "boss hurted")
+        LM.giveScore(2500, "boss hurt")
         FX.shake(1,3) --Shake screen
         --Reset stats
         for i = 1,4 do
@@ -564,7 +564,7 @@ function Boss_2_Main:changeStage()
         end
 
     elseif b.stage == 5 then
-        LM.giveScore(3000, "boss hurted")
+        LM.giveScore(3000, "boss hurt")
         FX.shake(2,3) --Shake screen
         --Reset stats
         for i = 1,4 do

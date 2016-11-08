@@ -233,7 +233,7 @@ function Boss_1:changeStage()
         b.isShooting = false --Stop shooting
         b.shoot_tick = 0
         b.shoot_fps = .45
-        LM.giveScore(1000, "boss hurted")
+        LM.giveScore(1000, "boss hurt")
 
         --Stop moving
         b.static = true
@@ -275,7 +275,7 @@ function Boss_1:changeStage()
         b.static = true
         b.isShooting = false
         b.shoot_tick = 0
-        LM.giveScore(1000, "boss hurted")
+        LM.giveScore(1000, "boss hurt")
 
         if b.level_handles["move"] then
             LEVEL_TIMER:cancel(b.level_handles["move"])

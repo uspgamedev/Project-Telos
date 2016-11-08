@@ -13,6 +13,11 @@ local setup = {}
 
 --Set game's global variables, random seed, window configuration and anything else needed
 function setup.config()
+    local args
+    --LOAD/SAVE
+    SAVE_VERSION = 1.0 --Current save version
+    args = FM.load() --Load from savefile (or create one if needed)
+
 
     --IMAGES--
     PIXEL = love.graphics.newImage("assets/images/pixel.png") -- Pixel for shaders
@@ -24,6 +29,11 @@ function setup.config()
     DEBUG = true --DEBUG mode status
     BUTTON_LOCK = false --Blocks buttons to be pressed
     SWITCH = nil --Which gamestate to switch next
+
+    FIRST_TIME = args["first_time"] --If its the first time the player is playing (for tutorial)
+    print("first time is ", FIRST_TIME)
+    CONTINUE = args["continue"] --If player is in the middle of a run
+    print("continue is ", CONTINUE)
 
     WINDOW_WIDTH = love.graphics.getWidth() --Current width of the game window
     WINDOW_HEIGHT = love.graphics.getHeight() --Current height of the game window
