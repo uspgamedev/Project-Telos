@@ -33,6 +33,8 @@ function setup.config()
     FIRST_TIME = args["first_time"] --If its the first time the player is playing (for tutorial)
     CONTINUE = args["continue"] --If player is in the middle of a run
 
+    TUTORIAL = false --If the game gamestate should play the tutorial
+
     WINDOW_WIDTH = love.graphics.getWidth() --Current width of the game window
     WINDOW_HEIGHT = love.graphics.getHeight() --Current height of the game window
     ORIGINAL_WINDOW_WIDTH = 1000 --Default width of the game window

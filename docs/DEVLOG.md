@@ -5,7 +5,18 @@ GAME DESIGN DOCUMENT
 DEV LOG
 =======
 
-#### 27/10/2016 - 07/10/2016:
+#### 08/11/2016 - 09/11/2016:
+
+Finished save system. For now only using two variables: first_time and continue.
+First time is used for the tutorial (if its the first time the player is playing, the new game will go to the tutorial
+instead of the main game).
+Continue is used in case the player lost or quited the game while in the middle of a run (and past level 1).
+He can then continue from the start of the last level he reached, reseting his lives and score.
+
+Also made all the functionalities for the continue button, and as an extra, added "overtext" for buttons,
+that appear when you have the mouse over them.
+
+#### 27/10/2016 - 07/11/2016:
 
 Finished boss 2, and made lots of tweaks on psycho to make him more enjoyable to play with.
 
