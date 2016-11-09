@@ -134,6 +134,7 @@ function love.quit()
     if not sucess then print("Couldn't update your save in the savefile. Aborting the exit of the game. You can press f4 to forcefully close the game without trying to save."); return false end
 
     print("Balls saved. Thanks for psycho-balling")
+    print("---------------------------")
 
     return true
 end

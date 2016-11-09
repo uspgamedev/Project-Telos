@@ -8,9 +8,10 @@ local Audio = require "audio"
 --MODULE FOR THE GAMESTATE: GAME--
 
 --LEVEL FUNCTIONS--
-
-local level1 = require "levels.level1"
-local level2 = require "levels.level2"
+local Levels = {
+    level1 = require "levels.level1",
+    level2 = require "levels.level2"
+}
 
 --------------------
 
@@ -21,7 +22,11 @@ local p --Psycho
 function state:enter()
     local x, y, level, t
 
-    level = level2
+    if not CONTINUE then
+        level = Levels["level1"]
+    else
+        level = Levels["level"..CONTINUE]
+    end
 
     x, y = level.startPositions()
 
@@ -45,7 +50,7 @@ function state:enter()
     Txt.create_game_gui(5, 185, "————", GUI_MEDPLUS, nil, nil, nil, "separator_1")
 
     level.setup() --Make title and start BGM
-    Level.start(level.part_4) --Start first part of level
+    Level.start(level.part_1) --Start first part of level
 
     love.mouse.setVisible(false) --Make cursor invisible
     love.mouse.setGrabbed(true) --Resume mouse capture

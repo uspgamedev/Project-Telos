@@ -31,9 +31,7 @@ function setup.config()
     SWITCH = nil --Which gamestate to switch next
 
     FIRST_TIME = args["first_time"] --If its the first time the player is playing (for tutorial)
-    print("first time is ", FIRST_TIME)
     CONTINUE = args["continue"] --If player is in the middle of a run
-    print("continue is ", CONTINUE)
 
     WINDOW_WIDTH = love.graphics.getWidth() --Current width of the game window
     WINDOW_HEIGHT = love.graphics.getHeight() --Current height of the game window
@@ -113,8 +111,10 @@ function setup.config()
     GUI_GAME_TITLE = love.graphics.newFont("assets/fonts/Nevis.ttf", 90)
     GUI_BOSS_TITLE = love.graphics.newFont("assets/fonts/Nevis.ttf", 60)
     GUI_BIG = love.graphics.newFont("assets/fonts/vanadine_bold.ttf", 60)
+    GUI_BIGLESS = love.graphics.newFont("assets/fonts/vanadine_bold.ttf", 45)
     GUI_MEDPLUS = love.graphics.newFont("assets/fonts/Nevis.ttf", 30)
     GUI_MED = love.graphics.newFont("assets/fonts/Nevis.ttf", 20)
+    GUI_MEDLESS = love.graphics.newFont("assets/fonts/Nevis.ttf", 15)
 
     --CAMERA--
     CAM = Camera(love.graphics.getWidth()/2, love.graphics.getHeight()/2) --Set camera position to center of screen
@@ -254,6 +254,8 @@ function setup.config()
     SMOOTH_CIRCLE_TABLE[30] = love.graphics.newShader(Smooth_Circle_Shader:format(30))
     SMOOTH_CIRCLE_TABLE[60] = love.graphics.newShader(Smooth_Circle_Shader:format(60))
     print("Finished setting up shaders")
+
+    print("---------------------------")
 
 end
 

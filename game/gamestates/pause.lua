@@ -15,7 +15,7 @@ local Audio = require "audio"
 local state = {}
 
 function state:enter()
-    local t, b
+    local t, b, func
 
     USE_BLUR_CANVAS = true
 
@@ -25,20 +25,12 @@ function state:enter()
     Txt.create_gui(440, 300, "Pause", GUI_BIG)
 
     --Unpause button
-    b = Inv_Button(140, 650,
-        function()
-            SWITCH = "GAME"
-        end,
-        "un(p)ause", GUI_MED)
-    b:addElement(DRAW_TABLE.GUI, "gui")
+    func = function() SWITCH = "GAME" end
+    Button.create_inv_gui(140, 650, func, "un(p)ause", GUI_MED, nil, nil, "pause_gui")
 
     --"Go back" button
-    b = Inv_Button(340, 650,
-        function()
-            SWITCH = "MENU"
-        end,
-        "go (b)ack", GUI_MED)
-    b:addElement(DRAW_TABLE.GUI, "gui")
+    func = function() SWITCH = "MENU" end
+    Button.create_inv_gui(340, 650, func, "(b)ack to menu", GUI_MED, "reset score, lives and progress on this level", GUI_MEDLESS, "pause_gui")
 
     --AUDIO--
     Audio.pauseSFX()
@@ -92,6 +84,8 @@ function state:update(dt)
 
     COLOR_TIMER:update(dt)
     AUDIO_TIMER:update(dt)
+
+    Util.updateSubTp(dt, "pause_gui") --Update buttons on the gui
 
     Util.updateFPS()
 

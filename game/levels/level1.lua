@@ -17,6 +17,8 @@ local level2 = require "levels.level2"
 --1-1: The Start of the End
 function level_functions.part_1()
 
+    FIRST_TIME = false
+
     LM.level_part("Part 1 - The Start of the End")
 
     LM.wait(4)

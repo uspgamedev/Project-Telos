@@ -137,7 +137,7 @@ end
 --[[Text button with an invisible box behind (for collision)]]
 Inv_Button = Class{
     __includes = {RECT, WTXT},
-    init = function(self, _x, _y, _func, _text, _font)
+    init = function(self, _x, _y, _func, _text, _font, _overtext, _overfont)
         local w, h
 
         w = _font:getWidth(_text)
@@ -149,15 +149,45 @@ Inv_Button = Class{
 
         WTXT.init(self, _text, _font, nil) --Set text
 
+        self.overtext = _overtext --Text to appear below button if mouse is over
+        self.overfont = _overfont --Font of overtext
+        self.isOver = false --If mouse is over the button
+
         self.tp = "invbutton" --Type of this class
     end
 }
 
+function Inv_Button:update(dt)
+    local b, x, y, mousepos
 
+    b = self
+
+    if not b.overtext then return end
+
+    --Fix mouse position click to respective distance
+    x, y = love.mouse.getPosition()
+    w, h = FreeRes.windowDistance()
+    scale = FreeRes.scale()
+    x = x - w
+    x = x*(1/scale)
+    y = y - h
+    y = y*(1/scale)
+
+    --If mouse is colliding with button, then show message below
+    if x >= b.pos.x and
+       x <= b.pos.x + b.w and
+       y >= b.pos.y and
+       y <= b.pos.y + b.h then
+           b.isOver = true
+   else
+       b.isOver = false
+   end
+
+end
 
 --Draws a given square button with text aligned to the left
 function Inv_Button:draw()
-    local b
+    local b, x, w, y
 
     b = self
 
@@ -166,7 +196,28 @@ function Inv_Button:draw()
     love.graphics.setFont(b.font)
     love.graphics.print(b.text, b.pos.x , b.pos.y)
 
+    --Print overtext, aligned with center of the normal text
+    if b.overtext and b.isOver then
+        love.graphics.setFont(b.overfont)
+        x = b.pos.x + b.w/2 - b.overfont:getWidth(b.overtext)/2 --Centralize overtext with text
+        y = b.pos.y + b.overfont:getHeight(b.text) + 6 --Get position below text
+        love.graphics.print(b.overtext, x, y)
+    end
+
 end
+
+--UTILITY FUNCTIONS--
+
+function button.create_inv_gui(x, y, func, text, font, overtext, overfont, st)
+    local b
+
+    st = st or "gui"
+    b = Inv_Button(x, y, func, text, font, overtext, overfont)
+    b:addElement(DRAW_TABLE.GUI, st)
+
+    return b
+end
+
 
 ---------------------
 --COLLISION FUNCTIONS

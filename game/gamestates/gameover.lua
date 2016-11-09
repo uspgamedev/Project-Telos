@@ -24,20 +24,20 @@ function state:enter()
     chooseDeathMessage(t)
 
     --Restart button
-    b = Inv_Button(140, 650,
-        function()
-            SWITCH = "GAME"
-        end,
-        "(r)estart", GUI_MED)
-    b:addElement(DRAW_TABLE.GUI, "gui")
+    func = function() SWITCH = "GAME"; CONTINUE = false end
+    Button.create_inv_gui(140, 650, func, "(r)estart", GUI_MED, "start a new game", GUI_MEDLESS, "gameover_gui")
+
+    if CONTINUE then
+
+        --Continue button
+        func = function() SWITCH = "GAME" end
+        Button.create_inv_gui(340, 650, func, "(c)ontinue", GUI_MED, "reset score, lives and progress on this level", GUI_MEDLESS, "gameover_gui")
+
+    end
 
     --Back to menu button
-    b = Inv_Button(340, 650,
-        function()
-            SWITCH = "MENU"
-        end,
-        "go (b)ack", GUI_MED)
-    b:addElement(DRAW_TABLE.GUI, "gui")
+    func = function() SWITCH = "MENU" end
+    Button.create_inv_gui(540, 650, func, "(b)ack to menu", GUI_MED, "reset score, lives and progress on this level", GUI_MEDLESS, "gameover_gui")
 
     --Add slowmotion effect
     SLOWMO_M = .2
@@ -91,6 +91,7 @@ function state:update(dt)
     Util.updateSubTp(m_dt, "enemy_indicator")
     Util.updateSubTp(m_dt, "ultrablast")
     Util.updateSubTp(m_dt, "rotating_indicator")
+    Util.updateSubTp(dt, "gameover_gui") --Update buttons on the gui
     Util.checkCollision()
 
     --Kill dead objects
@@ -115,6 +116,9 @@ end
 function state:keypressed(key)
 
     if     key == 'r' then
+        SWITCH = "GAME"
+        CONTINUE = false
+    elseif key == 'c' and CONTINUE then
         SWITCH = "GAME"
     elseif key == 'b' then
         SWITCH = "MENU"

@@ -15,6 +15,8 @@ local Boss = require "classes.bosses.boss2"
 function level_functions.part_1()
     local p
 
+    CONTINUE = 2 --Setup continue variable to later continue from where you started
+
     p = Util.findId("psycho")
 
     LM.level_part("Part 1 - A Cross the Planes")

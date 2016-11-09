@@ -13,13 +13,24 @@ local Audio = require "audio"
 local state = {}
 
 function state:enter()
-    local b, func
+    local b, func, offset
 
     --GUI--
 
+    offset = 0
+
+    if CONTINUE then
+        offset = 140 --Move "New Game" button to the left
+
+        --Continue Button
+        func = function() SWITCH = "GAME" end
+        b = Button.create_circle_gui(640, 300, 110, func, "Continue", GUI_BIGLESS)
+
+    end
+
     --Play Button
-    func = function() SWITCH = "GAME" end
-    b = Button.create_circle_gui(500, 300, 100, func, "Play", GUI_BIG)
+    func = function() SWITCH = "GAME"; CONTINUE = false end
+    b = Button.create_circle_gui(500 - offset, 300, 110, func, "New Game", GUI_BIGLESS)
 
     --AUDIO--
     Audio.playBGM(BGM_MENU)

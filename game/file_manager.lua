@@ -13,6 +13,8 @@ first_time(bool): true if player never played, false otherwise
 function fm.load()
     local args, sucess, err, file, content
 
+    print("---------------------------")
+
     --Looks for a metafile
     if love.filesystem.isFile("metafile") then
         print("Metafile found")
@@ -87,9 +89,9 @@ function fm.load()
     args, err = Tserial.unpack(content, true) --Get table from savefile
     if err then print("Problem loading the current savefile. Error:"); print(err); os.exit() end
 
+    print("---------------------------")
 
     return args
-
 end
 
 
