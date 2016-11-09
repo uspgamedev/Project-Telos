@@ -559,6 +559,9 @@ function util.defaultKeyPressed(key)
 
     if  key == 'f1' then
         util.quit()
+    elseif key == 'f4' then
+        print("Closing the game without saving")
+        os.exit()
     elseif key == 'f11' then
         util.toggleFullscreen()
     elseif key == 'f9' then

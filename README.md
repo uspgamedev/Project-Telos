@@ -1,5 +1,5 @@
 
-# PsyChO: The Ball version 0.0.0.9
+# PsyChO: The Ball version 0.0.0.10 indev
 ===========================================  
  *a game by* **USPGAMEDEV** *&* **MARVELLOUS SOFT**  
  *Projeto de Cultura e Extensão - 2º Semestre 2016*  
