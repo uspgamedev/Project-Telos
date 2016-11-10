@@ -13,9 +13,12 @@ local level1 = require "levels.level1"
 
 --Tutorial main part
 function level_functions.part_1()
-    local txt
+    local txt, p
 
     LM.level_part("Learning the ropes")
+
+    p = Util.findId("psycho")
+    p.can_ultra = false --Disable ultrablast
 
     --Make gui invisible here
     Util.findId("lives_counter").alpha = 0
@@ -32,7 +35,7 @@ function level_functions.part_1()
     LM.wait(3)
     LM.text(320, 590, "...if that makes any sense", 3, 200)
     LM.wait(5)
-    LM.text(400, 460, "I can't trust anyone", 2, 200)
+    LM.text(400, 460, "I can't trust anyone", 2, 100)
     LM.wait(4)
     LM.text(100, 50, "everyone wants me dead", 3, 200)
     LM.wait(2)
@@ -44,7 +47,7 @@ function level_functions.part_1()
     LM.wait(4)
     LM.text(300, 260, "I have to kill them", 2, 100)
     LM.wait(4)
-    LM.text(270, 560, "the left mouse button should do the trick", 6, 200)
+    LM.text(250, 560, "holding the left mouse button should do the trick", 6, 200)
     LM.wait(2)
 
     F.single{enemy = SB, x = -20, y = ORIGINAL_WINDOW_HEIGHT/2, dx = 1, dy = 0, speed_m = .8, e_radius = 30, score_mul = 0, ind_duration = 3, ind_side = 40}
@@ -67,6 +70,7 @@ function level_functions.part_1()
     LM.text(135, 195, "...but they do make me invulnerable for a short time", 4, 200)
     LM.wait(6)
     LM.text(170, 560, "the spacebar or right mouse button should unleash the powerful ultrablast", 6, 200)
+    p.can_ultra = true --Enable ultrablast
     LM.wait(2)
 
     F.circle{enemy = {SB}, number = 20, radius = 630, speed_m = .8, score_mul = 0, ind_duration = 4, ind_side = 35}
@@ -78,7 +82,7 @@ function level_functions.part_1()
     LM.wait(5)
     LM.text(270, 560, "...sometimes is best to run", 3, 100)
     LM.wait(5)
-    LM.text(280, 260, "I can enter focus mode and move more carefully", 4, 200)
+    LM.text(275, 260, "I can enter focus mode and move more carefully", 4, 200)
     LM.wait(6)
 
     LM.text(150, 560, "when in a tight spot, I should hold the shift key to enter focus mode", 8, 200)
@@ -90,10 +94,10 @@ function level_functions.part_1()
     LM.wait("noenemies")
     LM.wait(2)
 
-    LM.text(410, 260, "I'm ready.", 7, 200)
+    LM.text(410, 260, "I'm ready.", 6, 200)
     LM.wait(3)
-    LM.text(510, 260, "I think", 4, 200)
-    LM.wait(4)
+    LM.text(510, 260, "I think", 3, 200)
+    LM.wait(1)
 
     --Turn score counter visible
     txt = Util.findId("score_counter")
@@ -111,7 +115,7 @@ function level_functions.part_1()
     txt = Util.findId("level_part")
     txt.level_handles["become_visible"] = LEVEL_TIMER:tween(1, txt, {alpha = 255}, 'in-linear')
 
-    LM.wait(3)
+    LM.wait(4)
     LM.text(300, 560, "may the devil have mercy on my soul", 2, 100)
     LM.wait(5)
 

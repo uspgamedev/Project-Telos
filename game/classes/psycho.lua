@@ -59,6 +59,7 @@ Psy = Class{
         self.life_score_target = 8000 --How many points psycho must win to get a life
         self.ultrablast_score = 0 --How much score psycho has accumulated to win a ultrablast
         self.ultrablast_score_target = 2000 --How many points psycho must win to get a ultrablast
+        self.can_ultra = true -- If psycho can use ultrablast (for tutorial)
 
         self.lives = 10 --How many lives psycho by default has
 
@@ -137,7 +138,7 @@ function Psy:ultrablast(power)
 
     p = self
 
-    if p.ultrablast_counter <= 0 then return end
+    if p.ultrablast_counter <= 0 or not p.can_ultra then return end
 
     p.ultrablast_invincibility_timer = p.ultrablast_invincibility_timer_max
 
