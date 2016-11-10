@@ -29,8 +29,22 @@ function state:enter()
     end
 
     --Play Button
-    func = function() SWITCH = "GAME"; CONTINUE = false end
+    func = function()
+        SWITCH = "GAME"
+        CONTINUE = false
+        if FIRST_TIME then
+            TUTORIAL = true
+        end
+    end
     b = Button.create_circle_gui(500 - offset, 300, 110, func, "New Game", GUI_BIGLESS)
+
+    if not FIRST_TIME then
+
+        --Tutorial Button
+        func = function() SWITCH = "GAME"; TUTORIAL = true end
+        b = Button.create_circle_gui(500, 480, 63, func, "Tutorial", GUI_BIGLESSLESS)
+
+    end
 
     --AUDIO--
     Audio.playBGM(BGM_MENU)

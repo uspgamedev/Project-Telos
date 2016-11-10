@@ -5,6 +5,12 @@ GAME DESIGN DOCUMENT
 DEV LOG
 =======
 
+#### 10/11/2016:
+
+Fixed lots of bugs, and added a tutorial level!
+Made the game play the tutorial level the first time, then unlock the tutorial to be played
+from the main menu.
+
 #### 08/11/2016 - 09/11/2016:
 
 Finished save system. For now only using two variables: first_time and continue.

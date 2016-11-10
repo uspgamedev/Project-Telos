@@ -9,6 +9,9 @@ local level_functions = {}
 --Boss
 local Boss = require "classes.bosses.boss2"
 
+--Levels
+local level3 = require "levels.level3"
+
 --LEVEL 2--
 
 --2-1: A Cross the Planes
@@ -741,8 +744,11 @@ function level_functions.part_4()
 
     LM.wait(10)
     LM.wait("nobosses")
-    print("end of level")
+    LM.wait(2)
+
     LM.stop()
+    level3.setup()
+    LM.start(level3.part_1)
 
 end
 

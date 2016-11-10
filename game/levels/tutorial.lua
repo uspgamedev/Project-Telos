@@ -13,77 +13,120 @@ local level1 = require "levels.level1"
 
 --Tutorial main part
 function level_functions.part_1()
-
-    FIRST_TIME = false
+    local txt
 
     LM.level_part("Learning the ropes")
 
+    --Make gui invisible here
+    Util.findId("lives_counter").alpha = 0
+    Util.findId("ultrablast_counter").alpha = 0
+    Util.findId("score_counter").alpha = 0
+    Util.findId("separator_1").alpha = 0
+    Util.findId("level_part").alpha = 0
+    Util.findId("fps_counter").alpha = 0
+
     LM.wait(4)
-    INDICATOR_DEFAULT = 1.5
-    F.single{enemy = SB, x = -20, y = ORIGINAL_WINDOW_HEIGHT/2, dx = 1, dy = 0, e_radius = 28, ind_duration = 2, ind_side = 35}
-    LM.wait("noenemies")
-
-    F.single{enemy = SB, x = -20, y = ORIGINAL_WINDOW_HEIGHT/2, dx = 1, dy = 0}
-    F.single{enemy = SB, x = ORIGINAL_WINDOW_WIDTH + 20, y = ORIGINAL_WINDOW_HEIGHT/2, dx = -1, dy = 0}
-    LM.wait(1.5)
-    F.circle{enemy = {SB}, number = 4, radius = 610}
-    LM.wait("noenemies")
-
-    F.fromHorizontal{side = "left", mode = "center", number = 9, enemy_x_margin = 25, enemy_y_margin = 90, enemy = {SB}, speed_m = 1.5}
-    LM.wait(1)
-    INDICATOR_DEFAULT = 1.2
-    F.fromHorizontal{side = "left", mode = "center", number = 9, enemy_x_margin = 25, enemy_y_margin = 90, enemy = {SB}, speed_m = 1.5}
-    LM.wait(.8)
-    F.fromHorizontal{side = "left", mode = "center", number = 9, enemy_x_margin = 25, enemy_y_margin = 90, enemy = {SB}, speed_m = 1.5}
-    LM.wait(.6)
-    F.fromHorizontal{side = "left", mode = "center", number = 9, enemy_x_margin = 25, enemy_y_margin = 90, enemy = {SB}, speed_m = 1.5}
-    LM.wait(.4)
-    F.fromHorizontal{side = "left", mode = "center", number = 9, enemy_x_margin = 25, enemy_y_margin = 90, enemy = {SB}, speed_m = 2}
-    LM.wait(1.5)
-    F.fromHorizontal{side = "right", mode = "distribute", number = 16, enemy = {SB}, speed_m = 1.5}
-    LM.wait("noenemies")
-
-    INDICATOR_DEFAULT = 1.5
-    F.fromVertical{side = "bottom", mode = "left", number = 9, enemy = {SB}}
-    F.fromVertical{side = "bottom", mode = "right", number = 9, enemy = {SB}}
-    F.fromVertical{side = "top", mode = "left", number = 9, enemy = {SB}}
-    F.fromVertical{side = "top", mode = "right", number = 9, enemy = {SB}}
-    LM.wait(1)
-    INDICATOR_DEFAULT = 1.2
-    F.fromHorizontal{side = "left", mode = "center", number = 11, enemy = {SB}}
-    F.fromHorizontal{side = "right", mode = "center", number = 11, enemy = {SB}}
-    F.fromVertical{side = "top", mode = "center", number = 5, enemy = {SB}, speed_m = .9}
-    F.fromVertical{side = "bottom", mode = "center", number = 5, enemy = {SB}, speed_m = .9}
-    LM.wait("noenemies")
-
-    INDICATOR_DEFAULT = 1.5
-    F.single{enemy = DB, x = ORIGINAL_WINDOW_WIDTH/2, y = ORIGINAL_WINDOW_HEIGHT + 25, dy = -1, e_radius = 28}
-    LM.wait("noenemies")
-
-    F.line{enemy = {DB}, x = ORIGINAL_WINDOW_WIDTH + 25, y = ORIGINAL_WINDOW_HEIGHT/2, dx = -1, number = 36, ind_side = 35}
+    LM.text(310, 260, "I guess there is no going back now", 3, 200)
     LM.wait(5)
-    F.fromVertical{side = "top", mode = "center", enemy = {DB}, number = 20, speed_m = .55}
+    LM.text(300, 560, "I should move with WASD or the arrow keys...", 6, 200)
     LM.wait(3)
-    F.fromHorizontal{side = "left", mode = "center", enemy = {DB}, number = 14, speed_m = 1.2}
-    LM.wait("noenemies")
+    LM.text(320, 590, "...if that makes any sense", 3, 200)
+    LM.wait(5)
+    LM.text(400, 460, "I can't trust anyone", 2, 200)
+    LM.wait(4)
+    LM.text(100, 50, "everyone wants me dead", 3, 200)
+    LM.wait(2)
 
-    F.line{enemy = {DB}, x = ORIGINAL_WINDOW_WIDTH/2 - 200, y = ORIGINAL_WINDOW_HEIGHT + 25, dy = -1, number = 56, ind_side = 35}
-    F.line{enemy = {DB}, x = ORIGINAL_WINDOW_WIDTH/2 + 200, y = - 25, dy = 1, number = 56, ind_side = 35}
+    --Turn lives counter visible
+    txt = Util.findId("lives_counter")
+    txt.level_handles["become_visible"] = LEVEL_TIMER:tween(1, txt, {alpha = 255}, 'in-linear')
+
     LM.wait(4)
-    INDICATOR_DEFAULT = 1.2
-    F.fromVertical{side = "top", mode = "distribute", number = 9, enemy = {SB}, speed_m = 1.3}
-    F.fromVertical{side = "bottom", mode = "distribute", number = 9, enemy = {SB}, speed_m = 1.3}
+    LM.text(300, 260, "I have to kill them", 2, 100)
     LM.wait(4)
-    F.fromVertical{side = "top", mode = "distribute", number = 14, enemy = {SB, DB}, speed_m = 1.2}
-    F.fromVertical{side = "bottom", mode = "distribute", number = 14, enemy = {SB, DB}, speed_m = 1.2}
-    LM.wait(4)
-    F.fromVertical{side = "top", mode = "distribute", number = 12, enemy = {DB}, speed_m = .9}
-    F.fromVertical{side = "bottom", mode = "distribute", number = 12, enemy = {DB}, speed_m = .9}
+    LM.text(270, 560, "the left mouse button should do the trick", 6, 200)
+    LM.wait(2)
+
+    F.single{enemy = SB, x = -20, y = ORIGINAL_WINDOW_HEIGHT/2, dx = 1, dy = 0, speed_m = .8, e_radius = 30, score_mul = 0, ind_duration = 3, ind_side = 40}
+
     LM.wait("noenemies")
-    LM.giveLives(2, "finished part")
+    LM.wait(3)
+
+    LM.text(270, 260, "if there is more enemies than I can handle...", 6, 200)
+    LM.wait(2)
+    LM.text(280, 290, "... I could use a more powerful attack", 4, 200)
+    LM.wait(6)
+    LM.text(100, 165, "too bad I can't use them a lot...", 7, 200)
+    LM.wait(1)
+
+    --Turn ultrablast counter visible
+    txt = Util.findId("ultrablast_counter")
+    txt.level_handles["become_visible"] = LEVEL_TIMER:tween(1, txt, {alpha = 255}, 'in-linear')
+
+    LM.wait(2)
+    LM.text(135, 195, "...but they do make me invulnerable for a short time", 4, 200)
+    LM.wait(6)
+    LM.text(170, 560, "the spacebar or right mouse button should unleash the powerful ultrablast", 6, 200)
+    LM.wait(2)
+
+    F.circle{enemy = {SB}, number = 20, radius = 630, speed_m = .8, score_mul = 0, ind_duration = 4, ind_side = 35}
+
+    LM.wait("noenemies")
+    LM.wait(2)
+
+    LM.text(470, 260, "but sometimes fighting them is useless...", 3, 200)
+    LM.wait(5)
+    LM.text(270, 560, "...sometimes is best to run", 3, 100)
+    LM.wait(5)
+    LM.text(280, 260, "I can enter focus mode and move more carefully", 4, 200)
+    LM.wait(6)
+
+    LM.text(150, 560, "when in a tight spot, I should hold the shift key to enter focus mode", 8, 200)
+    LM.wait(1)
+
+    F.fromHorizontal{side = "right", mode = "top", number = 7, enemy = {GrB}, ind_duration = 4, ind_side = 35, speed_m = .8, enemy_y_margin = 55, e_radius = 23}
+    F.fromHorizontal{side = "right", mode = "bottom", number = 6, enemy = {GrB}, ind_duration = 4, ind_side = 35, speed_m = .8, enemy_y_margin = 55, e_radius = 23}
+
+    LM.wait("noenemies")
+    LM.wait(2)
+
+    LM.text(410, 260, "I'm ready.", 7, 200)
+    LM.wait(3)
+    LM.text(510, 260, "I think", 4, 200)
+    LM.wait(4)
+
+    --Turn score counter visible
+    txt = Util.findId("score_counter")
+    txt.level_handles["become_visible"] = LEVEL_TIMER:tween(1, txt, {alpha = 255}, 'in-linear')
+
+    --Turn fps counter visible
+    txt = Util.findId("fps_counter")
+    txt.level_handles["become_visible"] = LEVEL_TIMER:tween(1, txt, {alpha = 255}, 'in-linear')
+
+    --Turn separator visible
+    txt = Util.findId("separator_1")
+    txt.level_handles["become_visible"] = LEVEL_TIMER:tween(1, txt, {alpha = 255}, 'in-linear')
+
+    --Turn level part visible
+    txt = Util.findId("level_part")
+    txt.level_handles["become_visible"] = LEVEL_TIMER:tween(1, txt, {alpha = 255}, 'in-linear')
+
+    LM.wait(3)
+    LM.text(300, 560, "may the devil have mercy on my soul", 2, 100)
+    LM.wait(5)
 
     LM.stop()
-    LM.start(level1.part_1)
+    TUTORIAL = false
+
+    if FIRST_TIME then
+        FIRST_TIME = false
+        level1.setup() --Make title and start BGM
+        LM.start(level1.part_1)
+    else
+        LM.stop()
+        LM.level_title("END OF TUTORIAL")
+        LM.text(360, 560, "press p to pause and leave", 120, 180)
+    end
 
 end
 

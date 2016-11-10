@@ -26,8 +26,10 @@ require "classes.bosses.boss2"
 
 --levels
 
+require "levels.tutorial"
 require "levels.level1"
 require "levels.level2"
+require "levels.level3"
 
 --other
 require "classes.primitive"

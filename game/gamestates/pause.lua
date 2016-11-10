@@ -79,6 +79,16 @@ function state:update(dt)
         SWITCH = nil
         Util.clearTimerTable(DEATH_HANDLES, FX_TIMER)
 
+        if TUTORIAL then
+            TUTORIAL = false
+            FIRST_TIME = false
+
+            --Turn fps counter visible
+            txt = Util.findId("fps_counter")
+            txt.level_handles["become_visible"] = LEVEL_TIMER:tween(1, txt, {alpha = 255}, 'in-linear')
+            
+        end
+
         --Stop indicators batch from spawning enemies
         if SUBTP_TABLE["enemy_indicator_batch"] then
             for batch in pairs(SUBTP_TABLE["enemy_indicator_batch"]) do

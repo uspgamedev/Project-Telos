@@ -4,6 +4,13 @@ THE HISTORY OF PSYCHO: THE BALL
 
 #### (xx/xx/201x) Version 0.0.0.10 (indev)  -  XXXXXXXXXXXXXXXX
 
+- Added tutorial!
+    -Learn the ropes when first playing the game
+- Continue button
+    - If you lose or jsut quit the game, you can restart from the current level (losing all progress)
+- Bug fixes!!
+    - There was a lot of them. There might still be some =O
+
 #### (07/11/2016) Version 0.0.0.9  -  Violent Boss +4
 
 - Level 2 finished!

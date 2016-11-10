@@ -9,8 +9,9 @@ local Audio = require "audio"
 
 --LEVEL FUNCTIONS--
 local Levels = {
+    tutorial = require "levels.tutorial",
     level1 = require "levels.level1",
-    level2 = require "levels.level2"
+    level2 = require "levels.level2",
 }
 
 --------------------
@@ -22,7 +23,9 @@ local p --Psycho
 function state:enter()
     local x, y, level, t
 
-    if not CONTINUE then
+    if TUTORIAL then
+        level = Levels["tutorial"]
+    elseif not CONTINUE then
         level = Levels["level1"]
     else
         level = Levels["level"..CONTINUE]
