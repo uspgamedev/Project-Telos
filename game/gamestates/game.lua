@@ -61,6 +61,8 @@ end
 function state:leave()
 
     Level.stop()
+
+    --Don't remove background or fps counter
     Util.addExceptionId("background")
     Util.addExceptionId("fps_counter")
     Util.clearAllTables("remove")

@@ -229,6 +229,10 @@ function util.gameElementException(mode)
         util.addExceptionSubtype("enemy_indicator")
     end
 
+    if util.findSbTp("enemy_indicator_batch") then
+        util.addExceptionSubtype("enemy_indicator_batch")
+    end
+
     if util.findSbTp("rotating_indicator") then
         util.addExceptionSubtype("rotating_indicator")
     end

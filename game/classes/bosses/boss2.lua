@@ -69,8 +69,8 @@ Boss_2_Main = Class{
         self.color_stage_hue[2] = 188.32 --Color hue for stage 1 (purple)
         self.color_stage_hue[3] = 162.22  --Color hue for stage 2 (deep blue)
         self.color_stage_hue[4] = 142.22 --Color hue for stage 3 (light blue)
-        self.color_stage_hue[5] = 132.32 --Color hue for stage 4
-        self.color_stage_hue[6] = 112.79 --Color hue for stage 5
+        self.color_stage_hue[5] = 132.32 --Color hue for stage 4 (very light blue)
+        self.color_stage_hue[6] = 188.32 --Color hue for stage 5 (purple)
         self.color_onhit_hue = 254 --Color hue for when boss is hit (red)
         self.color_onhit_saturation = 255 --Color saturation for when boss is hit
         self.color_stage_current_saturation = {}  --Current stage color saturation this boss has
@@ -198,7 +198,8 @@ function Boss_2_Main:kill()
 
     b.death = true
 
-    FX.explosion(self.pos.x, self.pos.y, 20, self.color, 600, 600, 100, 4, true)
+    FX.explosion(b.pos.x, b.pos.y, 20, HSL(255, 180, 150), 600, 600, 100, 4, true)
+    print("exploded")
 
 end
 
@@ -223,9 +224,10 @@ function Boss_2_Main:getHit(id)
 
     b = self
 
+    if b.stage >= 7 then return end
+
     if b.damage_taken[id] >= b.life[id] then return end
 
-    if b.stage >= 7 then return end
 
     b.damage_taken[id] = b.damage_taken[id] + 1 --Make part take damage
     b.bottom_lightness[id] = b.bottom_lightness[id] - .6 --Make part glow darker
@@ -487,7 +489,7 @@ function Boss_2_Main:changeStage()
                 end
             )
             b.damage_taken[i] = 0
-            b.life[i] = 20 --20
+            b.life[i] = 16
             b.parts_alive = 4
             b.shoot_fps = .7 --Make main boss shoot faster
             b.shoot_tick = 0 --Reset tick
@@ -666,7 +668,7 @@ function Boss_2_Main:changeStage()
         LM.giveScore(4000, "boss defeated")
         b.static = true
 
-        b.level_handles["text_appear"] = LEVEL_TIMER:after(.5, function() LM.text(ORIGINAL_WINDOW_WIDTH/2 - 105, ORIGINAL_WINDOW_HEIGHT/2 - 90, "please don't kill me", 4.5, 110) end)
+        b.level_handles["text_appear"] = LEVEL_TIMER:after(.5, function() LM.text(ORIGINAL_WINDOW_WIDTH/2 - 95, ORIGINAL_WINDOW_HEIGHT/2 - 90, "please don't kill me", 4.5, 110) end)
         b.level_handles["wait"] = LEVEL_TIMER:after(2,
             function()
                 b.level_handles["no_more_saturation"] = LEVEL_TIMER:tween(1.5, b.part_colors[1], {s = 255}, 'in-linear',
@@ -679,6 +681,9 @@ function Boss_2_Main:changeStage()
 
     elseif b.stage == 7 then
         LM.giveScore(666, "boss killed")
+
+        FX.shake(1, 2) --Shake screen
+
         b:kill()
 
     end
@@ -762,6 +767,7 @@ Boss_2_Turret = Class{
 
         self.getDir = false --If turret should get a direction to shoot itself to player
         self.getIndicator = false --If turret create a indicator following psycho
+        self.indicator = nil --Indicator for a turret attack (Stage 5)
         self.shoot_to_player = false --If turret should shoot itself to player
 
         self.counter = 0 --Counter for stage 3
@@ -846,9 +852,9 @@ function Boss_2_Turret:collides(o)
 
     --In case of psycho, check collision with his collision radius
     if o.tp == "psycho" then
-        dr = (e.r + e.outer_ring) + o.collision_r
+        dr = e.r + o.collision_r
     else
-        dr = (e.r + e.outer_ring) + o.r
+        dr = (e.r + e.outer_ring) + o.r --If its not psycho, use the outer ring
     end
 
     if ((dx*dx + dy*dy) < dr*dr) then
@@ -927,9 +933,12 @@ function Boss_2_Turret:kill()
     b = self
 
     if b.death then return end
+
     b.death = true
 
     FX.explosion(self.pos.x, self.pos.y, 20, self.color, 600, 600, 100, 4, true)
+
+    if b.indicator then b.indicator.death = true end --Remove indicator, if it exists
 
 end
 
@@ -1355,7 +1364,7 @@ Stage_4_t = function(b, dt)
 
             _x, _y = LM.outsidePosition(love.math.random(2*ORIGINAL_WINDOW_WIDTH+2*ORIGINAL_WINDOW_HEIGHT+1)-1)
 
-            F.single{enemy = SB, x = _x, y = _y, dir_follow = true, speed_m = 5, ind_side = 50, ind_duration = 2.5}
+            F.single{enemy = SB, x = _x, y = _y, dir_follow = true, speed_m = 5, ind_side = 50, ind_duration = 2.5, score_mul = 0}
 
         end
 
@@ -1414,13 +1423,16 @@ Stage_5_t = function(b, dt)
 
     if b.getIndicator then
         b.getIndicator = false
-        Indicator.create_rotating(50, b.color, 1, b.r + b.outer_ring + 50, Vector(b.pos.x, b.pos.y))
+        b.indicator = Indicator.create_rotating(50, b.color, 1, b.r + b.outer_ring + 50, Vector(b.pos.x, b.pos.y))
         b.level_handles["get_direction"] = LEVEL_TIMER:after(1, function() b.getDir = true end)
     end
 
     if b.getDir then
         local p
+
         b.getDir = false
+        b.indicator = nil
+
         p = Util.findId("psycho")
 
         --Get direction to psycho
@@ -1441,14 +1453,24 @@ Stage_5_t = function(b, dt)
         b.pos.y = b.pos.y + dt*b.dir.y*b.speedv
 
         --Stop turret if it reaches the edge of the screen
-        if b.pos.x < b.r + b.outer_ring or
-           b.pos.x > ORIGINAL_WINDOW_WIDTH - (b.r + b.outer_ring) or
-           b.pos.y < b.r + b.outer_ring or
-           b.pos.y > ORIGINAL_WINDOW_HEIGHT - (b.r + b.outer_ring) then
+        if b.pos.x <= b.r + b.outer_ring or
+           b.pos.x >= ORIGINAL_WINDOW_WIDTH - (b.r + b.outer_ring) or
+           b.pos.y <= b.r + b.outer_ring or
+           b.pos.y >= ORIGINAL_WINDOW_HEIGHT - (b.r + b.outer_ring) then
+
                FX.shake(.5,4)
-               b.shoot_to_player = false
+
+               b.shoot_to_player = false --Stop shooting at player
+
                --Restart cycle of getting an indicator
                b.level_handles["resume_indicator"] = LEVEL_TIMER:after(.3, function() b.getIndicator = true end)
+
+               --Fix position of turret
+               b.pos.x = math.max(b.pos.x - (b.r + b.outer_ring), (b.r + b.outer_ring) + 2) --Fix on left side of screen
+               b.pos.x = math.min(b.pos.x + (b.r + b.outer_ring), ORIGINAL_WINDOW_WIDTH - (b.r + b.outer_ring) - 2) --Fix on right side of screen
+               b.pos.y = math.max(b.pos.y - (b.r + b.outer_ring), (b.r + b.outer_ring) - 2) --Fix on top side of screen
+               b.pos.y = math.min(b.pos.y + (b.r + b.outer_ring), ORIGINAL_WINDOW_HEIGHT - (b.r + b.outer_ring) - 2) --Fix on bottom side of screen
+
         end
 
     end

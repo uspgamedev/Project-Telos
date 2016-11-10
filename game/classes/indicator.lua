@@ -38,8 +38,9 @@ Enemy_Indicator_Batch = Class{
         self.batch = {}
         self.endtime = _endtime
         self.time = 0
-        self.tp = "enemy_indicator_batch"
+        self.spawn = true --If this batch should spawn the enemies from the indicators or not
 
+        self.tp = "enemy_indicator_batch"
     end
 }
 
@@ -61,21 +62,23 @@ function Enemy_Indicator_Batch:destroy()
     local p
 
     if self.batch then
-        for _, ind in pairs(self.batch) do
+        if self.spawn then
+            for _, ind in pairs(self.batch) do
 
-            if not ind.death then
-                ind.death = true
-                if not ind.follow_psycho then
+                if not ind.death then
+                    ind.death = true
+                    if not ind.follow_psycho then
 
-                    ind.enemy.create(ind.enemy_pos.x, ind.enemy_pos.y, ind.enemy_dir, ind.enemy_speed_m, ind.enemy_radius, ind.enemy_score_mul)
+                        ind.enemy.create(ind.enemy_pos.x, ind.enemy_pos.y, ind.enemy_dir, ind.enemy_speed_m, ind.enemy_radius, ind.enemy_score_mul)
 
-                else
-
-                    p  = Util.findId("psycho")
-                    if p then
-                        ind.enemy.create(ind.enemy_pos.x, ind.enemy_pos.y, Vector(p.pos.x - ind.enemy_pos.x, p.pos.y - ind.enemy_pos.y), ind.enemy_speed_m, ind.enemy_radius, ind.enemy_score_mul)
                     else
-                        ind.enemy.create(ind.enemy_pos.x, ind.enemy_pos.y, Vector(ORIGINAL_WINDOW_WIDTH/2 - ind.enemy_pos.x, ORIGINAL_WINDOW_HEIGHT/2 - ind.enemy_pos.y), ind.enemy_speed_m, ind.enemy_radius, ind.enemy_score_mul)
+
+                        p  = Util.findId("psycho")
+                        if p then
+                            ind.enemy.create(ind.enemy_pos.x, ind.enemy_pos.y, Vector(p.pos.x - ind.enemy_pos.x, p.pos.y - ind.enemy_pos.y), ind.enemy_speed_m, ind.enemy_radius, ind.enemy_score_mul)
+                        else
+                            ind.enemy.create(ind.enemy_pos.x, ind.enemy_pos.y, Vector(ORIGINAL_WINDOW_WIDTH/2 - ind.enemy_pos.x, ORIGINAL_WINDOW_HEIGHT/2 - ind.enemy_pos.y), ind.enemy_speed_m, ind.enemy_radius, ind.enemy_score_mul)
+                        end
                     end
                 end
             end

@@ -711,7 +711,7 @@ function level_functions.part_4()
     p = Util.findId("psycho")
 
     LM.level_part("Part 4 - Violent Love with Friends")
-    --[[LM.wait(3)
+    LM.wait(3)
 
     LM.text(300, 260, "he's running away!!", 1, 150)
     LM.wait(2)
@@ -736,7 +736,7 @@ function level_functions.part_4()
     LM.text(600, 260, "nevermind", 1, 150)
     LM.wait(2)
     LM.text(ORIGINAL_WINDOW_WIDTH/2 - 70, ORIGINAL_WINDOW_HEIGHT/2 - 10, "I'LL GET HIM", 1.5, 230, GUI_MEDPLUS)
-    LM.wait(3)]]
+    LM.wait(3)
     Boss.create()
 
     LM.wait(10)

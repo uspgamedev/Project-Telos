@@ -78,6 +78,14 @@ function state:update(dt)
 
         SWITCH = nil
         Util.clearTimerTable(DEATH_HANDLES, FX_TIMER)
+
+        --Stop indicators batch from spawning enemies
+        if SUBTP_TABLE["enemy_indicator_batch"] then
+            for batch in pairs(SUBTP_TABLE["enemy_indicator_batch"]) do
+                batch.spawn = false
+            end
+        end
+
         Gamestate.pop()
         Gamestate.switch(GS.MENU)
     end

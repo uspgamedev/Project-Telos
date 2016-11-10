@@ -50,6 +50,14 @@ function state:leave()
 
     Util.addExceptionId("background")
     Util.addExceptionId("fps_counter")
+
+    --Stop indicators batch from spawning enemies
+    if SUBTP_TABLE["enemy_indicator_batch"] then
+        for batch in pairs(SUBTP_TABLE["enemy_indicator_batch"]) do
+            batch.spawn = false
+        end
+    end
+
     Util.clearAllTables("remove")
 
 end

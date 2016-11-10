@@ -56,7 +56,7 @@ Psy = Class{
 
         self.score = 0 --Score psycho has
         self.life_score = 0 --How much score psycho has accumulated to win a life
-        self.life_score_target = 10000 --How many points psycho must win to get a life
+        self.life_score_target = 8000 --How many points psycho must win to get a life
         self.ultrablast_score = 0 --How much score psycho has accumulated to win a ultrablast
         self.ultrablast_score_target = 2000 --How many points psycho must win to get a ultrablast
 
@@ -123,6 +123,13 @@ function Psy:shoot(x,y)
     dir = dir:normalized()
     Bullet.create(p.pos.x, p.pos.y, dir, c, color_table, "player_bullet")
 
+    --On godmode, shoot 10 bullets instead of 1
+    if GODMODE then
+        for j = 1,9 do
+            Bullet.create(p.pos.x, p.pos.y, dir, c, color_table, "player_bullet")
+        end
+    end
+
 end
 
 function Psy:ultrablast(power)
@@ -153,7 +160,7 @@ function Psy:update(dt)
     --Update psycho radius
     if p.focused and p.r > p.collision_r + 2 then
         p.r = p.r - 20*dt
-        if p.r <  p.collision_r + 2 then p.r =  p.collision_r + 2 end --Cap radius to collision radius + 1
+        if p.r <  p.collision_r + 2 then p.r =  p.collision_r + 2 end --Cap radius to collision radius + 2
     elseif not p.focused and p.r < p.normal_radius then
         p.r = p.r + 20*dt
         if p.r >  p.normal_radius then p.r =  p.normal_radius end --Cap radius to normal_radius
