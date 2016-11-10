@@ -258,19 +258,19 @@ function level_functions.part_3()
     for i= 1, 30 do
         local _x, _y = LM.outsidePosition(love.math.random(2*ORIGINAL_WINDOW_WIDTH+2*ORIGINAL_WINDOW_HEIGHT+1)-1)
         if i == 1 then
-            F.single{enemy = SB, x = _x, y = _y, dir_follow = true, speed_m = 5, ind_side = 35, ind_duration = 2.5}
+            F.single{enemy = SB, x = _x, y = _y, dir_follow = true, speed_m = 5, ind_side = 35, ind_duration = 2.5, score_mul = 6}
             LM.wait(3)
         elseif i <= 4 then
-            F.single{enemy = SB, x = _x, y = _y, dir_follow = true, speed_m = 5, ind_side = 35}
+            F.single{enemy = SB, x = _x, y = _y, dir_follow = true, speed_m = 5, ind_side = 35, score_mul = 6}
             LM.wait(3)
         elseif i <= 15 then
-            F.single{enemy = SB, x = _x, y = _y, dir_follow = true, speed_m = 6, ind_side = 35}
+            F.single{enemy = SB, x = _x, y = _y, dir_follow = true, speed_m = 6, ind_side = 35, score_mul = 6}
             LM.wait(1)
         elseif i <= 20 then
-            F.single{enemy = SB, x = _x, y = _y, dir_follow = true, speed_m = 7, ind_side = 35}
+            F.single{enemy = SB, x = _x, y = _y, dir_follow = true, speed_m = 7, ind_side = 35, score_mul = 6}
             LM.wait(.8)
         else
-            F.single{enemy = SB, x = _x, y = _y, dir_follow = true, speed_m = 8, ind_side = 35}
+            F.single{enemy = SB, x = _x, y = _y, dir_follow = true, speed_m = 8, ind_side = 35, score_mul = 6}
             LM.wait(.6)
         end
     end

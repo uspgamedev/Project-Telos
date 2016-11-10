@@ -725,9 +725,9 @@ function level_functions.part_4()
         local _x, _y = LM.outsidePosition(all * i / 60)
         local en = {SB, DB}
         local p = (i % 2) + 1
-        F.single{enemy = en[p], x = _x, y = _y, dir_follow = true, speed_m = 3, ind_side = 25}
+        F.single{enemy = en[p], x = _x, y = _y, dir_follow = true, speed_m = 3, ind_side = 25, score_mul = 2}
         _x, _y = LM.outsidePosition(all * (60 - i) / 60)
-        F.single{enemy = en[3 - p], x = _x, y = _y, dir_follow = true, speed_m = 3, ind_side = 25}
+        F.single{enemy = en[3 - p], x = _x, y = _y, dir_follow = true, speed_m = 3, ind_side = 25, score_mul = 2}
         LM.wait(.8)
     end
 

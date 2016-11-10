@@ -668,7 +668,7 @@ function Boss_2_Main:changeStage()
         LM.giveScore(4000, "boss defeated")
         b.static = true
 
-        b.level_handles["text_appear"] = LEVEL_TIMER:after(.5, function() LM.text(ORIGINAL_WINDOW_WIDTH/2 - 95, ORIGINAL_WINDOW_HEIGHT/2 - 90, "please don't kill me", 4.5, 110) end)
+        b.level_handles["text_appear"] = LEVEL_TIMER:after(.5, function() LM.text(ORIGINAL_WINDOW_WIDTH/2 - 93, ORIGINAL_WINDOW_HEIGHT/2 - 90, "please don't kill me", 4.5, 110) end)
         b.level_handles["wait"] = LEVEL_TIMER:after(2,
             function()
                 b.level_handles["no_more_saturation"] = LEVEL_TIMER:tween(1.5, b.part_colors[1], {s = 255}, 'in-linear',
@@ -1453,10 +1453,10 @@ Stage_5_t = function(b, dt)
         b.pos.y = b.pos.y + dt*b.dir.y*b.speedv
 
         --Stop turret if it reaches the edge of the screen
-        if b.pos.x <= b.r + b.outer_ring or
-           b.pos.x >= ORIGINAL_WINDOW_WIDTH - (b.r + b.outer_ring) or
-           b.pos.y <= b.r + b.outer_ring or
-           b.pos.y >= ORIGINAL_WINDOW_HEIGHT - (b.r + b.outer_ring) then
+        if b.pos.x < b.r  or
+           b.pos.x > ORIGINAL_WINDOW_WIDTH - b.r or
+           b.pos.y < b.r  or
+           b.pos.y > ORIGINAL_WINDOW_HEIGHT - b.r then
 
                FX.shake(.5,4)
 
@@ -1465,11 +1465,11 @@ Stage_5_t = function(b, dt)
                --Restart cycle of getting an indicator
                b.level_handles["resume_indicator"] = LEVEL_TIMER:after(.3, function() b.getIndicator = true end)
 
-               --Fix position of turret
-               b.pos.x = math.max(b.pos.x - (b.r + b.outer_ring), (b.r + b.outer_ring) + 2) --Fix on left side of screen
-               b.pos.x = math.min(b.pos.x + (b.r + b.outer_ring), ORIGINAL_WINDOW_WIDTH - (b.r + b.outer_ring) - 2) --Fix on right side of screen
-               b.pos.y = math.max(b.pos.y - (b.r + b.outer_ring), (b.r + b.outer_ring) - 2) --Fix on top side of screen
-               b.pos.y = math.min(b.pos.y + (b.r + b.outer_ring), ORIGINAL_WINDOW_HEIGHT - (b.r + b.outer_ring) - 2) --Fix on bottom side of screen
+               --Fix position of turret to be slightly away from the wall
+               if b.pos.x <= b.r + 1 then b.pos.x = b.r + 1 --Fix on left side of screen
+               elseif  b.pos.x >= ORIGINAL_WINDOW_WIDTH - b.r - 1 then b.pos.x = ORIGINAL_WINDOW_WIDTH - b.r - 1 end --Fix on right side of screen
+               if b.pos.y <= b.r + 1 then b.pos.y = b.r + 1 --Fix on top side of screen
+               elseif  b.pos.y >= ORIGINAL_WINDOW_HEIGHT - b.r - 1 then b.pos.y = ORIGINAL_WINDOW_HEIGHT - b.r - 1 end --Fix on bottom side of screen
 
         end
 
