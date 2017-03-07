@@ -122,15 +122,15 @@ function level_functions.part_1()
     LM.stop()
     TUTORIAL = false
 
-    if FIRST_TIME then
+    --if FIRST_TIME then
         FIRST_TIME = false
         level1.setup() --Make title and start BGM
         LM.start(level1.part_1)
-    else
+    --[[else
         LM.stop()
         LM.level_title("END OF TUTORIAL")
         LM.text(360, 560, "press p to pause and leave", 120, 180)
-    end
+    end]]
 
 end
 
