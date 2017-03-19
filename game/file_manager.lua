@@ -27,7 +27,7 @@ function fm.load()
         --Check if versions are different, and handle conflicts
         if args["version"] ~= SAVE_VERSION then
             --For now, just delete metafile and savefile if version is different
-            print("Version of save you are using is not compatible. You have version "..metafile_args["version"].." while the game is using version "..SAVE_VERSION)
+            print("Version of save you are using is not compatible. You have version "..args["version"].." while the game is using version "..SAVE_VERSION)
             print("Will now delete current metafile and savefile and create compatible ones")
 
             sucess = love.filesystem.remove("metafile")
@@ -70,8 +70,15 @@ function fm.load()
 
         --Setting initial arguments for savefile
         args = {
-            continue = false, --Reset continue status
-            first_time = true --Make player play the tutorial the first time
+            continue = false,  --Reset continue status
+            first_time = true, --Make player play the tutorial the first time
+            highscores = {     --Reset highscores with default values
+                {name = "---", score = 0},
+                {name = "---", score = 0},
+                {name = "---", score = 0},
+                {name = "---", score = 0},
+                {name = "---", score = 0}
+            }
         }
 
         content = Tserial.pack(args) --Serialize the table into a string
@@ -94,7 +101,31 @@ function fm.load()
     return args
 end
 
+--Attempts to save all content into savefile. If successful, returns true. Returns false otherwise.
+function fm.save()
+    local args, content
 
+    --Save all status on the files
+    args = {
+        continue = CONTINUE,
+        first_time = FIRST_TIME,
+        highscores = {}
+    }
+    for i,k in ipairs(HIGHSCORES) do
+        args.highscores[i] = k
+    end
+
+    content = Tserial.pack(args) --Transform data into a string
+
+    local sucess = love.filesystem.write("savefile", content) --Update game data on the savefile
+
+    if not sucess then
+        return false
+    else
+        return true
+    end
+
+end
 
 --Return functions
 return fm

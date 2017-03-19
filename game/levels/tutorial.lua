@@ -122,7 +122,7 @@ function level_functions.part_1()
     LM.stop()
     TUTORIAL = false
 
-    --if FIRST_TIME then
+    --G if FIRST_TIME then
         FIRST_TIME = false
         level1.setup() --Make title and start BGM
         LM.start(level1.part_1)

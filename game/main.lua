@@ -53,6 +53,7 @@ require "formation"
 require "level_manager"
 FX = require "fx"
 FM = require "file_manager"
+require "highscore"
 local Setup = require "setup"
 
 --IMPORTED MODULES
@@ -120,20 +121,16 @@ end
 
 --Function called when love is quitting
 function love.quit()
-    local args, content
+    local sucess
 
     print("Exiting the game. Please hold while we save all the balls.")
 
     --Save all status on the files
-    args = {
-        continue = CONTINUE,
-        first_time = FIRST_TIME
-    }
-
-    content = Tserial.pack(args) --Transform data into a string
-
-    sucess = love.filesystem.write("savefile", content) --Update game data on the savefile
-    if not sucess then print("Couldn't update your save in the savefile. Aborting the exit of the game. You can press f4 to forcefully close the game without trying to save."); return false end
+    sucess = FM.save()
+    if not sucess then
+        print("Couldn't update your save in the savefile. Aborting the exit of the game. You can press f4 to forcefully close the game without trying to save.")
+        return false
+    end
 
     print("Balls saved. Thanks for psycho-balling")
     print("---------------------------")

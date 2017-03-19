@@ -5,11 +5,14 @@ local Util = require "util"
 local Draw = require "draw"
 local Txt = require "classes.text"
 local Audio = require "audio"
+local Hs = require "highscore"
 --MODULE FOR THE GAMESTATE: PAUSE--
 
 --LOCAL FUNCTIONS--
 
 local chooseDeathMessage
+
+--LOCAL VARIABLES--
 
 --------------------
 
@@ -38,6 +41,16 @@ function state:enter()
     --Back to menu button
     func = function() SWITCH = "MENU" end
     Button.create_inv_gui(540, 650, func, "(b)ack to menu", GUI_MED, "reset score, lives and progress on this level", GUI_MEDLESS, "gameover_gui")
+
+    --Handling Highscore
+    local score = Util.findId("score_counter").var
+    local pos = Hs.isHighscore(score)
+    if pos then
+        Hs.addHighscore("LOL", score)
+        Txt.create_gui(250, 500, "You got a highscore on position #"..pos.."!", GUI_MED, nil, "format", nil, "highscore_text", "center")
+    else
+        print("Not a highscore. Try again")
+    end
 
     --Add slowmotion effect
     SLOWMO_M = .2

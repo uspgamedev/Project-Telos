@@ -1,4 +1,5 @@
 local FreeRes = require "FreeRes"
+local Hs = require "highscore"
 
 --MODULE WITH LOGICAL, MATHEMATICAL AND USEFUL STUFF--
 
@@ -593,7 +594,12 @@ function util.defaultKeyPressed(key)
         local state = not love.mouse.isGrabbed()   -- the opposite of whatever it currently is
         love.mouse.setGrabbed(state)
         print("MOUSE CAPTURE IS", state)
+    elseif key == "f2" then
+        Hs.print()
+    elseif key == "f3" then
+        Hs.reset()
     end
+
 
 end
 

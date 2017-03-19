@@ -15,7 +15,7 @@ local setup = {}
 function setup.config()
     local args
     --LOAD/SAVE
-    SAVE_VERSION = 1.0 --Current save version
+    SAVE_VERSION = 1.1 --Current save version
     args = FM.load() --Load from savefile (or create one if needed)
 
 
@@ -32,6 +32,9 @@ function setup.config()
 
     FIRST_TIME = args["first_time"] --If its the first time the player is playing (for tutorial)
     CONTINUE = args["continue"] --If player is in the middle of a run
+
+    HIGHSCORES = args["highscores"] --Highscores
+    MAX_HIGHSCORE = 5 --Number of scores stored in the highscore table
 
     TUTORIAL = false --If the game gamestate should play the tutorial
 
@@ -52,7 +55,7 @@ function setup.config()
     FOCUS = true --If game screen is focused
     SWITCH = nil --What state to go next
 
-    MAX_PARTICLES = 300 --Max number of particles effects on screen
+    MAX_PARTICLES = 300 --Max number of particles effects on screen (actual number of particles can be greater when creating "important particles", that will be added despite the max_particle limit)
 
     COROUTINE = nil --Current coroutine
     COROUTINE_HANDLE = nil --Handle timer for current coroutine
@@ -224,15 +227,17 @@ function setup.config()
     SFX_PLAY_BUTTON:setVolume(.3*SFX_VOLUME_MULT)
 
     --DEATH MESSAGE
-    DEATH_TEXTS = {"Game Over", "No one will miss you", "You now lay with the dead",
-     "You ceased to exist", "Your mother wouldn't be proud","Snake? Snake? Snaaaaaaaaaake",
-     "Already?", "All your base are belong to BALLS", "You wake up and realize it was all a nightmare",
-     "MIND BLOWN", "Just one more", "USPGameDev Rulez", "A winner is not you", "Have a nice death",
-     "There is no cake also you died", "You have died of dysentery", "You failed", "BAD END", "Embrace your defeat",
-     "Balls have no mercy", "You have no balls left", "Nevermore...", "Rest in Peace", "Die in shame",
-     "You've found your end", "KIA", "Status: Deceased", "Requiescat in Pace", "Valar Morghulis",
-     "What is dead may never die", "Mission Failed", "It's dead Jim", "Arrivederci",
-     "FRANKIE SAYS RELAX, YOU DIED"}
+    DEATH_TEXTS = {
+        "Game Over", "No one will miss you", "You now lay with the dead",
+        "You ceased to exist", "Your mother wouldn't be proud","Snake? Snake? Snaaaaaaaaaake",
+        "Already?", "All your base are belong to BALLS", "You wake up and realize it was all a nightmare",
+        "MIND BLOWN", "Just one more", "USPGameDev Rulez", "A winner is not you", "Have a nice death",
+        "There is no cake also you died", "You have died of dysentery", "You failed", "BAD END",
+        "Embrace your defeat", "Balls have no mercy", "You have no balls left", "Nevermore...",
+        "Rest in Peace", "Die in shame", "You've found your end", "KIA", "Status: Deceased",
+        "Requiescat in Pace", "Valar Morghulis", "What is dead may never die", "Mission Failed",
+        "It's dead Jim", "Arrivederci", "FRANKIE SAYS RELAX, YOU DIED"
+    }
 
     --Start UI color transition
     UI_COLOR = UI.create_color()
