@@ -76,6 +76,7 @@ function Aim:update(dt)
 
     aim = self
     p = Util.findId("psycho")
+    if not p then return end
 
     --Fix mouse position click to respective distance
     x, y = love.mouse.getPosition()

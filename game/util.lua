@@ -1,5 +1,4 @@
 local FreeRes = require "FreeRes"
-local Hs = require "highscore"
 
 --MODULE WITH LOGICAL, MATHEMATICAL AND USEFUL STUFF--
 
@@ -590,14 +589,19 @@ function util.defaultKeyPressed(key)
         print("psycho position",p.pos.x, p.pos.y)
     elseif key == '5' then
         util.countDrawables()
+    elseif key == '4' then
+        p = util.findId("psycho")
+        if p and not p.death then
+            p:kill()
+        end
     elseif key == "tab" then
         local state = not love.mouse.isGrabbed()   -- the opposite of whatever it currently is
         love.mouse.setGrabbed(state)
         print("MOUSE CAPTURE IS", state)
     elseif key == "f2" then
-        Hs.print()
+        HS.print()
     elseif key == "f3" then
-        Hs.reset()
+        HS.reset()
     end
 
 

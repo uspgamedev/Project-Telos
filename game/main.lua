@@ -53,7 +53,7 @@ require "formation"
 require "level_manager"
 FX = require "fx"
 FM = require "file_manager"
-require "highscore"
+HS = require "highscore"
 local Setup = require "setup"
 
 --IMPORTED MODULES

@@ -232,8 +232,13 @@ function TRIANGLE:draw()
 
     --Draws the triangle
     Color.set(t.color)
-    love.graphics.setLineWidth(t.line_width)
+    if t.line_width then love.graphics.setLineWidth(t.line_width) end
     love.graphics.polygon(t.mode, t.p1.x, t.p1.y, t.p2.x, t.p2.y, t.p3.x, t.p3.y)
+end
+
+--Checks if this triangle collides with a given point
+function TRIANGLE:collidesTrianglePoint(x,y)
+
 end
 
 --------------------

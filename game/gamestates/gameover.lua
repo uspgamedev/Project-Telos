@@ -5,7 +5,8 @@ local Util = require "util"
 local Draw = require "draw"
 local Txt = require "classes.text"
 local Audio = require "audio"
-local Hs = require "highscore"
+require "classes.primitive"
+
 --MODULE FOR THE GAMESTATE: PAUSE--
 
 --LOCAL FUNCTIONS--
@@ -21,10 +22,22 @@ local state = {}
 function state:enter()
     local t, b
 
-    --Main gameover text
-    t = Txt.create_gui(400, 300, "GAMEOVER", GUI_BOSS_TITLE, nil, "format", nil, "gameover_text", "center")
+    --Handling Highscore
+    local score = Util.findId("score_counter").var
+    local pos = HS.isHighscore(score)
+    if pos then
+        HS.addHighscore("LOL", score)
 
-    chooseDeathMessage(t)
+        Txt.create_gui(180, 100, "You got a highscore on position #"..pos.."!", GUI_BOSS_TITLE, nil, "format", nil, "highscore_text", "center", ORIGINAL_WINDOW_WIDTH/1.5)
+
+        Txt.create_gui(260, 260, "please enter your name and confirm", GUI_MEDMED, nil, "format", nil, "highscore_text2", "center")
+
+        HS.createHighscoreButton(330,370)
+    else
+        --Normal gameover text
+        t = Txt.create_gui(400, 300, "GAMEOVER", GUI_BOSS_TITLE, nil, "format", nil, "gameover_text", "center")
+        chooseDeathMessage(t)
+    end
 
     --Restart button
     func = function() SWITCH = "GAME"; CONTINUE = false end
@@ -42,15 +55,6 @@ function state:enter()
     func = function() SWITCH = "MENU" end
     Button.create_inv_gui(540, 650, func, "(b)ack to menu", GUI_MED, "reset score, lives and progress on this level", GUI_MEDLESS, "gameover_gui")
 
-    --Handling Highscore
-    local score = Util.findId("score_counter").var
-    local pos = Hs.isHighscore(score)
-    if pos then
-        Hs.addHighscore("LOL", score)
-        Txt.create_gui(250, 500, "You got a highscore on position #"..pos.."!", GUI_MED, nil, "format", nil, "highscore_text", "center")
-    else
-        print("Not a highscore. Try again")
-    end
 
     --Add slowmotion effect
     SLOWMO_M = .2
@@ -91,7 +95,8 @@ function state:update(dt)
         USE_CANVAS = true
         Draw.allTables()
 
-        SWITCH = nil
+        SWITCH = nil    love.graphics.rectangle("fill", i, but.pos.y, butw, buth, 5)
+
         Gamestate.switch(GS.MENU)
     end
 
