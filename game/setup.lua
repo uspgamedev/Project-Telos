@@ -36,6 +36,8 @@ function setup.config()
     HIGHSCORES = args["highscores"] --Highscores
     MAX_HIGHSCORE = 5 --Number of scores stored in the highscore table
 
+    GAMEOVER_BUTTONS_LOCK = false --If player can press or activate the gameover buttons
+
     TUTORIAL = false --If the game gamestate should play the tutorial
 
     WINDOW_WIDTH = love.graphics.getWidth() --Current width of the game window

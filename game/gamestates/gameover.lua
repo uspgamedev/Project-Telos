@@ -22,38 +22,44 @@ local state = {}
 function state:enter()
     local t, b
 
+    --Blur gamescreen
+    USE_BLUR_CANVAS = true
+
     --Handling Highscore
     local score = Util.findId("score_counter").var
     local pos = HS.isHighscore(score)
     if pos then
-        HS.addHighscore("LOL", score)
-
+        --"Got a highscore" text
         Txt.create_gui(180, 100, "You got a highscore on position #"..pos.."!", GUI_BOSS_TITLE, nil, "format", nil, "highscore_text", "center", ORIGINAL_WINDOW_WIDTH/1.5)
-
         Txt.create_gui(260, 260, "please enter your name and confirm", GUI_MEDMED, nil, "format", nil, "highscore_text2", "center")
+        HS.createHighscoreButton(330,370,score)
 
-        HS.createHighscoreButton(330,370)
+        GAMEOVER_BUTTONS_LOCK = true
     else
-        --Normal gameover text
+        --Normal gameover text and buttons
+
         t = Txt.create_gui(400, 300, "GAMEOVER", GUI_BOSS_TITLE, nil, "format", nil, "gameover_text", "center")
         chooseDeathMessage(t)
+
+        --Restart button
+        func = function() SWITCH = "GAME"; CONTINUE = false end
+        Button.create_inv_gui(140, 650, func, "(r)estart", GUI_MED, "start a new game", GUI_MEDLESS, "gameover_gui")
+
+        if CONTINUE then
+
+            --Continue button
+            func = function() SWITCH = "GAME" end
+            Button.create_inv_gui(340, 650, func, "(c)ontinue", GUI_MED, "reset score, lives and progress on this level", GUI_MEDLESS, "gameover_gui")
+
+        end
+
+        --Back to menu button
+        func = function() SWITCH = "MENU" end
+        Button.create_inv_gui(540, 650, func, "(b)ack to menu", GUI_MED, "reset score, lives and progress on this level", GUI_MEDLESS, "gameover_gui")
+
+        GAMEOVER_BUTTONS_LOCK = false
     end
 
-    --Restart button
-    func = function() SWITCH = "GAME"; CONTINUE = false end
-    Button.create_inv_gui(140, 650, func, "(r)estart", GUI_MED, "start a new game", GUI_MEDLESS, "gameover_gui")
-
-    if CONTINUE then
-
-        --Continue button
-        func = function() SWITCH = "GAME" end
-        Button.create_inv_gui(340, 650, func, "(c)ontinue", GUI_MED, "reset score, lives and progress on this level", GUI_MEDLESS, "gameover_gui")
-
-    end
-
-    --Back to menu button
-    func = function() SWITCH = "MENU" end
-    Button.create_inv_gui(540, 650, func, "(b)ack to menu", GUI_MED, "reset score, lives and progress on this level", GUI_MEDLESS, "gameover_gui")
 
 
     --Add slowmotion effect
@@ -64,6 +70,11 @@ function state:enter()
 end
 
 function state:leave()
+
+    --Stop using blur
+    USE_BLUR_CANVAS = false
+    BLUR_CANVAS_1 = nil
+    BLUR_CANVAS_2 = nil
 
     Util.addExceptionId("background")
     Util.addExceptionId("fps_counter")
@@ -95,7 +106,7 @@ function state:update(dt)
         USE_CANVAS = true
         Draw.allTables()
 
-        SWITCH = nil    love.graphics.rectangle("fill", i, but.pos.y, butw, buth, 5)
+        SWITCH = nil
 
         Gamestate.switch(GS.MENU)
     end
@@ -141,12 +152,12 @@ end
 
 function state:keypressed(key)
 
-    if     key == 'r' then
+    if     key == 'r' and not GAMEOVER_BUTTONS_LOCK then
         SWITCH = "GAME"
         CONTINUE = false
-    elseif key == 'c' and CONTINUE then
+    elseif key == 'c' and CONTINUE and not GAMEOVER_BUTTONS_LOCK then
         SWITCH = "GAME"
-    elseif key == 'b' then
+    elseif key == 'b' and not GAMEOVER_BUTTONS_LOCK then
         SWITCH = "MENU"
     else
         Util.defaultKeyPressed(key)
@@ -158,6 +169,8 @@ function state:mousepressed(x, y, button)
 
     if button == 1 then  --Left mouse button
         Button.checkCollision(x,y)
+        local hsb = Util.findId("highscore_button")
+        if hsb then hsb:mousepressed(x,y) end
     end
 
 end

@@ -17,6 +17,7 @@ local state = {}
 function state:enter()
     local t, b, func
 
+    --Blur gamescreen
     USE_BLUR_CANVAS = true
 
     --GUI--
@@ -42,6 +43,7 @@ end
 
 function state:leave()
 
+    --Stop using blur
     USE_BLUR_CANVAS = false
     BLUR_CANVAS_1 = nil
     BLUR_CANVAS_2 = nil
@@ -86,7 +88,7 @@ function state:update(dt)
             --Turn fps counter visible
             txt = Util.findId("fps_counter")
             txt.level_handles["become_visible"] = LEVEL_TIMER:tween(1, txt, {alpha = 255}, 'in-linear')
-            
+
         end
 
         --Stop indicators batch from spawning enemies
