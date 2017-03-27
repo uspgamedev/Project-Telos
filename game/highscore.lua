@@ -152,7 +152,7 @@ Highscore_Button = Class{
         pos1 = Vector(s.pos.x + 6*s.display_r + 2*s.display_gap + s.arrow_gap, s.pos.y + (2*s.display_r - s.arrow_size)/2) --Top left vertex
         pos2 = Vector(s.pos.x + 6*s.display_r + 2*s.display_gap + s.arrow_gap, s.pos.y + (2*s.display_r - s.arrow_size)/2 + s.arrow_size) --Bottom left vertex
         pos3 = Vector(s.pos.x + 6*s.display_r + 2*s.display_gap + s.arrow_gap + s.arrow_size*sqrt3/2, s.pos.y + (2*s.display_r - s.arrow_size)/2 + s.arrow_size/2) --Right vertex
-        self.confirm_button =  Highscore_Arrow(pos1, pos2, pos3, confirm_arrow_func, self)
+        self.confirm_button =  Highscore_Arrow(pos1, pos2, pos3, confirm_arrow_func, self, nil, true)
 
         self.type = "highscore_button"
     end
@@ -166,16 +166,29 @@ function Highscore_Button:draw()
     for i=0,2 do
 
         --Draw the display circle
-        Color.set(HSL(Hsl.stdv(297,81,74,100)))
+        local color = Color.black()
+        Color.copy(color, UI_COLOR.color)
+        color.h = (color.h+128)%256
+        color.a = 140
+        Color.set(color)
+
         love.graphics.circle("fill", but.pos.x + dis_r + i*(gap+2*dis_r), but.pos.y + dis_r, dis_r)
-        Color.set(Color.purple())
-        love.graphics.setLineWidth(1)
+
+        color = Color.black()
+        Color.copy(color, UI_COLOR.color)
+        color.h = (color.h+128)%256
+        Color.set(color)
+        love.graphics.setLineWidth(2)
         love.graphics.circle("line", but.pos.x + dis_r + i*(gap+2*dis_r), but.pos.y + dis_r, dis_r)
 
         --Draw the letter
         local font = GUI_HIGHSCORE
         love.graphics.setFont(font)
-        Color.set(Color.black())
+
+        color = Color.black()
+        Color.copy(color, UI_COLOR.color)
+        color.l = 160
+        Color.set(color)
         local letter = but.letters_table[but.letters[i+1]]
         love.graphics.print(letter, but.pos.x + dis_r + i*(gap+2*dis_r) - font:getWidth(letter)/2, but.pos.y + dis_r - font:getHeight(letter)/2)
 
@@ -242,9 +255,10 @@ end
 --Triangle with a function for when its pressed
 Highscore_Arrow = Class{
     __includes = {TRIANGLE},
-    init = function(self, _pos1, _pos2, _pos3, _func, _highscore_button, _number)
+    init = function(self, _pos1, _pos2, _pos3, _func, _highscore_button, _number, _confirm)
         TRIANGLE.init(self, _pos1, _pos2, _pos3, Color.purple(), nil, "line")
 
+        self.confirm = _confirm or false --If this arrow is a confirm arrow
         self.func = _func --Function when the triangle is pressed
         self.highscore_button = _highscore_button --Reference to highscore button
         self.number = _number --Number of correspondent display
@@ -253,6 +267,26 @@ Highscore_Arrow = Class{
     end
 
 }
+
+function Highscore_Arrow:draw()
+    local t = self
+
+    --Draws the triangle
+    local color = Color.black()
+    Color.copy(color, UI_COLOR.color)
+    if t.confirm then
+        color.h = (color.h+128)%256
+    end
+    Color.set(color)
+
+    love.graphics.setLineWidth(8)
+    if not t.confirm then
+        love.graphics.line(t.p1.x, t.p1.y, t.p3.x, t.p3.y, t.p2.x, t.p2.y)
+    else
+        love.graphics.line(t.p1.x, t.p1.y, t.p3.x, t.p3.y, t.p2.x, t.p2.y, t.p1.x, t.p1.y)
+    end
+
+end
 
 --HIGHCORE ARROW BUTTON FUNCTIONS--
 
