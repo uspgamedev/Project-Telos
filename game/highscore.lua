@@ -1,6 +1,7 @@
 local Color = require "classes.color.color"
 local Hsl = require "classes.color.hsl"
 local Util = require "util"
+local Txt = require "classes.text"
 
 --MODULE WITH FOR HANDLING HIGHSCORES AND STUFF--
 local hs = {}
@@ -22,6 +23,26 @@ function hs.print()
     end
     print("-----------")
 
+end
+
+--Draw all highscores in the middle of the screen
+function hs.draw()
+
+    --Draw header
+    Txt.create_gui(180, 100, "HIGHSCORES", GUI_HIGHSCORE, nil, "format", nil, "highscore_title", "center", ORIGINAL_WINDOW_WIDTH/1.5)
+    Txt.create_gui(180, 110, "__________", GUI_HIGHSCORE, nil, "format", nil, "highscore_title_underscore", "center", ORIGINAL_WINDOW_WIDTH/1.5)
+
+    --Draw highscores
+    for i = 1, MAX_HIGHSCORE do
+        --Draw numbers
+        Txt.create_gui(235, 140+i*80, i, GUI_BOSS_TITLE, nil, nil, nil, "highscore_number_"..i)
+        --Draw numberdot
+        Txt.create_gui(275, 140+i*80, ".", GUI_BOSS_TITLE, nil, nil, nil, "highscore_dot"..i)
+        --Draw player name
+        Txt.create_gui(400, 140+i*80, HIGHSCORES[i].name, GUI_BOSS_TITLE, nil, nil, nil, "highscore_name"..i)
+        --Draw player score
+        Txt.create_gui(660, 140+i*80, HIGHSCORES[i].score, GUI_BOSS_TITLE, nil, nil, nil, "highscore_score"..i)
+    end
 end
 
 --Reset all highscores to name "---" and score 0
@@ -288,6 +309,10 @@ function confirm_arrow_func(arrow, hs_button)
 
     --Unlock buttons shortkeys
     GAMEOVER_BUTTONS_LOCK = false
+
+    --Draw highscores on the screen
+    hs.draw()
+
 end
 
 
