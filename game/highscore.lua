@@ -2,6 +2,7 @@ local Color = require "classes.color.color"
 local Hsl = require "classes.color.hsl"
 local Util = require "util"
 local Txt = require "classes.text"
+local Particle = require "classes.particle"
 
 --MODULE WITH FOR HANDLING HIGHSCORES AND STUFF--
 local hs = {}
@@ -137,13 +138,13 @@ Highscore_Button = Class{
             local pos1 = Vector(center_x - s.arrow_size/2, center_y - s.display_r - s.arrow_gap) --Bottom left vertex
             local pos2 = Vector(center_x + s.arrow_size/2, center_y - s.display_r - s.arrow_gap) --Bottom right vertex
             local pos3 = Vector(center_x, center_y - s.display_r - s.arrow_gap - s.arrow_size*sqrt3/2) --Top vertex
-            self.change_button_up[i] =  Highscore_Arrow(pos1, pos2, pos3, up_arrow_func, self, i)
+            self.change_button_up[i] =  Highscore_Arrow(pos1, pos2, pos3, up_arrow_func, self, i, nil, true)
 
             --Create down arrow
             pos1 = Vector(center_x - s.arrow_size/2, center_y + s.display_r + s.arrow_gap) --Top left vertex
             pos2 = Vector(center_x + s.arrow_size/2, center_y + s.display_r + s.arrow_gap) --Top right vertex
             pos3 = Vector(center_x, center_y + s.display_r + s.arrow_gap + s.arrow_size*sqrt3/2) --Bottom vertex
-            self.change_button_down[i] =  Highscore_Arrow(pos1, pos2, pos3, down_arrow_func, self, i)
+            self.change_button_down[i] =  Highscore_Arrow(pos1, pos2, pos3, down_arrow_func, self, i, nil, false)
 
         end
 
@@ -165,7 +166,7 @@ function Highscore_Button:draw()
     --Draw the displays
     for i=0,2 do
 
-        --Draw the display circle
+        --[[Draw the display circle
         local color = Color.black()
         Color.copy(color, UI_COLOR.color)
         color.h = (color.h+128)%256
@@ -179,7 +180,7 @@ function Highscore_Button:draw()
         color.h = (color.h+128)%256
         Color.set(color)
         love.graphics.setLineWidth(2)
-        love.graphics.circle("line", but.pos.x + dis_r + i*(gap+2*dis_r), but.pos.y + dis_r, dis_r)
+        love.graphics.circle("line", but.pos.x + dis_r + i*(gap+2*dis_r), but.pos.y + dis_r, dis_r)]]
 
         --Draw the letter
         local font = GUI_HIGHSCORE
@@ -202,26 +203,43 @@ function Highscore_Button:draw()
 
 end
 
---Auxiliary functions for checking collision with mouse click
-local sign
-local pointInTriangle
+--Call update functions of buttons
+function Highscore_Button:update(dt)
+
+    for i = 1,3 do
+        self.change_button_up[i]:update(dt)
+        self.change_button_down[i]:update(dt)
+    end
+
+end
 
 --Check collision between mouse and arrow buttons
 function Highscore_Button:mousepressed(x,y)
-    local point = Vector(x,y)
+    local mousepos
+
+
+    --Fix mouse position click to respective distance
+    w, h = FreeRes.windowDistance()
+    scale = FreeRes.scale()
+    x = x - w
+    x = x*(1/scale)
+    y = y - h
+    y = y*(1/scale)
+
+    mousepos = Vector(x, y)
 
     --Check collision with arrows buttons
     for i = 1,3 do
         --Top buttons
         local a = self.change_button_up[i]
-        if pointInTriangle(point, a.p1, a.p2, a.p3) then
+        if a.center:dist(mousepos) <= a.col_radius then
             a.func(a, a.highscore_button)
             return
         end
 
         --Bottom buttons
         local a = self.change_button_down[i]
-        if pointInTriangle(point, a.p1, a.p2, a.p3) then
+        if a.center:dist(mousepos) <= a.col_radius then
             a.func(a, a.highscore_button)
             return
         end
@@ -229,7 +247,7 @@ function Highscore_Button:mousepressed(x,y)
 
     --Check collision with confirm button
     local a = self.confirm_button
-    if pointInTriangle(point, a.p1, a.p2, a.p3) then
+    if a.center:dist(mousepos) <= a.col_radius then
         a.func(a, a.highscore_button)
         return
     end
@@ -255,8 +273,19 @@ end
 --Triangle with a function for when its pressed
 Highscore_Arrow = Class{
     __includes = {TRIANGLE},
-    init = function(self, _pos1, _pos2, _pos3, _func, _highscore_button, _number, _confirm)
+    init = function(self, _pos1, _pos2, _pos3, _func, _highscore_button, _number, _confirm, _up)
         TRIANGLE.init(self, _pos1, _pos2, _pos3, Color.purple(), nil, "line")
+
+        self.center = Vector((_pos1.x + _pos2.x + _pos3.x)/3, (_pos1.y + _pos2.y + _pos3.y)/3) --Coordenates of center of the arrow button
+        --Fixes center of collision circle
+        if not _confirm and _up then
+            self.center.y = self.center.y - 5
+        elseif not _confirm and not _up then
+            self.center.y = self.center.y + 5
+        end
+        self.col_radius = 40 --Radius of collision shape of this button
+        self.effect_radius = 0 --Radisu of effect that increases when mouse is over button
+        self.effect_growth_speed = 500
 
         self.confirm = _confirm or false --If this arrow is a confirm arrow
         self.func = _func --Function when the triangle is pressed
@@ -271,19 +300,62 @@ Highscore_Arrow = Class{
 function Highscore_Arrow:draw()
     local t = self
 
+    --Draws the circle effect for mouseover
+    love.graphics.setLineWidth(4)
+    local color = Color.black()
+    Color.copy(color, UI_COLOR.color)
+    if not t.confirm then
+        color.h = (color.h+128)%256
+    end
+    Color.set(color)
+    love.graphics.circle("line", t.center.x, t.center.y, t.effect_radius)
+
     --Draws the triangle
     local color = Color.black()
     Color.copy(color, UI_COLOR.color)
     if t.confirm then
         color.h = (color.h+128)%256
     end
+    color.l = color.l *.7
     Color.set(color)
 
     love.graphics.setLineWidth(8)
     if not t.confirm then
         love.graphics.line(t.p1.x, t.p1.y, t.p3.x, t.p3.y, t.p2.x, t.p2.y)
     else
-        love.graphics.line(t.p1.x, t.p1.y, t.p3.x, t.p3.y, t.p2.x, t.p2.y, t.p1.x, t.p1.y)
+        love.graphics.line(t.p1.x, t.p1.y, t.p3.x, t.p3.y, t.p2.x, t.p2.y)
+    end
+
+end
+
+--Increase effect radius of button if moosue is on top of it
+function Highscore_Arrow:update(dt)
+    local b, x, y, mousepos
+
+    b = self
+
+    --Fix mouse position click to respective distance
+    x, y = love.mouse.getPosition()
+    w, h = FreeRes.windowDistance()
+    scale = FreeRes.scale()
+    x = x - w
+    x = x*(1/scale)
+    y = y - h
+    y = y*(1/scale)
+
+    mousepos = Vector(x, y)
+
+    --If mouse is colliding with button collision radius, increase effect radius
+    if b.center:dist(mousepos) <= b.col_radius then
+        if b.effect_radius < b.col_radius then
+            b.effect_radius = b.effect_radius + b.effect_growth_speed*dt
+            if b.effect_radius > b.col_radius then b.effect_radius = b.col_radius end
+        end
+    else
+        if b.effect_radius > 0 then
+            b.effect_radius = b.effect_radius - b.effect_growth_speed*dt
+            if b.effect_radius < 0 then b.effect_radius = 0 end
+        end
     end
 
 end

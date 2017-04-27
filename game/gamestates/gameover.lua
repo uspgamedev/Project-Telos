@@ -32,7 +32,7 @@ function state:enter()
         --"Got a highscore" text
         Txt.create_gui(180, 100, "You got a highscore on position #"..pos.."!", GUI_BOSS_TITLE, nil, "format", nil, "highscore_text", "center", ORIGINAL_WINDOW_WIDTH/1.5)
         Txt.create_gui(260, 260, "please enter your name and confirm", GUI_MEDMED, nil, "format", nil, "highscore_text2", "center")
-        HS.createHighscoreButton(330,390,score)
+        HS.createHighscoreButton(330,410,score)
 
         GAMEOVER_BUTTONS_LOCK = true
     else
@@ -128,6 +128,7 @@ function state:update(dt)
     Util.updateSubTp(m_dt, "enemy_indicator")
     Util.updateSubTp(m_dt, "ultrablast")
     Util.updateSubTp(m_dt, "rotating_indicator")
+    Util.updateId(dt, "highscore_button")
     Util.updateSubTp(dt, "gameover_gui") --Update buttons on the gui
     Util.checkCollision()
 
