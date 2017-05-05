@@ -12,7 +12,7 @@ local text = {}
 --[[Simple Text that can print a variable]]
 Text = Class{
     __includes = {ELEMENT, WTXT, POS},
-    init = function(self, _x, _y, _text, _font, _var, _mode, _var_font, _align, _limit)
+    init = function(self, _x, _y, _text, _font, _var, _mode, _var_font, _align, _limit, _invert)
         WTXT.init(self, _text, _font) --Set text
         POS.init(self, _x, _y)
 
@@ -23,6 +23,7 @@ Text = Class{
         self.format = _format or false
         self.align = _align or "center"
         self.limit = _limit or ORIGINAL_WINDOW_WIDTH/2
+        self.invert = _invert or false
 
         self.alpha = 255 --This object alpha
 
@@ -46,6 +47,10 @@ function Text:draw()
     color = Color.black()
     Color.copy(color, UI_COLOR.color)
     color.a = t.alpha
+    if t.invert then
+        color.h = (color.h + 127)%256
+    end
+
     --Draws button text
     Color.set(color)
     love.graphics.setFont(t.font)
@@ -81,19 +86,19 @@ function text.create_text(x, y, text, font, st, id)
 end
 
 --Create a text in the gui draw table
-function text.create_gui(x, y, text, font, var, mode, var_font, id, align, limit)
+function text.create_gui(x, y, text, font, var, mode, var_font, id, align, limit, invert)
     local txt
 
-    txt = Text(x, y, text, font, var, mode, var_font, align, limit)
+    txt = Text(x, y, text, font, var, mode, var_font, align, limit, invert)
     txt:addElement(DRAW_TABLE.GUI, "gui", id)
     return txt
 end
 
 --Create a text in the game_gui draw table
-function text.create_game_gui(x, y, text, font, var, mode, var_font, id, align, limit)
+function text.create_game_gui(x, y, text, font, var, mode, var_font, id, align, limit, invert)
     local txt
 
-    txt = Text(x, y, text, font, var, mode, var_font, align, limit)
+    txt = Text(x, y, text, font, var, mode, var_font, align, limit, invert)
     txt:addElement(DRAW_TABLE.GAME_GUI, "game_gui", id)
 
     return txt

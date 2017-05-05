@@ -26,23 +26,32 @@ function hs.print()
 
 end
 
---Draw all highscores in the middle of the screen
-function hs.draw()
+--Create text related to highscores in the middle of the screen. Can provide an optional argument "position", to highlight a position in the highscore
+function hs.draw(position)
 
     --Draw header
     Txt.create_gui(180, 100, "HIGHSCORES", GUI_HIGHSCORE, nil, "format", nil, "highscore_title", "center", ORIGINAL_WINDOW_WIDTH/1.5)
     Txt.create_gui(180, 110, "__________", GUI_HIGHSCORE, nil, "format", nil, "highscore_title_underscore", "center", ORIGINAL_WINDOW_WIDTH/1.5)
 
+    local invert --Will invert colors of given player stats, if function receives a 'position' argument
     --Draw highscores
     for i = 1, MAX_HIGHSCORE do
+
+        if position and i == position then
+            invert = true
+        else
+            invert = false
+        end
+
         --Draw numbers
-        Txt.create_gui(235, 140+i*80, i, GUI_BOSS_TITLE, nil, nil, nil, "highscore_number_"..i)
+        Txt.create_gui(235, 140+i*80, i, GUI_BOSS_TITLE, nil, nil, nil, "highscore_number_"..i, nil, nil, invert)
         --Draw numberdot
-        Txt.create_gui(275, 140+i*80, ".", GUI_BOSS_TITLE, nil, nil, nil, "highscore_dot"..i)
+        Txt.create_gui(275, 140+i*80, ".", GUI_BOSS_TITLE, nil, nil, nil, "highscore_dot"..i, nil, nil, invert)
         --Draw player name
-        Txt.create_gui(400, 140+i*80, HIGHSCORES[i].name, GUI_BOSS_TITLE, nil, nil, nil, "highscore_name"..i)
+        Txt.create_gui(400, 140+i*80, HIGHSCORES[i].name, GUI_BOSS_TITLE, nil, nil, nil, "highscore_name"..i, nil, nil, invert)
         --Draw player score
-        Txt.create_gui(660, 140+i*80, HIGHSCORES[i].score, GUI_BOSS_TITLE, nil, nil, nil, "highscore_score"..i)
+        Txt.create_gui(660, 140+i*80, HIGHSCORES[i].score, GUI_BOSS_TITLE, nil, nil, nil, "highscore_score"..i, nil, nil, invert)
+
     end
 end
 
@@ -101,12 +110,13 @@ local up_arrow_func, down_arrow_func, confirm_arrow_func --Functions for arrows 
 --[[3 individual circular displays, each containing a letter, and two arrow buttons above and below for changing the letter. On the right of the individual displays, an arrow for confirming]]--
 Highscore_Button = Class{
     __includes = {ELEMENT, POS},
-    init = function(self, _x, _y, _score)
+    init = function(self, _x, _y, _score, _pos)
 
         ELEMENT.init(self)
         POS.init(self, _x, _y)
 
         self.score = _score --Score player got
+        self.position = _pos --Position of player score in the highscore table
 
         --Order of letters
         self.letters_table = {
@@ -166,26 +176,9 @@ function Highscore_Button:draw()
     --Draw the displays
     for i=0,2 do
 
-        --[[Draw the display circle
-        local color = Color.black()
-        Color.copy(color, UI_COLOR.color)
-        color.h = (color.h+128)%256
-        color.a = 140
-        Color.set(color)
-
-        love.graphics.circle("fill", but.pos.x + dis_r + i*(gap+2*dis_r), but.pos.y + dis_r, dis_r)
-
-        color = Color.black()
-        Color.copy(color, UI_COLOR.color)
-        color.h = (color.h+128)%256
-        Color.set(color)
-        love.graphics.setLineWidth(2)
-        love.graphics.circle("line", but.pos.x + dis_r + i*(gap+2*dis_r), but.pos.y + dis_r, dis_r)]]
-
         --Draw the letter
         local font = GUI_HIGHSCORE
         love.graphics.setFont(font)
-
         color = Color.black()
         Color.copy(color, UI_COLOR.color)
         color.l = 160
@@ -420,17 +413,17 @@ function confirm_arrow_func(arrow, hs_button)
     GAMEOVER_BUTTONS_LOCK = false
 
     --Draw highscores on the screen
-    hs.draw()
+    hs.draw(hs_button.position)
 
 end
 
 
 --HIGHSCORE BUTTON UTILITY FUNCTION--
 
-function hs.createHighscoreButton(x, y, score)
+function hs.createHighscoreButton(x, y, score, pos)
     local b
 
-    b = Highscore_Button(x, y, score)
+    b = Highscore_Button(x, y, score, pos)
     b:addElement(DRAW_TABLE.GUI, nil, "highscore_button")
 
     return but
