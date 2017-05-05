@@ -210,6 +210,7 @@ function Highscore_Button:update(dt)
         self.change_button_up[i]:update(dt)
         self.change_button_down[i]:update(dt)
     end
+    self.confirm_button:update(dt)
 
 end
 
@@ -282,6 +283,8 @@ Highscore_Arrow = Class{
             self.center.y = self.center.y - 5
         elseif not _confirm and not _up then
             self.center.y = self.center.y + 5
+        elseif _confirm then
+            self.center.x = self.center.x + 5
         end
         self.col_radius = 40 --Radius of collision shape of this button
         self.effect_radius = 0 --Radisu of effect that increases when mouse is over button

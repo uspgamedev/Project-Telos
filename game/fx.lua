@@ -54,7 +54,7 @@ function fx.explosion(x, y, r, color, number, speed, decaying, size, important)
         pos = Vector(0,0)
         pos.x = x + radius*math.cos(angle)
         pos.y = y + radius*math.sin(angle)
-        
+
         particle = Particle.create_decaying(pos, dir, color, speed * (1 - love.math.random()*.5), decaying, size)
         batch:put(particle)
 
