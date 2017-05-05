@@ -227,5 +227,63 @@ function fx.colorTransition(o, color_var, color_target, func)
 
 end
 
+----------------
+--MOVEMENT EFFECTS--
+----------------
+
+--Given a table of objects, and a table of their initial positions, will rotate all of them in sync around in a circle, starting from the position given, rotating counter-clockwise.
+--If you don't provide the initial positions, their current position will be used as the initial
+--Objects will rotate around a point that will be "radius" distance to the left of the initial position of the objects
+function fx.rotate_objects(objects, positions)
+    local positions = positions or {}
+    local radius = 5 --radius distance that the objects will rotate around from
+    local speed = 10 --Speed that the objects will rotate around a point
+    local duration = 2*math.pi*radius/speed --Duration of movement for each object, that represents the time until the object reaches the same angle it had
+
+    --Get initial positions if they were not provided
+    if Util.tableLen(positions) <= 0 then
+        for i,k in ipairs(objects) do
+            local pos = Vector(k.pos.x, k.pos.y)
+            positions[i] = pos
+        end
+    end
+
+    --Start applying effect on objects
+    for i, ob in ipairs(objects) do
+
+        if ob.death then return end --Stop function if any objects is killed
+
+        --Cancel previously running effect
+        if ob.handles["rotating_effect"] then
+            FX_TIMER:cancel(ob.handles["rotating_effect"])
+        end
+
+        --Start rotating effect, that moves the position of object according to an angle (that will increase), a point to rotate around (based on object initial position) and radius of circle
+        ob.handles["rotating_effect"] = FX_TIMER:during(duration,
+            function(dt)
+                ob.angle = ob.angle + speed*dt
+                local center_of_circle = Vector(positions[i].x - radius, positions[i].y) --Point at which the object will rotate around of
+                ob.pos.x = center_of_circle.x + math.cos(ob.angle)*radius
+                ob.pos.y = center_of_circle.y + math.sin(ob.angle)*radius
+
+            end)
+
+    end
+
+    HIGHCORE_TEXT_EFFECT_HANDLE = FX_TIMER:after(duration,
+        function()
+            if HIGHCORE_TEXT_EFFECT_HANDLE then
+
+                --Cancel previously handle
+                FX_TIMER:cancel(HIGHCORE_TEXT_EFFECT_HANDLE)
+                HIGHCORE_TEXT_EFFECT_HANDLE = nil
+
+                --Restart effect
+                fx.rotate_objects(objects,positions)
+            end
+        end
+    )
+end
+
 --Return fucntions
 return fx

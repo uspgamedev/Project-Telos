@@ -35,6 +35,7 @@ function setup.config()
 
     HIGHSCORES = args["highscores"] --Highscores
     MAX_HIGHSCORE = 5 --Number of scores stored in the highscore table
+    HIGHSCORE_HIGHLIGHT_EFFECT_HANDLE = nil --Handle for tween effect applied on highscore text (when a position is highlighed)
 
     GAMEOVER_BUTTONS_LOCK = false --If player can press or activate the gameover buttons
 

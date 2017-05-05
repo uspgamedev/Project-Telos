@@ -86,6 +86,11 @@ function state:leave()
         end
     end
 
+    --Stop highscore hihglight effect
+    if HIGHSCORE_HIGHLIGHT_EFFECT_HANDLE then
+        FX_TIMER:cancel(HIGHSCORE_HIGHLIGHT_EFFECT_HANDLE)
+    end
+
     Util.clearAllTables("remove")
 
 end
