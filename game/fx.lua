@@ -249,6 +249,11 @@ function fx.rotate_objects(objects, positions)
     local speed = 10 --Speed that the objects will rotate around a point
     local duration = 2*math.pi*radius/speed --Duration of movement for each object, that represents the time until the object reaches the same angle it had
 
+    --Cancel previously running effect
+    if HIGHCORE_TEXT_EFFECT_HANDLE then
+        FX_TIMER:cancel(HIGHCORE_TEXT_EFFECT_HANDLE)
+    end
+
     --Get initial positions if they were not provided
     if Util.tableLen(positions) <= 0 then
         for i,k in ipairs(objects) do

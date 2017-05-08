@@ -27,7 +27,7 @@ For a list of lastest patches, changes and fixes, read "CHANGELOG"
 For Copyright and licensing information, read "LICENSE" or  the other license files
 
 ==============================  
-Found any bugs? Contact us at pudimdefrutas@gmail.com or yancouto@gmail.com
+Found any bugs? Contact us at "pudimdefrutas at gmail dot com"
 
 ==============================  
 Want to know about incoming projects, new releases and other cool stuff? Of course you do!
@@ -47,8 +47,8 @@ Want to see where is the developing process of PsyChO: The Ball, and get a sneak
 ***Wilson Kazuo Mizutani***  
 for the guidance and being there when we most needed
 
-***Rodigo Passos***  
+***Rodrigo Passos***  
 for the smiles and being the music sensei
 
 ***Akira Mizutani***  
-for the warm hugs and helping with the design
+for the harsh but needed critics and helping with the design
