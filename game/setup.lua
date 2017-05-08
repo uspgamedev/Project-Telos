@@ -24,6 +24,7 @@ function setup.config()
 
     --RANDOM SEED--
     love.math.setRandomSeed( os.time() )
+    math.random = love.math.random --Override lua random function for love2d random function
 
     --GLOBAL VARIABLES--
     DEBUG = true --DEBUG mode status
@@ -129,6 +130,7 @@ function setup.config()
 
     --CAMERA--
     CAM = Camera(love.graphics.getWidth()/2, love.graphics.getHeight()/2) --Set camera position to center of screen
+    MENU_CAM = Camera(love.graphics.getWidth()/2, love.graphics.getHeight()/2) --Set camera position to center of screen, camera used for menu transitions
 
     --SHADERS--
 

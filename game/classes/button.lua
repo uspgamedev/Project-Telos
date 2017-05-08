@@ -28,6 +28,8 @@ Circle_Button = Class{
         self.ring_growth_speed = 500 --Speed to increase or decrease radius
         self.line_width = 6 --Line width for circle ring
 
+        self.lock = false --If this button can't be activated
+
         self.tp = "circlebutton" --Type of this class
     end
 }
@@ -120,12 +122,12 @@ end
 
 --UTILITY FUNCTIONS--
 
-function button.create_circle_gui(x, y, r, func, text, font, st)
+function button.create_circle_gui(x, y, r, func, text, font, st, id)
     local b
 
     st = st or "gui"
     b = Circle_Button(x, y, r, func, text, font)
-    b:addElement(DRAW_TABLE.GUI, st)
+    b:addElement(DRAW_TABLE.GUI, st, id)
 
     return b
 end
@@ -152,6 +154,8 @@ Inv_Button = Class{
         self.overtext = _overtext --Text to appear below button if mouse is over
         self.overfont = _overfont --Font of overtext
         self.isOver = false --If mouse is over the button
+
+        self.lock = false --If this button can't be activated
 
         self.tp = "invbutton" --Type of this class
     end
@@ -251,6 +255,8 @@ function checkCircleButtonCollision(x,y)
         for b in pairs(t) do
             if  b.tp == "circlebutton"
               and
+              not b.lock
+              and
               b.pos.x - b.r <= x
               and
               x <= b.pos.x + b.r
@@ -274,6 +280,8 @@ function checkInvButtonCollision(x,y)
     for _,t in pairs(DRAW_TABLE) do
         for b in pairs(t) do
             if  b.tp == "invbutton"
+              and
+              not b.lock
               and
               x  <= b.pos.x + b.w
               and

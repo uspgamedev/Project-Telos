@@ -17,6 +17,10 @@ function state:enter()
 
     --GUI--
 
+    --------------------
+    --MAIN MENU SCREEN--
+    --------------------
+
     offset = 0
 
     if CONTINUE then
@@ -24,7 +28,7 @@ function state:enter()
 
         --Continue Button
         func = function() SWITCH = "GAME" end
-        b = Button.create_circle_gui(640, 300, 110, func, "Continue", GUI_BIGLESS)
+        b = Button.create_circle_gui(640, 300, 110, func, "Continue", GUI_BIGLESS, "main_menu_buttons", "menu_continue_button")
 
     end
 
@@ -36,15 +40,110 @@ function state:enter()
             TUTORIAL = true
         end
     end
-    b = Button.create_circle_gui(500 - offset, 300, 110, func, "New Game", GUI_BIGLESS)
+    b = Button.create_circle_gui(500 - offset, 300, 110, func, "New Game", GUI_BIGLESS, "main_menu_buttons", "menu_play_button")
 
     if not FIRST_TIME then
 
         --Tutorial Button
         func = function() SWITCH = "GAME"; TUTORIAL = true end
-        b = Button.create_circle_gui(500, 480, 63, func, "Tutorial", GUI_BIGLESSLESS)
+        b = Button.create_circle_gui(500, 480, 63, func, "Tutorial", GUI_BIGLESSLESS, "main_menu_buttons", "menu_tutorial_button")
 
     end
+
+    --"Go to Highscore Menu Screen" button
+    func = function()
+        local objects_positions = {}
+        local target_x_values = {}
+        local handles_table = {}
+
+        --Iterate through all main menu buttons and add objects positions (and target values) to the tables
+        local table_ = Util.findSbTp("main_menu_buttons")
+        if table_ then
+            for ob in pairs(table_) do
+                table.insert(objects_positions, ob.pos)
+                table.insert(target_x_values, ob.pos.x - ORIGINAL_WINDOW_WIDTH) --Move objects to the left
+                table.insert(handles_table, ob.handles)
+                ob.lock = true
+            end
+        end
+
+        --Iterate through all main menu buttons and add objects positions (and target values) to the tables
+        local table_ = Util.findSbTp("highscore_menu_buttons")
+        if table_ then
+            for ob in pairs(table_) do
+                table.insert(objects_positions, ob.pos)
+                table.insert(target_x_values, ob.pos.x - ORIGINAL_WINDOW_WIDTH) --Move objects to the left
+                table.insert(handles_table, ob.handles)
+                ob.lock = false
+            end
+        end
+
+        --Iterate through all main menu buttons and add objects positions (and target values) to the tables
+        local table_ = Util.findSbTp("highscore_screen_texts")
+        if table_ then
+            for ob in pairs(table_) do
+                table.insert(objects_positions, ob.pos)
+                table.insert(target_x_values, ob.pos.x - ORIGINAL_WINDOW_WIDTH) --Move objects to the left
+                table.insert(handles_table, ob.handles)
+            end
+        end
+
+        --Change x value of all menu objects
+        FX.change_value_objects(objects_positions, "x", target_x_values, 1800, "moving_tween", handles_table, "out-back")
+
+    end
+    b = Button.create_circle_gui(880, 650, 80, func, "Highscores", GUI_BIGLESSLESS, "main_menu_buttons", "menu_go2highscore_button")
+
+    --------------------
+    --HIGHSCORE MENU SCREEN--
+    --------------------
+
+    HS.draw(nil, ORIGINAL_WINDOW_WIDTH, 0) --Create highscore table "one screen to the right"
+
+    --"Go to Main Menu Screen" button
+    func = function()
+        local objects_positions = {}
+        local target_x_values = {}
+        local handles_table = {}
+
+        --Iterate through all main menu buttons and add objects positions (and target values) to the tables
+        local table_ = Util.findSbTp("main_menu_buttons")
+        if table_ then
+            for ob in pairs(table_) do
+                table.insert(objects_positions, ob.pos)
+                table.insert(target_x_values, ob.pos.x + ORIGINAL_WINDOW_WIDTH) --Move objects to the left
+                table.insert(handles_table, ob.handles)
+                ob.lock = false
+            end
+        end
+
+        --Iterate through all main menu buttons and add objects positions (and target values) to the tables
+        local table_ = Util.findSbTp("highscore_menu_buttons")
+        if table_ then
+            for ob in pairs(table_) do
+                table.insert(objects_positions, ob.pos)
+                table.insert(target_x_values, ob.pos.x + ORIGINAL_WINDOW_WIDTH) --Move objects to the left
+                table.insert(handles_table, ob.handles)
+                ob.lock = true
+            end
+        end
+
+        --Iterate through all main menu buttons and add objects positions (and target values) to the tables
+        local table_ = Util.findSbTp("highscore_screen_texts")
+        if table_ then
+            for ob in pairs(table_) do
+                table.insert(objects_positions, ob.pos)
+                table.insert(target_x_values, ob.pos.x + ORIGINAL_WINDOW_WIDTH) --Move objects to the left
+                table.insert(handles_table, ob.handles)
+            end
+        end
+
+        --Change x value of all menu objects
+        FX.change_value_objects(objects_positions, "x", target_x_values, 1800, "moving_tween", handles_table, "out-back")
+
+    end
+    b = Button.create_circle_gui(ORIGINAL_WINDOW_WIDTH + 110, 680, 55, func, "Back", GUI_BIGLESSLESS, "highscore_menu_buttons", "menu_go2main_button")
+
 
     --AUDIO--
     Audio.playBGM(BGM_MENU)
@@ -79,6 +178,8 @@ function state:update(dt)
     end
 
     Util.updateSubTp(dt, "gui")
+    Util.updateSubTp(dt, "main_menu_buttons")
+    Util.updateSubTp(dt, "highscore_menu_buttons")
     Util.updateSubTp(dt, "decaying_particle")
 
     Util.updateTimers(dt)

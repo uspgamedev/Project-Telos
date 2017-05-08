@@ -86,11 +86,11 @@ function text.create_text(x, y, text, font, st, id)
 end
 
 --Create a text in the gui draw table
-function text.create_gui(x, y, text, font, var, mode, var_font, id, align, limit, invert)
+function text.create_gui(x, y, text, font, var, mode, var_font, id, align, limit, invert, sbtp)
     local txt
-
+    sbtp = sbtp or "gui"
     txt = Text(x, y, text, font, var, mode, var_font, align, limit, invert)
-    txt:addElement(DRAW_TABLE.GUI, "gui", id)
+    txt:addElement(DRAW_TABLE.GUI, sbtp, id)
     return txt
 end
 

@@ -531,6 +531,8 @@ function util.toggleFullscreen()
 
         --Fix camera position to look at the center
         CAM:lookAt(WINDOW_WIDTH/2, WINDOW_HEIGHT/2)
+        --Fix menu camera position to look at the center
+        MENU_CAM:lookAt(WINDOW_WIDTH/2, WINDOW_HEIGHT/2)
 
     else
         --Go to fullscreen mode, saving last configuration for eventual return
@@ -551,6 +553,8 @@ function util.toggleFullscreen()
 
         --Fix camera position to look at the center
         CAM:lookAt(WINDOW_WIDTH/2, WINDOW_HEIGHT/2)
+        --Fix menu camera position to look at the center
+        MENU_CAM:lookAt(WINDOW_WIDTH/2, WINDOW_HEIGHT/2)
 
     end
 

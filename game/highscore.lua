@@ -28,13 +28,16 @@ end
 
 
 --Create text related to highscores in the middle of the screen. Can provide an optional argument "position", to highlight a position in the highscore
-function hs.draw(position)
+--An optional x_offset or y_offset argument will create all texts with an offset to their original position
+function hs.draw(position, x_offset, y_offset)
+    x_offset = x_offset or 0
+    y_offset = y_offset or 0
 
     local texts = {} --Table for texts, used for highlighting a given position received by the function, if it exists
 
     --Draw header
-    Txt.create_gui(180, 100, "HIGHSCORES", GUI_HIGHSCORE, nil, "format", nil, "highscore_title", "center", ORIGINAL_WINDOW_WIDTH/1.5)
-    Txt.create_gui(180, 110, "__________", GUI_HIGHSCORE, nil, "format", nil, "highscore_title_underscore", "center", ORIGINAL_WINDOW_WIDTH/1.5)
+    Txt.create_gui(180 + x_offset, 100 + y_offset, "HIGHSCORES", GUI_HIGHSCORE, nil, "format", nil, "highscore_title", "center", ORIGINAL_WINDOW_WIDTH/1.5, nil, "highscore_screen_texts")
+    Txt.create_gui(180 + x_offset, 110 + y_offset, "__________", GUI_HIGHSCORE, nil, "format", nil, "highscore_title_underscore", "center", ORIGINAL_WINDOW_WIDTH/1.5, nil, "highscore_screen_texts")
 
     local invert --Will invert colors of given player stats, if function receives a 'position' argument
     --Draw highscores
@@ -49,28 +52,28 @@ function hs.draw(position)
         local t
 
         --Draw numbers
-        t = Txt.create_gui(235, 140+i*80, i, GUI_BOSS_TITLE, nil, nil, nil, "highscore_number_"..i, nil, nil, invert)
+        t = Txt.create_gui(235 + x_offset, 140+i*80 + y_offset, i, GUI_BOSS_TITLE, nil, nil, nil, "highscore_number_"..i, nil, nil, invert, "highscore_screen_texts")
         if invert then
             t.angle = 0 --Creates a angle variable fo the highlight effect
             table.insert(texts, t)
         end
 
         --Draw numberdot
-        t = Txt.create_gui(275, 140+i*80, ".", GUI_BOSS_TITLE, nil, nil, nil, "highscore_dot"..i, nil, nil, invert)
+        t = Txt.create_gui(275 + x_offset, 140+i*80 + y_offset, ".", GUI_BOSS_TITLE, nil, nil, nil, "highscore_dot"..i, nil, nil, invert, "highscore_screen_texts")
         if invert then
             t.angle = 0 --Creates a angle variable fo the highlight effect
             table.insert(texts, t)
         end
 
         --Draw player name
-        t = Txt.create_gui(400, 140+i*80, HIGHSCORES[i].name, GUI_BOSS_TITLE, nil, nil, nil, "highscore_name"..i, nil, nil, invert)
+        t = Txt.create_gui(400 + x_offset, 140+i*80 + y_offset, HIGHSCORES[i].name, GUI_BOSS_TITLE, nil, nil, nil, "highscore_name"..i, nil, nil, invert, "highscore_screen_texts")
         if invert then
             t.angle = 0 --Creates a angle variable fo the highlight effect
             table.insert(texts, t)
         end
 
         --Draw player score
-        t = Txt.create_gui(660, 140+i*80, HIGHSCORES[i].score, GUI_BOSS_TITLE, nil, nil, nil, "highscore_score"..i, nil, nil, invert)
+        t = Txt.create_gui(660 + x_offset, 140+i*80 + y_offset, HIGHSCORES[i].score, GUI_BOSS_TITLE, nil, nil, nil, "highscore_score"..i, nil, nil, invert, "highscore_screen_texts")
         if invert then
             t.angle = 0 --Creates a angle variable fo the highlight effect
             table.insert(texts, t)

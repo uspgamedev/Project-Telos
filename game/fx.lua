@@ -183,6 +183,15 @@ function fx.shake(d, s)
     )
 end
 
+--Moves a camera to target position with a given speed using a given tweening method (linear by default). Returns the handle for the tweening.
+function fx.moveCamera(cam, target_x, target_y, speed, tweening)
+    local target = Vector(target_x, target_y)
+    local duration = target:dist(Vector(cam.x, cam.y))/speed
+    tweening = tweening or "in-linear"
+
+    return FX_TIMER:tween(duration, cam, {x = target.x, y = target.y}, tweening)
+end
+
 ---------------
 --COLOR EFFECTS
 ---------------
@@ -285,5 +294,30 @@ function fx.rotate_objects(objects, positions)
     )
 end
 
---Return fucntions
+--Given a table of objects, a string "value_name" of the field you want to change, a table "target_values" with target values for each object(in the same order as the objects table), and a speed, it will make the tween for all objects of that field to the respective target value.
+--It's advisable to provide a label for the handle stored in each object
+--Provide a table that contains the handle tables for each object
+--You can provide an optional argument for tweening method. If not provided, linear will be used.
+function fx.change_value_objects(objects, value_name, target_values, speed, label, handles_table, tweening_method)
+    tweening_method = tweening_method or "in-linear"
+    label = label or "changing_value_"..value_name
+    --Start applying effect on objects
+    for i, ob in ipairs(objects) do
+
+        --Calculate the duration of the effect based on the speed and differences between values
+        local duration = math.abs(ob[value_name] - target_values[i])/speed
+
+        --Cancel previously running effect
+        if handles_table[i][label] then
+            FX_TIMER:cancel(handles_table[i][label])
+        end
+
+        --Create tweening effect for the object
+        handles_table[i][label] = FX_TIMER:tween(duration, ob, {[value_name] = target_values[i]}, tweening_method)
+    end
+
+end
+
+
+--Return functions
 return fx

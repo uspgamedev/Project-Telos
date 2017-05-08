@@ -30,8 +30,9 @@ function draw.allTables()
 
     DrawTable(DRAW_TABLE.BG) --Background
 
-    CAM:attach() --Start tracking camera
+    MENU_CAM:attach() --Start tracking main menu camera
 
+    CAM:attach() --Start tracking camera
 
     DrawTable(DRAW_TABLE.L1)  --Circle effect
 
@@ -84,8 +85,9 @@ function draw.allTables()
         FreeRes.transform() --Return transformations onscreen
     end
 
-
     DrawTable(DRAW_TABLE.GUI) --Top GUI
+
+    MENU_CAM:detach() --Start tracking main menu camera
 
     --Creates letterbox at the sides of the screen if needed
     FreeRes.letterbox(color)
