@@ -565,47 +565,8 @@ end
 function util.defaultKeyPressed(key)
     local p
 
-    if  key == 'f1' then
-        util.quit()
-    elseif key == 'f4' then
-        print("Closing the game without saving")
-        os.exit()
-    elseif key == 'f11' then
+    if  key == 'f11' then
         util.toggleFullscreen()
-    elseif key == 'f9' then
-        util.toggleDebug()
-    elseif key == '0' then
-        util.toggleGODMODE()
-    elseif key == '9' then
-        p = util.findId("psycho")
-        p.lives = p.lives + 10
-        util.findId("lives_counter").var = p.lives
-    elseif key == '8' then
-        p = util.findId("psycho")
-        p.lives = 1
-        util.findId("lives_counter").var = p.lives
-    elseif key == '7' then
-        p = util.findId("psycho")
-        p.ultrablast_counter = p.ultrablast_counter + 10
-        util.findId("ultrablast_counter").var = p.ultrablast_counter
-    elseif key == '6' then
-        p = util.findId("psycho")
-        print("psycho position",p.pos.x, p.pos.y)
-    elseif key == '5' then
-        util.countDrawables()
-    elseif key == '4' then
-        p = util.findId("psycho")
-        if p and not p.death then
-            p:kill()
-        end
-    elseif key == "tab" then
-        local state = not love.mouse.isGrabbed()   -- the opposite of whatever it currently is
-        love.mouse.setGrabbed(state)
-        print("MOUSE CAPTURE IS", state)
-    elseif key == "f2" then
-        HS.print()
-    elseif key == "f3" then
-        HS.reset()
     end
 
 

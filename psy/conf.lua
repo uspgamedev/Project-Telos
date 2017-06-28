@@ -41,4 +41,18 @@ function love.conf(t)
     t.modules.video = true              -- Enable the video module (boolean)
     t.modules.window = true             -- Enable the window module (boolean)
     t.modules.thread = true             -- Enable the thread module (boolean)
+
+    t.releases = {
+        title = "psycho-the-ball",                                   -- The project title (string)
+        package = "psycho-the-ball",                              -- The project command and package name (string)
+        loveVersion = t.version,                                  -- The project LÖVE version
+        version = "0.1",                                          -- The project version
+        author = "Ricardo Lira",                                  -- Your name (string)
+        email = "pudimdefrutas@gmail.com",                        -- Your email (string)
+        description = "Psychodelic top-down ball shooter.",        -- The project description (string)
+        homepage = "https://github.com/uspgamedev/Project-Telos", -- The project homepage (string)
+        identifier = "love2d-game",                               -- The project Uniform Type Identifier (string)
+        excludeFileList = {},                                     -- File patterns to exclude. (string list)
+        releaseDirectory = "release",                             -- Where to store the project releases (string)
+    }
 end

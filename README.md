@@ -1,5 +1,4 @@
-
-# PsyChO: The Ball version 0.0.0.10 indev
+# PsyChO: The Ball version 0.0.1
 ===========================================  
  *a game by* **USPGAMEDEV** *&* **MARVELLOUS SOFT**  
 
@@ -43,7 +42,7 @@ Want to see where is the developing process of PsyChO: The Ball, and get a sneak
 
 ### **--- SPECIAL THANKS ---**
 
-#### ***Yan Soares Couto***
+***Yan Soares Couto***  
 the original psychoboy; more than a game developer, an eternal friend
 
 ***Wilson Kazuo Mizutani***  

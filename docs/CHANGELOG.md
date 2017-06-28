@@ -2,7 +2,7 @@
 THE HISTORY OF PSYCHO: THE BALL
 ===============================
 
-#### (xx/xx/2017) Version 0.0.0.10 (indev)  -  Releasing the Ball
+#### (28/06/2017) Version 0.1  -  Releasing the Ball
 
 - Added tutorial!
     - Learn the ropes when first playing the game
