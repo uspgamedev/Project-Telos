@@ -16,7 +16,16 @@ function level_functions.part_1()
 
     LM.level_part("Part 1 - Boom shakalaka")
 
+    LM.wait(3)
+
+    p = Util.findId("psycho")
+    if p then
+        p.lives = 1
+        p:kill()
+    end
+
     LM.stop()
+
 
 end
 
@@ -29,7 +38,7 @@ end
 function level_functions.setup()
 
     --Start Level
-    LM.level_title("CONGRATULATIONS, OMAR IS PROUD OF YOU")
+    LM.level_title("YOU WON!!!")
     Audio.playBGM(BGM_LEVEL_2)
 
 end
