@@ -2,12 +2,14 @@
 THE HISTORY OF PSYCHO: THE BALL
 ===============================
 
-#### (xx/xx/201x) Version 0.0.0.10 (indev)  -  XXXXXXXXXXXXXXXX
+#### (xx/xx/2017) Version 0.0.0.10 (indev)  -  Releasing the Ball
 
 - Added tutorial!
-    -Learn the ropes when first playing the game
+    - Learn the ropes when first playing the game
 - Continue button
-    - If you lose or jsut quit the game, you can restart from the current level (losing all progress)
+    - If you lose or just quit the game, you can restart from the current level (losing all progress)
+- Added Highscore screen
+    - Get those points!
 - Bug fixes!!
     - There was a lot of them. There might still be some =O
 

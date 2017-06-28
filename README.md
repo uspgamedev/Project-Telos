@@ -2,7 +2,6 @@
 # PsyChO: The Ball version 0.0.0.10 indev
 ===========================================  
  *a game by* **USPGAMEDEV** *&* **MARVELLOUS SOFT**  
- *Projeto de Cultura e Extensão - 2º Semestre 2016*  
 
 ```
  ______          _____ _     _____     _____ _           ______       _ _
@@ -42,7 +41,10 @@ Want to see where is the developing process of PsyChO: The Ball, and get a sneak
 ==============================
 ##### Made using the free framework LÖVE. More info here: https://love2d.org/ +
 
-### **SPECIAL THANKS**
+### **--- SPECIAL THANKS ---**
+
+#### ***Yan Soares Couto***
+the original psychoboy; more than a game developer, an eternal friend
 
 ***Wilson Kazuo Mizutani***  
 for the guidance and being there when we most needed
