@@ -129,8 +129,8 @@ function setup.config()
     GUI_MEDLESS = love.graphics.newFont("assets/fonts/Nevis.ttf", 15)
 
     --CAMERA--
-    CAM = Camera(love.graphics.getWidth()/2, love.graphics.getHeight()/2) --Set camera position to center of screen
-    MENU_CAM = Camera(love.graphics.getWidth()/2, love.graphics.getHeight()/2) --Set camera position to center of screen, camera used for menu transitions
+    CAM = Camera(ORIGINAL_WINDOW_WIDTH/2, ORIGINAL_WINDOW_HEIGHT/2) --Set camera position to center of screen
+    MENU_CAM = Camera(ORIGINAL_WINDOW_WIDTH/2, ORIGINAL_WINDOW_HEIGHT/2) --Set camera position to center of screen, camera used for menu transitions
 
     --SHADERS--
 

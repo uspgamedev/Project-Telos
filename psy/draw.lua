@@ -9,24 +9,28 @@ local draw = {}
 --Draws every drawable object from all tables
 function draw.allTables()
 
+    --Makes transformations regarding screen current size
+    FreeRes.transform()
+
     --Start using canvas
     if not SCREEN_CANVAS and USE_CANVAS then
-        SCREEN_CANVAS = love.graphics.newCanvas(WINDOW_WIDTH, WINDOW_HEIGHT) --Create canvas
+        SCREEN_CANVAS = love.graphics.newCanvas(ORIGINAL_WINDOW_WIDTH, ORIGINAL_WINDOW_HEIGHT) --Create canvas
         love.graphics.setCanvas(SCREEN_CANVAS)
         love.graphics.clear() --Clear previous stuff so Canvas won't draw
         love.graphics.setBlendMode("alpha") --Set alpha mode properly
     end
 
     if USE_BLUR_CANVAS then
+        love.graphics.pop() --Stop tracking effects on screen transformations for the canvas
+
         if not BLUR_CANVAS_1 then
             BLUR_CANVAS_1 = love.graphics.newCanvas(WINDOW_WIDTH, WINDOW_HEIGHT)
         end
         love.graphics.setCanvas(BLUR_CANVAS_1)
         love.graphics.setBlendMode("alpha") --Set alpha mode properly
-    end
 
-    --Makes transformations regarding screen current size
-    FreeRes.transform()
+        FreeRes.transform() --Return transformations onscreen
+    end
 
     DrawTable(DRAW_TABLE.BG) --Background
 
@@ -60,6 +64,8 @@ function draw.allTables()
 
     CAM:detach() --Stop tracking camera
 
+    MENU_CAM:detach() --Start tracking main menu camera
+
     if USE_BLUR_CANVAS then
         love.graphics.pop() --Stop tracking effects on screen transformations for the canvas
 
@@ -85,12 +91,12 @@ function draw.allTables()
         FreeRes.transform() --Return transformations onscreen
     end
 
+    MENU_CAM:attach() --Start tracking main menu camera
+
     DrawTable(DRAW_TABLE.GUI) --Top GUI
 
     MENU_CAM:detach() --Start tracking main menu camera
 
-    --Creates letterbox at the sides of the screen if needed
-    FreeRes.letterbox(color)
 
     --Stop using canvas
     if USE_CANVAS then
@@ -104,6 +110,8 @@ function draw.allTables()
         love.graphics.setBlendMode("alpha")
     end
 
+    --Creates letterbox at the sides of the screen if needed
+    FreeRes.letterbox(color)
 
 end
 
