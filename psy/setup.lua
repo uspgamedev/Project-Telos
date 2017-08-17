@@ -232,6 +232,8 @@ function setup.config()
     SFX_BACK_BUTTON:setVolume(.5*SFX_VOLUME_MULT)
     SFX_PLAY_BUTTON = love.audio.newSource("assets/sfx/general_sfxs/snd_button_play.mp3")
     SFX_PLAY_BUTTON:setVolume(.3*SFX_VOLUME_MULT)
+    SFX_ULTRABLAST = love.audio.newSource("assets/sfx/general_sfxs/snd_ultrablast.mp3")
+    SFX_ULTRABLAST:setVolume(1*SFX_VOLUME_MULT)
 
     --DEATH MESSAGE
     DEATH_TEXTS = {
