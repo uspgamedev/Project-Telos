@@ -33,6 +33,8 @@ Psy = Class{
         r = 24 --Radius of psycho
         self.collision_r = 17 --Radius of psycho that detects collision, and radius when psyho is focused
         self.normal_radius = r --Radius when psycho is not focused
+        self.invisible_circle_radius_ratio = 0 --Ratio of radius of invisibility inside psycho (for invunerability moments)
+        self.invisible_circle_radius_max = .7
         CIRC.init(self, _x, _y, r, color, color_table, "fill") --Set atributes
 
         ELEMENT.setSubTp(self, "player")
@@ -92,7 +94,13 @@ function Psy:draw()
         Color.set(UI_COLOR.color)
     end
 
-    Draw_Smooth_Circle(p.pos.x, p.pos.y, p.r)
+    --Apply effect for invisible radius
+    if p.invisible_circle_radius_ratio > 0 then
+        Draw_Smooth_Ring(p.pos.x, p.pos.y, p.r, p.invisible_circle_radius_ratio*p.r)
+    else
+        Draw_Smooth_Circle(p.pos.x, p.pos.y, p.r)
+    end
+
 end
 
 function Psy:shoot(x,y)
@@ -275,27 +283,25 @@ end
 end
 
 --Make psycho temporarily invincible
-function Psy:startInvincible()
+function Psy:startInvincible(duration)
     local d, count, p
 
     p = self
 
-    d = 2 --Time psycho is invincible
-    c = 8 --Number of times he blinks
+    d = duration or 2 --Time psycho is invincible
+    d2 = d/2 --Time before outer circle grows
 
     p.invincible = true
+    p.invisible_circle_radius_ratio = p.invisible_circle_radius_max
 
-    --Blinks psycho for d seconds
-    FX_TIMER:every(d/(2*c),
+    FX_TIMER:after(d2,
         function()
-            --local p = psycho.get()
 
-            p.invisible = not p.invisible
+            FX_TIMER:tween(d-d2, p, {invisible_circle_radius_ratio = 0}, 'in-linear')
 
-        end,
-    2*c)
+        end)
 
-    --Makes psycho visible and vunerable again
+    --Makes psycho visible and vunerable again (+.2 for game-feel)
     FX_TIMER:after(d + .2,
         function()
             --local p = psycho.get()

@@ -324,8 +324,7 @@ function ENEMY:draw()
     --Draws the circle
     Color.set(p.color)
     if p.mode == "line" then
-        love.graphics.setLineWidth(p.line_width)
-        love.graphics.circle(p.mode, p.pos.x, p.pos.y, p.r)
+        Draw_Smooth_Ring(p.pos.x, p.pos.y, p.r, p.r-p.line_width)
     else
         Draw_Smooth_Circle(p.pos.x, p.pos.y, p.r)
     end
@@ -346,12 +345,34 @@ function Draw_Smooth_Circle(x, y, r)
     size = math.ceil(2*r)
     --Create smooth circle shader if it hasn't been yet
     if not SMOOTH_CIRCLE_TABLE[size] then
-        print("creating shader for size ".. size)
+        print("creating circle shader for size ".. size)
         SMOOTH_CIRCLE_TABLE[size] = love.graphics.newShader(Smooth_Circle_Shader:format(size))
     end
 
     --Draw the circle
     love.graphics.setShader(SMOOTH_CIRCLE_TABLE[size])
+    love.graphics.draw(PIXEL, x, y, 0, 2*r)
+    love.graphics.setShader()
+
+end
+
+--Receives the center x and y values of a ring, its radius and inner_radius, and draw it on the screen
+--OBS: Have the color already setted
+function Draw_Smooth_Ring(x, y, r, i_r)
+
+    x = x - r
+    y = y - r
+
+    size = math.ceil(2*r)
+    i_r = math.ceil(i_r)
+    --Create smooth circle shader if it hasn't been yet
+    if not SMOOTH_RING_TABLE[size..'-'..i_r] then
+        print("creating ring shader for size ".. size.." and inner radius "..i_r)
+        SMOOTH_RING_TABLE[size..'-'..i_r] = love.graphics.newShader(Smooth_Ring_Shader:format(size, i_r))
+    end
+
+    --Draw the circle
+    love.graphics.setShader(SMOOTH_RING_TABLE[size..'-'..i_r])
     love.graphics.draw(PIXEL, x, y, 0, 2*r)
     love.graphics.setShader()
 

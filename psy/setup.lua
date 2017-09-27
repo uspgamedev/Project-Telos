@@ -144,6 +144,26 @@ function setup.config()
       }
     ]])
 
+    --Default Smooth Ring Shader
+    Smooth_Ring_Shader = ([[
+      vec4 effect( vec4 color, Image texture, vec2 texture_coords, vec2 screen_coords ){
+        vec4 pixel = Texel(texture, texture_coords );//This is the current pixel color
+        vec2 center = vec2(0.5,0.5);
+        number size = %f;
+        number inner_radius = %f;
+        number x = distance(center, texture_coords);
+        if (x >= inner_radius/size) {
+          pixel.a = 1 - smoothstep(.5 - 1/size, .5, x);
+        }
+        else
+        {
+          pixel.a = smoothstep(inner_radius/size - 1/size, inner_radius/size, x);
+        }
+
+        return pixel * color;
+      }
+    ]])
+
     --Generic Smooth Circle Shader (for objects that change size a lot)
     Generic_Smooth_Circle_Shader = love.graphics.newShader[[
       vec4 effect( vec4 color, Image texture, vec2 texture_coords, vec2 screen_coords ){
@@ -156,6 +176,8 @@ function setup.config()
 
     --Table containing smooth circle shaders created
     SMOOTH_CIRCLE_TABLE = {}
+    --Table containing smooth ring shaders created
+    SMOOTH_RING_TABLE = {}
 
 
     --Example shader for drawing glow effect
@@ -268,6 +290,14 @@ function setup.config()
     SMOOTH_CIRCLE_TABLE[12] = love.graphics.newShader(Smooth_Circle_Shader:format(12))
     SMOOTH_CIRCLE_TABLE[30] = love.graphics.newShader(Smooth_Circle_Shader:format(30))
     SMOOTH_CIRCLE_TABLE[60] = love.graphics.newShader(Smooth_Circle_Shader:format(60))
+
+    --Create some pre-made smooth rings
+    for i_r =1, 21 do
+        SMOOTH_RING_TABLE["48-"..i_r] = love.graphics.newShader(Smooth_Ring_Shader:format(48,i_r))
+    end
+    for i_r =1, 16 do
+        SMOOTH_RING_TABLE["38-"..i_r] = love.graphics.newShader(Smooth_Ring_Shader:format(38,i_r))
+    end
     print("Finished setting up shaders")
 
     print("---------------------------")
