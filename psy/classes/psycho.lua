@@ -34,7 +34,7 @@ Psy = Class{
         self.collision_r = 17 --Radius of psycho that detects collision, and radius when psyho is focused
         self.normal_radius = r --Radius when psycho is not focused
         self.invisible_circle_radius_ratio = 0 --Ratio of radius of invisibility inside psycho (for invunerability moments)
-        self.invisible_circle_radius_max = .7
+        self.invisible_circle_radius_max = .75
         CIRC.init(self, _x, _y, r, color, color_table, "fill") --Set atributes
 
         ELEMENT.setSubTp(self, "player")
@@ -70,8 +70,7 @@ Psy = Class{
         self.default_ultrablast_power = 50 --Ultrablast power when using right mouse button
 
         self.invincible = false --If psycho can't collide with enemies
-        self.ultrablast_invincibility_timer = 0 --If its <= 0, then psycho can die (used for invincibility when using ultrablast)
-        self.ultrablast_invincibility_timer_max = .5 --How much time psychoball is invincible when using ultrablast
+        self.invincible_handles = {} --Handles for psycho invencibility timers
         self.controlsLocked = false --If psycho cant move or shoot
         self.shootLocked = true --If psycho cant shoot or ultrablast
 
@@ -148,7 +147,7 @@ function Psy:ultrablast(power)
 
     if p.ultrablast_counter <= 0 or not p.can_ultra then return end
 
-    p.ultrablast_invincibility_timer = p.ultrablast_invincibility_timer_max
+    p:startInvincible(1)
 
     --Update ultrablast counter
     LM.giveUltrablast(-1)
@@ -161,10 +160,6 @@ function Psy:update(dt)
     local p
 
     p = self
-
-    if p.ultrablast_invincibility_timer > 0 then
-        p.ultrablast_invincibility_timer = p.ultrablast_invincibility_timer - dt
-    end
 
     --Update psycho radius
     if p.focused and p.r > p.collision_r + 2 then
@@ -221,6 +216,13 @@ function Psy:update(dt)
     p.pos.x, p.pos.y = isOutside(p)
 end
 
+function Psy:destroy()
+    for _,h in pairs(self.invincible_handles) do
+        FX_TIMER:cancel(h) --Stops any timers this object has
+    end
+    ELEMENT.destroy(self)
+end
+
 function Psy:kill()
     local p, temp
 
@@ -228,7 +230,7 @@ function Psy:kill()
 
     p = self
 
-    if p.ultrablast_invincibility_timer > 0 or p.lives == 0 then return end
+    if p.lives <= 0 then return end
 
     SFX_PSYCHOBALL_DIES:play()
 
@@ -248,8 +250,6 @@ function Psy:kill()
         FX.psychoExplosion(p)
     end
 end
-
-
 
 function Psy:keypressed(key)
     local p
@@ -289,20 +289,27 @@ function Psy:startInvincible(duration)
     p = self
 
     d = duration or 2 --Time psycho is invincible
-    d2 = d/2 --Time before outer circle grows
+    d2 = 2*d/3 --Time before outer circle grows
 
     p.invincible = true
     p.invisible_circle_radius_ratio = p.invisible_circle_radius_max
 
-    FX_TIMER:after(d2,
+    --Tween psycho ring effect
+    if p.invincible_handles["ring_effect"] then
+        FX_TIMER:cancel(p.invincible_handles["ring_effect"])
+    end
+    p.invincible_handles["ring_effect"] = FX_TIMER:after(d2,
         function()
 
-            FX_TIMER:tween(d-d2, p, {invisible_circle_radius_ratio = 0}, 'in-linear')
+            p.invincible_handles["ring_effect"] = FX_TIMER:tween(d-d2, p, {invisible_circle_radius_ratio = 0}, 'in-linear')
 
         end)
 
     --Makes psycho visible and vunerable again (+.2 for game-feel)
-    FX_TIMER:after(d + .2,
+    if p.invincible_handles["end_effect"] then
+        FX_TIMER:cancel(p.invincible_handles["end_effect"])
+    end
+    p.invincible_handles["end_effect"] = FX_TIMER:after(d + .2,
         function()
             --local p = psycho.get()
 
