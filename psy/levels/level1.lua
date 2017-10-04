@@ -81,7 +81,7 @@ function level_functions.part_1()
     F.fromVertical{side = "top", mode = "distribute", number = 12, enemy = {DB}, speed_m = .9}
     F.fromVertical{side = "bottom", mode = "distribute", number = 12, enemy = {DB}, speed_m = .9}
     LM.wait("noenemies")
-    LM.giveLives(2, "finished part")
+    LM.giveScore(1000, "finished part")
 
     LM.stop()
     LM.start(level_functions.part_2)
@@ -144,7 +144,7 @@ function level_functions.part_2()
     LM.wait(1.5)
     F.circle{enemy = {DB}, number = 28, radius = 640}
     LM.wait("noenemies")
-    LM.giveLives(3, "finished part")
+    LM.giveScore(2000, "finished part")
 
     LM.stop()
     LM.start(level_functions.part_3)
@@ -275,7 +275,7 @@ function level_functions.part_3()
         end
     end
     LM.wait("noenemies")
-    LM.giveLives(5, "finished part")
+    LM.giveScore(3000, "finished part")
 
     LM.stop()
     LM.start(level_functions.part_4)
@@ -291,7 +291,8 @@ function level_functions.part_4()
     Boss.create()
     LM.wait(20)
     LM.wait("nobosses")
-    LM.giveLives(5, "finished level")
+    LM.wait(1)
+    LM.giveScore(4000, "finished level")
     LM.wait(3)
 
     LM.stop()

@@ -407,7 +407,7 @@ function Boss_2_Main:changeStage()
                 end
             )
             b.damage_taken[i] = 0
-            b.life[i] = 30 --40 (change to 30?)
+            b.life[i] = 20
             b.parts_alive = 4
             b.shoot_tick = 0 --Reset tick
             b.invincible = true --Can't take damage
@@ -575,7 +575,7 @@ function Boss_2_Main:changeStage()
             b.upper_lightness[i] = 130 --Upper color lightness in %
             b.part_colors[i] = HSL(b.color_stage_hue[6], 0, b.bottom_lightness[i])
             b.damage_taken[i] = 0
-            b.life[i] = 20
+            b.life[i] = 25
             b.parts_alive = 4
             b.shoot_tick = 0 --Reset tick
             b.invincible = true --Can't take damage

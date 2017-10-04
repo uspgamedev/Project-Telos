@@ -58,15 +58,14 @@ Psy = Class{
 
         self.score = 0 --Score psycho has
         self.life_score = 0 --How much score psycho has accumulated to win a life
-        self.life_score_target = 8000 --How many points psycho must win to get a life
-        self.ultrablast_score = 0 --How much score psycho has accumulated to win a ultrablast
-        self.ultrablast_score_target = 2000 --How many points psycho must win to get a ultrablast
+        self.life_score_target = 6000 --How many points psycho must win to get a life
         self.can_ultra = true -- If psycho can use ultrablast (for tutorial)
 
         self.lives = 10 --How many lives psycho by default has
 
         self.ultrablast_counter = 2 --How many ultrablasts psycho has
         self.default_ultrablast_number = 2 --How many ultrablasts psycho by default has in every life
+        self.ultrablast_max = 3 --max number of ultrablasts player can have
         self.default_ultrablast_power = 50 --Ultrablast power when using right mouse button
 
         self.invincible = false --If psycho can't collide with enemies
@@ -393,16 +392,16 @@ function isOutside(o)
     x, y = o.pos.x, o.pos.y
 
     --X position
-    if     o.pos.x - o.r <= 0 then
+    if     o.pos.x - o.r <= TOP_LEFT_CORNER.x then
         x = o.r
-    elseif o.pos.x + o.r >= ORIGINAL_WINDOW_WIDTH then
-        x = ORIGINAL_WINDOW_WIDTH - o.r
+    elseif o.pos.x + o.r >= BOTTOM_RIGHT_CORNER.x then
+        x = BOTTOM_RIGHT_CORNER.x - o.r
     end
     --Y position
-    if o.pos.y - o.r <= 0 then
+    if o.pos.y - o.r <= TOP_LEFT_CORNER.y then
         y = o.r
-    elseif o.pos.y + o.r >= ORIGINAL_WINDOW_HEIGHT then
-        y = ORIGINAL_WINDOW_HEIGHT - o.r
+    elseif o.pos.y + o.r >= BOTTOM_RIGHT_CORNER.y then
+        y = BOTTOM_RIGHT_CORNER.y - o.r
     end
 
     return x,y

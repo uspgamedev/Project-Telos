@@ -176,7 +176,7 @@ function level_manager.text(x, y, text, d, max_alpha, font)
     txt.alpha = 0
 
     --After two seconds, fades-out the title
-    txt.level_handles["fade-in"] = LEVEL_TIMER:tween(1, txt, {alpha = max_alpha}, 'in-linear',
+    txt.level_handles["fade-in"] = LEVEL_TIMER:tween(.3, txt, {alpha = max_alpha}, 'in-linear',
         function()
             txt.level_handles["stay_effect"] = LEVEL_TIMER:after(d,
                 function()
@@ -325,13 +325,6 @@ function level_manager.giveScore(number, text)
     while p.life_score >= p.life_score_target do
         p.life_score = p.life_score - p.life_score_target
         level_manager.giveLives(1, "score bonus")
-    end
-
-    --Update ultrablast score
-    p.ultrablast_score = p.ultrablast_score + number
-    while p.ultrablast_score >= p.ultrablast_score_target do
-        p.ultrablast_score = p.ultrablast_score - p.ultrablast_score_target
-        level_manager.giveUltrablast(1, "score bonus")
     end
 
     --Indicators

@@ -203,7 +203,7 @@ function level_functions.part_1()
         F.fromHorizontal{enemy = {DB}, speed_m = 1.7, side = "right", mode = "bottom" , number = 7, ind_mode = false}
     end
     LM.wait("noenemies")
-    LM.giveLives(4, "finished part")
+    LM.giveScore(1000, "finished part")
 
     LM.stop()
     LM.start(level_functions.part_2)
@@ -469,7 +469,7 @@ function level_functions.part_2()
         end
     end
     LM.wait("noenemies")
-    LM.giveLives(5, "finished part")
+    LM.giveScore(2000, "finished part")
 
     LM.stop()
     LM.start(level_functions.part_3)
@@ -700,7 +700,7 @@ function level_functions.part_3()
         LM.wait(1)
     end
     LM.wait("noenemies")
-    LM.giveLives(5, "finished part")
+    LM.giveScore(3000, "finished part")
 
     LM.stop()
     LM.start(level_functions.part_4)
@@ -736,16 +736,17 @@ function level_functions.part_4()
 
     LM.wait("noenemies")
     LM.wait(1)
-    LM.text(600, 260, "nevermind", 1, 150)
-    LM.wait(2)
+    LM.text(600, 260, "nevermind", .8, 150)
+    LM.wait(1)
     LM.text(ORIGINAL_WINDOW_WIDTH/2 - 70, ORIGINAL_WINDOW_HEIGHT/2 - 10, "I'LL GET HIM", 1.5, 230, GUI_MEDPLUS)
     LM.wait(3)
     Boss.create()
-
     LM.wait(10)
     LM.wait("nobosses")
-    LM.wait(2)
 
+    LM.wait(1)
+    LM.giveScore(4000, "finished level")
+    LM.wait(2)
     LM.stop()
     level3.setup()
     LM.start(level3.part_1)

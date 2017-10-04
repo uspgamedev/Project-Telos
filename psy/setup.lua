@@ -49,6 +49,10 @@ function setup.config()
     PREVIOUS_WINDOW_WIDTH = love.graphics.getWidth() --Window width before fullscreen
     PREVIOUS_WINDOW_HEIGHT = love.graphics.getHeight() --Window height before fullscreen
 
+    --Game screen params
+    TOP_LEFT_CORNER = Vector(0,0)
+    BOTTOM_RIGHT_CORNER = Vector(ORIGINAL_WINDOW_WIDTH, ORIGINAL_WINDOW_HEIGHT)
+
     SCREEN_CANVAS = nil --Screen canvas that can be draw or apllied effects
     USE_CANVAS = false --If game should draw the SCREEN_CANVAS
 
