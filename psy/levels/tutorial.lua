@@ -22,7 +22,7 @@ function level_functions.part_1()
 
     --Make gui invisible here
     Util.findId("lives_counter").alpha = 0
-    Util.findId("ultrablast_counter").alpha = 0
+    Util.findId("ultrablast_counter_text").alpha = 0
     Util.findId("score_counter").alpha = 0
     Util.findId("separator_1").alpha = 0
     Util.findId("level_part").alpha = 0
@@ -63,7 +63,7 @@ function level_functions.part_1()
     LM.wait(1)
 
     --Turn ultrablast counter visible
-    txt = Util.findId("ultrablast_counter")
+    txt = Util.findId("ultrablast_counter_text")
     txt.level_handles["become_visible"] = LEVEL_TIMER:tween(1, txt, {alpha = 255}, 'in-linear')
 
     LM.wait(2)

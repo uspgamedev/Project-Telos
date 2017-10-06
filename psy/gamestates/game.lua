@@ -4,6 +4,7 @@ local Draw = require "draw"
 local Level = require "level_manager"
 local Color = require "classes.color.color"
 local Txt = require "classes.text"
+local UltraCounter = require "classes.ultrablast_counter"
 local Audio = require "audio"
 --MODULE FOR THE GAMESTATE: GAME--
 
@@ -45,7 +46,9 @@ function state:enter()
     Txt.create_game_gui(10, 10, "lives: ", GUI_MED, p.lives, "down", GUI_MEDPLUS, "lives_counter")
 
     --Ultrablast counter text
-    Txt.create_game_gui(10, 75, "Ultrablast: ", GUI_MED, p.ultrablast_counter, "down", GUI_MEDPLUS, "ultrablast_counter")
+    Txt.create_game_gui(10, 75, "Ultrablast: ", GUI_MED, nil, nil, nil, "ultrablast_counter_text")
+    --Ultrablast counter
+    UltraCounter.create(30, 120)
 
     --Score counter text
     Txt.create_game_gui(10, 140, "Score: ", GUI_MED, p.score, "down", GUI_MEDPLUS, "score_counter")
@@ -128,6 +131,7 @@ function state:update(dt)
     Util.updateSubTp(m_dt, "rotating_indicator")
     Util.updateSubTp(m_dt, "ultrablast")
     Util.updateId(dt, "psycho_aim") --Is not affected by slowmo
+    Util.updateId(dt, "ultrablast_counter") --Is not affected by slowmo
 
     Util.checkCollision()
 

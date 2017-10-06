@@ -42,6 +42,8 @@ function setup.config()
 
     TUTORIAL = false --If the game gamestate should play the tutorial
 
+    MAX_ULTRABLAST = 3 --Max number of ultrablasts psycho has
+
     WINDOW_WIDTH = love.graphics.getWidth() --Current width of the game window
     WINDOW_HEIGHT = love.graphics.getHeight() --Current height of the game window
     ORIGINAL_WINDOW_WIDTH = 1000 --Default width of the game window

@@ -65,7 +65,6 @@ Psy = Class{
 
         self.ultrablast_counter = 2 --How many ultrablasts psycho has
         self.default_ultrablast_number = 2 --How many ultrablasts psycho by default has in every life
-        self.ultrablast_max = 3 --max number of ultrablasts player can have
         self.default_ultrablast_power = 50 --Ultrablast power when using right mouse button
 
         self.invincible = false --If psycho can't collide with enemies

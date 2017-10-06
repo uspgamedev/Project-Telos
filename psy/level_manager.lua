@@ -376,12 +376,13 @@ function level_manager.giveUltrablast(number, text)
 
     if not p then return end
 
+    number = math.min(number, MAX_ULTRABLAST-p.ultrablast_counter)
+
     p.ultrablast_counter = p.ultrablast_counter + number
-    Util.findId("ultrablast_counter").var = p.ultrablast_counter
 
     t = Util.findId("ultrablast_change")
     counter = Util.findId("ultrablast_counter")
-    dist = counter.var_font:getWidth(counter.var) --Get distance to draw the indicator
+    dist = counter:getStartPosition() + p.ultrablast_counter*counter:getIconWidth() --Get distance to draw the indicator
     if number >= 0 then signal = "+" else signal = "" end --Get correct sign
     if text then separator = "   " else separator = "" end
     text = text or '' --Correct text
