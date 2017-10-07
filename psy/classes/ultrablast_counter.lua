@@ -1,6 +1,7 @@
 require "classes.primitive"
 local Color = require "classes.color.color"
 local Util = require "util"
+local LM = require "level_manager"
 
 --ULTRABLAST COUNTER CLASS--
 --[[Displays how many ultrablasts the player has]]
@@ -23,11 +24,20 @@ UltrablastCounter = Class{
 
         self.ultra_cont = 0 --Number of ultrablasts
 
+        --Ultrablast icon graphic constants
         self.ultra_first_radius = 12
         self.ultra_gap_width = 4
         self.ultra_ring_width = 4
-
         self.gap_between_ultras = 10
+
+        self.charge_bar_value = 0 --Current value of bar
+        self.charge_bar_max = 100 --Max value a bar can have before giving a utlrablast to player
+        self.charge_bar_speed = 30 --Speed to increase bar per second
+
+        self.charge_bar_w = 10 --Charge bar width
+        self.charge_bar_h = 20 --Charge bar max height
+        self.charge_bar_gap = 2 --Space between charge bar and outline
+        self.charge_bar_line_width = 2 --Line width
 
     end
 }
@@ -36,13 +46,15 @@ UltrablastCounter = Class{
 
 function UltrablastCounter:draw()
   local s = self
+
+  local color = Color.black()
+  Color.copy(color, UI_COLOR.color)
+  color.a = s.alpha
+  Color.set(color)
+
   for i = 0, s.ultra_cont-1 do
     local x = s.pos.x + i*(2*s.ultra_first_radius + 2*s.ultra_gap_width + 2*s.ultra_ring_width + s.gap_between_ultras)
     local y = s.pos.y
-
-    local color = Color.black()
-    Color.copy(color, UI_COLOR.color)
-    color.a = self.alpha
 
     --Draw ultrablast icon
     Draw_Smooth_Circle(x, y, s.ultra_first_radius)
@@ -50,6 +62,21 @@ function UltrablastCounter:draw()
 
   end
 
+  --Draw charge bar
+  if s.ultra_cont < MAX_ULTRABLAST then
+    local x = s.pos.x + s.ultra_cont*(2*s.ultra_first_radius + 2*s.ultra_gap_width + 2*s.ultra_ring_width + s.gap_between_ultras)
+    local y = s.pos.y - s.charge_bar_h/2
+    local w = s.charge_bar_w
+    local h = s.charge_bar_h * (s.charge_bar_value/s.charge_bar_max)
+    love.graphics.rectangle("fill", x, y, w, h)
+    x = x - s.charge_bar_gap - s.charge_bar_line_width
+    y = y - s.charge_bar_gap - s.charge_bar_line_width
+    love.graphics.setLineWidth(s.charge_bar_line_width)
+    w = w + 2*s.charge_bar_gap  + 2*s.charge_bar_line_width
+    h = s.charge_bar_h + 2*s.charge_bar_gap  + 2*s.charge_bar_line_width
+    love.graphics.rectangle("line", x, y, w, h)
+
+  end
 
 end
 
@@ -58,9 +85,23 @@ function UltrablastCounter:getStartPosition()
 end
 
 function UltrablastCounter:getIconWidth()
-
     return 2*self.ultra_first_radius + 2*self.ultra_gap_width + 2*self.ultra_ring_width + self.gap_between_ultras
+end
 
+function UltrablastCounter:getWidth()
+  local width = 0
+  width = width + self:getStartPosition()
+  if self.ultra_cont < MAX_ULTRABLAST then
+    for i = 1, self.ultra_cont + 1 do
+      width = width + self:getIconWidth()
+    end
+  else
+    for i = 1, self.ultra_cont do
+      width = width + self:getIconWidth()
+    end
+  end
+
+  return width
 end
 
 function UltrablastCounter:update(dt)
@@ -68,7 +109,23 @@ function UltrablastCounter:update(dt)
     local p = Util.findId("psycho")
 
     if p then
+      --Update utlrablast cont
       self.ultra_cont = p.ultrablast_counter
+
+      --Update charge bar
+      if self.ultra_cont >= MAX_ULTRABLAST then
+        self.charge_bar_value = 0
+      else
+        self.charge_bar_value = self.charge_bar_value + self.charge_bar_speed*dt
+        if self.charge_bar_value >= self.charge_bar_max then
+          self.charge_bar_value = self.charge_bar_value - self.charge_bar_max
+          LM.giveUltrablast(1)
+        end
+      end
+
+      --Update change text
+      local txt = Util.findId("ultrablast_change")
+      if txt then txt.x = self:getWidth() end
     end
 
 

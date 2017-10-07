@@ -376,20 +376,21 @@ function level_manager.giveUltrablast(number, text)
 
     if not p then return end
 
+
     number = math.min(number, MAX_ULTRABLAST-p.ultrablast_counter)
 
     p.ultrablast_counter = p.ultrablast_counter + number
 
     t = Util.findId("ultrablast_change")
     counter = Util.findId("ultrablast_counter")
-    dist = counter:getStartPosition() + p.ultrablast_counter*counter:getIconWidth() --Get distance to draw the indicator
+    dist = counter:getWidth() --Get distance to draw the indicator
     if number >= 0 then signal = "+" else signal = "" end --Get correct sign
     if text then separator = "   " else separator = "" end
     text = text or '' --Correct text
 
     --Create indicator, if there isn't one
     if not t then
-        t = Txt.create_game_gui(15 + dist, 108, signal..number..separator..text, GUI_MED, nil, "right", nil, "ultrablast_change")
+        t = Txt.create_game_gui(dist, 108, signal..number..separator..text, GUI_MED, nil, "right", nil, "ultrablast_change")
     --Else update the one already existing
     else
         --Remove previous effect
