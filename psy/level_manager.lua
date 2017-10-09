@@ -373,55 +373,33 @@ function level_manager.giveScore(number, text)
 end
 
 --Increase psycho's ultrablast
-function level_manager.giveUltrablast(number, text)
+function level_manager.giveUltrablast(number)
     local p, t, counter, dist, signal, handle
 
     p = Util.findId("psycho")
 
     if not p then return end
 
-
     number = math.min(number, MAX_ULTRABLAST-p.ultrablast_counter)
+
+    if number > 1 then
+      level_manager.giveUltrablast(number - 1)
+      number = 1
+    elseif number < -1 then
+      level_manager.giveUltrablast(number + 1)
+      number = -1
+     end
+
 
     p.ultrablast_counter = p.ultrablast_counter + number
 
-    t = Util.findId("ultrablast_change")
     counter = Util.findId("ultrablast_counter")
-    if number >= 0 then signal = "+" else signal = "" end --Get correct sign
-    if text then separator = "   " else separator = "" end
-    text = text or '' --Correct text
-
-    local full_text = signal..number..separator..text
-    local font = GUI_MED
-    local x = counter:getStartXPosition() + counter:getWidth()/2 - font:getWidth(full_text)/2 --Get distance to draw the indicator
-    local y = counter:getStartYPosition() + counter:getHeight() + 10
-    --Create indicator, if there isn't one
-    if not t then
-        t = Txt.create_game_gui(x, y, full_text, font, nil, "right", nil, "ultrablast_change")
-    --Else update the one already existing
+    if not counter then return end
+    if number > 0 then
+       counter:ultraGained()
     else
-        --Remove previous effect
-        if t.level_handles["effect"] then
-            LEVEL_TIMER:cancel(t.level_handles["effect"])
-            t.level_handles["effect"] = nil
-        end
-        t.alpha = 255
-        t.pos.x = x
-        t.text = full_text
+       counter:ultraUsed()
     end
-
-    --Make text stay still for a while, then fade-out
-    t.level_handles["effect"] = LEVEL_TIMER:after(1,
-                function()
-                    local handle
-                    t.level_handles["effect"] = LEVEL_TIMER:tween(1, t, {alpha = 0}, 'in-linear',
-                                function()
-                                    t.death = true
-                                end
-                            )
-                end
-            )
-
 end
 
 --Return functions

@@ -34,8 +34,8 @@ function Bullet:kill()
 
     if self.death then return end
     self.death = true
-    FX.explosion(self.pos.x, self.pos.y, self.r, self.color, 10, nil, nil, 2, important)
-    
+    FX.explosion(self.pos.x, self.pos.y, self.r, self.color, 8, nil, nil, 2, important)
+
 end
 
 function Bullet:update(dt)

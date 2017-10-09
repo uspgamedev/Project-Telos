@@ -63,8 +63,8 @@ Psy = Class{
 
         self.lives = 10 --How many lives psycho by default has
 
-        self.ultrablast_counter = 2 --How many ultrablasts psycho has
-        self.default_ultrablast_number = 2 --How many ultrablasts psycho by default has in every life
+        self.default_ultrablast_number = 1 --How many ultrablasts psycho by default has in every life
+        self.ultrablast_counter = self.default_ultrablast_number--How many ultrablasts psycho has
         self.default_ultrablast_power = 50 --Ultrablast power when using right mouse button
 
         self.invincible = false --If psycho can't collide with enemies
@@ -135,6 +135,10 @@ function Psy:shoot(x,y)
             Bullet.create(p.pos.x, p.pos.y, dir, c, color_table, "player_bullet")
         end
     end
+
+    --Signal ultrablast counter that psycho is shooting
+    local counter = Util.findId("ultrablast_counter")
+    if counter then counter:psychoShot() end
 
 end
 
@@ -222,29 +226,28 @@ function Psy:destroy()
 end
 
 function Psy:kill()
-    local p, temp
 
     if GODMODE then return end --GODMODE cheat
 
-    p = self
+    local p = self
 
     if p.lives <= 0 then return end
 
     SFX_PSYCHOBALL_DIES:play()
 
-    LM.giveLives(-1)
-    temp = p.default_ultrablast_number - p.ultrablast_counter
-    if temp ~= 0 then
-        LM.giveUltrablast(p.default_ultrablast_number - p.ultrablast_counter, "reset") --Reset ultrablast counter if its not the default
-    end
-
+    LM.giveLives(-1) --Update life
 
     if not p.death and p.lives <= 0 then
         FX.explosion(p.pos.x, p.pos.y, p.r, p.color, 100, 450, 250, 4)
         p.death = true
         Util.findId("psycho_aim").death = true --Delete aim
         SWITCH =  "GAMEOVER"
+        PSYCHO_SCORE = p.score
     else
+        --Reset ultrablast counter if its not the default
+        p.ultrablast_counter = p.default_ultrablast_number
+        local counter = Util.findId("ultrablast_counter")
+        if counter then counter:reset() end
         FX.psychoExplosion(p)
     end
 end

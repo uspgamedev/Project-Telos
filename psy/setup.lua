@@ -39,6 +39,7 @@ function setup.config()
     HIGHSCORE_HIGHLIGHT_EFFECT_HANDLE = nil --Handle for tween effect applied on highscore text (when a position is highlighed)
 
     GAMEOVER_BUTTONS_LOCK = false --If player can press or activate the gameover buttons
+    PSYCHO_SCORE = 0 --Psycho score
 
     TUTORIAL = false --If the game gamestate should play the tutorial
 
@@ -127,7 +128,7 @@ function setup.config()
     GUI_HIGHSCORE = love.graphics.newFont("assets/fonts/Nevis.ttf", 80)
     GUI_LIFE_COUNTER = love.graphics.newFont("assets/fonts/Nevis.ttf", 40)
     GUI_SCORE_COUNTER = love.graphics.newFont("assets/fonts/Nevis.ttf", 50)
-    GUI_LIFE_COUNTER_X = love.graphics.newFont("assets/fonts/vanadine_bold.ttf", 40)
+    GUI_LIFE_COUNTER_X = love.graphics.newFont("assets/fonts/Nevis.ttf", 35)
     GUI_BOSS_TITLE = love.graphics.newFont("assets/fonts/Nevis.ttf", 60)
     GUI_BIG = love.graphics.newFont("assets/fonts/vanadine_bold.ttf", 60)
     GUI_BIGLESS = love.graphics.newFont("assets/fonts/vanadine_bold.ttf", 45)

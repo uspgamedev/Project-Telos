@@ -26,7 +26,7 @@ function state:enter(_score)
     USE_BLUR_CANVAS = true
 
     --Handling Highscore
-    local score = _score
+    local score = PSYCHO_SCORE
     local pos = HS.isHighscore(score)
     if pos then
         --"Got a highscore" text
