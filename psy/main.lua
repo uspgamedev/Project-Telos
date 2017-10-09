@@ -43,6 +43,9 @@ require "classes.ui"
 require "classes.psycho_aim"
 require "classes.indicator"
 require "classes.ultrablast"
+require "classes.ultrablast_counter"
+require "classes.life_counter"
+require "classes.score_counter"
 Button = require "classes.button"
 
 --MY MODULES

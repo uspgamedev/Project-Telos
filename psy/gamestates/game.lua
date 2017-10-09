@@ -4,6 +4,9 @@ local Draw = require "draw"
 local Level = require "level_manager"
 local Color = require "classes.color.color"
 local Txt = require "classes.text"
+local UltraCounter = require "classes.ultrablast_counter"
+local LifeCounter = require "classes.life_counter"
+local ScoreCounter = require "classes.score_counter"
 local Audio = require "audio"
 --MODULE FOR THE GAMESTATE: GAME--
 
@@ -41,17 +44,17 @@ function state:enter()
     --Level part text
     Txt.create_game_gui(350, 10, "Part PI: Eletric Boogaloo", GUI_MED, nil, nil, nil, "level_part")
 
-    --Lives counter text
-    Txt.create_game_gui(10, 10, "lives: ", GUI_MED, p.lives, "down", GUI_MEDPLUS, "lives_counter")
-
-    --Ultrablast counter text
-    Txt.create_game_gui(10, 75, "Ultrablast: ", GUI_MED, p.ultrablast_counter, "down", GUI_MEDPLUS, "ultrablast_counter")
-
-    --Score counter text
-    Txt.create_game_gui(10, 140, "Score: ", GUI_MED, p.score, "down", GUI_MEDPLUS, "score_counter")
+    --Life counter
+    LifeCounter.create(25, 20)
 
     --Separator 1
-    Txt.create_game_gui(5, 185, "————", GUI_MEDPLUS, nil, nil, nil, "separator_1")
+    Txt.create_game_gui(15, 55, "————", GUI_MEDPLUSPLUS, nil, nil, nil, "separator_1")
+
+    --Ultrablast counter
+    UltraCounter.create(36, 118)
+
+    --Score counter
+    ScoreCounter.create(10)
 
     level.setup() --Make title and start BGM
     Level.start(level.part_1) --Start first part of level
@@ -128,6 +131,9 @@ function state:update(dt)
     Util.updateSubTp(m_dt, "rotating_indicator")
     Util.updateSubTp(m_dt, "ultrablast")
     Util.updateId(dt, "psycho_aim") --Is not affected by slowmo
+    Util.updateId(dt, "ultrablast_counter") --Is not affected by slowmo
+    Util.updateId(dt, "life_counter") --Is not affected by slowmo
+    Util.updateId(dt, "score_counter") --Is not affected by slowmo
 
     Util.checkCollision()
 

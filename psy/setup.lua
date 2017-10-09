@@ -39,8 +39,11 @@ function setup.config()
     HIGHSCORE_HIGHLIGHT_EFFECT_HANDLE = nil --Handle for tween effect applied on highscore text (when a position is highlighed)
 
     GAMEOVER_BUTTONS_LOCK = false --If player can press or activate the gameover buttons
+    PSYCHO_SCORE = 0 --Psycho score
 
     TUTORIAL = false --If the game gamestate should play the tutorial
+
+    MAX_ULTRABLAST = 3 --Max number of ultrablasts psycho has
 
     WINDOW_WIDTH = love.graphics.getWidth() --Current width of the game window
     WINDOW_HEIGHT = love.graphics.getHeight() --Current height of the game window
@@ -123,10 +126,14 @@ function setup.config()
     --FONT CONFIG--
     GUI_GAME_TITLE = love.graphics.newFont("assets/fonts/Nevis.ttf", 90)
     GUI_HIGHSCORE = love.graphics.newFont("assets/fonts/Nevis.ttf", 80)
+    GUI_LIFE_COUNTER = love.graphics.newFont("assets/fonts/Nevis.ttf", 40)
+    GUI_SCORE_COUNTER = love.graphics.newFont("assets/fonts/Nevis.ttf", 50)
+    GUI_LIFE_COUNTER_X = love.graphics.newFont("assets/fonts/Nevis.ttf", 35)
     GUI_BOSS_TITLE = love.graphics.newFont("assets/fonts/Nevis.ttf", 60)
     GUI_BIG = love.graphics.newFont("assets/fonts/vanadine_bold.ttf", 60)
     GUI_BIGLESS = love.graphics.newFont("assets/fonts/vanadine_bold.ttf", 45)
     GUI_BIGLESSLESS = love.graphics.newFont("assets/fonts/vanadine_bold.ttf", 30)
+    GUI_MEDPLUSPLUS = love.graphics.newFont("assets/fonts/Nevis.ttf", 35)
     GUI_MEDPLUS = love.graphics.newFont("assets/fonts/Nevis.ttf", 30)
     GUI_MEDMED = love.graphics.newFont("assets/fonts/Nevis.ttf", 25)
     GUI_MED = love.graphics.newFont("assets/fonts/Nevis.ttf", 20)
@@ -279,7 +286,7 @@ function setup.config()
     BG.create()
 
     --FPS Counter
-    Txt.create_gui(ORIGINAL_WINDOW_WIDTH - 100, 10, "FPS: ", GUI_MED, love.timer.getFPS(), "right", GUI_MED, "fps_counter")
+    Txt.create_gui(5, ORIGINAL_WINDOW_HEIGHT - 20, "FPS: ", GUI_MEDLESS, love.timer.getFPS(), "right", GUI_MEDLESS, "fps_counter")
 
     --SHADERS SETUP
     print("Setting up shaders")

@@ -579,15 +579,12 @@ function util.defaultKeyPressed(key)
     elseif key == '9' then
         p = util.findId("psycho")
         p.lives = p.lives + 10
-        util.findId("lives_counter").var = p.lives
     elseif key == '8' then
         p = util.findId("psycho")
         p.lives = 1
-        util.findId("lives_counter").var = p.lives
     elseif key == '7' then
         p = util.findId("psycho")
-        p.ultrablast_counter = p.ultrablast_counter + 10
-        util.findId("ultrablast_counter").var = p.ultrablast_counter
+        p.ultrablast_counter = MAX_ULTRABLAST
     elseif key == '6' then
         p = util.findId("psycho")
         print("psycho position",p.pos.x, p.pos.y)
