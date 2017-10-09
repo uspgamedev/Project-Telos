@@ -262,25 +262,27 @@ end
 
 --Increase psycho's lives
 function level_manager.giveLives(number, text)
-    local p, t, counter, dist, signal, handle
+    local p, t, counter, signal, handle
 
     p = Util.findId("psycho")
 
     if not p then return end
 
     p.lives = p.lives + number
-    Util.findId("lives_counter").var = p.lives
 
     t = Util.findId("lives_change")
-    counter = Util.findId("lives_counter")
-    dist = counter.var_font:getWidth(counter.var) --Get distance to draw the indicator
+    counter = Util.findId("life_counter")
+    local x = counter:getStartXPosition() + counter:getWidth() + 15 --Get distance to draw the indicator
+    local y = counter:getStartYPosition()
     if number >= 0 then signal = "+" else signal = "" end --Get correct sign
     if text then separator = "   " else separator = "" end
     text = text or '' --Correct text
 
+    local full_text = signal..number..separator..text
+
     --Create indicator, if there isn't one
     if not t then
-        t = Txt.create_game_gui(15 + dist, 43, signal..number..separator..text, GUI_MED, nil, "right", nil, "lives_change")
+        t = Txt.create_game_gui(x, y, full_text, GUI_MED, nil, "right", nil, "lives_change")
     --Else update the one already existing
     else
         --Remove previous effect
@@ -289,23 +291,19 @@ function level_manager.giveLives(number, text)
             t.level_handles["effect"] = nil
         end
         t.alpha = 255
-        t.pos.x = 15 + dist
-        t.text = signal..number.." "..text
+        t.text = full_text
     end
     --Make text stay still for a while, then fade-out
-    handle = LEVEL_TIMER:after(1,
+    t.level_handles["effect"] = LEVEL_TIMER:after(1,
                 function()
                     local handle
-                    handle = LEVEL_TIMER:tween(1, t, {alpha = 0}, 'in-linear',
+                    t.level_handles["effect"] = LEVEL_TIMER:tween(1, t, {alpha = 0}, 'in-linear',
                                 function()
                                     t.death = true
                                 end
                             )
-                    t.level_handles["effect"] = handle
                 end
             )
-    t.level_handles["effect"] = handle
-
 end
 
 --Increase psycho's score by 'value'
@@ -383,14 +381,17 @@ function level_manager.giveUltrablast(number, text)
 
     t = Util.findId("ultrablast_change")
     counter = Util.findId("ultrablast_counter")
-    dist = counter:getWidth() --Get distance to draw the indicator
     if number >= 0 then signal = "+" else signal = "" end --Get correct sign
     if text then separator = "   " else separator = "" end
     text = text or '' --Correct text
 
+    local full_text = signal..number..separator..text
+    local font = GUI_MED
+    local x = counter:getStartXPosition() + counter:getWidth()/2 - font:getWidth(full_text) --Get distance to draw the indicator
+    local y = counter:getStartYPosition() + counter:getHeight() + 10
     --Create indicator, if there isn't one
     if not t then
-        t = Txt.create_game_gui(dist, 108, signal..number..separator..text, GUI_MED, nil, "right", nil, "ultrablast_change")
+        t = Txt.create_game_gui(x, y, full_text, font, nil, "right", nil, "ultrablast_change")
     --Else update the one already existing
     else
         --Remove previous effect
@@ -399,23 +400,21 @@ function level_manager.giveUltrablast(number, text)
             t.level_handles["effect"] = nil
         end
         t.alpha = 255
-        t.pos.x = 15 + dist
-        t.text = signal..number.." "..text
+        t.pos.x = x
+        t.text = full_text
     end
 
     --Make text stay still for a while, then fade-out
-    handle = LEVEL_TIMER:after(1,
+    t.level_handles["effect"] = LEVEL_TIMER:after(1,
                 function()
                     local handle
-                    handle = LEVEL_TIMER:tween(1, t, {alpha = 0}, 'in-linear',
+                    t.level_handles["effect"] = LEVEL_TIMER:tween(1, t, {alpha = 0}, 'in-linear',
                                 function()
                                     t.death = true
                                 end
                             )
-                    t.level_handles["effect"] = handle
                 end
             )
-    t.level_handles["effect"] = handle
 
 end
 

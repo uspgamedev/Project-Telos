@@ -68,7 +68,7 @@ function UltrablastCounter:draw()
     local y = s.pos.y - s.charge_bar_h/2
     local w = s.charge_bar_w
     local h = s.charge_bar_h * (s.charge_bar_value/s.charge_bar_max)
-    love.graphics.rectangle("fill", x, y, w, h)
+    love.graphics.rectangle("fill", x, y + s.charge_bar_h - h, w, h)
     x = x - s.charge_bar_gap - s.charge_bar_line_width
     y = y - s.charge_bar_gap - s.charge_bar_line_width
     love.graphics.setLineWidth(s.charge_bar_line_width)
@@ -80,28 +80,31 @@ function UltrablastCounter:draw()
 
 end
 
-function UltrablastCounter:getStartPosition()
+function UltrablastCounter:getStartXPosition()
   return self.pos.x - self.ultra_first_radius - self.ultra_gap_width - self.ultra_ring_width
 end
+
+function UltrablastCounter:getStartYPosition()
+  return self.pos.y - self.ultra_first_radius - self.ultra_gap_width - self.ultra_ring_width
+end
+
 
 function UltrablastCounter:getIconWidth()
     return 2*self.ultra_first_radius + 2*self.ultra_gap_width + 2*self.ultra_ring_width + self.gap_between_ultras
 end
 
-function UltrablastCounter:getWidth()
-  local width = 0
-  width = width + self:getStartPosition()
-  if self.ultra_cont < MAX_ULTRABLAST then
-    for i = 1, self.ultra_cont + 1 do
-      width = width + self:getIconWidth()
-    end
-  else
-    for i = 1, self.ultra_cont do
-      width = width + self:getIconWidth()
-    end
-  end
+function UltrablastCounter:getIconHeight()
+    return 2*self.ultra_first_radius + 2*self.ultra_gap_width + 2*self.ultra_ring_width
+end
 
-  return width
+--Return max width the indicator can have
+function UltrablastCounter:getWidth()
+  return MAX_ULTRABLAST*self:getIconWidth()
+end
+
+--Return height the indicator can have
+function UltrablastCounter:getHeight()
+  return self:getIconHeight()
 end
 
 function UltrablastCounter:update(dt)
@@ -123,9 +126,6 @@ function UltrablastCounter:update(dt)
         end
       end
 
-      --Update change text
-      local txt = Util.findId("ultrablast_change")
-      if txt then txt.x = self:getWidth() end
     end
 
 
@@ -133,10 +133,9 @@ end
 
 --UTILITY FUNCTIONS--
 
---Create a regular aim with and id
 function funcs.create(x, y)
 
-    ultra = UltrablastCounter(x, y)
+    local ultra = UltrablastCounter(x, y)
 
     ultra:addElement(DRAW_TABLE.GAME_GUI, "game_gui", "ultrablast_counter")
 
