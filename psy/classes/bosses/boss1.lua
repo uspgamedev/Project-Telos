@@ -270,7 +270,7 @@ function Boss_1:changeStage()
         b.damage_taken = 0 --Reset boss life
         b.invincible = true --Can't take damage
         b.behaviour = Stage_3
-        b.life = 175 --Increase boss max life
+        b.life = 130 --Increase boss max life
         --Stop moving
         b.static = true
         b.isShooting = false
@@ -311,6 +311,9 @@ function Boss_1:changeStage()
         b.life = 18 --Increase boss max life
         LM.giveScore(1000, "boss killed")
 
+        --Lower music volume
+        bgm = SOUNDTRACK["next"] or SOUNDTRACK["current"]
+        Audio.fade_out(bgm, bgm:getVolume(), 0, 2)
 
         --Stop moving
         b.static = true
@@ -318,16 +321,16 @@ function Boss_1:changeStage()
 
         b.angry_af_roar:play()
         SFX["boss_roar"] = b.angry_af_roar
-        FX.shake(3, 4) --Shake screen
+        FX.shake(3, 5.2) --Shake screen
         F.circle{x_center = b.pos.x, y_center = b.pos.y, radius = 40, ind_mode = false, enemy = {SB}, number = 20, score_mul = 0}
 
 
         --Start stage 4
-        b.level_handles["begin_stage"] = LEVEL_TIMER:after(3.1,
+        b.level_handles["begin_stage"] = LEVEL_TIMER:after(.1,
             function()
 
                  --Move to the center
-                 b.level_handles["move"] = LEVEL_TIMER:after(1,
+                 b.level_handles["move"] = LEVEL_TIMER:after(.1,
                      function()
                          b.static = false --Make boss start to shrink
                      end
@@ -346,10 +349,18 @@ function Boss_1:changeStage()
         b.life = 10
         LM.giveScore(4000, "boss killed for real this time")
 
+        --Lower music volume
+        bgm = SOUNDTRACK["next"] or SOUNDTRACK["current"]
+        Audio.fade_out(bgm, bgm:getVolume(), 0, 4)
+
         --Remove growing tween
         if b.level_handles["grow_quick"] then
             LEVEL_TIMER:cancel(b.level_handles["grow_quick"])
         end
+
+        b.angry_af_roar:play()
+        SFX["boss_roar"] = b.angry_af_roar
+        FX.shake(4, 6) --Shake screen
 
         --Shrinks then dies
         b.level_handles["die"] = LEVEL_TIMER:tween(1.5, b, {r = 1}, 'in-back', function() b:kill() end)
@@ -390,7 +401,7 @@ function boss.create()
 
     --Lower music volume
     bgm = SOUNDTRACK["next"] or SOUNDTRACK["current"]
-    Audio.fade_out(bgm, bgm:getVolume(), bgm:getVolume()/10, .8)
+    Audio.fade_out(bgm, bgm:getVolume(), 0, 2)
 
     --Shake screen
     volume = .2
@@ -398,7 +409,7 @@ function boss.create()
         function()
             FX.shake(.5, 2)
             b.stomp:setVolume(volume)
-            volume = volume + .1
+            volume = volume + .2
             b.stomp:play()
         end,
         6
@@ -418,8 +429,9 @@ function boss.create()
                     LM.boss_title("GORGAMAX") --Boss title
 
                     --Increase music volume
+                    Audio.playBGM(BGM_BOSS_1)
                     bgm = SOUNDTRACK["next"] or SOUNDTRACK["current"]
-                    Audio.fade_in(bgm, bgm:getVolume(), BGM_VOLUME_LEVEL, 2)
+                    Audio.fade_in(bgm, bgm:getVolume(), BGM_VOLUME_LEVEL, .5)
 
                     FX.shake(.5, 5) --Shake screen
                     b.big_thump:play()
@@ -617,11 +629,15 @@ Stage_4 = function(b, dt)
 
     --Shrink
     if not b.static and not b.level_handles["shrink"] then
-        b.level_handles["shrink"] = LEVEL_TIMER:tween(6, b, {r = 25}, 'in-linear',
+        b.level_handles["shrink"] = LEVEL_TIMER:tween(5, b, {r = 25}, 'in-linear',
             --Grow quick
             function()
+                --Increases music volume
+                bgm = SOUNDTRACK["next"] or SOUNDTRACK["current"]
+                Audio.fade_out(bgm, bgm:getVolume(), BGM_VOLUME_LEVEL, .5)
+
                 b.invincible = false
-                b.level_handles["grow_quick"] = LEVEL_TIMER:tween(4, b, {r = 600}, 'in-linear',
+                b.level_handles["grow_quick"] = LEVEL_TIMER:tween(4.5, b, {r = 600}, 'in-linear',
                     function()
                         b.stage = 5
                         b:changeStage() --Change boss stage

@@ -240,9 +240,10 @@ function setup.config()
     FADE_OUT_HANDLE = nil
     AUDIO_TIMER_HANDLE = nil
     --Tracks
-    BGM_MENU = love.audio.newSource("assets/bgm/Flying Carrots 2.mp3")
-    BGM_LEVEL_1 = love.audio.newSource("assets/bgm/Limitless.mp3")
+    BGM_MENU = love.audio.newSource("assets/bgm/Flying Carrots Remix.mp3")
+    BGM_LEVEL_1 = love.audio.newSource("assets/bgm/Limitless Remix.mp3")
     BGM_LEVEL_2 = love.audio.newSource("assets/bgm/Through Hiperboles.ogg")
+    BGM_BOSS_1 = love.audio.newSource("assets/bgm/Boss Theme 1.mp3")
     --SFX
     SFX_PSYCHOBALL_SHOT = love.audio.newSource("assets/sfx/general_sfxs/snd_psychoball_shot.mp3")
     SFX_PSYCHOBALL_SHOT:setVolume(.2*SFX_VOLUME_MULT)
