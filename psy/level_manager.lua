@@ -272,17 +272,21 @@ function level_manager.giveLives(number, text)
 
     t = Util.findId("lives_change")
     counter = Util.findId("life_counter")
-    local x = counter:getStartXPosition() + counter:getWidth() + 15 --Get distance to draw the indicator
-    local y = counter:getStartYPosition()
-    if number >= 0 then signal = "+" else signal = "" end --Get correct sign
-    if text then separator = "   " else separator = "" end
-    text = text or '' --Correct text
 
+    counter:update(0)
+
+    if number >= 0 then signal = "+" else signal = "" end --Get correct sign
+    if text then separator = " " else separator = "" end
+    text = text or '' --Correct text
     local full_text = signal..number..separator..text
+    local font = GUI_MED
+
+    local x = counter:getStartXPosition() + counter:getWidth() + 15 --Get distance to draw the indicator
+    local y = counter:getStartYPosition() + counter:getHeight()/2 - font:getHeight(full_text)/2
 
     --Create indicator, if there isn't one
     if not t then
-        t = Txt.create_game_gui(x, y, full_text, GUI_MED, nil, "right", nil, "lives_change")
+        t = Txt.create_game_gui(x, y, full_text, font, nil, "right", nil, "lives_change")
     --Else update the one already existing
     else
         --Remove previous effect
@@ -308,7 +312,7 @@ end
 
 --Increase psycho's score by 'value'
 function level_manager.giveScore(number, text)
-    local p, t, counter, handle, dist, signal
+    local p, t, counter, handle, signal
 
     p = Util.findId("psycho")
 
@@ -316,7 +320,6 @@ function level_manager.giveScore(number, text)
 
     --Update main score
     p.score = p.score + number
-    Util.findId("score_counter").var = p.score
 
     --Update life score
     p.life_score = p.life_score + number
@@ -330,14 +333,19 @@ function level_manager.giveScore(number, text)
     --Score
     t = Util.findId("score_change")
     counter = Util.findId("score_counter")
-    dist = counter.var_font:getWidth(counter.var) --Get distance to draw the indicator
     if number >= 0 then signal = "+" else signal = "" end --Get correct sign
-    if text then separator = "   " else separator = "" end
+    if text then separator = " " else separator = "" end
     text = text or '' --Correct text
+    local full_text = signal..number..separator..text
+
+    local font = GUI_MED
+    --Get position to draw the indicator
+    local x = ORIGINAL_WINDOW_WIDTH - counter:getGap() - font:getWidth(full_text)
+    local y = counter:getHeight() + 5
 
     --Create indicator, if there isn't one
     if not t then
-        t = Txt.create_game_gui(15 + dist, 173, signal..number..separator..text, GUI_MED, nil, "right", nil, "score_change")
+        t = Txt.create_game_gui(x, y, full_text, font, nil, "right", nil, "score_change")
     --Else update the one already existing
     else
         --Remove previous effect
@@ -346,23 +354,21 @@ function level_manager.giveScore(number, text)
             t.level_handles["effect"] = nil
         end
         t.alpha = 255
-        t.pos.x = 15 + dist
-        t.text = signal..number.." "..text
+        t.pos.x = x
+        t.text = full_text
     end
 
     --Make text stay still for a while, then fade-out
-    handle = LEVEL_TIMER:after(1,
+    t.level_handles["effect"] = LEVEL_TIMER:after(1,
                 function()
                     local handle
-                    handle = LEVEL_TIMER:tween(1, t, {alpha = 0}, 'in-linear',
+                    t.level_handles["effect"] = LEVEL_TIMER:tween(1, t, {alpha = 0}, 'in-linear',
                                 function()
                                     t.death = true
                                 end
                             )
-                    t.level_handles["effect"] = handle
                 end
             )
-    t.level_handles["effect"] = handle
 
 end
 
@@ -387,7 +393,7 @@ function level_manager.giveUltrablast(number, text)
 
     local full_text = signal..number..separator..text
     local font = GUI_MED
-    local x = counter:getStartXPosition() + counter:getWidth()/2 - font:getWidth(full_text) --Get distance to draw the indicator
+    local x = counter:getStartXPosition() + counter:getWidth()/2 - font:getWidth(full_text)/2 --Get distance to draw the indicator
     local y = counter:getStartYPosition() + counter:getHeight() + 10
     --Create indicator, if there isn't one
     if not t then

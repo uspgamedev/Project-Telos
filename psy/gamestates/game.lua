@@ -6,6 +6,7 @@ local Color = require "classes.color.color"
 local Txt = require "classes.text"
 local UltraCounter = require "classes.ultrablast_counter"
 local LifeCounter = require "classes.life_counter"
+local ScoreCounter = require "classes.score_counter"
 local Audio = require "audio"
 --MODULE FOR THE GAMESTATE: GAME--
 
@@ -52,9 +53,8 @@ function state:enter()
     --Ultrablast counter
     UltraCounter.create(36, 118)
 
-    --Score counter text
-    Txt.create_game_gui(10, 140, "Score: ", GUI_MED, p.score, "down", GUI_MEDPLUS, "score_counter")
-
+    --Score counter
+    ScoreCounter.create(10)
 
     level.setup() --Make title and start BGM
     Level.start(level.part_1) --Start first part of level
@@ -133,6 +133,7 @@ function state:update(dt)
     Util.updateId(dt, "psycho_aim") --Is not affected by slowmo
     Util.updateId(dt, "ultrablast_counter") --Is not affected by slowmo
     Util.updateId(dt, "life_counter") --Is not affected by slowmo
+    Util.updateId(dt, "score_counter") --Is not affected by slowmo
 
     Util.checkCollision()
 

@@ -12,14 +12,13 @@ local funcs = {}
 --LIVES COUNTER CLASS--
 ---------------------------
 
---Draws all ultrablast icons
+--Draws player life amount
 LifeCounter = Class{
     __includes = {ELEMENT},
     init = function(self, _x, _y)
 
         ELEMENT.init(self)
-        self.pos = Vector(_x, _y) --Center position of first ultrablat icon
-
+        self.pos = Vector(_x, _y)
         self.alpha = 255
 
         self.life_cont = 0 --Number of lives player have
@@ -27,6 +26,7 @@ LifeCounter = Class{
         --Fonts
         self.life_font = GUI_LIFE_COUNTER
         self.x_font = GUI_LIFE_COUNTER_X
+        self.x_text = 'x'
 
         --Psycho icon graphic constants
         self.psycho_icon_radius = 20
@@ -59,7 +59,7 @@ function LifeCounter:draw()
   x = x + font:getWidth(text) + s.gap_width
   y = y + y_offset
   font = s.x_font
-  text = "x"
+  text = s.x_text
   love.graphics.setFont(font)
   love.graphics.print(text, x, y)
 
@@ -83,7 +83,18 @@ end
 --Return width of the indicator
 function LifeCounter:getWidth()
   local s = self
-  return s.life_font:getWidth(s.life_cont) + s.gap_width + s.x_font:getWidth("X") + s.gap_width + 2*s.psycho_icon_radius
+  return s.life_font:getWidth(s.life_cont) + s.gap_width + s.x_font:getWidth(s.x_text) + s.gap_width + 2*s.psycho_icon_radius
+end
+
+--Return height of the indicator
+function LifeCounter:getHeight()
+  local s = self
+
+  local life_cont_h = s.life_font:getHeight(s.life_cont)
+  local x_h = s.x_font:getHeight(s.x_text)
+  local icon_h = s.psycho_icon_radius*2
+
+  return math.max(life_cont_h, x_h, icon_h)
 end
 
 function LifeCounter:update(dt)

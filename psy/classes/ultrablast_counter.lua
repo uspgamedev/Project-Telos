@@ -18,7 +18,7 @@ UltrablastCounter = Class{
     init = function(self, _x, _y)
 
         ELEMENT.init(self)
-        self.pos = Vector(_x, _y) --Center position of first ultrablat icon
+        self.pos = Vector(_x, _y) --Center position of first ultrablast icon
 
         self.alpha = 255
 

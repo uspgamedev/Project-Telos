@@ -19,14 +19,14 @@ local chooseDeathMessage
 
 local state = {}
 
-function state:enter()
+function state:enter(_score)
     local t, b
 
     --Blur gamescreen
     USE_BLUR_CANVAS = true
 
     --Handling Highscore
-    local score = Util.findId("score_counter").var
+    local score = _score
     local pos = HS.isHighscore(score)
     if pos then
         --"Got a highscore" text
