@@ -28,7 +28,6 @@ function audio.playBGM(bgm)
     end
     if FADE_OUT_HANDLE then
         AUDIO_TIMER:cancel(FADE_OUT_HANDLE)
-
     end
     if AUDIO_TIMER_HANDLE then
         AUDIO_TIMER:cancel(AUDIO_TIMER_HANDLE)
