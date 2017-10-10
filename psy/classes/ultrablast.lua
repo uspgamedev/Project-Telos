@@ -45,7 +45,6 @@ function Ultrablast:draw()
     Color.set(color)
     love.graphics.setLineWidth(ultra.line_width)
     love.graphics.circle(ultra.mode, ultra.pos.x, ultra.pos.y, ultra.r)
-
 end
 
 function Ultrablast:takeHit()
@@ -107,6 +106,7 @@ function ultrablast.create(x, y, c, power)
     ultra = Ultrablast(x, y, c, power)
 
     ultra:addElement(DRAW_TABLE.L4, st)
+    SFX_ULTRABLAST:play()
 
     return ultra
 end
