@@ -103,8 +103,6 @@ function state:update(dt)
         Gamestate.switch(GS.GAMEOVER)
     end
 
-    Audio.cleanupSFX() --Remove sfx that have ended
-
     Util.updateTimers(dt)
 
     Util.updateFPS()

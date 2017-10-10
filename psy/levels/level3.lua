@@ -39,7 +39,7 @@ function level_functions.setup()
 
     --Start Level
     LM.level_title("YOU WON!!!")
-    Audio.playBGM(BGM_LEVEL_2)
+    Audio.playBGM(BGM.level_2)
 
 end
 

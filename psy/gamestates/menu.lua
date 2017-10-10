@@ -146,7 +146,7 @@ function state:enter()
 
 
     --AUDIO--
-    Audio.playBGM(BGM_MENU)
+    Audio.playBGM(BGM.menu)
 
     --SHAKE--
     if SHAKE_HANDLE then
@@ -215,7 +215,7 @@ function state:mousepressed(x, y, button)
         Button.checkCollision(x,y)
     end
 
-    SFX_PLAY_BUTTON:play()
+    SFX.play_button:play()
 
 end
 

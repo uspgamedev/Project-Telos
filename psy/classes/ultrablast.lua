@@ -106,7 +106,7 @@ function ultrablast.create(x, y, c, power)
     ultra = Ultrablast(x, y, c, power)
 
     ultra:addElement(DRAW_TABLE.L4, st)
-    SFX_ULTRABLAST:play()
+    SFX.ultrablast:play()
 
     return ultra
 end

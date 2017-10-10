@@ -57,15 +57,6 @@ function audio.playBGM(bgm)
     end
 end
 
---Remove any sfx that have ended
-function audio.cleanupSFX()
-    for i,sfx in pairs(SFX) do
-        if sfx:isStopped() then
-            SFX[i] = nil
-        end
-    end
-end
-
 --Fade an audio source in d seconds, from value ini to fin
 function audio.fade_in(s, ini, fin, d)
     local delay, rate

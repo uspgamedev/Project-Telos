@@ -310,7 +310,7 @@ function level_functions.setup()
 
     --Start Level
     LM.level_title("I - THE FALL OF PSYCHO")
-    Audio.playBGM(BGM_LEVEL_1)
+    Audio.playBGM(BGM.level_1)
 
 end
 

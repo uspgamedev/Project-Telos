@@ -247,27 +247,39 @@ function setup.config()
     FADE_OUT_HANDLE = nil
     AUDIO_TIMER_HANDLE = nil
     --Tracks
-    BGM_MENU = love.audio.newSource("assets/bgm/Flying Carrots Remix.mp3")
-    BGM_LEVEL_1 = love.audio.newSource("assets/bgm/Limitless Remix.mp3")
-    BGM_LEVEL_2 = love.audio.newSource("assets/bgm/Through Hiperboles.ogg")
-    BGM_BOSS_1 = love.audio.newSource("assets/bgm/Boss Theme 1.mp3")
+    BGM = {
+        menu = love.audio.newSource("assets/bgm/Flying Carrots Remix.mp3"),
+        level_1 = love.audio.newSource("assets/bgm/Limitless Remix.mp3"),
+        level_2 = love.audio.newSource("assets/bgm/Through Hiperboles.ogg"),
+        boss_1 = love.audio.newSource("assets/bgm/Boss Theme 1.mp3"),
+    }
     --SFX
-    SFX_PSYCHOBALL_SHOT = love.audio.newSource("assets/sfx/general_sfxs/snd_psychoball_shot.mp3")
-    SFX_PSYCHOBALL_SHOT:setVolume(.2*SFX_VOLUME_MULT)
-    SFX_PSYCHOBALL_DIES = love.audio.newSource("assets/sfx/general_sfxs/snd_psychoball_dies.mp3")
-    SFX_PSYCHOBALL_DIES:setVolume(1*SFX_VOLUME_MULT)
-    SFX_HIT_SIMPLE = love.audio.newSource("assets/sfx/general_sfxs/snd_hit_simple_ball.mp3")
-    SFX_HIT_SIMPLE:setVolume(.5*SFX_VOLUME_MULT)
-    SFX_HIT_DOUBLE = love.audio.newSource("assets/sfx/general_sfxs/snd_hit_double_ball.mp3")
-    SFX_HIT_DOUBLE:setVolume(.5*SFX_VOLUME_MULT)
-    SFX_GENERIC_BUTTON = love.audio.newSource ("assets/sfx/general_sfxs/snd_generic_button.mp3")
-    SFX_GENERIC_BUTTON:setVolume(.5*SFX_VOLUME_MULT)
-    SFX_BACK_BUTTON = love.audio.newSource ("assets/sfx/general_sfxs/snd_back_button.mp3")
-    SFX_BACK_BUTTON:setVolume(.5*SFX_VOLUME_MULT)
-    SFX_PLAY_BUTTON = love.audio.newSource("assets/sfx/general_sfxs/snd_button_play.mp3")
-    SFX_PLAY_BUTTON:setVolume(.3*SFX_VOLUME_MULT)
-    SFX_ULTRABLAST = love.audio.newSource("assets/sfx/general_sfxs/snd_ultrablast.mp3")
-    SFX_ULTRABLAST:setVolume(1*SFX_VOLUME_MULT)
+    SFX = {
+        --Game Generic SFXs
+        psychoball_shot = love.audio.newSource("assets/sfx/general_sfxs/snd_psychoball_shot.mp3"),
+        hit_simple = love.audio.newSource("assets/sfx/general_sfxs/snd_hit_simple_ball.mp3"),
+        hit_double = love.audio.newSource("assets/sfx/general_sfxs/snd_hit_double_ball.mp3"),
+        psychoball_dies = love.audio.newSource("assets/sfx/general_sfxs/snd_psychoball_dies.mp3"),
+        generic_button = love.audio.newSource ("assets/sfx/general_sfxs/snd_generic_button.mp3"),
+        back_button = love.audio.newSource ("assets/sfx/general_sfxs/snd_back_button.mp3"),
+        play_button = love.audio.newSource("assets/sfx/general_sfxs/snd_button_play.mp3"),
+        ultrablast = love.audio.newSource("assets/sfx/general_sfxs/snd_ultrablast.mp3"),
+        --Boss 1 SFXs
+        b1_stomp = love.audio.newSource("assets/sfx/boss1/stomp.wav"),
+        b1_big_thump = love.audio.newSource("assets/sfx/boss1/big_thump.wav"),
+        b1_long_roar =  love.audio.newSource("assets/sfx/boss1/long_roar.wav"),
+        b1_hurt_roar =  love.audio.newSource("assets/sfx/boss1/hurt_roar.wav"),
+        b1_angry_hurt_roar =  love.audio.newSource("assets/sfx/boss1/angry_hurt_roar.wav"),
+        b1_angry_af_roar =  love.audio.newSource("assets/sfx/boss1/angry_af_roar.wav"),
+    }
+    SFX.hit_simple:setVolume(.2*SFX_VOLUME_MULT)
+    SFX.hit_double:setVolume(.2*SFX_VOLUME_MULT)
+    SFX.generic_button:setVolume(.5*SFX_VOLUME_MULT)
+    SFX.psychoball_shot:setVolume(.2*SFX_VOLUME_MULT)
+    SFX.back_button:setVolume(.5*SFX_VOLUME_MULT)
+    SFX.play_button:setVolume(.3*SFX_VOLUME_MULT)
+    SFX.ultrablast:setVolume(1*SFX_VOLUME_MULT)
+    SFX.psychoball_dies:setVolume(1*SFX_VOLUME_MULT)
 
     --DEATH MESSAGE
     DEATH_TEXTS = {

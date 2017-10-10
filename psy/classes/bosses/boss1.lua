@@ -71,13 +71,6 @@ Boss_1 = Class{
         self.validPositions[3] = Vector(ORIGINAL_WINDOW_WIDTH - self.r - 5, ORIGINAL_WINDOW_HEIGHT - self.r  - 5) --Bottom Right
         self.validPositions[4] = Vector(self.r + 5, ORIGINAL_WINDOW_HEIGHT - self.r - 5) --Bottom Left
 
-        self.stomp = love.audio.newSource("assets/sfx/boss1/stomp.wav")
-        self.big_thump = love.audio.newSource("assets/sfx/boss1/big_thump.wav")
-        self.long_roar =  love.audio.newSource("assets/sfx/boss1/long_roar.wav")
-        self.hurt_roar =  love.audio.newSource("assets/sfx/boss1/hurt_roar.wav")
-        self.angry_hurt_roar =  love.audio.newSource("assets/sfx/boss1/angry_hurt_roar.wav")
-        self.angry_af_roar =  love.audio.newSource("assets/sfx/boss1/angry_af_roar.wav")
-
         self.behaviour = Stage_1_and_2 --What behaviour this boss is following
         self.tp = "boss_one" --Type of this class
     end
@@ -241,8 +234,7 @@ function Boss_1:changeStage()
             LEVEL_TIMER:cancel(b.level_handles["move"])
         end
 
-        b.hurt_roar:play()
-        SFX["boss_roar"] = b.hurt_roar
+        SFX.b1_hurt_roar:play()
         FX.shake(2, 3) --Shake screen
         F.circle{x_center = b.pos.x, y_center = b.pos.y, radius = 40, speed_m = 1.1, ind_mode = false, enemy = {SB, DB}, number = 20, score_mul = 0}
 
@@ -281,8 +273,7 @@ function Boss_1:changeStage()
             LEVEL_TIMER:cancel(b.level_handles["move"])
         end
 
-        b.angry_hurt_roar:play()
-        SFX["boss_roar"] = b.angry_hurt_roar
+        SFX.b1_angry_hurt_roar:play()
         FX.shake(2.5, 4) --Shake screen
         F.circle{x_center = b.pos.x, y_center = b.pos.y, radius = 40, speed_m = 1.1, ind_mode = false, enemy = {DB}, number = 20, score_mul = 0}
 
@@ -319,8 +310,7 @@ function Boss_1:changeStage()
         b.static = true
         if b.indicator then b.indicator.death = true end --Remove pending indicator
 
-        b.angry_af_roar:play()
-        SFX["boss_roar"] = b.angry_af_roar
+        SFX.b1_angry_af_roar:play()
         FX.shake(3, 5.2) --Shake screen
         F.circle{x_center = b.pos.x, y_center = b.pos.y, radius = 40, ind_mode = false, enemy = {SB}, number = 20, score_mul = 0}
 
@@ -358,8 +348,7 @@ function Boss_1:changeStage()
             LEVEL_TIMER:cancel(b.level_handles["grow_quick"])
         end
 
-        b.angry_af_roar:play()
-        SFX["boss_roar"] = b.angry_af_roar
+        SFX.b1_angry_af_roar:play()
         FX.shake(4, 6) --Shake screen
 
         --Shrinks then dies
@@ -408,9 +397,9 @@ function boss.create()
     shadow.level_handles["shake_screen"] = LEVEL_TIMER:every(1.5,
         function()
             FX.shake(.5, 2)
-            b.stomp:setVolume(volume)
+            SFX.b1_stomp:setVolume(volume)
             volume = volume + .2
-            b.stomp:play()
+            SFX.b1_stomp:play()
         end,
         6
     )
@@ -429,12 +418,12 @@ function boss.create()
                     LM.boss_title("GORGAMAX") --Boss title
 
                     --Increase music volume
-                    Audio.playBGM(BGM_BOSS_1)
+                    Audio.playBGM(BGM.boss_1)
                     bgm = SOUNDTRACK["next"] or SOUNDTRACK["current"]
                     Audio.fade_in(bgm, bgm:getVolume(), BGM_VOLUME_LEVEL, .5)
 
                     FX.shake(.5, 5) --Shake screen
-                    b.big_thump:play()
+                    SFX.b1_big_thump:play()
 
                     --SHOW BOSS NAME
 
@@ -443,8 +432,7 @@ function boss.create()
                         function()
 
                             --ROAR AND SHAKE
-                            b.long_roar:play()
-                            SFX["boss_roar"] = b.long_roar
+                            SFX.b1_long_roar:play()
                             FX.shake(2, 3) --Shake screen
                             F.circle{x_center = b.pos.x, y_center = b.pos.y, radius = 40, speed_m = 1.1, ind_mode = false, enemy = {SB}, number = 20, score_mul = 0}
 

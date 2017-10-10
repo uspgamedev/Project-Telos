@@ -102,11 +102,11 @@ end
 
 function Psy:shoot(x,y)
     local p, bullet, dir, c, color_table, w, h, scale
-     SFX_PSYCHOBALL_SHOT:play()
     p = self
     if p.shootLocked then return end
 
 
+    SFX.psychoball_shot:play()
 
     --Fix mouse position click to respective distance
     w, h = FreeRes.windowDistance()
@@ -233,7 +233,7 @@ function Psy:kill()
 
     if p.lives <= 0 then return end
 
-    SFX_PSYCHOBALL_DIES:play()
+    SFX.psychoball_dies:play()
 
     LM.giveLives(-1) --Update life
 

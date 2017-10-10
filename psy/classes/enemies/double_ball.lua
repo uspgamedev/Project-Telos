@@ -46,7 +46,7 @@ function Double_Ball:kill(gives_score, mode)
             LM.giveScore(math.ceil(self.score_value*self.score_mul))
         end
 
-        SFX_HIT_DOUBLE:play()
+        SFX.hit_double:play()
 
     end
 

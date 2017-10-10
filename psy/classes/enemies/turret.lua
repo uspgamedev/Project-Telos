@@ -118,7 +118,7 @@ function Turret:kill(gives_score)
 
         if gives_score then
             LM.giveScore(math.ceil(self.score_value*self.score_mul))
-            SFX_HIT_SIMPLE:play()
+            SFX.hit_simple:play()
         end
 
         FX.explosion(self.pos.x, self.pos.y, self.r, self.color)
