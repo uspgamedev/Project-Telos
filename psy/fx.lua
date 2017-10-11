@@ -80,8 +80,9 @@ function fx.psychoExplosion(p)
 
 
     --Refrains player from interacting with psycho
-    p.controlsLocked = true
-    p.shootLocked = true
+    p.can_move = false
+    p.can_shoot = false
+    p.can_ultra = false
 
     --Config psycho so he disapears
     p.invisible = true
@@ -147,8 +148,16 @@ function fx.psychoExplosion(p)
             end
 
             --Fix psycho for invincible-blinking effect
-            p.controlsLocked = false
-            p.shootLocked = false
+            if not DONT_ENABLE_SHOOTING_AFTER_DEATH then
+               p.can_shoot = true
+            end
+            if not DONT_ENABLE_ULTRA_AFTER_DEATH then
+               p.can_ultra = true
+            end
+            if not DONT_ENABLE_MOVING_AFTER_DEATH then
+               p.can_move = true
+            end
+
             p.invisible = false
             Color.copy(p.color, color) --Make psycho the particles color
             p:startInvincible()

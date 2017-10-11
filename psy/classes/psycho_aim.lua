@@ -52,8 +52,8 @@ function Aim:draw()
 
     --Draw the line
 
-    --Don't draw line if psycho is exploding
-    if not p.shootLocked or not p.controlsLocked then
+    --Draw line only if psycho can shoot
+    if p.can_shoot then
         Color.set(color)
         love.graphics.setLineWidth(aim.line_width)
         love.graphics.line(aim.pos.x, aim.pos.y, aim.pos.x + aim.distance*aim.dir.x, aim.pos.y + aim.distance*aim.dir.y)
@@ -65,8 +65,8 @@ function Aim:draw()
 
     Color.set(color)
     size = aim.circle_size
-    --Shrink size of aim when psycho is exploding
-    if p.shootLocked and p.controlsLocked then size = 3 end
+    --Shrink size of aim when psycho can't shoot
+    if not p.can_shoot then size = 3 end
     Draw_Smooth_Circle(aim.mouse_pos.x, aim.mouse_pos.y, size)
 
 end
@@ -100,7 +100,7 @@ end
 --UTILITY FUNCTIONS--
 
 --Create a regular aim with and id
-function aim_functions.create(id)
+function aim_functions.create(id, remain_invisible)
     local aim
 
     id = id or "aim" --subtype
@@ -109,12 +109,14 @@ function aim_functions.create(id)
 
     aim:addElement(DRAW_TABLE.L5, nil, id)
 
-    --Fade in the aim
-    LEVEL_TIMER:after(2.2,
-        function()
-            LEVEL_TIMER:tween(.3, aim, {alpha = 90}, 'in-linear')
-        end
-    )
+    if not remain_invisible then
+      --Fade in the aim
+      LEVEL_TIMER:after(2.2,
+          function()
+              LEVEL_TIMER:tween(.3, aim, {alpha = 90}, 'in-linear')
+          end
+      )
+    end
 
     return aim
 end

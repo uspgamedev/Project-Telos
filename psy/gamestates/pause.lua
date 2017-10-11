@@ -85,6 +85,10 @@ function state:update(dt)
             TUTORIAL = false
             FIRST_TIME = false
 
+            DONT_ENABLE_SHOOTING_AFTER_DEATH = false
+            DONT_ENABLE_ULTRA_AFTER_DEATH = false
+            DONT_ENABLE_MOVING_AFTER_DEATH = false
+
             --Turn fps counter visible
             txt = Util.findId("fps_counter")
             txt.level_handles["become_visible"] = LEVEL_TIMER:tween(1, txt, {alpha = 255}, 'in-linear')

@@ -14,7 +14,7 @@ function level_functions.part_1()
 
     CONTINUE = 3 --Setup continue variable to later continue from where you started
 
-    LM.level_part("Part 1 - Boom shakalaka")
+    LM.level_part("-- to be continued --")
 
     LM.wait(3)
 
@@ -38,7 +38,7 @@ end
 function level_functions.setup()
 
     --Start Level
-    LM.level_title("YOU WON!!!")
+    LM.level_title("TO BE CONTINUED")
     Audio.playBGM(BGM.level_2)
 
 end

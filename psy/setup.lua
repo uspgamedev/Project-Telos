@@ -18,10 +18,6 @@ function setup.config()
     SAVE_VERSION = 1.1 --Current save version
     args = FM.load() --Load from savefile (or create one if needed)
 
-
-    --IMAGES--
-    PIXEL = love.graphics.newImage("assets/images/pixel.png") -- Pixel for shaders
-
     --RANDOM SEED--
     love.math.setRandomSeed( os.time() )
     math.random = love.math.random --Override lua random function for love2d random function
@@ -42,6 +38,9 @@ function setup.config()
     PSYCHO_SCORE = 0 --Psycho score
 
     TUTORIAL = false --If the game gamestate should play the tutorial
+    DONT_ENABLE_SHOOTING_AFTER_DEATH = false --for tutorial only
+    DONT_ENABLE_ULTRA_AFTER_DEATH = false --for tutorial only
+    DONT_ENABLE_MOVING_AFTER_DEATH = false --for tutorial only
 
     MAX_ULTRABLAST = 3 --Max number of ultrablasts psycho has
 
@@ -123,13 +122,32 @@ function setup.config()
     love.window.setMode(WINDOW_WIDTH, WINDOW_HEIGHT, {resizable = true, minwidth = 800, minheight = 600})
     FreeRes.setScreen()
 
+    --IMAGES--
+
+    print("Setting up images...")
+
+    PIXEL = love.graphics.newImage("assets/images/pixel.png") -- Pixel for shaders
+    IMG = {
+      mouse_icon = love.graphics.newImage("assets/images/mouse_icon.png"),
+      left_mouse_button_icon = love.graphics.newImage("assets/images/left_mouse_button.png"),
+      right_mouse_button_icon = love.graphics.newImage("assets/images/right_mouse_button.png")
+    }
+
+    print("Finished setting up images")
+
     --FONT CONFIG--
-    GUI_GAME_TITLE = love.graphics.newFont("assets/fonts/Nevis.ttf", 90)
-    GUI_HIGHSCORE = love.graphics.newFont("assets/fonts/Nevis.ttf", 80)
+
+    print("Setting up fonts...")
+
+    --Specific sizes
+    GUI_LEVEL_TITLE = love.graphics.newFont("assets/fonts/Nevis.ttf", 90)
+    GUI_HIGHSCORE = love.graphics.newFont("assets/fonts/Nevis.ttf", 85)
     GUI_LIFE_COUNTER = love.graphics.newFont("assets/fonts/Nevis.ttf", 40)
     GUI_SCORE_COUNTER = love.graphics.newFont("assets/fonts/Nevis.ttf", 50)
     GUI_LIFE_COUNTER_X = love.graphics.newFont("assets/fonts/Nevis.ttf", 35)
     GUI_BOSS_TITLE = love.graphics.newFont("assets/fonts/Nevis.ttf", 60)
+    GUI_TUTORIAL_ICON = love.graphics.newFont("assets/fonts/Nevis.ttf", 24)
+    --Generic sizes
     GUI_BIG = love.graphics.newFont("assets/fonts/vanadine_bold.ttf", 60)
     GUI_BIGLESS = love.graphics.newFont("assets/fonts/vanadine_bold.ttf", 45)
     GUI_BIGLESSLESS = love.graphics.newFont("assets/fonts/vanadine_bold.ttf", 30)
@@ -139,11 +157,79 @@ function setup.config()
     GUI_MED = love.graphics.newFont("assets/fonts/Nevis.ttf", 20)
     GUI_MEDLESS = love.graphics.newFont("assets/fonts/Nevis.ttf", 15)
 
+    print("Finished setting up fonts")
+
+
     --CAMERA--
     CAM = Camera(ORIGINAL_WINDOW_WIDTH/2, ORIGINAL_WINDOW_HEIGHT/2) --Set camera position to center of screen
     MENU_CAM = Camera(ORIGINAL_WINDOW_WIDTH/2, ORIGINAL_WINDOW_HEIGHT/2) --Set camera position to center of screen, camera used for menu transitions
 
+    --DEATH MESSAGE
+    DEATH_TEXTS = {
+        "Game Over", "No one will miss you", "You now lay with the dead",
+        "You ceased to exist", "Your mother wouldn't be proud","Snake? Snake? Snaaaaaaaaaake",
+        "Already?", "All your base are belong to BALLS", "You wake up and realize it was all a nightmare",
+        "MIND BLOWN", "Just one more", "USPGameDev Rulez", "A winner is not you", "Have a nice death",
+        "There is no cake also you died", "You have died of dysentery", "You failed", "BAD END",
+        "Embrace your defeat", "Balls have no mercy", "You have no balls left", "Nevermore...",
+        "Rest in Peace", "Die in shame", "You've found your end", "KIA", "Status: Deceased",
+        "Requiescat in Pace", "Valar Morghulis", "What is dead may never die", "Mission Failed",
+        "It's dead Jim", "Arrivederci", "FRANKIE SAYS RELAX, YOU DIED"
+    }
+
+    --AUDIO--
+    print("Setting up audio...")
+
+    SOUNDTRACK = {}
+    SOUNDTRACK["current"] = nil --Current soudntrack playing
+    SOUNDTRACK["next"] = nil  --Next soundtrack to play (for cross-fading)
+    SFX = {} --Table with all sound effects playing
+    BGM_VOLUME_LEVEL = 1 --Volume of BGM
+    SFX_VOLUME_MULT = 1 --Volume multiplier for SFX
+    --Useful handles for audio manipulation
+    FADE_IN_HANDLE = nil
+    FADE_OUT_HANDLE = nil
+    AUDIO_TIMER_HANDLE = nil
+    --Tracks
+    BGM = {
+        menu = love.audio.newSource("assets/bgm/Flying Carrots Remix.mp3"),
+        level_1 = love.audio.newSource("assets/bgm/Limitless Remix.mp3"),
+        level_2 = love.audio.newSource("assets/bgm/Through Hiperboles.ogg"),
+        boss_1 = love.audio.newSource("assets/bgm/Boss Theme 1.mp3"),
+    }
+    --SFX
+    SFX = {
+        --Game Generic SFXs
+        psychoball_shot = love.audio.newSource("assets/sfx/general_sfxs/snd_psychoball_shot.mp3"),
+        hit_simple = love.audio.newSource("assets/sfx/general_sfxs/snd_hit_simple_ball.mp3"),
+        hit_double = love.audio.newSource("assets/sfx/general_sfxs/snd_hit_double_ball.mp3"),
+        psychoball_dies = love.audio.newSource("assets/sfx/general_sfxs/snd_psychoball_dies.mp3"),
+        generic_button = love.audio.newSource ("assets/sfx/general_sfxs/snd_generic_button.mp3"),
+        back_button = love.audio.newSource ("assets/sfx/general_sfxs/snd_back_button.mp3"),
+        play_button = love.audio.newSource("assets/sfx/general_sfxs/snd_button_play.mp3"),
+        ultrablast = love.audio.newSource("assets/sfx/general_sfxs/snd_ultrablast.mp3"),
+        --Boss 1 SFXs
+        b1_stomp = love.audio.newSource("assets/sfx/boss1/stomp.wav"),
+        b1_big_thump = love.audio.newSource("assets/sfx/boss1/big_thump.wav"),
+        b1_long_roar =  love.audio.newSource("assets/sfx/boss1/long_roar.wav"),
+        b1_hurt_roar =  love.audio.newSource("assets/sfx/boss1/hurt_roar.wav"),
+        b1_angry_hurt_roar =  love.audio.newSource("assets/sfx/boss1/angry_hurt_roar.wav"),
+        b1_angry_af_roar =  love.audio.newSource("assets/sfx/boss1/angry_af_roar.wav"),
+    }
+    SFX.hit_simple:setVolume(.2*SFX_VOLUME_MULT)
+    SFX.hit_double:setVolume(.2*SFX_VOLUME_MULT)
+    SFX.generic_button:setVolume(.5*SFX_VOLUME_MULT)
+    SFX.psychoball_shot:setVolume(.2*SFX_VOLUME_MULT)
+    SFX.back_button:setVolume(.5*SFX_VOLUME_MULT)
+    SFX.play_button:setVolume(.3*SFX_VOLUME_MULT)
+    SFX.ultrablast:setVolume(1*SFX_VOLUME_MULT)
+    SFX.psychoball_dies:setVolume(1*SFX_VOLUME_MULT)
+
+    print("Finished setting up audio")
+
     --SHADERS--
+
+    print("Setting up shaders...")
 
     --Default Smooth Circle Shader
     Smooth_Circle_Shader = ([[
@@ -235,98 +321,40 @@ function setup.config()
 		}
 	]]
 
-    --AUDIO--
-    SOUNDTRACK = {}
-    SOUNDTRACK["current"] = nil --Current soudntrack playing
-    SOUNDTRACK["next"] = nil  --Next soundtrack to play (for cross-fading)
-    SFX = {} --Table with all sound effects playing
-    BGM_VOLUME_LEVEL = 1 --Volume of BGM
-    SFX_VOLUME_MULT = 1 --Volume multiplier for SFX
-    --Useful handles for audio manipulation
-    FADE_IN_HANDLE = nil
-    FADE_OUT_HANDLE = nil
-    AUDIO_TIMER_HANDLE = nil
-    --Tracks
-    BGM = {
-        menu = love.audio.newSource("assets/bgm/Flying Carrots Remix.mp3"),
-        level_1 = love.audio.newSource("assets/bgm/Limitless Remix.mp3"),
-        level_2 = love.audio.newSource("assets/bgm/Through Hiperboles.ogg"),
-        boss_1 = love.audio.newSource("assets/bgm/Boss Theme 1.mp3"),
-    }
-    --SFX
-    SFX = {
-        --Game Generic SFXs
-        psychoball_shot = love.audio.newSource("assets/sfx/general_sfxs/snd_psychoball_shot.mp3"),
-        hit_simple = love.audio.newSource("assets/sfx/general_sfxs/snd_hit_simple_ball.mp3"),
-        hit_double = love.audio.newSource("assets/sfx/general_sfxs/snd_hit_double_ball.mp3"),
-        psychoball_dies = love.audio.newSource("assets/sfx/general_sfxs/snd_psychoball_dies.mp3"),
-        generic_button = love.audio.newSource ("assets/sfx/general_sfxs/snd_generic_button.mp3"),
-        back_button = love.audio.newSource ("assets/sfx/general_sfxs/snd_back_button.mp3"),
-        play_button = love.audio.newSource("assets/sfx/general_sfxs/snd_button_play.mp3"),
-        ultrablast = love.audio.newSource("assets/sfx/general_sfxs/snd_ultrablast.mp3"),
-        --Boss 1 SFXs
-        b1_stomp = love.audio.newSource("assets/sfx/boss1/stomp.wav"),
-        b1_big_thump = love.audio.newSource("assets/sfx/boss1/big_thump.wav"),
-        b1_long_roar =  love.audio.newSource("assets/sfx/boss1/long_roar.wav"),
-        b1_hurt_roar =  love.audio.newSource("assets/sfx/boss1/hurt_roar.wav"),
-        b1_angry_hurt_roar =  love.audio.newSource("assets/sfx/boss1/angry_hurt_roar.wav"),
-        b1_angry_af_roar =  love.audio.newSource("assets/sfx/boss1/angry_af_roar.wav"),
-    }
-    SFX.hit_simple:setVolume(.2*SFX_VOLUME_MULT)
-    SFX.hit_double:setVolume(.2*SFX_VOLUME_MULT)
-    SFX.generic_button:setVolume(.5*SFX_VOLUME_MULT)
-    SFX.psychoball_shot:setVolume(.2*SFX_VOLUME_MULT)
-    SFX.back_button:setVolume(.5*SFX_VOLUME_MULT)
-    SFX.play_button:setVolume(.3*SFX_VOLUME_MULT)
-    SFX.ultrablast:setVolume(1*SFX_VOLUME_MULT)
-    SFX.psychoball_dies:setVolume(1*SFX_VOLUME_MULT)
+  Horizontal_Blur_Shader:send("win_width", 1/WINDOW_WIDTH)
+  Vertical_Blur_Shader:send("win_height", 1/WINDOW_HEIGHT)
+  --Create some pre-made smooth circle
+  for size = 36, 49 do
+      SMOOTH_CIRCLE_TABLE[size] = love.graphics.newShader(Smooth_Circle_Shader:format(size))
+  end
+  SMOOTH_CIRCLE_TABLE[6] = love.graphics.newShader(Smooth_Circle_Shader:format(10))
+  SMOOTH_CIRCLE_TABLE[10] = love.graphics.newShader(Smooth_Circle_Shader:format(10))
+  SMOOTH_CIRCLE_TABLE[12] = love.graphics.newShader(Smooth_Circle_Shader:format(12))
+  SMOOTH_CIRCLE_TABLE[30] = love.graphics.newShader(Smooth_Circle_Shader:format(30))
+  SMOOTH_CIRCLE_TABLE[60] = love.graphics.newShader(Smooth_Circle_Shader:format(60))
 
-    --DEATH MESSAGE
-    DEATH_TEXTS = {
-        "Game Over", "No one will miss you", "You now lay with the dead",
-        "You ceased to exist", "Your mother wouldn't be proud","Snake? Snake? Snaaaaaaaaaake",
-        "Already?", "All your base are belong to BALLS", "You wake up and realize it was all a nightmare",
-        "MIND BLOWN", "Just one more", "USPGameDev Rulez", "A winner is not you", "Have a nice death",
-        "There is no cake also you died", "You have died of dysentery", "You failed", "BAD END",
-        "Embrace your defeat", "Balls have no mercy", "You have no balls left", "Nevermore...",
-        "Rest in Peace", "Die in shame", "You've found your end", "KIA", "Status: Deceased",
-        "Requiescat in Pace", "Valar Morghulis", "What is dead may never die", "Mission Failed",
-        "It's dead Jim", "Arrivederci", "FRANKIE SAYS RELAX, YOU DIED"
-    }
+  --Create some pre-made smooth rings
+  for i_r =1, 21 do
+      SMOOTH_RING_TABLE["48-"..i_r] = love.graphics.newShader(Smooth_Ring_Shader:format(48,i_r))
+  end
+  for i_r =1, 16 do
+      SMOOTH_RING_TABLE["38-"..i_r] = love.graphics.newShader(Smooth_Ring_Shader:format(38,i_r))
+  end
 
-    --Start UI color transition
-    UI_COLOR = UI.create_color()
+  print("Finished setting up shaders")
 
-    --Background start
-    BG.create()
+  --LAST GAME SETUPS
 
-    --FPS Counter
-    Txt.create_gui(5, ORIGINAL_WINDOW_HEIGHT - 20, "FPS: ", GUI_MEDLESS, love.timer.getFPS(), "right", GUI_MEDLESS, "fps_counter")
+  --Start UI color transition
+  UI_COLOR = UI.create_color()
 
-    --SHADERS SETUP
-    print("Setting up shaders")
-    Horizontal_Blur_Shader:send("win_width", 1/WINDOW_WIDTH)
-    Vertical_Blur_Shader:send("win_height", 1/WINDOW_HEIGHT)
-    --Create some pre-made smooth circle
-    for size = 36, 49 do
-        SMOOTH_CIRCLE_TABLE[size] = love.graphics.newShader(Smooth_Circle_Shader:format(size))
-    end
-    SMOOTH_CIRCLE_TABLE[6] = love.graphics.newShader(Smooth_Circle_Shader:format(10))
-    SMOOTH_CIRCLE_TABLE[10] = love.graphics.newShader(Smooth_Circle_Shader:format(10))
-    SMOOTH_CIRCLE_TABLE[12] = love.graphics.newShader(Smooth_Circle_Shader:format(12))
-    SMOOTH_CIRCLE_TABLE[30] = love.graphics.newShader(Smooth_Circle_Shader:format(30))
-    SMOOTH_CIRCLE_TABLE[60] = love.graphics.newShader(Smooth_Circle_Shader:format(60))
+  --Background start
+  BG.create()
 
-    --Create some pre-made smooth rings
-    for i_r =1, 21 do
-        SMOOTH_RING_TABLE["48-"..i_r] = love.graphics.newShader(Smooth_Ring_Shader:format(48,i_r))
-    end
-    for i_r =1, 16 do
-        SMOOTH_RING_TABLE["38-"..i_r] = love.graphics.newShader(Smooth_Ring_Shader:format(38,i_r))
-    end
-    print("Finished setting up shaders")
+  --FPS Counter
+  Txt.create_gui(5, ORIGINAL_WINDOW_HEIGHT - 20, "FPS: ", GUI_MEDLESS, love.timer.getFPS(), "right", GUI_MEDLESS, "fps_counter")
 
-    print("---------------------------")
+  print("---------------------------")
 
 end
 

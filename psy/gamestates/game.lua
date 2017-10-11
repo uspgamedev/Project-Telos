@@ -37,12 +37,16 @@ function state:enter()
 
     x, y = level.startPositions()
 
-    p = Psycho.create(x,y)
+    if TUTORIAL then
+      p = Psycho.create(x,y,true)
+    else
+      p = Psycho.create(x,y)
+    end
 
     SLOWMO = false
 
     --Level part text
-    Txt.create_game_gui(350, 10, "Part PI: Eletric Boogaloo", GUI_MED, nil, nil, nil, "level_part")
+    Txt.create_game_gui(350, 10, "Part X: Eletric Boogaloo", GUI_MED, nil, nil, nil, "level_part")
 
     --Life counter
     LifeCounter.create(25, 20)
@@ -128,6 +132,7 @@ function state:update(dt)
     Util.updateSubTp(m_dt, "enemy_indicator")
     Util.updateSubTp(m_dt, "rotating_indicator")
     Util.updateSubTp(m_dt, "ultrablast")
+    Util.updateSubTp(m_dt, "tutorial_icon")
     Util.updateId(dt, "psycho_aim") --Is not affected by slowmo
     Util.updateId(dt, "ultrablast_counter") --Is not affected by slowmo
     Util.updateId(dt, "life_counter") --Is not affected by slowmo
@@ -162,7 +167,7 @@ function state:keypressed(key)
         SWITCH = "PAUSE"
     elseif key == 'x' then
         p = Util.findId("psycho")
-        if not p.shootLocked then
+        if p.can_ultra then
             p:ultrablast(p.default_ultrablast_power)
         end
     else
@@ -183,7 +188,7 @@ function state:mousepressed(x, y, button, istouch)
     --Secondary mouse button unleashes an ultrablast
     if button == 2 then
         p = Util.findId("psycho")
-        if not p.shootLocked then
+        if p.can_ultra then
             p:ultrablast(p.default_ultrablast_power)
         end
     end

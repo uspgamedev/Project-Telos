@@ -59,9 +59,14 @@ Psy = Class{
         self.score = 0 --Score psycho has
         self.life_score = 0 --How much score psycho has accumulated to win a life
         self.life_score_target = 6000 --How many points psycho must win to get a life
-        self.can_ultra = true -- If psycho can use ultrablast (for tutorial)
 
-        self.lives = 10 --How many lives psycho by default has
+        self.can_ultra = true --If psycho can use ultrablast (for tutorial)
+        self.can_move = true --If psycho can move (for tutorial)
+        self.can_focus = true --If psycho can focus (for tutorial)
+        self.can_shoot = true --If psycho can shoot
+
+        self.default_lives = 10 --How many lives psycho by default has
+        self.lives = self.default_lives --How many lives psycho has
 
         self.default_ultrablast_number = 1 --How many ultrablasts psycho by default has in every life
         self.ultrablast_counter = self.default_ultrablast_number--How many ultrablasts psycho has
@@ -69,8 +74,6 @@ Psy = Class{
 
         self.invincible = false --If psycho can't collide with enemies
         self.invincible_handles = {} --Handles for psycho invencibility timers
-        self.controlsLocked = false --If psycho cant move or shoot
-        self.shootLocked = true --If psycho cant shoot or ultrablast
 
         self.tp = "psycho" --Type of this class
 
@@ -103,7 +106,7 @@ end
 function Psy:shoot(x,y)
     local p, bullet, dir, c, color_table, w, h, scale
     p = self
-    if p.shootLocked then return end
+    if not p.can_shoot then return end
 
 
     SFX.psychoball_shot:play()
@@ -185,7 +188,7 @@ function Psy:update(dt)
     end
 
     --Leave before moving psycho or creating circle effects
-    if p.controlsLocked then return end
+    if not p.can_move then return end
 
     --Create circle effect
     p.circle_fx_tick = p.circle_fx_tick - dt
@@ -261,10 +264,10 @@ function Psy:keypressed(key)
     if key == 'w' or key == 'a' or key == 's' or key == 'd' or
        key == 'up' or key == 'left' or key == 'down' or key == 'right' then
         psycho.updateSpeed(self)
-    elseif key == 'lshift' then
+    elseif key == 'lshift' and p.can_focus then
         p.focused = true
     elseif key == 'space' then
-        if not p.shootLocked then
+        if p.can_ultra then
             p:ultrablast(p.default_ultrablast_power)
         end
     end
@@ -322,7 +325,7 @@ end
 
 --UTILITY FUNCTIONS--
 
-function psycho.create(x, y)
+function psycho.create(x, y, is_tutorial)
     local p, handle
 
     x, y = x or ORIGINAL_WINDOW_WIDTH/2, y or  ORIGINAL_WINDOW_HEIGHT/2
@@ -332,7 +335,7 @@ function psycho.create(x, y)
     p:addElement(DRAW_TABLE.L4)
 
     --Create aim
-    Aim.create("psycho_aim")
+    p.aim = Aim.create("psycho_aim", is_tutorial)
 
     --Make psycho first color to be the UI color (to blend with title)
     p.ui_color = true
@@ -346,12 +349,18 @@ function psycho.create(x, y)
     )
     table.insert(p.handles, handle)
 
+    p.can_ultra = false
+    p.can_shoot = false
+
     --Enable shooting after 2.5 seconds
-    LEVEL_TIMER:after(2.5,
-        function()
-            p.shootLocked = false
-        end
-    )
+    if not is_tutorial then
+      LEVEL_TIMER:after(2.5,
+          function()
+              p.can_ultra = true
+              p.can_shoot = true
+          end
+      )
+    end
 
     return p
 end

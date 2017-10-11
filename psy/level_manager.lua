@@ -100,14 +100,16 @@ end
 
 --Changes the level part text
 function level_manager.level_part(name)
-    Util.findId("level_part").text = name
+    local level_part = Util.findId("level_part")
+    level_part.text = name --Update text
+    level_part.pos.x = ORIGINAL_WINDOW_WIDTH/2 - level_part.font:getWidth(name)/2 --Update position
 end
 
 --Create a centralized level title, that fades out after 3 seconds
 function level_manager.level_title(name)
     local txt, fx, fy, x, y, font, limit
 
-    font = GUI_GAME_TITLE
+    font = GUI_LEVEL_TITLE
     limit = 4*ORIGINAL_WINDOW_WIDTH/5
 
     --Get position so that the text is centralized on screen
@@ -116,7 +118,7 @@ function level_manager.level_title(name)
     x = ORIGINAL_WINDOW_WIDTH/2 - fx/2
     y = ORIGINAL_WINDOW_HEIGHT/2 - fy/2
     --Create level title
-    txt = Txt.create_game_gui(x, y, name, GUI_GAME_TITLE, nil, "format", nil, "game_title", "center", fx)
+    txt = Txt.create_game_gui(x, y, name, GUI_LEVEL_TITLE, nil, "format", nil, "game_title", "center", fx)
     --in the future, make a "PAAAM" sound here
 
     --After two seconds, fades-out the title
@@ -266,7 +268,7 @@ function level_manager.giveLives(number, text)
 
     p = Util.findId("psycho")
 
-    if not p then return end
+    if not p  or number == 0 then return end
 
     p.lives = p.lives + number
 
@@ -316,7 +318,7 @@ function level_manager.giveScore(number, text)
 
     p = Util.findId("psycho")
 
-    if not p then return end
+    if not p or number == 0 then return end
 
     --Update main score
     p.score = p.score + number

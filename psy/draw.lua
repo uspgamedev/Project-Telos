@@ -40,7 +40,7 @@ function draw.allTables()
 
     DrawTable(DRAW_TABLE.L1)  --Circle effect
 
-    DrawTable(DRAW_TABLE.L2)  --Game particle effects
+    DrawTable(DRAW_TABLE.L2)  --Game particle effects and tutorial icons
 
     DrawTable(DRAW_TABLE.L3)  --Bullets, projectiles
 

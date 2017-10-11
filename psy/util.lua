@@ -237,6 +237,10 @@ function util.gameElementException(mode)
         util.addExceptionSubtype("rotating_indicator")
     end
 
+    if util.findSbTp("tutorial_icon") then
+        util.addExceptionSubtype("tutorial_icon")
+    end
+
     --GUI ELEMENTS
 
     if util.findSbTp("game_gui") then
