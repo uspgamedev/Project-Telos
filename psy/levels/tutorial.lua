@@ -152,7 +152,7 @@ function level_functions.setup()
 
     --Start Level
     LM.level_title("HELLO THERE...")
-    Audio.playBGM(BGM.level_1)
+    Audio.playBGM(BGM.tutorial)
 
 end
 
