@@ -30,7 +30,7 @@ function state:enter()
     if TUTORIAL then
         level = Levels["tutorial"]
     elseif not CONTINUE then
-        level = Levels["level1"]
+        level = Levels["level2"]
     else
         level = Levels["level"..CONTINUE]
     end
@@ -61,7 +61,7 @@ function state:enter()
     ScoreCounter.create(10)
 
     level.setup() --Make title and start BGM
-    Level.start(level.part_1) --Start first part of level
+    Level.start(level.part_3) --Start first part of level
 
     love.mouse.setVisible(false) --Make cursor invisible
     love.mouse.setGrabbed(true) --Resume mouse capture

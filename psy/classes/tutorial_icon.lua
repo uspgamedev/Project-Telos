@@ -107,6 +107,30 @@ function TutorialIcon:draw()
     --
   elseif self.type == "shift" then
 
+    --Draw keyboard-key outer outline
+    local x, y, w, h = s.pos.x, s.pos.y, s.w, s.h
+    love.graphics.rectangle("line", x, y, w, h, roundness_of_corners)
+    --Draw keyboard-key inner outline
+    x = x + (w-w*inside_line_ratio)/2
+    y = y + (h-h*inside_line_ratio)/2 + inside_line_y_offset
+    w = w*inside_line_ratio
+    h = h*inside_line_ratio
+    love.graphics.rectangle("line", x, y, w, h, roundness_of_corners)
+
+    --Draw shift-key image and text
+    color.a = color.a + 20
+    Color.set(color)
+    local font = GUI_TUTORIAL_ICON
+    local sx, sy = .4, .4
+    x = x + 2
+    y = y + h/2 - IMG.shift_icon:getHeight()*sy/2
+    love.graphics.draw(IMG.shift_icon, x, y, 0, sx, sy)
+    local font = GUI_TUTORIAL_SHIFT_ICON
+    love.graphics.setFont(font)
+    x =  x + IMG.shift_icon:getWidth()*sx + 5
+    y = s.pos.y + s.h/2 - font:getHeight("shift")/2
+    love.graphics.print("shift", x, y)
+
   elseif self.type == "left_mouse_button" then
     --Draw mouse outline
     love.graphics.draw(IMG.mouse_icon, s.pos.x, s.pos.y)
@@ -188,7 +212,7 @@ function funcs.dimensions(type)
   if     type == "space" then
     return 200, 50
   elseif type == "shift" then
-    return 50, 50
+    return 160, 80
   elseif type == "left_mouse_button" then
     return IMG.mouse_icon:getDimensions()
   elseif type == "right_mouse_button" then

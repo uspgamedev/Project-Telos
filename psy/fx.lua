@@ -153,6 +153,8 @@ function fx.psychoExplosion(p)
             end
             if not DONT_ENABLE_ULTRA_AFTER_DEATH then
                p.can_ultra = true
+            else
+              print("NOT")
             end
             if not DONT_ENABLE_MOVING_AFTER_DEATH then
                p.can_move = true

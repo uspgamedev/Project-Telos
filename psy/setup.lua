@@ -130,7 +130,8 @@ function setup.config()
     IMG = {
       mouse_icon = love.graphics.newImage("assets/images/mouse_icon.png"),
       left_mouse_button_icon = love.graphics.newImage("assets/images/left_mouse_button.png"),
-      right_mouse_button_icon = love.graphics.newImage("assets/images/right_mouse_button.png")
+      right_mouse_button_icon = love.graphics.newImage("assets/images/right_mouse_button.png"),
+      shift_icon = love.graphics.newImage("assets/images/shift_icon.png"),
     }
 
     print("Finished setting up images")
@@ -147,6 +148,8 @@ function setup.config()
     GUI_LIFE_COUNTER_X = love.graphics.newFont("assets/fonts/Nevis.ttf", 35)
     GUI_BOSS_TITLE = love.graphics.newFont("assets/fonts/Nevis.ttf", 60)
     GUI_TUTORIAL_ICON = love.graphics.newFont("assets/fonts/Nevis.ttf", 24)
+    GUI_TUTORIAL_SHIFT_ICON = love.graphics.newFont("assets/fonts/Nevis.ttf", 28)
+
     --Generic sizes
     GUI_BIG = love.graphics.newFont("assets/fonts/vanadine_bold.ttf", 60)
     GUI_BIGLESS = love.graphics.newFont("assets/fonts/vanadine_bold.ttf", 45)

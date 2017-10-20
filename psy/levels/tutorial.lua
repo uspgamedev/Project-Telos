@@ -70,7 +70,7 @@ function level_functions.part_1()
     --Turn ultrablast counter visible
     p.ultrablast_counter = 0
     p.can_ultra = true
-    DONT_ENABLE_MOVING_AFTER_DEATH = false
+    DONT_ENABLE_ULTRA_AFTER_DEATH = false
     local counter = Util.findId("ultrablast_counter")
     counter:reset()
     counter.charge_cooldown = 0
