@@ -487,8 +487,8 @@ function level_functions.part_3()
     LM.level_part("Part 3 - Standing Still")
 
     LM.wait(3)
-    --[[
     INDICATOR_DEFAULT = 1.5
+    
     F.turret{x = -60, y = ORIGINAL_WINDOW_HEIGHT/2, t_x = ORIGINAL_WINDOW_WIDTH/2, t_y = ORIGINAL_WINDOW_HEIGHT/2, enemy = SB, number = 8, life = 20, duration = 15, rot_angle = math.pi/4, speed_m = 2, ind_duration = 2.5}
     LM.wait("noenemies")
 
@@ -638,7 +638,6 @@ function level_functions.part_3()
     F.fromHorizontal{side = "right", mode = "top", number = 5, enemy = {DB,SB}, speed_m = .9}
     F.fromHorizontal{side = "right", mode = "bottom", number = 5, enemy = {DB,SB}, speed_m = .9}
     LM.wait("noenemies")
-    ]]--
 
     --Manzo's Pyramid Adaptation (original "pyramid" idea by manzo)
 

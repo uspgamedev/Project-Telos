@@ -62,7 +62,7 @@ function state:enter()
 
     level.setup() --Make title and start BGM
 
-    Level.start(level.part_3) --Start first part of level
+    Level.start(level.part_1) --Start first part of level
 
     love.mouse.setVisible(false) --Make cursor invisible
     love.mouse.setGrabbed(true) --Resume mouse capture
