@@ -165,19 +165,20 @@ end
 
 --Create a text in position (x,y), that fades in, and then fades out after d seconds
 function level_manager.text(x, y, text, d, max_alpha, font)
-    local txt, font
+    local txt
 
     d = d or 3
     max_alpha = max_alpha or 255
 
     font = font or GUI_MED
+    print(font, GUI_MED, "hey")
 
     --Create text
     txt = Txt.create_text(x, y, text, font, "in-game_text")
 
     txt.alpha = 0
 
-    --After two seconds, fades-out the title
+    --After two seconds, fades-out the text
     txt.level_handles["fade-in"] = LEVEL_TIMER:tween(.3, txt, {alpha = max_alpha}, 'in-linear',
         function()
             txt.level_handles["stay_effect"] = LEVEL_TIMER:after(d,

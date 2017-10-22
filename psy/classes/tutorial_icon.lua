@@ -106,14 +106,14 @@ function TutorialIcon:draw()
     love.graphics.print("space", x, y)
     --
   elseif self.type == "shift" then
-
+    local inside_line_x_ratio = .8
     --Draw keyboard-key outer outline
     local x, y, w, h = s.pos.x, s.pos.y, s.w, s.h
     love.graphics.rectangle("line", x, y, w, h, roundness_of_corners)
     --Draw keyboard-key inner outline
-    x = x + (w-w*inside_line_ratio)/2
+    x = x + (w-w*inside_line_x_ratio)/2
     y = y + (h-h*inside_line_ratio)/2 + inside_line_y_offset
-    w = w*inside_line_ratio
+    w = w*inside_line_x_ratio
     h = h*inside_line_ratio
     love.graphics.rectangle("line", x, y, w, h, roundness_of_corners)
 
@@ -127,7 +127,7 @@ function TutorialIcon:draw()
     love.graphics.draw(IMG.shift_icon, x, y, 0, sx, sy)
     local font = GUI_TUTORIAL_SHIFT_ICON
     love.graphics.setFont(font)
-    x =  x + IMG.shift_icon:getWidth()*sx + 5
+    x =  x + IMG.shift_icon:getWidth()*sx + 2
     y = s.pos.y + s.h/2 - font:getHeight("shift")/2
     love.graphics.print("shift", x, y)
 

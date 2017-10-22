@@ -687,9 +687,23 @@ function level_functions.part_3()
         local enemy_table
 
         --Create focus-mode tutorial
-        if i == (size-6) then
+        if i == (size-7) then
+            local text = "hold"
+            local font = GUI_MED
             local w, h = TutIcon.dimensions("shift")
-            TutIcon.create(ORIGINAL_WINDOW_WIDTH/2 - w/2, ORIGINAL_WINDOW_HEIGHT/2 - h/2, 'shift', 10)
+            local x = ORIGINAL_WINDOW_WIDTH/2 - font:getWidth(text)/2
+            local y = ORIGINAL_WINDOW_HEIGHT/2 - h/2 - font:getHeight(text) - 25
+            LM.text(x, y, text, 8, 210, font)
+            TutIcon.create(ORIGINAL_WINDOW_WIDTH/2 - w/2, ORIGINAL_WINDOW_HEIGHT/2 - h/2 - 20, 'shift', 8)
+            text = "to enter"
+            x = ORIGINAL_WINDOW_WIDTH/2 - font:getWidth(text)/2
+            y = ORIGINAL_WINDOW_HEIGHT/2 + h/2 - 10
+            LM.text(x, y, text, 8, 210, font)
+            font = GUI_MEDPLUSPLUS
+            text = "FOCUS MODE"
+            x = ORIGINAL_WINDOW_WIDTH/2 - font:getWidth(text)/2
+            y = y + 25
+            LM.text(x, y, text, 8, 210, font)
         end
 
         enemy_table = LM.textToEnemies(spaceship[i])
