@@ -164,6 +164,7 @@ function UltrablastCounter:ultraGained()
   local x = self.pos.x + (self.ultra_cont-1)*(2*self.ultra_first_radius + 2*self.ultra_gap_width + 2*self.ultra_ring_width + self.gap_between_ultras)
   local y = self.pos.y
   FX.explosion(x, y, self.ultra_first_radius, color, 25, 150, 400, 3, true)
+  if self.alpha > 30 then SFX.ultrablast_bar_complete:play() end
 
 
 end

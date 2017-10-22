@@ -61,6 +61,7 @@ function state:enter()
     ScoreCounter.create(10)
 
     level.setup() --Make title and start BGM
+
     Level.start(level.part_3) --Start first part of level
 
     love.mouse.setVisible(false) --Make cursor invisible

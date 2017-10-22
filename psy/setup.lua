@@ -195,22 +195,24 @@ function setup.config()
     AUDIO_TIMER_HANDLE = nil
     --Tracks
     BGM = {
-        menu = love.audio.newSource("assets/bgm/Flying Carrots Remix.mp3"),
+        menu = love.audio.newSource("assets/bgm/mus_psychoball_menu_unknown_universe_loop.mp3"),
         level_1 = love.audio.newSource("assets/bgm/Limitless Remix.mp3"),
         level_2 = love.audio.newSource("assets/bgm/Through Hiperboles.ogg"),
         boss_1 = love.audio.newSource("assets/bgm/Boss Theme 1.mp3"),
+        tutorial = love.audio.newSource("assets/bgm/mus_psychoball_tutorial_into_the_void_loop.mp3"),
     }
     --SFX
     SFX = {
         --Game Generic SFXs
-        psychoball_shot = love.audio.newSource("assets/sfx/general_sfxs/snd_psychoball_shot.mp3"),
-        hit_simple = love.audio.newSource("assets/sfx/general_sfxs/snd_hit_simple_ball.mp3"),
-        hit_double = love.audio.newSource("assets/sfx/general_sfxs/snd_hit_double_ball.mp3"),
-        psychoball_dies = love.audio.newSource("assets/sfx/general_sfxs/snd_psychoball_dies.mp3"),
-        generic_button = love.audio.newSource ("assets/sfx/general_sfxs/snd_generic_button.mp3"),
-        back_button = love.audio.newSource ("assets/sfx/general_sfxs/snd_back_button.mp3"),
-        play_button = love.audio.newSource("assets/sfx/general_sfxs/snd_button_play.mp3"),
-        ultrablast = love.audio.newSource("assets/sfx/general_sfxs/snd_ultrablast.mp3"),
+        psychoball_shot = love.audio.newSource("assets/sfx/general_sfxs/sfx_psychoball_shot.mp3"),
+        hit_simple = love.audio.newSource("assets/sfx/general_sfxs/sfx_hit_simple_ball.mp3"),
+        hit_double = love.audio.newSource("assets/sfx/general_sfxs/sfx_hit_double_ball.mp3"),
+        psychoball_dies = love.audio.newSource("assets/sfx/general_sfxs/sfx_psychoball_dies.mp3"),
+        generic_button = love.audio.newSource ("assets/sfx/general_sfxs/sfx_generic_button.mp3"),
+        back_button = love.audio.newSource ("assets/sfx/general_sfxs/sfx_back_button.mp3"),
+        play_button = love.audio.newSource("assets/sfx/general_sfxs/sfx_button_play.mp3"),
+        ultrablast = love.audio.newSource("assets/sfx/general_sfxs/sfx_ultrablast.mp3"),
+        ultrablast_bar_complete = love.audio.newSource("assets/sfx/general_sfxs/sfx_ultrablast_bar_complete.mp3"),
         --Boss 1 SFXs
         b1_stomp = love.audio.newSource("assets/sfx/boss1/stomp.wav"),
         b1_big_thump = love.audio.newSource("assets/sfx/boss1/big_thump.wav"),
