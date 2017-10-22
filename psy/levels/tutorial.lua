@@ -22,7 +22,6 @@ function level_functions.part_1()
     p.can_ultra = false --Disable ultrablast
     p.can_move = false --Disable movement
     p.can_shoot = false --Disable shooting
-    p.can_focus = false --Disable focus mode
 
     --Make gui invisible here
     Util.findId("life_counter").alpha = 0
@@ -82,13 +81,23 @@ function level_functions.part_1()
 
     --Create tutorial icons for ultrablast
     local w, h = TutIcon.dimensions("space")
-    local x, y = ORIGINAL_WINDOW_WIDTH/2 - w/2, ORIGINAL_WINDOW_HEIGHT/3 + 15
-    TutIcon.create(x, y, 'space', 4.5)
+    local x, y = ORIGINAL_WINDOW_WIDTH/2 - w/2, ORIGINAL_WINDOW_HEIGHT/3 - 20
+    TutIcon.create(x, y, 'space', 5)
     x, y = x + w/2 - 10, y + h + 20
-    LM.text(x, y, "or", 4.5, 180)
-    local w, h = TutIcon.dimensions("right_mouse_button")
-    local x, y = x - w/2 + 8, y + 35
-    TutIcon.create(x, y, 'right_mouse_button', 4.5)
+    LM.text(x, y, "or", 5, 180)
+    w, h = TutIcon.dimensions("right_mouse_button")
+    x, y = x - w/2 + 8, y + 35
+    TutIcon.create(x, y, 'right_mouse_button', 5)
+    local font = GUI_MED
+    local text = "for"
+    x = ORIGINAL_WINDOW_WIDTH/2 - font:getWidth(text)/2
+    y = y + h + 15
+    LM.text(x, y, text, 5, 180, font)
+    font = GUI_MEDPLUS
+    text = "ULTRABLAST"
+    x = ORIGINAL_WINDOW_WIDTH/2 - font:getWidth(text)/2
+    y = y + 30
+    LM.text(x, y, text, 5, 180, font)
 
     LM.wait(2)
 
@@ -116,7 +125,7 @@ function level_functions.part_1()
     LM.wait("noenemies")
     LM.wait(1)
 
-    LM.text(ORIGINAL_WINDOW_WIDTH/2 - 50, ORIGINAL_WINDOW_HEIGHT/2, "good luck", 6, 130)
+    LM.text(ORIGINAL_WINDOW_WIDTH/2 - 50, ORIGINAL_WINDOW_HEIGHT/2, "good luck", 6, 170)
     LM.wait(3)
 
     --Turn fps counter visible
@@ -132,7 +141,7 @@ function level_functions.part_1()
     LM.giveScore(-p.score, "reset")
     p.life_score = 0
     LM.giveLives(p.default_lives-p.lives, "reset")
-    LM.wait(3)
+    LM.wait(5)
 
     LM.stop()
     TUTORIAL = false
