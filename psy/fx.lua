@@ -89,11 +89,18 @@ function fx.psychoExplosion(p)
     p.invincible = true
     SLOWMO = true
     SLOWMO_M = .1
+
+
     ------------------------------
     --EFFECT FIRST PART: EXPANSION
     ------------------------------
     --Create several particles filling psycho's dead body, exploding in a random death_func pattern
 
+    --Lower sound when psycho is killed
+    local bgm = Audio.getCurrentBGM()
+    if bgm then
+        Audio.fade(bgm, bgm:getVolume(), BGM_VOLUME_LEVEL/4, d, false, true)
+    end
 
     c_pos = Vector(p.pos.x, p.pos.y) --Position of psycho's center
 
@@ -125,6 +132,13 @@ function fx.psychoExplosion(p)
     --Male all particles go back the way they expanded, but faster
     handle = FX_TIMER:after(d,
         function()
+
+            --Increase sound to normal levels again
+            local bgm = Audio.getCurrentBGM()
+            if bgm then
+                Audio.fade(bgm, bgm:getVolume(), BGM_VOLUME_LEVEL, d, false, true)
+            end
+
             for part in pairs(Util.findSbTp("psycho_explosion")) do
                 part.speed = -part.speed*multi
                 --Fade-in particles

@@ -73,6 +73,7 @@ function setup.config()
     INDICATOR_DEFAULT = 1.5 --Indicator timer default
 
     SHAKE_HANDLE = nil --Handle for shake effect
+    ZOOM_HANDLE = nil --handle for camera zoom effect
 
     SLOWMO = false --If (most) game elements will move in slow-mo
     SLOWMO_M = .5 --Slowmo multiplier effect

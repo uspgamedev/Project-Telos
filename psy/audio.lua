@@ -3,7 +3,8 @@
 local audio = {}
 
 local _current_bgm
-local _current_bgm_handles = {}
+local _current_bgm_volume_handles = {}
+local _current_bgm_pitch_handle
 
 -----------------------
 --SFX AUDIO FUNCTIONS--
@@ -59,12 +60,32 @@ end
 function audio.fadeOutCurrentBGM(d)
     if not _current_bgm then return end
     d = d or .5
-    for _, handle in pairs(_current_bgm_handles) do --Remove all previous effects applied to the current song
+    for _, handle in pairs(_current_bgm_volume_handles) do --Remove all previous effects applied to the current song
         AUDIO_TIMER:cancel(handle)
     end
     audio.fade(_current_bgm, _current_bgm:getVolume(), 0, d, true)
     _current_bgm = nil
-    _current_bgm_handles = {}
+    _current_bgm_volume_handles = {}
+end
+
+--Tween current bgm pitch to target value in d seconds
+function audio.tweenCurrentBGMPitch(target, d)
+
+    if not _current_bgm then return end
+    if _current_bgm_pitch_handle then
+        AUDIO_TIMER:cancel(_current_bgm_pitch_handle)
+    end
+
+    local bgm = _current_bgm
+
+    delay = .01
+    rate = (target-bgm:getPitch())/(d/delay)
+    _current_bgm_pitch_handle = AUDIO_TIMER:every(delay,
+        function()
+            bgm:setPitch(bgm:getPitch() + rate)
+        end,
+    d/delay)
+
 end
 
 ---------------------------
@@ -73,8 +94,8 @@ end
 
 --Fade an audio source in d seconds, from value ini to fin
 --If optional argument stop is true, it will stop the song after the fade
---If optional argument is_bgm is true, it will store the handles on the current_bgm_handles table
-function audio.fade(s, ini, fin, d, stop, is_bgm)
+--If optional argument is_current_bgm is true, it will store the handles on the current_bgm_handles table
+function audio.fade(s, ini, fin, d, stop, is_current_bgm)
     local delay, rate
 
     s:setVolume(ini)
@@ -90,9 +111,9 @@ function audio.fade(s, ini, fin, d, stop, is_bgm)
         local h2 = AUDIO_TIMER:after(d + delay, function() s:stop() end)
     end
 
-    if is_bgm then
-        table.insert(_current_bgm_handles, h1)
-        if h2 then table.insert(_current_bgm_handles, h1) end
+    if is_current_bgm then
+        table.insert(_current_bgm_volume_handles, h1)
+        if h2 then table.insert(_current_bgm_volume_handles, h1) end
     end
 end
 
