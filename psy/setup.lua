@@ -184,16 +184,8 @@ function setup.config()
     --AUDIO--
     print("Setting up audio...")
 
-    SOUNDTRACK = {}
-    SOUNDTRACK["current"] = nil --Current soudntrack playing
-    SOUNDTRACK["next"] = nil  --Next soundtrack to play (for cross-fading)
-    SFX = {} --Table with all sound effects playing
     BGM_VOLUME_LEVEL = 1 --Volume of BGM
     SFX_VOLUME_MULT = 1 --Volume multiplier for SFX
-    --Useful handles for audio manipulation
-    FADE_IN_HANDLE = nil
-    FADE_OUT_HANDLE = nil
-    AUDIO_TIMER_HANDLE = nil
     --Tracks
     BGM = {
         menu = love.audio.newSource("assets/bgm/mus_psychoball_menu_unknown_universe_loop.mp3"),
@@ -203,7 +195,7 @@ function setup.config()
         tutorial = love.audio.newSource("assets/bgm/mus_psychoball_tutorial_into_the_void_loop.mp3"),
     }
     --SFX
-    SFX = {
+    SFX = { --Table with all sound effects playing
         --Game Generic SFXs
         psychoball_shot = love.audio.newSource("assets/sfx/general_sfxs/sfx_psychoball_shot.mp3"),
         hit_simple = love.audio.newSource("assets/sfx/general_sfxs/sfx_hit_simple_ball.mp3"),

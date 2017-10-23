@@ -3,7 +3,6 @@ local Color = require "classes.color.color"
 local Hsl   = require "classes.color.hsl"
 local Util = require "util"
 local F = require "formation"
-local Audio = require "audio"
 local Indicator = require "classes.indicator"
 local LM = require "level_manager"
 

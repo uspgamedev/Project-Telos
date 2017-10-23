@@ -4,7 +4,6 @@ local Color  = require "classes.color.color"
 local Util = require "util"
 local Draw = require "draw"
 local Txt = require "classes.text"
-local Audio = require "audio"
 require "classes.primitive"
 
 --MODULE FOR THE GAMESTATE: PAUSE--

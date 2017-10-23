@@ -1,7 +1,6 @@
 local F = require "formation"
 local LM = require "level_manager"
 local Color = require "classes.color.color"
-local Audio = require "audio"
 local Util = require "util"
 local TutIcon = require "classes.tutorial_icon"
 
@@ -488,7 +487,7 @@ function level_functions.part_3()
 
     LM.wait(3)
     INDICATOR_DEFAULT = 1.5
-    
+
     F.turret{x = -60, y = ORIGINAL_WINDOW_HEIGHT/2, t_x = ORIGINAL_WINDOW_WIDTH/2, t_y = ORIGINAL_WINDOW_HEIGHT/2, enemy = SB, number = 8, life = 20, duration = 15, rot_angle = math.pi/4, speed_m = 2, ind_duration = 2.5}
     LM.wait("noenemies")
 

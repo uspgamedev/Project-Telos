@@ -5,7 +5,6 @@ local Util = require "util"
 local Draw = require "draw"
 local Level = require "level_manager"
 local Txt = require "classes.text"
-local Audio = require "audio"
 --MODULE FOR THE GAMESTATE: PAUSE--
 
 --BUTTON FUNCTIONS--

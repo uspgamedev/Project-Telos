@@ -2,6 +2,8 @@
 
 local audio = {}
 
+local _current_bgm
+local _current_bgm_handles = {}
 ----------------------
 --BASIC AUDIO FUNCTIONS
 ----------------------
@@ -20,79 +22,60 @@ function audio.pauseSFX()
     end
 end
 
-function audio.playBGM(bgm)
+--Start playing given bgm with a loop, crossfading with previous current bgm
+--Optional fade_in_d and fade_out_d for fade-in/fade-ou durations on crossfade
+--Optional start_pos to determine what position to start the bgm
+function audio.playBGM(bgm, fade_out_d, fade_in_d, start_pos)
+    fade_in_d = fade_in_d or 2
+    fade_out_d = fade_out_d or .5
+    start_pos = start_pos or 0
 
-    --Remove any timers still going
-    if FADE_IN_HANDLE then
-        AUDIO_TIMER:cancel(FADE_IN_HANDLE)
-    end
-    if FADE_OUT_HANDLE then
-        AUDIO_TIMER:cancel(FADE_OUT_HANDLE)
-    end
-    if AUDIO_TIMER_HANDLE then
-        AUDIO_TIMER:cancel(AUDIO_TIMER_HANDLE)
-        SOUNDTRACK["current"]:stop()
-        SOUNDTRACK["current"] = SOUNDTRACK["next"]
-        SOUNDTRACK["next"] = nil
-    end
-
-    if not SOUNDTRACK["current"] then
-        bgm:play()
-        bgm:setLooping(true)
-        audio.fade_in(bgm, 0, BGM_VOLUME_LEVEL, 2)
-        SOUNDTRACK["current"] = bgm
+    if not _current_bgm then
+        _current_bgm = bgm:play()
+        _current_bgm:setLooping(true)
+        _current_bgm:seek(start_pos)
+        local handle = audio.fade(bgm, 0, BGM_VOLUME_LEVEL, fade_in_d)
+        table.insert(_current_bgm_handles, handle)
     else
-        bgm:play()
-        bgm:setLooping(true)
-        audio.fade_in(bgm, 0, BGM_VOLUME_LEVEL, 2)
-        audio.fade_out(SOUNDTRACK["current"], SOUNDTRACK["current"]:getVolume(), 0, .2)
-        SOUNDTRACK["next"] = bgm
-        AUDIO_TIMER_HANDLE = AUDIO_TIMER:after(2,
-            function()
-               SOUNDTRACK["current"]:stop()
-               SOUNDTRACK["current"] = SOUNDTRACK["next"]
-               SOUNDTRACK["next"] = nil
-            end
-        )
+        --Fades out previous bgm
+        for _, handle in pairs(_current_bgm_handles) do
+            AUDIO_TIMER:cancel(handle)
+        end
+        audio.fade(_current_bgm, _current_bgm:getVolume(), 0, fade_out_d, true, true)
+        --Fade in new bgm
+        _current_bgm_handles = {}
+        _current_bgm = bgm:play()
+        _current_bgm:setLooping(true)
+        _current_bgm:seek(start_pos)
+        local handle = audio.fade(_current_bgm, 0, BGM_VOLUME_LEVEL, fade_in_d)
+        table.insert(_current_bgm_handles, handle)
     end
 end
 
 --Fade an audio source in d seconds, from value ini to fin
-function audio.fade_in(s, ini, fin, d)
+--If optional argument stop is true, it will stop the song after the fade
+function audio.fade(s, ini, fin, d, stop, debug)
     local delay, rate
 
     s:setVolume(ini)
     d = d or 1
     delay = .01
     rate = (fin-ini)/(d/delay)
-    if FADE_IN_HANDLE then
-        AUDIO_TIMER:cancel(FADE_IN_HANDLE)
-    end
-    FADE_IN_HANDLE = AUDIO_TIMER:every(delay,
+    local h1 = AUDIO_TIMER:every(delay,
         function()
             s:setVolume(s:getVolume() + rate)
+            if debug then print(s:getVolume()) end
         end,
     d/delay)
+    if stop then
+        local h2 = AUDIO_TIMER:after(d + delay, function() print(s:getVolume(),"stopped");s:stop() end)
+    end
+
+    return h1, h2
 end
 
---Fade an audio source in d seconds, from value ini to fin
-function audio.fade_out(s, ini, fin, d)
-    local delay, rate
-
-    s:setVolume(ini)
-    d = d or 1
-    delay = .01
-    rate = (fin-ini)/(d/delay)
-
-    if FADE_OUT_HANDLE then
-        AUDIO_TIMER:cancel(FADE_OUT_HANDLE)
-    end
-    FADE_OUT_HANDLE = AUDIO_TIMER:every(delay,
-        function()
-            s:setVolume(s:getVolume() + rate)
-        end,
-    d/delay)
-
+function audio.getCurrentBGM()
+    return _current_bgm
 end
 
 

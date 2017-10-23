@@ -3,7 +3,6 @@ local LM = require "level_manager"
 local Color = require "classes.color.color"
 local TutIcon = require "classes.tutorial_icon"
 local Util = require "util"
-local Audio = require "audio"
 
 local level_functions = {}
 
@@ -161,7 +160,8 @@ function level_functions.setup()
 
     --Start Level
     LM.level_title("HELLO THERE...")
-    Audio.playBGM(BGM.tutorial)
+    --Make tutorial music play at the same position menu music was playing
+    Audio.playBGM(BGM.tutorial, .5, .5, Audio.getCurrentBGM():tell())
 
 end
 

@@ -53,7 +53,7 @@ Button = require "classes.button"
 --MY MODULES
 local Util = require "util"
 require "draw"
-require "audio"
+Audio = require "audio"
 require "formation"
 require "level_manager"
 FX = require "fx"

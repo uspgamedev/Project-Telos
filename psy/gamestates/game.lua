@@ -7,7 +7,6 @@ local Txt = require "classes.text"
 local UltraCounter = require "classes.ultrablast_counter"
 local LifeCounter = require "classes.life_counter"
 local ScoreCounter = require "classes.score_counter"
-local Audio = require "audio"
 --MODULE FOR THE GAMESTATE: GAME--
 
 --LEVEL FUNCTIONS--

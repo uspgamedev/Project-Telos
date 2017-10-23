@@ -3,7 +3,6 @@ local Color = require "classes.color.color"
 local Hsl   = require "classes.color.hsl"
 local Util = require "util"
 local F = require "formation"
-local Audio = require "audio"
 local Indicator = require "classes.indicator"
 local LM = require "level_manager"
 
@@ -303,7 +302,7 @@ function Boss_1:changeStage()
         LM.giveScore(1000, "boss killed")
 
         --Lower music volume
-        bgm = SOUNDTRACK["next"] or SOUNDTRACK["current"]
+        bgm = Audio.getCurrentBGM()
         Audio.fade_out(bgm, bgm:getVolume(), 0, 2)
 
         --Stop moving
@@ -340,7 +339,7 @@ function Boss_1:changeStage()
         LM.giveScore(4000, "boss killed for real this time")
 
         --Lower music volume
-        bgm = SOUNDTRACK["next"] or SOUNDTRACK["current"]
+        bgm = Audio.getCurrentBGM()
         Audio.fade_out(bgm, bgm:getVolume(), 0, 4)
 
         --Remove growing tween
@@ -389,7 +388,7 @@ function boss.create()
     shadow.draw = shadow_draw --Change draw function of shadow
 
     --Lower music volume
-    bgm = SOUNDTRACK["next"] or SOUNDTRACK["current"]
+    bgm = Audio.getCurrentBGM()
     Audio.fade_out(bgm, bgm:getVolume(), 0, 2)
 
     --Shake screen
@@ -418,9 +417,7 @@ function boss.create()
                     LM.boss_title("GORGAMAX") --Boss title
 
                     --Increase music volume
-                    Audio.playBGM(BGM.boss_1)
-                    bgm = SOUNDTRACK["next"] or SOUNDTRACK["current"]
-                    Audio.fade_in(bgm, bgm:getVolume(), BGM_VOLUME_LEVEL, .5)
+                    Audio.playBGM(BGM.boss_1, 0, .5)
 
                     FX.shake(.5, 5) --Shake screen
                     SFX.b1_big_thump:play()
@@ -612,7 +609,7 @@ Stage_3 = function(b, dt)
 
 end
 
---Shrinks, then gorws quickly trying to kill psycho one last time
+--Shrinks, then grows quickly trying to kill psycho one last time
 Stage_4 = function(b, dt)
 
     --Shrink
@@ -621,7 +618,7 @@ Stage_4 = function(b, dt)
             --Grow quick
             function()
                 --Increases music volume
-                bgm = SOUNDTRACK["next"] or SOUNDTRACK["current"]
+                bgm = Audio.getCurrentBGM()
                 Audio.fade_out(bgm, bgm:getVolume(), BGM_VOLUME_LEVEL, .5)
 
                 b.invincible = false
