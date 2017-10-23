@@ -73,7 +73,8 @@ function UltrablastCounter:draw()
 
     --Draw ultrablast icon
     Draw_Smooth_Circle(x, y, s.ultra_first_radius)
-    Draw_Smooth_Ring(x, y, s.ultra_first_radius+s.ultra_gap_width+s.ultra_ring_width,s.ultra_first_radius+s.ultra_gap_width)
+    love.graphics.setLineWidth(s.ultra_ring_width)
+    love.graphics.circle("line", x, y, s.ultra_first_radius+s.ultra_gap_width+s.ultra_ring_width)
 
   end
 

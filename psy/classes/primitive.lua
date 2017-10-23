@@ -381,8 +381,10 @@ function Draw_Smooth_Ring(x, y, r, i_r)
         love.graphics.draw(PIXEL, x, y, 0, 2*r)
         love.graphics.setShader()
     else
-        love.graphics.setLineWidth(r - i_r)
-        love.graphics.circle("line", x, y, r)
+        love.graphics.stencil(function()love.graphics.circle("fill",x,y,i_r) end, "replace", 1)
+        love.graphics.setStencilTest("notequal", 1)
+        love.graphics.circle("fill", x, y, r)
+        love.graphics.setStencilTest()
     end
 
 end

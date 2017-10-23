@@ -607,6 +607,8 @@ function util.defaultKeyPressed(key)
         HS.print()
     elseif key == "f3" then
         HS.reset()
+    elseif key == "scrolllock" then
+        USE_ANTI_ALIASING = not USE_ANTI_ALIASING
     end
 
 

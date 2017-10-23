@@ -34,6 +34,11 @@ function state:enter()
 
     --AUDIO--
     Audio.pauseSFX()
+    --Decrease current bgm volume
+    local bgm = Audio.getCurrentBGM()
+    if bgm then
+        Audio.fade(bgm, bgm:getVolume(), BGM_VOLUME_LEVEL/5,.3,false,true)
+    end
 
     love.mouse.setVisible(true) --Make cursor visible
     love.mouse.setGrabbed(false) --Stop mouse capture
@@ -54,6 +59,11 @@ function state:leave()
     Util.clearAllTables("remove")
 
     Audio.resumeSFX()
+    --Return current bgm volume to normal
+    local bgm = Audio.getCurrentBGM()
+    if bgm then
+        Audio.fade(bgm, bgm:getVolume(), BGM_VOLUME_LEVEL,.3,false,true)
+    end
 
     love.mouse.setVisible(false) --Make cursor invisible
     love.mouse.setGrabbed(true) --Resume mouse capture

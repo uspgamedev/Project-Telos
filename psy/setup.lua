@@ -66,7 +66,7 @@ function setup.config()
     SWITCH = nil --What state to go next
 
     MAX_PARTICLES = 300 --Max number of particles effects on screen (actual number of particles can be greater when creating "important particles", that will be added despite the max_particle limit)
-    USE_ANTI_ALIASING = false --If the game should draw circles with anti-aliasing shader
+    USE_ANTI_ALIASING = true --If the game should draw circles with anti-aliasing shader
 
     COROUTINE = nil --Current coroutine
     COROUTINE_HANDLE = nil --Handle timer for current coroutine
@@ -221,8 +221,7 @@ function setup.config()
     SFX.psychoball_shot:setVolume(.2*SFX_VOLUME_MULT)
     SFX.back_button:setVolume(.5*SFX_VOLUME_MULT)
     SFX.play_button:setVolume(.3*SFX_VOLUME_MULT)
-    SFX.ultrablast:setVolume(1*SFX_VOLUME_MULT)
-    SFX.psychoball_dies:setVolume(1*SFX_VOLUME_MULT)
+    SFX.ultrablast_bar_complete:setVolume(.2*SFX_VOLUME_MULT)
 
     print("Finished setting up audio")
 
@@ -329,6 +328,7 @@ function setup.config()
   SMOOTH_CIRCLE_TABLE[6] = love.graphics.newShader(Smooth_Circle_Shader:format(10))
   SMOOTH_CIRCLE_TABLE[10] = love.graphics.newShader(Smooth_Circle_Shader:format(10))
   SMOOTH_CIRCLE_TABLE[12] = love.graphics.newShader(Smooth_Circle_Shader:format(12))
+  SMOOTH_CIRCLE_TABLE[24] = love.graphics.newShader(Smooth_Circle_Shader:format(24))
   SMOOTH_CIRCLE_TABLE[30] = love.graphics.newShader(Smooth_Circle_Shader:format(30))
   SMOOTH_CIRCLE_TABLE[60] = love.graphics.newShader(Smooth_Circle_Shader:format(60))
 

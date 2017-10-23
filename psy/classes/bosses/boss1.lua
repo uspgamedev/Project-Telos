@@ -301,9 +301,8 @@ function Boss_1:changeStage()
         b.life = 18 --Increase boss max life
         LM.giveScore(1000, "boss killed")
 
-        --Lower music volume
-        bgm = Audio.getCurrentBGM()
-        Audio.fade_out(bgm, bgm:getVolume(), 0, 2)
+        --Remove current bgm
+        Audio.fadeOutCurrentBGM(2)
 
         --Stop moving
         b.static = true
@@ -338,9 +337,8 @@ function Boss_1:changeStage()
         b.life = 10
         LM.giveScore(4000, "boss killed for real this time")
 
-        --Lower music volume
-        bgm = Audio.getCurrentBGM()
-        Audio.fade_out(bgm, bgm:getVolume(), 0, 4)
+        --Remove current music bgm
+        Audio.fadeOutCurrentBGM(4)
 
         --Remove growing tween
         if b.level_handles["grow_quick"] then
@@ -387,9 +385,8 @@ function boss.create()
     shadow:addElement(DRAW_TABLE.L5u, "boss_effect")
     shadow.draw = shadow_draw --Change draw function of shadow
 
-    --Lower music volume
-    bgm = Audio.getCurrentBGM()
-    Audio.fade_out(bgm, bgm:getVolume(), 0, 2)
+    --Stop current bgm
+    Audio.fadeOutCurrentBGM(2)
 
     --Shake screen
     volume = .2
@@ -617,9 +614,8 @@ Stage_4 = function(b, dt)
         b.level_handles["shrink"] = LEVEL_TIMER:tween(5, b, {r = 25}, 'in-linear',
             --Grow quick
             function()
-                --Increases music volume
-                bgm = Audio.getCurrentBGM()
-                Audio.fade_out(bgm, bgm:getVolume(), BGM_VOLUME_LEVEL, .5)
+                --Returns music
+                Audio.playBGM(BGM.boss_1, 0, .5, 130)
 
                 b.invincible = false
                 b.level_handles["grow_quick"] = LEVEL_TIMER:tween(4.5, b, {r = 600}, 'in-linear',

@@ -161,8 +161,12 @@ function level_functions.setup()
     --Start Level
     LM.level_title("HELLO THERE...")
     --Make tutorial music play at the same position menu music was playing
-    Audio.playBGM(BGM.tutorial, .5, .5, Audio.getCurrentBGM():tell())
-
+    local bgm = Audio.getCurrentBGM()
+    if bgm then
+        Audio.playBGM(BGM.tutorial, .5, .5, bgm:tell())
+    else
+        Audio.playBGM(BGM.tutorial, 0, .5)
+    end
 end
 
 function level_functions.startPositions()

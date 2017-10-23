@@ -4,9 +4,10 @@ local audio = {}
 
 local _current_bgm
 local _current_bgm_handles = {}
-----------------------
---BASIC AUDIO FUNCTIONS
-----------------------
+
+-----------------------
+--SFX AUDIO FUNCTIONS--
+-----------------------
 
 --Play all current sfxs
 function audio.resumeSFX()
@@ -21,6 +22,10 @@ function audio.pauseSFX()
         sfx:pause()
     end
 end
+
+-----------------------
+--BGM AUDIO FUNCTIONS--
+-----------------------
 
 --Start playing given bgm with a loop, crossfading with previous current bgm
 --Optional fade_in_d and fade_out_d for fade-in/fade-ou durations on crossfade
@@ -37,18 +42,34 @@ function audio.playBGM(bgm, fade_out_d, fade_in_d, start_pos)
         audio.fade(bgm, 0, BGM_VOLUME_LEVEL, fade_in_d, nil, true)
     else
         --Fades out previous bgm
-        for _, handle in pairs(_current_bgm_handles) do --Remove all previous effects applied to the current song
-            AUDIO_TIMER:cancel(handle)
-        end
-        audio.fade(_current_bgm, _current_bgm:getVolume(), 0, fade_out_d, true)
+        audio.fadeOutCurrentBGM(fade_out_d)
         --Fade in new bgm
-        _current_bgm_handles = {} --Reset handles
         _current_bgm = bgm:play()
         _current_bgm:setLooping(true)
         _current_bgm:seek(start_pos)
         audio.fade(_current_bgm, 0, BGM_VOLUME_LEVEL, fade_in_d, false, true)
     end
 end
+
+function audio.getCurrentBGM()
+    return _current_bgm
+end
+
+--Fades and removes the current bgm in d seconds
+function audio.fadeOutCurrentBGM(d)
+    if not _current_bgm then return end
+    d = d or .5
+    for _, handle in pairs(_current_bgm_handles) do --Remove all previous effects applied to the current song
+        AUDIO_TIMER:cancel(handle)
+    end
+    audio.fade(_current_bgm, _current_bgm:getVolume(), 0, d, true)
+    _current_bgm = nil
+    _current_bgm_handles = {}
+end
+
+---------------------------
+--GENERAL AUDIO FUNCTIONS--
+---------------------------
 
 --Fade an audio source in d seconds, from value ini to fin
 --If optional argument stop is true, it will stop the song after the fade
@@ -73,10 +94,6 @@ function audio.fade(s, ini, fin, d, stop, is_bgm)
         table.insert(_current_bgm_handles, h1)
         if h2 then table.insert(_current_bgm_handles, h1) end
     end
-end
-
-function audio.getCurrentBGM()
-    return _current_bgm
 end
 
 
