@@ -1,7 +1,7 @@
 require "classes.primitive"
 local Color = require "classes.color.color"
+local Hsl = require "classes.color.hsl"
 local Util = require "util"
-local LM = require "level_manager"
 
 --LOGO CLASS--
 --[[Logo of the game for the main menu]]
@@ -22,6 +22,26 @@ Logo = Class{
 
         self.alpha = 255
 
+        --Circle of logo balls params
+        self.number_of_stacks = 50 --How many rows the circle has
+        self.center = Vector(528, 300) --Center of circle
+        self.circle_min_radius = 95 --Minimum distance from center the stacks begin
+        self.circle_radius = self.circle_min_radius --Distance from center the stacks begin
+        self.circle_gap = 40 --Gap between "new game" button ring and stack circle
+        self.rotation_angle = 2*math.pi/self.number_of_stacks --Angle to rotate between each stack
+        self.stacks = {} --Stacks of stack of logo balls
+        for i = 1, self.number_of_stacks do
+            self.stacks[i] = {} --Stack of logo balls
+            for j = 1, love.math.random(1,10) do
+              table.insert(self.stacks[i], true)
+            end
+        end
+        self.stack_initial_rotation = 0 --Stack initial rotation
+        self.stack_rotation_speed = -math.pi/15 --Stack rotation speed
+
+        self.logo_balls_radius = 6 --Logo balls radius
+        self.logo_balls_gap = 4 --Space between logo balls in the same stack
+
         --Fonts
         self.logo_font = GUI_LOGO
 
@@ -37,17 +57,47 @@ function Logo:draw()
   color.h = (color.h+127)%255
   Color.set(color)
 
-  love.graphics.setFont(self.logo_font)
-  love.graphics.print("PSYCH", self.pos.x, self.pos.y)
+  --Draw logo stack of balls
+  love.graphics.push()
+  love.graphics.translate(self.center.x, self.center.y)
+  love.graphics.rotate(self.stack_initial_rotation)
+  for i = 1, self.number_of_stacks do
+    local x = 0
+    local y = self.circle_radius + self.circle_gap
+    for j = 1, #self.stacks[i] do
+      if self.stacks[i][j] == true then
+        Draw_Smooth_Circle(x, y, self.logo_balls_radius)
+      end
+      y = y + 2*self.logo_balls_radius + self.logo_balls_gap
+    end
+    love.graphics.rotate(self.rotation_angle)
+  end
+  love.graphics.pop()
+
+
+  --Draw logo text
   color.h = (color.h+127)%255
   Color.set(color)
+  love.graphics.setFont(self.logo_font)
+  love.graphics.print("PSYCH", self.pos.x, self.pos.y)
   love.graphics.print("THE", self.pos.x + 650, self.pos.y - 50)
   love.graphics.print("BALL", self.pos.x + 650, self.pos.y + 50)
+
+
 
 end
 
 
 function Logo:update(dt)
+
+  --Update circle radius based on "new game" button ring radius
+  local b = Util.findId("menu_play_button")
+  if b then
+    self.circle_radius = math.max(self.circle_min_radius, b.ring_r + self.circle_gap)
+  end
+
+  --Rotate stack
+  self.stack_initial_rotation = self.stack_initial_rotation + dt*self.stack_rotation_speed
 
 end
 

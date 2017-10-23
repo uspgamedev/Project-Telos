@@ -30,7 +30,7 @@ function state:enter()
 
         --Continue Button
         func = function() SWITCH = "GAME" end
-        b = Button.create_circle_gui(430, 510, 75, func, "Continue", GUI_BIGLESSLESS, "main_menu_buttons", "menu_continue_button")
+        b = Button.create_circle_gui(430, 530, 75, func, "Continue", GUI_BIGLESSLESS, "main_menu_buttons", "menu_continue_button")
         b.sfx = SFX.play_button
 
     end
@@ -44,7 +44,7 @@ function state:enter()
 
         --Tutorial Button
         func = function() SWITCH = "GAME"; TUTORIAL = true end
-        b = Button.create_circle_gui(525+offset, 510, 75, func, "Tutorial", GUI_BIGLESSLESS, "main_menu_buttons", "menu_tutorial_button")
+        b = Button.create_circle_gui(525+offset, 530, 75, func, "Tutorial", GUI_BIGLESSLESS, "main_menu_buttons", "menu_tutorial_button")
         b.sfx = SFX.play_button
 
     end
@@ -101,6 +101,7 @@ function state:update(dt)
     Util.updateSubTp(dt, "main_menu_buttons")
     Util.updateSubTp(dt, "highscore_menu_buttons")
     Util.updateSubTp(dt, "decaying_particle")
+    Util.updateId(dt, "logo")
 
     Util.updateTimers(dt)
 
