@@ -66,6 +66,7 @@ function setup.config()
     SWITCH = nil --What state to go next
 
     MAX_PARTICLES = 300 --Max number of particles effects on screen (actual number of particles can be greater when creating "important particles", that will be added despite the max_particle limit)
+    USE_ANTI_ALIASING = false --If the game should draw circles with anti-aliasing shader
 
     COROUTINE = nil --Current coroutine
     COROUTINE_HANDLE = nil --Handle timer for current coroutine

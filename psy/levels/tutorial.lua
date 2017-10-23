@@ -140,7 +140,7 @@ function level_functions.part_1()
     LM.giveScore(-p.score, "reset")
     p.life_score = 0
     LM.giveLives(p.default_lives-p.lives, "reset")
-    LM.wait(5)
+    LM.wait(4)
 
     LM.stop()
     TUTORIAL = false

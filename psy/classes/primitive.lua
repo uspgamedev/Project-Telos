@@ -339,20 +339,24 @@ end
 --OBS: Have the color already setted
 function Draw_Smooth_Circle(x, y, r)
 
-    x = x - r
-    y = y - r
+    if USE_ANTI_ALIASING then
+        x = x - r
+        y = y - r
 
-    size = math.ceil(2*r)
-    --Create smooth circle shader if it hasn't been yet
-    if not SMOOTH_CIRCLE_TABLE[size] then
-        print("creating circle shader for size ".. size)
-        SMOOTH_CIRCLE_TABLE[size] = love.graphics.newShader(Smooth_Circle_Shader:format(size))
+        size = math.ceil(2*r)
+        --Create smooth circle shader if it hasn't been yet
+        if not SMOOTH_CIRCLE_TABLE[size] then
+            print("creating circle shader for size ".. size)
+            SMOOTH_CIRCLE_TABLE[size] = love.graphics.newShader(Smooth_Circle_Shader:format(size))
+        end
+
+        --Draw the circle
+        love.graphics.setShader(SMOOTH_CIRCLE_TABLE[size])
+        love.graphics.draw(PIXEL, x, y, 0, 2*r)
+        love.graphics.setShader()
+    else
+        love.graphics.circle("fill", x, y, r)
     end
-
-    --Draw the circle
-    love.graphics.setShader(SMOOTH_CIRCLE_TABLE[size])
-    love.graphics.draw(PIXEL, x, y, 0, 2*r)
-    love.graphics.setShader()
 
 end
 
@@ -360,20 +364,25 @@ end
 --OBS: Have the color already setted
 function Draw_Smooth_Ring(x, y, r, i_r)
 
-    x = x - r
-    y = y - r
+    if USE_ANTI_ALIASING then
+        x = x - r
+        y = y - r
 
-    size = math.ceil(2*r)
-    i_r = math.ceil(i_r)
-    --Create smooth circle shader if it hasn't been yet
-    if not SMOOTH_RING_TABLE[size..'-'..i_r] then
-        print("creating ring shader for size ".. size.." and inner radius "..i_r)
-        SMOOTH_RING_TABLE[size..'-'..i_r] = love.graphics.newShader(Smooth_Ring_Shader:format(size, i_r))
+        size = math.ceil(2*r)
+        i_r = math.ceil(i_r)
+        --Create smooth circle shader if it hasn't been yet
+        if not SMOOTH_RING_TABLE[size..'-'..i_r] then
+            print("creating ring shader for size ".. size.." and inner radius "..i_r)
+            SMOOTH_RING_TABLE[size..'-'..i_r] = love.graphics.newShader(Smooth_Ring_Shader:format(size, i_r))
+        end
+
+        --Draw the circle
+        love.graphics.setShader(SMOOTH_RING_TABLE[size..'-'..i_r])
+        love.graphics.draw(PIXEL, x, y, 0, 2*r)
+        love.graphics.setShader()
+    else
+        love.graphics.setLineWidth(r - i_r)
+        love.graphics.circle("line", x, y, r)
     end
-
-    --Draw the circle
-    love.graphics.setShader(SMOOTH_RING_TABLE[size..'-'..i_r])
-    love.graphics.draw(PIXEL, x, y, 0, 2*r)
-    love.graphics.setShader()
 
 end
