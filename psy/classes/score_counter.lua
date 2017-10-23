@@ -8,9 +8,9 @@ local LM = require "level_manager"
 
 local funcs = {}
 
----------------------------
+-----------------------
 --LIVES COUNTER CLASS--
----------------------------
+-----------------------
 
 --Draws player score on the right side of screen
 ScoreCounter = Class{

@@ -48,6 +48,7 @@ require "classes.ultrablast_counter"
 require "classes.life_counter"
 require "classes.score_counter"
 require "classes.tutorial_icon"
+require "classes.logo"
 Button = require "classes.button"
 
 --MY MODULES

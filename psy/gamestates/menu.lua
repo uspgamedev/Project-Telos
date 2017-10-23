@@ -3,6 +3,7 @@ local Color  = require "classes.color.color"
 local Util = require "util"
 local Draw = require "draw"
 local Txt = require "classes.text"
+local Logo = require "classes.logo"
 --MODULE FOR THE GAMESTATE: MENU--
 
 --BUTTON FUNCTIONS--
@@ -22,80 +23,37 @@ function state:enter()
 
     offset = 0
 
+    local logo = Logo.create()
+
     if CONTINUE then
-        offset = 140 --Move "New Game" button to the left
+        offset = 105 --Move "Tutorial" button to the right
 
         --Continue Button
         func = function() SWITCH = "GAME" end
-        b = Button.create_circle_gui(640, 300, 110, func, "Continue", GUI_BIGLESS, "main_menu_buttons", "menu_continue_button")
+        b = Button.create_circle_gui(430, 510, 75, func, "Continue", GUI_BIGLESSLESS, "main_menu_buttons", "menu_continue_button")
         b.sfx = SFX.play_button
 
     end
 
     --Play Button
-    func = function()
-        SWITCH = "GAME"
-        CONTINUE = false
-        if FIRST_TIME then
-            TUTORIAL = true
-        end
-    end
-    b = Button.create_circle_gui(500 - offset, 300, 110, func, "New Game", GUI_BIGLESS, "main_menu_buttons", "menu_play_button")
+    func = require "buttons.play_button"
+    b = Button.create_circle_gui(528, 300, 110, func, "New Game", GUI_BIGLESS, "main_menu_buttons", "menu_play_button")
     b.sfx = SFX.play_button
 
     if not FIRST_TIME then
 
         --Tutorial Button
         func = function() SWITCH = "GAME"; TUTORIAL = true end
-        b = Button.create_circle_gui(500, 480, 63, func, "Tutorial", GUI_BIGLESSLESS, "main_menu_buttons", "menu_tutorial_button")
+        b = Button.create_circle_gui(525+offset, 510, 75, func, "Tutorial", GUI_BIGLESSLESS, "main_menu_buttons", "menu_tutorial_button")
         b.sfx = SFX.play_button
 
     end
 
     --"Go to Highscore Menu Screen" button
-    func = function()
-        local objects_positions = {}
-        local target_x_values = {}
-        local handles_table = {}
-
-        --Iterate through all main menu buttons and add objects positions (and target values) to the tables
-        local table_ = Util.findSbTp("main_menu_buttons")
-        if table_ then
-            for ob in pairs(table_) do
-                table.insert(objects_positions, ob.pos)
-                table.insert(target_x_values, ob.pos.x - ORIGINAL_WINDOW_WIDTH) --Move objects to the left
-                table.insert(handles_table, ob.handles)
-                ob.lock = true
-            end
-        end
-
-        --Iterate through all main menu buttons and add objects positions (and target values) to the tables
-        local table_ = Util.findSbTp("highscore_menu_buttons")
-        if table_ then
-            for ob in pairs(table_) do
-                table.insert(objects_positions, ob.pos)
-                table.insert(target_x_values, ob.pos.x - ORIGINAL_WINDOW_WIDTH) --Move objects to the left
-                table.insert(handles_table, ob.handles)
-                ob.lock = false
-            end
-        end
-
-        --Iterate through all main menu buttons and add objects positions (and target values) to the tables
-        local table_ = Util.findSbTp("highscore_screen_texts")
-        if table_ then
-            for ob in pairs(table_) do
-                table.insert(objects_positions, ob.pos)
-                table.insert(target_x_values, ob.pos.x - ORIGINAL_WINDOW_WIDTH) --Move objects to the left
-                table.insert(handles_table, ob.handles)
-            end
-        end
-
-        --Change x value of all menu objects
-        FX.change_value_objects(objects_positions, "x", target_x_values, 1800, "moving_tween", handles_table, "out-back")
-
-    end
-    b = Button.create_circle_gui(880, 650, 80, func, "Highscores", GUI_BIGLESSLESS, "main_menu_buttons", "menu_go2highscore_button")
+    local func = require "buttons.highscore_button"
+    b = Button.create_circle_gui(880, 650, 90, func, "Highscores", GUI_BIGLESSLESS, "main_menu_buttons", "menu_go2highscore_button")
     b.sfx = SFX.generic_button
+
     --------------------
     --HIGHSCORE MENU SCREEN--
     --------------------
@@ -103,47 +61,7 @@ function state:enter()
     HS.draw(nil, ORIGINAL_WINDOW_WIDTH, 0) --Create highscore table "one screen to the right"
 
     --"Go to Main Menu Screen" button
-    func = function()
-        local objects_positions = {}
-        local target_x_values = {}
-        local handles_table = {}
-
-        --Iterate through all main menu buttons and add objects positions (and target values) to the tables
-        local table_ = Util.findSbTp("main_menu_buttons")
-        if table_ then
-            for ob in pairs(table_) do
-                table.insert(objects_positions, ob.pos)
-                table.insert(target_x_values, ob.pos.x + ORIGINAL_WINDOW_WIDTH) --Move objects to the left
-                table.insert(handles_table, ob.handles)
-                ob.lock = false
-            end
-        end
-
-        --Iterate through all main menu buttons and add objects positions (and target values) to the tables
-        local table_ = Util.findSbTp("highscore_menu_buttons")
-        if table_ then
-            for ob in pairs(table_) do
-                table.insert(objects_positions, ob.pos)
-                table.insert(target_x_values, ob.pos.x + ORIGINAL_WINDOW_WIDTH) --Move objects to the left
-                table.insert(handles_table, ob.handles)
-                ob.lock = true
-            end
-        end
-
-        --Iterate through all main menu buttons and add objects positions (and target values) to the tables
-        local table_ = Util.findSbTp("highscore_screen_texts")
-        if table_ then
-            for ob in pairs(table_) do
-                table.insert(objects_positions, ob.pos)
-                table.insert(target_x_values, ob.pos.x + ORIGINAL_WINDOW_WIDTH) --Move objects to the left
-                table.insert(handles_table, ob.handles)
-            end
-        end
-
-        --Change x value of all menu objects
-        FX.change_value_objects(objects_positions, "x", target_x_values, 1800, "moving_tween", handles_table, "out-back")
-
-    end
+    func = require "buttons.highscore_back_button"
     b = Button.create_circle_gui(ORIGINAL_WINDOW_WIDTH + 110, 680, 55, func, "Back", GUI_BIGLESSLESS, "highscore_menu_buttons", "menu_go2main_button")
     b.sfx = SFX.back_button
 

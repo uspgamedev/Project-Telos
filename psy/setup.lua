@@ -143,6 +143,7 @@ function setup.config()
     print("Setting up fonts...")
 
     --Specific sizes
+    GUI_LOGO = love.graphics.newFont("assets/fonts/Nevis.ttf", 100)
     GUI_LEVEL_TITLE = love.graphics.newFont("assets/fonts/Nevis.ttf", 90)
     GUI_HIGHSCORE = love.graphics.newFont("assets/fonts/Nevis.ttf", 85)
     GUI_LIFE_COUNTER = love.graphics.newFont("assets/fonts/Nevis.ttf", 40)
@@ -155,7 +156,7 @@ function setup.config()
     --Generic sizes
     GUI_BIG = love.graphics.newFont("assets/fonts/vanadine_bold.ttf", 60)
     GUI_BIGLESS = love.graphics.newFont("assets/fonts/vanadine_bold.ttf", 45)
-    GUI_BIGLESSLESS = love.graphics.newFont("assets/fonts/vanadine_bold.ttf", 30)
+    GUI_BIGLESSLESS = love.graphics.newFont("assets/fonts/vanadine_bold.ttf", 35)
     GUI_MEDPLUSEXTRA = love.graphics.newFont("assets/fonts/Nevis.ttf", 45)
     GUI_MEDPLUSPLUS = love.graphics.newFont("assets/fonts/Nevis.ttf", 35)
     GUI_MEDPLUS = love.graphics.newFont("assets/fonts/Nevis.ttf", 30)
