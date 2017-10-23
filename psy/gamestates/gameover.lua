@@ -6,13 +6,16 @@ local Draw = require "draw"
 local Txt = require "classes.text"
 require "classes.primitive"
 
---MODULE FOR THE GAMESTATE: PAUSE--
+--MODULE FOR THE GAMESTATE: GAMEOVER--
 
 --LOCAL FUNCTIONS--
 
 local chooseDeathMessage
 
 --LOCAL VARIABLES--
+
+local _camera_rot_handle
+local _camera_zoom_handle
 
 --------------------
 
@@ -59,10 +62,15 @@ function state:enter(_score)
         GAMEOVER_BUTTONS_LOCK = false
     end
 
-
-
     --Add slowmotion effect
     SLOWMO_M = .2
+
+    local rot = 3
+    if love.math.random() >= .5 then
+        rot = -rot
+    end
+    _camera_rot_handle = FX.rotateCamera(CAM, rot, 20)
+    _camera_zoom_handle = FX.zoomCamera(CAM,.9,20)
 
     love.mouse.setGrabbed(false) --Stop mouse capture
 
@@ -74,6 +82,11 @@ function state:leave()
     USE_BLUR_CANVAS = false
     BLUR_CANVAS_1 = nil
     BLUR_CANVAS_2 = nil
+
+    CAM.rot = 0 --Reset camera rotation
+    FX_TIMER:cancel(_camera_rot_handle)
+    CAM.scale = 1 --Reset camera zoom
+    FX_TIMER:cancel(_camera_zoom_handle)
 
     Util.addExceptionId("background")
     Util.addExceptionId("fps_counter")

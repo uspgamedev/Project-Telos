@@ -30,6 +30,8 @@ Circle_Button = Class{
 
         self.lock = false --If this button can't be activated
 
+        self.sfx = nil --Sfx to play when button is pressed
+
         self.tp = "circlebutton" --Type of this class
     end
 }
@@ -155,6 +157,8 @@ Inv_Button = Class{
         self.overfont = _overfont --Font of overtext
         self.isOver = false --If mouse is over the button
 
+        self.sfx = nil --Sfx to play when button is pressed
+
         self.lock = false --If this button can't be activated
 
         self.tp = "invbutton" --Type of this class
@@ -265,6 +269,7 @@ function checkCircleButtonCollision(x,y)
               and
               y <= b.pos.y + b.r then
                 b:func()
+                if b.sfx then b.sfx:play() end
                 return
             end
         end
@@ -291,6 +296,7 @@ function checkInvButtonCollision(x,y)
               and
               y >= b.pos.y then
                 b:func()
+                if b.sfx then b.sfx:play() end
                 return
             end
         end

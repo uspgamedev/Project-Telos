@@ -24,6 +24,12 @@ function audio.pauseSFX()
     end
 end
 
+--Stop all current sfxs
+function audio.stopSFX()
+    for _,sfx in pairs(SFX) do
+        sfx:stop()
+    end
+end
 -----------------------
 --BGM AUDIO FUNCTIONS--
 -----------------------

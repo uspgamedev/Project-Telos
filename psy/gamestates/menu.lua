@@ -28,6 +28,7 @@ function state:enter()
         --Continue Button
         func = function() SWITCH = "GAME" end
         b = Button.create_circle_gui(640, 300, 110, func, "Continue", GUI_BIGLESS, "main_menu_buttons", "menu_continue_button")
+        b.sfx = SFX.play_button
 
     end
 
@@ -40,12 +41,14 @@ function state:enter()
         end
     end
     b = Button.create_circle_gui(500 - offset, 300, 110, func, "New Game", GUI_BIGLESS, "main_menu_buttons", "menu_play_button")
+    b.sfx = SFX.play_button
 
     if not FIRST_TIME then
 
         --Tutorial Button
         func = function() SWITCH = "GAME"; TUTORIAL = true end
         b = Button.create_circle_gui(500, 480, 63, func, "Tutorial", GUI_BIGLESSLESS, "main_menu_buttons", "menu_tutorial_button")
+        b.sfx = SFX.play_button
 
     end
 
@@ -92,7 +95,7 @@ function state:enter()
 
     end
     b = Button.create_circle_gui(880, 650, 80, func, "Highscores", GUI_BIGLESSLESS, "main_menu_buttons", "menu_go2highscore_button")
-
+    b.sfx = SFX.generic_button
     --------------------
     --HIGHSCORE MENU SCREEN--
     --------------------
@@ -142,7 +145,7 @@ function state:enter()
 
     end
     b = Button.create_circle_gui(ORIGINAL_WINDOW_WIDTH + 110, 680, 55, func, "Back", GUI_BIGLESSLESS, "highscore_menu_buttons", "menu_go2main_button")
-
+    b.sfx = SFX.back_button
 
     --AUDIO--
     Audio.playBGM(BGM.menu)
@@ -213,8 +216,6 @@ function state:mousepressed(x, y, button)
     if button == 1 then  --Left mouse button
         Button.checkCollision(x,y)
     end
-
-    SFX.play_button:play()
 
 end
 

@@ -171,7 +171,6 @@ function level_manager.text(x, y, text, d, max_alpha, font)
     max_alpha = max_alpha or 255
 
     font = font or GUI_MED
-    print(font, GUI_MED, "hey")
 
     --Create text
     txt = Txt.create_text(x, y, text, font, "in-game_text")

@@ -30,10 +30,11 @@ function state:enter()
 
     --"Go back" button
     func = function() SWITCH = "MENU" end
-    Button.create_inv_gui(340, 650, func, "(b)ack to menu", GUI_MED, "reset score, lives and progress on this level", GUI_MEDLESS, "pause_gui")
+    local b = Button.create_inv_gui(340, 650, func, "(b)ack to menu", GUI_MED, "reset score, lives and progress on this level", GUI_MEDLESS, "pause_gui")
 
     --AUDIO--
     Audio.pauseSFX()
+
     --Decrease current bgm volume
     local bgm = Audio.getCurrentBGM()
     if bgm then
@@ -59,6 +60,7 @@ function state:leave()
     Util.clearAllTables("remove")
 
     Audio.resumeSFX()
+
     --Return current bgm volume to normal
     local bgm = Audio.getCurrentBGM()
     if bgm then
@@ -89,6 +91,12 @@ function state:update(dt)
 
         SWITCH = nil
         Util.clearTimerTable(DEATH_HANDLES, FX_TIMER)
+        CAM.rot = 0 --Reset camera rotation
+        CAM.scale = 1 --Reset camera zoom
+
+        Audio.stopSFX()
+
+        SFX.back_button:play()
 
         if TUTORIAL then
             TUTORIAL = false
