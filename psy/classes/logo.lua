@@ -24,15 +24,20 @@ Logo = Class{
 
         --Circle of logo balls params
         self.number_of_stacks = 50 --How many rows the circle has
-        self.center_offset = Vector(503, 55) --Center of circle (offset based on logo position)
+        self.center_offset = Vector(502, 55) --Center of circle (offset based on logo position)
         self.circle_min_radius = 105 --Minimum distance from center the stacks begin
         self.circle_radius = self.circle_min_radius --Distance from center the stacks begin
         self.circle_gap = 15 --Gap between "new game" button ring and stack circle
         self.rotation_angle = 2*math.pi/self.number_of_stacks --Angle to rotate between each stack
         self.stacks = {} --Stacks of stack of logo balls
+        local true_offset = love.math.random(8,15)
         for i = 1, self.number_of_stacks do
+            local offset = 0
+            if i < self.number_of_stacks/2 then
+              offset = true_offset
+            end
             self.stacks[i] = {} --Stack of logo balls
-            for j = 1, love.math.random(1,10) do
+            for j = 1, love.math.random(love.math.random(1,2*offset/3),love.math.random(5,10)+offset) do
               table.insert(self.stacks[i], true)
             end
         end
