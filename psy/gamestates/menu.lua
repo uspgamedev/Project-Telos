@@ -30,21 +30,21 @@ function state:enter()
 
         --Continue Button
         func = function() SWITCH = "GAME" end
-        b = Button.create_circle_gui(430, 530, 75, func, "Continue", GUI_BIGLESSLESS, "main_menu_buttons", "menu_continue_button")
+        b = Button.create_circle_gui(430, 590, 75, func, "Continue", GUI_BIGLESSLESS, "main_menu_buttons", "menu_continue_button")
         b.sfx = SFX.play_button
 
     end
 
     --Play Button
     func = require "buttons.play_button"
-    b = Button.create_circle_gui(528, 300, 110, func, "New Game", GUI_BIGLESS, "main_menu_buttons", "menu_play_button")
+    b = Button.create_circle_gui(528, 340, 140, func, "New Game", GUI_BIGLESS, "main_menu_buttons", "menu_play_button")
     b.sfx = SFX.play_button
 
     if not FIRST_TIME then
 
         --Tutorial Button
         func = function() SWITCH = "GAME"; TUTORIAL = true end
-        b = Button.create_circle_gui(525+offset, 530, 75, func, "Tutorial", GUI_BIGLESSLESS, "main_menu_buttons", "menu_tutorial_button")
+        b = Button.create_circle_gui(525+offset, 590, 75, func, "Tutorial", GUI_BIGLESSLESS, "main_menu_buttons", "menu_tutorial_button")
         b.sfx = SFX.play_button
 
     end

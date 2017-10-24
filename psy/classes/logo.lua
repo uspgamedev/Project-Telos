@@ -18,16 +18,16 @@ Logo = Class{
     init = function(self)
 
         ELEMENT.init(self)
-        self.pos = Vector(25, 245)
+        self.pos = Vector(25, 285)
 
         self.alpha = 255
 
         --Circle of logo balls params
         self.number_of_stacks = 50 --How many rows the circle has
-        self.center = Vector(528, 300) --Center of circle
-        self.circle_min_radius = 95 --Minimum distance from center the stacks begin
+        self.center_offset = Vector(503, 55) --Center of circle (offset based on logo position)
+        self.circle_min_radius = 105 --Minimum distance from center the stacks begin
         self.circle_radius = self.circle_min_radius --Distance from center the stacks begin
-        self.circle_gap = 40 --Gap between "new game" button ring and stack circle
+        self.circle_gap = 15 --Gap between "new game" button ring and stack circle
         self.rotation_angle = 2*math.pi/self.number_of_stacks --Angle to rotate between each stack
         self.stacks = {} --Stacks of stack of logo balls
         for i = 1, self.number_of_stacks do
@@ -37,7 +37,7 @@ Logo = Class{
             end
         end
         self.stack_initial_rotation = 0 --Stack initial rotation
-        self.stack_rotation_speed = -math.pi/15 --Stack rotation speed
+        self.stack_rotation_speed = -math.pi/18 --Stack rotation speed
 
         self.logo_balls_radius = 6 --Logo balls radius
         self.logo_balls_gap = 4 --Space between logo balls in the same stack
@@ -59,11 +59,11 @@ function Logo:draw()
 
   --Draw logo stack of balls
   love.graphics.push()
-  love.graphics.translate(self.center.x, self.center.y)
+  love.graphics.translate(self.center_offset.x + self.pos.x, self.center_offset.y + self.pos.y)
   love.graphics.rotate(self.stack_initial_rotation)
   for i = 1, self.number_of_stacks do
     local x = 0
-    local y = self.circle_radius + self.circle_gap
+    local y = self.circle_radius
     for j = 1, #self.stacks[i] do
       if self.stacks[i][j] == true then
         Draw_Smooth_Circle(x, y, self.logo_balls_radius)
