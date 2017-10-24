@@ -95,7 +95,7 @@ function Circle_Button:update(dt)
     end
 
     --If ring is big enough, has a small chance to create a decaying particle
-    if b.ring_r > b.r/5 and love.math.random() > .95 then
+    if b.ring_r > b.r/5 and love.math.random() > .9 then
         local dir, angle, radius, pos, color, speed
 
         --Randomize position inside the given circle

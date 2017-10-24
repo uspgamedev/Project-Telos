@@ -39,6 +39,7 @@ function state:enter()
     func = require "buttons.play_button"
     b = Button.create_circle_gui(528, 340, 140, func, "New Game", GUI_BIGLESS, "main_menu_buttons", "menu_play_button")
     b.sfx = SFX.play_button
+    b.ring_growth_speed = 3*b.ring_growth_speed/4
 
     if not FIRST_TIME then
 
