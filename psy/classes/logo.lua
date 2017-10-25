@@ -20,7 +20,7 @@ Logo = Class{
         ELEMENT.init(self)
         self.pos = Vector(25, 285)
 
-        self.alpha = 255
+        self.alpha = 0
 
         --Circle of logo balls params
         self.number_of_stacks = 50 --How many rows the circle has
@@ -30,18 +30,62 @@ Logo = Class{
         self.circle_gap = 15 --Gap between "new game" button ring and stack circle
         self.rotation_angle = 2*math.pi/self.number_of_stacks --Angle to rotate between each stack
         self.stacks = {} --Stacks of stack of logo balls
-        for i = 1, self.number_of_stacks do
-            local offset = math.max(0,(i%self.number_of_stacks/2) - 8)
-            self.stacks[i] = {} --Stack of logo balls
-            for j = 1, love.math.random(1+offset/3,8+offset) do
-              table.insert(self.stacks[i], true)
-            end
-        end
+        self.temp_stacks = {} --Temporary step of stack of logo balls
         self.stack_initial_rotation = 0 --Stack initial rotation
         self.stack_rotation_speed = -math.pi/18 --Stack rotation speed
 
         self.logo_balls_radius = 6 --Logo balls radius
         self.logo_balls_gap = 4 --Space between logo balls in the same stack
+        self.logo_balls_alpha = 0 --Alpha on logo balls drawing
+
+        self.effects_handle = {} --Table containing all effects regarding the logo
+
+        --Populate the temporary stack first
+        for i = 1, self.number_of_stacks do
+            local offset = math.max(0,((i-2)%self.number_of_stacks/2) - 8)
+            self.stacks[i] = {} --Stack of logo balls
+            self.temp_stacks[i] = {}
+            for j = 1, love.math.random(2+offset/3,6+offset) do
+              table.insert(self.temp_stacks[i], 0)
+            end
+        end
+
+        --Create effect to slowly populate true stack
+        self.effects_handle["delay"] = FX_TIMER:after(1.3,
+            function()
+
+              self.effects_handle["intro_logo_balls_alpha"] = FX_TIMER:tween(1, self, {logo_balls_alpha = 256}, 'in-linear')
+
+              self.effects_handle["intro_effect"] = FX_TIMER:every(.12,
+                function()
+                  local changed_something = false
+
+                  for i = 1, self.number_of_stacks do
+                    for j = 1, #self.temp_stacks[i] do
+                      if not self.stacks[i][j] then
+                        self.stacks[i][j] = -2*self.logo_balls_radius
+                        handle = FX_TIMER:tween(.1,
+                                                self.stacks[i],
+                                                {[j] = 0},
+                                                'in-linear'
+                                               )
+                        self.effects_handle["logo_ball_"..i.."_"..j] = handle
+                        changed_something = true
+                        break
+                      end
+                    end
+                  end
+
+                  --Remove effect if have added all balls
+                  if not changed_something then
+                    FX_TIMER:cancel(self.effects_handle["intro_effect"])
+                  end
+                end
+              )
+            end
+        )
+        self.effects_handle["intro_alpha"] = FX_TIMER:tween(1, self, {alpha = 256}, 'in-quad')
+
 
         --Fonts
         self.logo_font = GUI_LOGO
@@ -51,11 +95,20 @@ Logo = Class{
 
 --CLASS FUNCTIONS--
 
+function Logo:destroy(t)
+  for _,handle in pairs(self.effects_handle) do
+    FX_TIMER:cancel(handle)
+  end
+  ELEMENT.destroy(self,t)
+
+end
+
 function Logo:draw()
 
   local color = Color.black()
   Color.copy(color, UI_COLOR.color)
   color.h = (color.h+127)%255
+  color.a = self.logo_balls_alpha
   Color.set(color)
 
   --Draw logo stack of balls
@@ -66,8 +119,8 @@ function Logo:draw()
     local x = 0
     local y = self.circle_radius
     for j = 1, #self.stacks[i] do
-      if self.stacks[i][j] == true then
-        Draw_Smooth_Circle(x, y, self.logo_balls_radius)
+      if self.stacks[i][j] ~= false then
+        Draw_Smooth_Circle(x, y + self.stacks[i][j], self.logo_balls_radius)
       end
       y = y + 2*self.logo_balls_radius + self.logo_balls_gap
     end
@@ -78,6 +131,7 @@ function Logo:draw()
 
   --Draw logo text
   color.h = (color.h+127)%255
+  color.a = self.alpha
   Color.set(color)
   love.graphics.setFont(self.logo_font)
   love.graphics.print("PSYCH", self.pos.x, self.pos.y)
