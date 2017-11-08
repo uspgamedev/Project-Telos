@@ -54,9 +54,37 @@ Logo = Class{
         self.effects_handle["delay"] = FX_TIMER:after(1.3,
             function()
 
+              --Create fade-in effect on menu buttons
+              self.effects_handle["second_delay"] = FX_TIMER:after(.5,
+                function()
+                  local button
+                  button = Util.findId("menu_play_button")
+                  if button then
+                    self.effects_handle["play_alpha"] = FX_TIMER:tween(2, button, {alpha_modifier = 1}, 'in-linear')
+                  end
+                  self.effects_handle["third_delay"] = FX_TIMER:after(2,
+                    function()
+                        button = Util.findId("menu_continue_button")
+                        if button then
+                          self.effects_handle["continue_alpha"] = FX_TIMER:tween(1, button, {alpha_modifier = 1}, 'in-linear')
+                        end
+                        button = Util.findId("menu_go2highscore_button")
+                        if button then
+                          self.effects_handle["go2highscore_alpha"] = FX_TIMER:tween(1, button, {alpha_modifier = 1}, 'in-linear')
+                        end
+                        button = Util.findId("menu_tutorial_button")
+                        if button then
+                          self.effects_handle["tutorial_alpha"] = FX_TIMER:tween(1, button, {alpha_modifier = 1}, 'in-linear')
+                        end
+                      end
+                    )
+                end
+              )
+
+
               self.effects_handle["intro_logo_balls_alpha"] = FX_TIMER:tween(1, self, {logo_balls_alpha = 256}, 'in-linear')
 
-              self.effects_handle["intro_effect"] = FX_TIMER:every(.12,
+              self.effects_handle["intro_effect"] = FX_TIMER:every(.15,
                 function()
                   local changed_something = false
 
@@ -84,7 +112,7 @@ Logo = Class{
               )
             end
         )
-        self.effects_handle["intro_alpha"] = FX_TIMER:tween(1, self, {alpha = 256}, 'in-quad')
+        self.effects_handle["intro_alpha"] = FX_TIMER:tween(.7, self, {alpha = 256}, 'in-quad')
 
 
         --Fonts
@@ -138,8 +166,6 @@ function Logo:draw()
   love.graphics.print("THE", self.pos.x + 650, self.pos.y - 50)
   love.graphics.print("BALL", self.pos.x + 650, self.pos.y + 50)
 
-
-
 end
 
 
@@ -155,6 +181,12 @@ function Logo:update(dt)
   self.stack_initial_rotation = self.stack_initial_rotation + dt*self.stack_rotation_speed
 
 end
+
+--Creates a recursive wave effect on all logo balls
+function Logo:pump(level)
+
+end
+
 
 --UTILITY FUNCTIONS--
 

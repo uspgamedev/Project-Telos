@@ -25,10 +25,13 @@ Circle_Button = Class{
         WTXT.init(self, _text, _font, nil) --Set text
 
         self.ring_r = 0 --Circle ring radius
-        self.ring_growth_speed = 500 --Speed to increase or decrease radius
+        self.ring_growth_speed = 700 --Speed to increase or decrease radius
         self.line_width = 6 --Line width for circle ring
 
         self.lock = false --If this button can't be activated
+
+        self.alpha_mod_v = 1 --Determines how fast alpha value will reach the peak
+        self.alpha_modifier = 1 --Modifier applied on alpha value of button
 
         self.sfx = nil --Sfx to play when button is pressed
 
@@ -49,6 +52,7 @@ function Circle_Button:draw()
     color = Color.black()
     Color.copy(color, UI_COLOR.color)
     color.h = (color.h + 125)%255
+    color.a = math.min((b.ring_r/(b.r/b.alpha_mod_v))^4, 1)*256*b.alpha_modifier
     Color.set(color)
     love.graphics.setLineWidth(b.line_width)
     love.graphics.circle("line", b.pos.x, b.pos.y, b.ring_r)
@@ -59,7 +63,9 @@ function Circle_Button:draw()
     ty = fheight/2     --Relative y position of font on textbox
 
     --Draws button text
-    Color.set(UI_COLOR.color)
+    Color.copy(color, UI_COLOR.color)
+    color.a = 256*b.alpha_modifier
+    Color.set(color)
     love.graphics.setFont(b.font)
     love.graphics.print(b.text, b.pos.x - tx , b.pos.y - ty)
 
@@ -81,15 +87,17 @@ function Circle_Button:update(dt)
 
     mousepos = Vector(x, y)
 
+
     --If mouse is colliding with button total radius, increase ring radius
+    local speed_mod = math.max((b.r-b.ring_r)/b.r,.4)
     if b.pos:dist(mousepos) <= b.r then
         if b.ring_r < b.r then
-            b.ring_r = b.ring_r + b.ring_growth_speed*dt
+            b.ring_r = b.ring_r + b.ring_growth_speed*speed_mod*dt
             if b.ring_r > b.r then b.ring_r = b.r end
         end
     else
         if b.ring_r > 0 then
-            b.ring_r = b.ring_r - b.ring_growth_speed*dt
+            b.ring_r = b.ring_r - b.ring_growth_speed*speed_mod*dt
             if b.ring_r < 0 then b.ring_r = 0 end
         end
     end
@@ -115,7 +123,7 @@ function Circle_Button:update(dt)
         color = Color.black()
         Color.copy(color, UI_COLOR.color)
         color.h = (color.h + 125)%255
-
+        color.a = color.a * b.alpha_modifier
         speed = 150
 
         Particle.create_decaying(pos, dir, color, speed, 200, 2)

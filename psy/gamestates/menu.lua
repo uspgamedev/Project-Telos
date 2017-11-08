@@ -23,7 +23,6 @@ function state:enter()
 
     offset = 0
 
-    local logo = Logo.create()
 
     if CONTINUE then
         offset = 105 --Move "Tutorial" button to the right
@@ -32,6 +31,7 @@ function state:enter()
         func = function() SWITCH = "GAME" end
         b = Button.create_circle_gui(430, 590, 75, func, "Continue", GUI_BIGLESSLESS, "main_menu_buttons", "menu_continue_button")
         b.sfx = SFX.play_button
+        b.alpha_modifier = 0
 
     end
 
@@ -39,7 +39,9 @@ function state:enter()
     func = require "buttons.play_button"
     b = Button.create_circle_gui(528, 340, 140, func, "New Game", GUI_BIGLESS, "main_menu_buttons", "menu_play_button")
     b.sfx = SFX.play_button
-    b.ring_growth_speed = 3*b.ring_growth_speed/4
+    b.ring_growth_speed = b.ring_growth_speed
+    b.alpha_mod_v = 1.5
+    b.alpha_modifier = 0
 
     if not FIRST_TIME then
 
@@ -47,6 +49,7 @@ function state:enter()
         func = function() SWITCH = "GAME"; TUTORIAL = true end
         b = Button.create_circle_gui(525+offset, 590, 75, func, "Tutorial", GUI_BIGLESSLESS, "main_menu_buttons", "menu_tutorial_button")
         b.sfx = SFX.play_button
+        b.alpha_modifier = 0
 
     end
 
@@ -54,6 +57,10 @@ function state:enter()
     local func = require "buttons.highscore_button"
     b = Button.create_circle_gui(880, 650, 90, func, "Highscores", GUI_BIGLESSLESS, "main_menu_buttons", "menu_go2highscore_button")
     b.sfx = SFX.generic_button
+    b.alpha_modifier = 0
+
+    --Create main menu logo
+    local logo = Logo.create()
 
     --------------------
     --HIGHSCORE MENU SCREEN--
