@@ -88,9 +88,9 @@ function Circle_Button:update(dt)
     mousepos = Vector(x, y)
 
 
-    --If mouse is colliding with button total radius, increase ring radius
+    --If mouse is colliding with button total radius (and button is visible), increase ring radius
     local speed_mod = math.max((b.r-b.ring_r)/b.r,.4)
-    if b.pos:dist(mousepos) <= b.r then
+    if b.pos:dist(mousepos) <= b.r and b.alpha_modifier >= .7 then
         if b.ring_r < b.r then
             b.ring_r = b.ring_r + b.ring_growth_speed*speed_mod*dt
             if b.ring_r > b.r then b.ring_r = b.r end

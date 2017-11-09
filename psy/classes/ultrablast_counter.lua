@@ -33,7 +33,7 @@ UltrablastCounter = Class{
 
         self.charge_bar_value = 0 --Current value of bar
         self.charge_bar_max = 100 --Max value a bar can have before giving a utlrablast to player
-        self.charge_bar_speed = 20 --Speed to increase bar per second
+        self.charge_bar_speed = 25 --Speed to increase bar per second
 
         self.charge_bar_w = 10 --Charge bar width
         self.charge_bar_h = 20 --Charge bar max height
@@ -45,7 +45,7 @@ UltrablastCounter = Class{
         --Variables for penalty when psycho is shooting
         self.charge_cooldown_max = 1 --Time added when player is shooting
         self.charge_cooldown = self.charge_cooldown_max
-        self.charge_penalty = 2 --Penalty deducted from charge value when psycho is shooting repeatedly
+        self.charge_penalty = 6 --Penalty deducted from charge value when psycho is shooting repeatedly
 
         self.overall_scale = 1 --Scale applied in everything being drawn
 

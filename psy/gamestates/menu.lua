@@ -51,20 +51,21 @@ function state:enter()
         b.sfx = SFX.play_button
         b.alpha_modifier = 0
 
+        --"Go to Highscore Menu Screen" button
+        local func = require "buttons.highscore_button"
+        b = Button.create_circle_gui(880, 650, 90, func, "Highscores", GUI_BIGLESSLESS, "main_menu_buttons", "menu_go2highscore_button")
+        b.sfx = SFX.generic_button
+        b.alpha_modifier = 0
+
     end
 
-    --"Go to Highscore Menu Screen" button
-    local func = require "buttons.highscore_button"
-    b = Button.create_circle_gui(880, 650, 90, func, "Highscores", GUI_BIGLESSLESS, "main_menu_buttons", "menu_go2highscore_button")
-    b.sfx = SFX.generic_button
-    b.alpha_modifier = 0
 
     --Create main menu logo
     local logo = Logo.create()
 
-    --------------------
+    -------------------------
     --HIGHSCORE MENU SCREEN--
-    --------------------
+    -------------------------
 
     HS.draw(nil, ORIGINAL_WINDOW_WIDTH, 0) --Create highscore table "one screen to the right"
 

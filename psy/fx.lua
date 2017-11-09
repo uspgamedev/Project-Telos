@@ -99,17 +99,8 @@ function fx.psychoExplosion(p)
     --Lower sound when psycho is killed
     local bgm = Audio.getCurrentBGM()
     if bgm then
-        Audio.fade(bgm, bgm:getVolume(), BGM_VOLUME_LEVEL/4, d, false, true)
+        Audio.fade(bgm, bgm:getVolume(), BGM_VOLUME_LEVEL/5, d, false, true)
     end
-
-    --Rotate camera slightly with a random rotation
-    local rot = .15 + love.math.random()*.1
-    if love.math.random() >= .5 then
-        rot = -rot
-    end
-    table.insert(DEATH_HANDLES, fx.rotateCamera(CAM, rot, d))
-    table.insert(DEATH_HANDLES, fx.zoomCamera(CAM, .95, d))
-
 
     c_pos = Vector(p.pos.x, p.pos.y) --Position of psycho's center
 
@@ -147,11 +138,6 @@ function fx.psychoExplosion(p)
             if bgm then
                 Audio.fade(bgm, bgm:getVolume(), BGM_VOLUME_LEVEL, .7, false, true)
             end
-
-            --Rotate back to normal
-            table.insert(DEATH_HANDLES, fx.rotateCamera(CAM, 0, .7, 'in-quad'))
-            table.insert(DEATH_HANDLES, fx.zoomCamera(CAM, 1, .7, 'in-quad'))
-
 
             for part in pairs(Util.findSbTp("psycho_explosion")) do
                 part.speed = -part.speed*multi
