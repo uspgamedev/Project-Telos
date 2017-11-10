@@ -82,9 +82,9 @@ Logo = Class{
               )
 
 
-              self.effects_handle["intro_logo_balls_alpha"] = FX_TIMER:tween(1, self, {logo_balls_alpha = 256}, 'in-linear')
+              self.effects_handle["intro_logo_balls_alpha"] = FX_TIMER:tween(1.5, self, {logo_balls_alpha = 256}, 'in-linear')
 
-              self.effects_handle["intro_effect"] = FX_TIMER:every(.15,
+              self.effects_handle["intro_effect"] = FX_TIMER:every(.09,
                 function()
                   local changed_something = false
 

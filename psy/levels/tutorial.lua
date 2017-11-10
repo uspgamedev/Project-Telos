@@ -55,15 +55,15 @@ function level_functions.part_1()
     --Create tutorial icons for moving
     local w, h = TutIcon.dimensions("letter")
     local gap = 15
-    TutIcon.create(p.pos.x - w/2, p.pos.y - p.r - gap - h, 'W', 5, true)
-    TutIcon.create(p.pos.x + p.r + gap, p.pos.y - h/2, 'D', 5, true)
-    TutIcon.create(p.pos.x - w/2, p.pos.y + p.r + gap, 'S', 5, true)
-    TutIcon.create(p.pos.x - p.r - gap - w, p.pos.y - h/2, 'A', 5, true)
+    TutIcon.create(p.pos.x - w/2, p.pos.y - p.r - gap - h, 'W', 4.2, true)
+    TutIcon.create(p.pos.x + p.r + gap, p.pos.y - h/2, 'D', 4.2, true)
+    TutIcon.create(p.pos.x - w/2, p.pos.y + p.r + gap, 'S', 4.2, true)
+    TutIcon.create(p.pos.x - p.r - gap - w, p.pos.y - h/2, 'A', 4.2, true)
     LM.wait(.6)
     p.can_move = true
     DONT_ENABLE_MOVING_AFTER_DEATH = false
 
-    LM.wait(6.5)
+    LM.wait(5.5)
 
     --Turn ultrablast counter visible
     p.ultrablast_counter = 0
@@ -76,7 +76,7 @@ function level_functions.part_1()
     local sep = Util.findId("separator_1")
     sep.level_handles["become_visible"] = LEVEL_TIMER:tween(.6, sep, {alpha = 255}, 'in-linear')
 
-    LM.wait(4.2)
+    LM.wait(5.4)
 
     --Create tutorial icons for ultrablast
     local w, h = TutIcon.dimensions("space")
@@ -98,9 +98,9 @@ function level_functions.part_1()
     y = y + 30
     LM.text(x, y, text, 7, 180, font)
 
-    LM.wait(3.5)
+    LM.wait(3)
 
-    F.circle{enemy = {SB}, number = 18, radius = 630, speed_m = 1, score_mul = 0, ind_duration = 3, ind_side = 35}
+    F.circle{enemy = {SB}, number = 18, radius = 630, speed_m = 1, score_mul = 0, ind_duration = 2, ind_side = 35}
 
     LM.wait("noenemies")
     LM.wait(2)
@@ -111,7 +111,7 @@ function level_functions.part_1()
     LEVEL_TIMER:tween(.3, p.aim, {alpha = 90}, 'in-linear')
     local w, h = TutIcon.dimensions("left_mouse_button")
     local x, y = ORIGINAL_WINDOW_WIDTH/2 - w/2, ORIGINAL_WINDOW_HEIGHT/2 - h/2
-    TutIcon.create(x, y, 'left_mouse_button', 4.5)
+    TutIcon.create(x, y, 'left_mouse_button', 6.5)
 
     LM.wait(3.5)
     F.fromHorizontal{side = "right", mode = "center", number = 7, enemy = {SB}, ind_duration = 3, ind_side = 35, speed_m = 1.1, enemy_y_margin = 55, enemy_x_margin = 55, e_radius = 23}

@@ -470,7 +470,7 @@ function level_functions.part_2()
         end
     end
     LM.wait("noenemies")
-    LM.giveScore(2000, "finished part")
+    LM.giveScore(3000, "finished part")
 
     LM.stop()
     LM.start(level_functions.part_3)

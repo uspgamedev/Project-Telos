@@ -159,6 +159,10 @@ function Psy:ultrablast(power)
 
     Ultra.create(p.pos.x, p.pos.y, p.color, power)
 
+    --Signal ultrablast counter that psycho used ultrablast
+    local counter = Util.findId("ultrablast_counter")
+    if counter then counter:psychoShot() end
+
 end
 
 function Psy:update(dt)
