@@ -121,7 +121,7 @@ function Turret:kill(gives_score)
             SFX.hit_simple:play()
         end
 
-        FX.shake(.2,1.5)
+        FX.shake(.4,1.5)
 
         FX.explosion(self.pos.x, self.pos.y, self.r, self.color)
     end

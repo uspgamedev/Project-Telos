@@ -32,6 +32,7 @@ function state:enter()
         b = Button.create_circle_gui(430, 590, 75, func, "Continue", GUI_BIGLESSLESS, "main_menu_buttons", "menu_continue_button")
         b.sfx = SFX.play_button
         b.alpha_modifier = 0
+        b.lock = true
 
     end
 
@@ -42,6 +43,7 @@ function state:enter()
     b.ring_growth_speed = b.ring_growth_speed
     b.alpha_mod_v = 1.5
     b.alpha_modifier = 0
+    b.lock = true
 
     if not FIRST_TIME then
 
@@ -50,12 +52,14 @@ function state:enter()
         b = Button.create_circle_gui(525+offset, 590, 75, func, "Tutorial", GUI_BIGLESSLESS, "main_menu_buttons", "menu_tutorial_button")
         b.sfx = SFX.play_button
         b.alpha_modifier = 0
+        b.lock = true
 
         --"Go to Highscore Menu Screen" button
         local func = require "buttons.highscore_button"
         b = Button.create_circle_gui(880, 650, 90, func, "Highscores", GUI_BIGLESSLESS, "main_menu_buttons", "menu_go2highscore_button")
         b.sfx = SFX.generic_button
         b.alpha_modifier = 0
+        b.lock = true
 
     end
 

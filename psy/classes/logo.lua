@@ -61,20 +61,52 @@ Logo = Class{
                   button = Util.findId("menu_play_button")
                   if button then
                     self.effects_handle["play_alpha"] = FX_TIMER:tween(2, button, {alpha_modifier = 1}, 'in-linear')
+                    self.effects_handle["play_lock"] = FX_TIMER:after(.7,
+                      function()
+                        local b = Util.findId("menu_play_button")
+                        if b then
+                          b.lock = false
+                        end
+                      end
+                    )
                   end
                   self.effects_handle["third_delay"] = FX_TIMER:after(2,
                     function()
-                        button = Util.findId("menu_continue_button")
+                        local button = Util.findId("menu_continue_button")
                         if button then
-                          self.effects_handle["continue_alpha"] = FX_TIMER:tween(1, button, {alpha_modifier = 1}, 'in-linear')
+                          self.effects_handle["continue_alpha"] = FX_TIMER:tween(.6, button, {alpha_modifier = 1}, 'in-linear')
+                          self.effects_handle["continue_lock"] = FX_TIMER:after(.2,
+                            function()
+                              local b = Util.findId("menu_continue_button")
+                              if b then
+                                b.lock = false
+                              end
+                            end
+                          )
                         end
                         button = Util.findId("menu_go2highscore_button")
                         if button then
-                          self.effects_handle["go2highscore_alpha"] = FX_TIMER:tween(1, button, {alpha_modifier = 1}, 'in-linear')
+                          self.effects_handle["go2highscore_alpha"] = FX_TIMER:tween(.6, button, {alpha_modifier = 1}, 'in-linear')
+                          self.effects_handle["go2highscore_lock"] = FX_TIMER:after(.3,
+                            function()
+                              local b = Util.findId("menu_go2highscore_button")
+                              if b then
+                                b.lock = false
+                              end
+                            end
+                          )
                         end
                         button = Util.findId("menu_tutorial_button")
                         if button then
-                          self.effects_handle["tutorial_alpha"] = FX_TIMER:tween(1, button, {alpha_modifier = 1}, 'in-linear')
+                          self.effects_handle["tutorial_alpha"] = FX_TIMER:tween(.6, button, {alpha_modifier = 1}, 'in-linear')
+                          self.effects_handle["tutorial_lock"] = FX_TIMER:after(.2,
+                            function()
+                              local b = Util.findId("menu_tutorial_button")
+                              if b then
+                                b.lock = false
+                              end
+                            end
+                          )
                         end
                       end
                     )
