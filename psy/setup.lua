@@ -62,6 +62,9 @@ function setup.config()
     BLUR_CANVAS_2 = nil --Second canvas for blur effect
     USE_BLUR_CANVAS = false --If game should draw the BLUR_CANVAS
 
+    BLACK_WHITE_CANVAS = love.graphics.newCanvas(ORIGINAL_WINDOW_WIDTH, ORIGINAL_WINDOW_HEIGHT)
+    BLACK_WHITE_SHADER_FACTOR = 0 --[0,1]
+
     FOCUS = true --If game screen is focused
     SWITCH = nil --What state to go next
 
@@ -276,7 +279,7 @@ function setup.config()
     SMOOTH_RING_TABLE = {}
 
 
-    --Example shader for drawing glow effect
+    --Shader for drawing glow effect
     Glow_Shader = love.graphics.newShader[[
         vec4 effect( vec4 color, Image texture, vec2 texture_coords, vec2 screen_coords ){
             vec4 pixel = Texel(texture, texture_coords );
@@ -293,35 +296,50 @@ function setup.config()
         }
     ]]
 
+    --Shaders for blur effect
     Horizontal_Blur_Shader = ([[
-        extern number win_width; //1 / (screen width)
-		const float kernel[5] = float[](0.2270270270, 0.1945945946, 0.1216216216, 0.0540540541, 0.0162162162);
-		vec4 effect(vec4 color, sampler2D tex, vec2 tex_coords, vec2 pos) {
-			color = texture2D(tex, tex_coords) * kernel[0];
-			for(int i = 1; i < 5; i++) {
-				color += texture2D(tex, vec2(tex_coords.x + 2*i * win_width, tex_coords.y)) * kernel[i];
-				color += texture2D(tex, vec2(tex_coords.x - 2*i * win_width, tex_coords.y)) * kernel[i];
-			}
-			return color;
-		}
+      extern number win_width; //1 / (screen width)
+  		const float kernel[5] = float[](0.270270270, 0.1945945946, 0.1216216216, 0.0540540541, 0.0162162162);
+  		vec4 effect(vec4 color, sampler2D tex, vec2 tex_coords, vec2 pos) {
+  			color = texture2D(tex, tex_coords) * kernel[0];
+  			for(int i = 1; i < 5; i++) {
+  				color += texture2D(tex, vec2(tex_coords.x + 2*i * win_width, tex_coords.y)) * kernel[i];
+  				color += texture2D(tex, vec2(tex_coords.x - 2*i * win_width, tex_coords.y)) * kernel[i];
+  			}
+  			return color;
+  		}
 	]]):format(1 / love.graphics.getWidth(), 1 / love.graphics.getWidth())
 	Horizontal_Blur_Shader = love.graphics.newShader(Horizontal_Blur_Shader)
 
 	Vertical_Blur_Shader = love.graphics.newShader[[
-        extern number win_height; //1 / (screen height)
-		const float kernel[5] = float[](0.2270270270, 0.1945945946, 0.1216216216, 0.0540540541, 0.0162162162);
-		vec4 effect(vec4 color, sampler2D tex, vec2 tex_coords, vec2 pos) {
-			color = texture2D(tex, tex_coords) * kernel[0];
-			for(int i = 1; i < 5; i++) {
-				color += texture2D(tex, vec2(tex_coords.x, tex_coords.y + 2*i * win_height)) * kernel[i];
-				color += texture2D(tex, vec2(tex_coords.x, tex_coords.y - 2*i * win_height)) * kernel[i];
-			}
-			return color;
-		}
+      extern number win_height; //1 / (screen height)
+  		const float kernel[5] = float[](0.270270270, 0.1945945946, 0.1216216216, 0.0540540541, 0.0162162162);
+  		vec4 effect(vec4 color, sampler2D tex, vec2 tex_coords, vec2 pos) {
+  			color = texture2D(tex, tex_coords) * kernel[0];
+  			for(int i = 1; i < 5; i++) {
+  				color += texture2D(tex, vec2(tex_coords.x, tex_coords.y + 2*i * win_height)) * kernel[i];
+  				color += texture2D(tex, vec2(tex_coords.x, tex_coords.y - 2*i * win_height)) * kernel[i];
+  			}
+  			return color;
+  		}
 	]]
 
   Horizontal_Blur_Shader:send("win_width", 1/WINDOW_WIDTH)
   Vertical_Blur_Shader:send("win_height", 1/WINDOW_HEIGHT)
+
+  --Shader for "black 'n' white" effect
+  Black_White_Shader = love.graphics.newShader[[
+    extern number factor; //How much black 'n' white pixels will be [0,1]
+    vec4 effect( vec4 color, Image texture, vec2 texture_coords, vec2 screen_coords ){
+      vec4 pixel = Texel(texture, texture_coords );//This is the current pixel color
+      number average = (pixel.r+pixel.b+pixel.g)/3.0;
+      pixel.r = pixel.r + (average-pixel.r) * factor;
+      pixel.g = pixel.g + (average-pixel.g) * factor;
+      pixel.b = pixel.b + (average-pixel.b) * factor;
+      return pixel;
+    }
+	]]
+
   --Create some pre-made smooth circle
   for size = 36, 49 do
       SMOOTH_CIRCLE_TABLE[size] = love.graphics.newShader(Smooth_Circle_Shader:format(size))

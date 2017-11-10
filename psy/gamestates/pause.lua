@@ -94,6 +94,8 @@ function state:update(dt)
         CAM.rot = 0 --Reset camera rotation
         CAM.scale = 1 --Reset camera zoom
 
+        BLACK_WHITE_SHADER_FACTOR = 0 --Reset grey factor
+
         Audio.stopSFX()
 
         SFX.back_button:play()

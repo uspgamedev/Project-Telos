@@ -38,6 +38,10 @@ function draw.allTables()
 
     CAM:attach() --Start tracking camera
 
+    local old_canvas = love.graphics.getCanvas()
+    love.graphics.setCanvas(BLACK_WHITE_CANVAS)
+    love.graphics.clear()
+
     DrawTable(DRAW_TABLE.L1)  --Circle effect
 
     DrawTable(DRAW_TABLE.L2)  --Game particle effects and tutorial icons
@@ -65,6 +69,17 @@ function draw.allTables()
     CAM:detach() --Stop tracking camera
 
     MENU_CAM:detach() --Start tracking main menu camera
+
+    love.graphics.setCanvas(old_canvas)
+
+    --Draw stuff (in black and white if needed)
+    love.graphics.setColor(255, 255, 255)
+    love.graphics.setBlendMode("alpha", 'premultiplied') --Set alpha mode properly
+    Black_White_Shader:send("factor", BLACK_WHITE_SHADER_FACTOR)
+    love.graphics.setShader(Black_White_Shader)
+    love.graphics.draw(BLACK_WHITE_CANVAS)
+    love.graphics.setShader()
+    love.graphics.setBlendMode("alpha") --Set alpha mode properly
 
     if USE_BLUR_CANVAS then
         love.graphics.pop() --Stop tracking effects on screen transformations for the canvas

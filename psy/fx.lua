@@ -96,6 +96,11 @@ function fx.psychoExplosion(p)
     ------------------------------
     --Create several particles filling psycho's dead body, exploding in a random death_func pattern
 
+    --Make everything "almost" black and white
+    BLACK_WHITE_SHADER_FACTOR = 0
+    local handle = FX_TIMER:tween(d, _G, {BLACK_WHITE_SHADER_FACTOR = .6}, 'in-linear')
+    table.insert(DEATH_HANDLES, handle)
+
     --Lower sound when psycho is killed
     local bgm = Audio.getCurrentBGM()
     if bgm then
@@ -132,6 +137,10 @@ function fx.psychoExplosion(p)
     --Male all particles go back the way they expanded, but faster
     handle = FX_TIMER:after(d,
         function()
+
+            --Make everything "normal colors" again
+            local handle = FX_TIMER:tween(.7, _G, {BLACK_WHITE_SHADER_FACTOR = 0}, 'in-linear')
+            table.insert(DEATH_HANDLES, handle)
 
             --Increase sound to normal levels again
             local bgm = Audio.getCurrentBGM()

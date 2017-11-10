@@ -14,7 +14,7 @@ local chooseDeathMessage
 
 --LOCAL VARIABLES--
 
-local zoom_handle
+local black_and_white_handle
 
 --------------------
 
@@ -25,6 +25,13 @@ function state:enter(_score)
 
     --Blur gamescreen
     USE_BLUR_CANVAS = true
+
+    --Make everything black and white
+    BLACK_WHITE_SHADER_FACTOR = 0
+    black_and_white_handle = FX_TIMER:tween(2, _G, {BLACK_WHITE_SHADER_FACTOR = 1}, 'in-linear')
+
+    --Shake Screen
+    FX.shake(3,2)
 
     --Handling Highscore
     local score = PSYCHO_SCORE
@@ -64,8 +71,6 @@ function state:enter(_score)
     --Add slowmotion effect
     SLOWMO_M = .2
 
-    zoom_handle = FX.zoomCamera(CAM, 1.1, 10, 'out-quad')
-
     love.mouse.setGrabbed(false) --Stop mouse capture
 
 end
@@ -76,6 +81,12 @@ function state:leave()
     USE_BLUR_CANVAS = false
     BLUR_CANVAS_1 = nil
     BLUR_CANVAS_2 = nil
+
+    --Stop using black and white effect
+    BLACK_WHITE_SHADER_FACTOR = 0
+    if black_and_white_handle then
+      FX_TIMER:cancel(black_and_white_handle)
+    end
 
     Util.addExceptionId("background")
     Util.addExceptionId("fps_counter")
@@ -91,8 +102,6 @@ function state:leave()
     if HIGHSCORE_HIGHLIGHT_EFFECT_HANDLE then
         FX_TIMER:cancel(HIGHSCORE_HIGHLIGHT_EFFECT_HANDLE)
     end
-
-    if zoom_handle then FX_TIMER:cancel(zoom_handle) end
 
     Util.clearAllTables("remove")
 
