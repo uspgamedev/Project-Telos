@@ -320,6 +320,9 @@ function level_manager.giveScore(number, text)
 
     if not p or number == 0 then return end
 
+    --Makes sure score is an integer
+    assert(number - math.floor(number) == 0, "Score received is not an integer")
+
     --Update main score
     p.score = p.score + number
 
@@ -330,47 +333,9 @@ function level_manager.giveScore(number, text)
         level_manager.giveLives(1, "score bonus")
     end
 
-    --Indicators
-
-    --Score
-    t = Util.findId("score_change")
+    --Update Score Counter
     counter = Util.findId("score_counter")
-    if number >= 0 then signal = "+" else signal = "" end --Get correct sign
-    if text then separator = " " else separator = "" end
-    text = text or '' --Correct text
-    local full_text = signal..number..separator..text
-
-    local font = GUI_MED
-    --Get position to draw the indicator
-    local x = ORIGINAL_WINDOW_WIDTH - counter:getGap() - font:getWidth(full_text)
-    local y = counter:getHeight() + 5
-
-    --Create indicator, if there isn't one
-    if not t then
-        t = Txt.create_game_gui(x, y, full_text, font, nil, "right", nil, "score_change")
-    --Else update the one already existing
-    else
-        --Remove previous effect
-        if t.level_handles["effect"] then
-            LEVEL_TIMER:cancel(t.level_handles["effect"])
-            t.level_handles["effect"] = nil
-        end
-        t.alpha = 255
-        t.pos.x = x
-        t.text = full_text
-    end
-
-    --Make text stay still for a while, then fade-out
-    t.level_handles["effect"] = LEVEL_TIMER:after(1,
-                function()
-                    local handle
-                    t.level_handles["effect"] = LEVEL_TIMER:tween(1, t, {alpha = 0}, 'in-linear',
-                                function()
-                                    t.death = true
-                                end
-                            )
-                end
-            )
+    counter:giveScore(number)
 
 end
 

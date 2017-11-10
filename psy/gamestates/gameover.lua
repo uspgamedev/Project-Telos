@@ -31,7 +31,7 @@ function state:enter(_score)
     black_and_white_handle = FX_TIMER:tween(2, _G, {BLACK_WHITE_SHADER_FACTOR = 1}, 'in-linear')
 
     --Shake Screen
-    FX.shake(3,2)
+    FX.shake(3,1)
 
     --Handling Highscore
     local score = PSYCHO_SCORE

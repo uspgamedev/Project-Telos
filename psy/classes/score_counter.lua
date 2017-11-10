@@ -22,7 +22,14 @@ ScoreCounter = Class{
 
         self.alpha = 255
 
-        self.score_cont = 0 --Number of lives player have
+        self.score_cont = 0 --Player score counter number
+        self.score_to_add = 0 --Score player has received but hasn't yet being added to score counter.
+
+        --Variables to add gradually score to score counter
+        self.tick = 0
+        self.tick_max = .05 --Time between gradually additions to score
+
+
 
         --Fonts
         self.score_font = GUI_SCORE_COUNTER
@@ -42,8 +49,7 @@ function ScoreCounter:draw()
   color.a = s.alpha
   Color.set(color)
 
-
-  --Draw life number
+  --Draw score number
   local x = s.pos.x
   local y = s.pos.y
   local font = s.score_font
@@ -71,14 +77,52 @@ function ScoreCounter:getHeight()
   return s.score_font:getHeight(s.score_cont)
 end
 
-function ScoreCounter:update(dt)
+function ScoreCounter:giveScore(score)
 
+  --Score will be gradually added
+  self.score_to_add = self.score_to_add + score
+
+end
+
+function ScoreCounter:update(dt)
+    local s = self
     local p = Util.findId("psycho")
 
-    if p then
-      self.score_cont = p.score
+    --Time to update score counter numer
+    s.tick = s.tick + dt
+    while s.tick >= s.tick_max do
+      s.tick = s.tick - s.tick_max
+
+      --Update score counter gradually
+      if s.score_to_add > 0 then
+        --Find biggest multiple of 10 smaller or equal to score_to_add
+        local i = 1
+        while (10*i <= s.score_to_add) do
+          i = i*10
+        end
+
+        while i >= 1 and s.score_to_add >= i do
+          s.score_to_add = s.score_to_add - i
+          s.score_cont = s.score_cont + i
+          i = i/10
+        end
+      elseif s.score_to_add < 0 then
+        --Find biggest negative multiple of 10 bigger or equal to score_to_add
+        local i = -1
+        while (10*i >= s.score_to_add) do
+          i = i*10
+        end
+
+        while i <= -1 and s.score_to_add <= i do
+          s.score_to_add = s.score_to_add - i
+          s.score_cont = s.score_cont + i
+          i = i/10
+        end
+      end
+
     end
 
+    --Update score x position
     self.pos.x = ORIGINAL_WINDOW_WIDTH - self.gap_width - self.score_font:getWidth(self.score_cont)
 
 end
