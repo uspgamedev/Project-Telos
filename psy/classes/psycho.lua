@@ -58,7 +58,7 @@ Psy = Class{
 
         self.score = 0 --Score psycho has
         self.life_score = 0 --How much score psycho has accumulated to win a life
-        self.life_score_target = 6000 --How many points psycho must win to get a life
+        self.life_score_target = 5000 --How many points psycho must win to get a life
 
         self.can_ultra = true --If psycho can use ultrablast (for tutorial)
         self.can_move = true --If psycho can move (for tutorial)
@@ -159,6 +159,8 @@ function Psy:ultrablast(power)
 
     Ultra.create(p.pos.x, p.pos.y, p.color, power)
 
+    FX.shake(.3,2)
+
     --Signal ultrablast counter that psycho used ultrablast
     local counter = Util.findId("ultrablast_counter")
     if counter then counter:psychoShot() end
@@ -256,6 +258,7 @@ function Psy:kill()
         p.ultrablast_counter = p.default_ultrablast_number
         local counter = Util.findId("ultrablast_counter")
         if counter then counter:reset() end
+        FX.shake(.25,1.5)
         FX.psychoExplosion(p)
     end
 end

@@ -45,6 +45,8 @@ function Simple_Ball:kill(gives_score)
             LM.giveScore(math.ceil(self.score_value*self.score_mul))
         end
 
+        FX.shake(.1,1)
+
         SFX.hit_simple:play()
     end
 

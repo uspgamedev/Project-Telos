@@ -210,7 +210,6 @@ end
 function fx.moveCamera(cam, target_x, target_y, speed, tweening)
     local target = Vector(target_x, target_y)
     local duration = target:dist(Vector(cam.x, cam.y))/speed
-    print(target:dist(Vector(cam.x, cam.y)))
     tweening = tweening or "in-linear"
 
     return FX_TIMER:tween(duration, cam, {x = target.x, y = target.y}, tweening)

@@ -14,6 +14,8 @@ local chooseDeathMessage
 
 --LOCAL VARIABLES--
 
+local zoom_handle
+
 --------------------
 
 local state = {}
@@ -62,6 +64,8 @@ function state:enter(_score)
     --Add slowmotion effect
     SLOWMO_M = .2
 
+    zoom_handle = FX.zoomCamera(CAM, 1.1, 10, 'out-quad')
+
     love.mouse.setGrabbed(false) --Stop mouse capture
 
 end
@@ -87,6 +91,8 @@ function state:leave()
     if HIGHSCORE_HIGHLIGHT_EFFECT_HANDLE then
         FX_TIMER:cancel(HIGHSCORE_HIGHLIGHT_EFFECT_HANDLE)
     end
+
+    if zoom_handle then FX_TIMER:cancel(zoom_handle) end
 
     Util.clearAllTables("remove")
 
