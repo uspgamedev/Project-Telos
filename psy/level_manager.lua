@@ -277,7 +277,7 @@ function level_manager.giveLives(number, text)
 
     counter:update(0)
 
-    if number >= 0 then signal = "+" else signal = "" end --Get correct sign
+    if number > 0 then signal = "+" else signal = "" end --Get correct sign
     if text then separator = " " else separator = "" end
     text = text or '' --Correct text
     local full_text = signal..number..separator..text
@@ -335,7 +335,7 @@ function level_manager.giveScore(number, text)
 
     --Update Score Counter
     counter = Util.findId("score_counter")
-    counter:giveScore(number)
+    counter:giveScore(number, text)
 
 end
 

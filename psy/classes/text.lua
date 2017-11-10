@@ -40,15 +40,16 @@ Text = Class{
 --mode == "left": Prints the variable, followed by the text.
 --mode == "down": Prints the text, and under it, the variable.
 --mode == "format": Prints the text formated (with print).
+--Obs: Variable will be drawn centered to text if mode is "right" or "left"
 function Text:draw()
     local t, text, color
 
     t = self
     color = Color.black()
     Color.copy(color, UI_COLOR.color)
-    color.a = t.alpha
+    color.a = math.max(t.alpha,0)
     if t.invert then
-        color.h = (color.h + 127)%256
+        color.h = (color.h + 127)%255
     end
 
     --Draws button text
@@ -57,9 +58,22 @@ function Text:draw()
     --Case of variable
     if t.var then
         if     t.mode == "right" then
-            love.graphics.print(t.text .. t.var, t.pos.x, t.pos.y)
+            if t.var_font and t.var_font ~= t.font then
+              love.graphics.print(t.text, t.pos.x, t.pos.y)
+              love.graphics.setFont(t.var_font)
+              love.graphics.print(t.var, t.pos.x + t.font:getWidth(t.text), t.pos.y + t.font:getHeight(t.text)/2 - t.var_font:getHeight(t.var)/2)
+            else
+              love.graphics.print(t.text .. t.var, t.pos.x, t.pos.y)
+            end
         elseif t.mode == "left" then
-            love.graphics.print(t.var .. t.text, t.pos.x, t.pos.y)
+          if t.var_font and t.var_font ~= t.font then
+            love.graphics.setFont(t.var_font)
+            love.graphics.print(t.var, t.pos.x, t.pos.y + t.font:getHeight(t.text)/2 - t.var_font:getHeight(t.var)/2)
+            love.graphics.setFont(t.font)
+            love.graphics.print(t.text, t.pos.x  + t.var_font:getWidth(t.var), t.pos.y)
+          else
+            love.graphics.print(t.text .. t.var, t.pos.x, t.pos.y)
+          end
         elseif t.mode == "down" then
             love.graphics.print(t.text, t.pos.x, t.pos.y)
             love.graphics.setFont(t.var_font)

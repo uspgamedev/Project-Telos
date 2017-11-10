@@ -349,6 +349,7 @@ function setup.config()
   SMOOTH_CIRCLE_TABLE[12] = love.graphics.newShader(Smooth_Circle_Shader:format(12))
   SMOOTH_CIRCLE_TABLE[24] = love.graphics.newShader(Smooth_Circle_Shader:format(24))
   SMOOTH_CIRCLE_TABLE[30] = love.graphics.newShader(Smooth_Circle_Shader:format(30))
+  SMOOTH_CIRCLE_TABLE[56] = love.graphics.newShader(Smooth_Circle_Shader:format(56))
   SMOOTH_CIRCLE_TABLE[60] = love.graphics.newShader(Smooth_Circle_Shader:format(60))
 
   --Create some pre-made smooth rings

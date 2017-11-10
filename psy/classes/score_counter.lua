@@ -1,5 +1,6 @@
 require "classes.primitive"
 local Color = require "classes.color.color"
+local Txt = require "classes.text"
 local Util = require "util"
 local LM = require "level_manager"
 
@@ -25,11 +26,11 @@ ScoreCounter = Class{
         self.score_cont = 0 --Player score counter number
         self.score_to_add = 0 --Score player has received but hasn't yet being added to score counter.
 
+        self.popup_texts = {} --Tale containing all popup texts when player receives score
+
         --Variables to add gradually score to score counter
         self.tick = 0
         self.tick_max = .05 --Time between gradually additions to score
-
-
 
         --Fonts
         self.score_font = GUI_SCORE_COUNTER
@@ -77,10 +78,63 @@ function ScoreCounter:getHeight()
   return s.score_font:getHeight(s.score_cont)
 end
 
-function ScoreCounter:giveScore(score)
+function ScoreCounter:giveScore(score, text)
 
   --Score will be gradually added
   self.score_to_add = self.score_to_add + score
+
+  --Move all other popups down, making them a little more transparent
+  for _,popup in pairs(self.popup_texts) do
+    local handle1 = LEVEL_TIMER:tween(.3, popup.pos, {y = popup.pos.y + 27})
+    local handle2 = LEVEL_TIMER:tween(.3, popup, {alpha = popup.alpha - 50})
+    table.insert(popup.level_handles, handle1)
+    table.insert(popup.level_handles, handle2)
+  end
+
+  --Create popup text--
+  local fade_duration = .3 --Time for popup to appear/disappear
+  local popup_duration = 2.1 --time popup remains visible
+  --Create number text
+  if score > 0 then signal = "+" else signal = "" end --Get correct sign
+  local score_text = signal..score
+  local extra_text = text and (text .. "  ") or ""
+  local score_font = GUI_MED
+  local extra_font = GUI_MEDLESS
+  local x = ORIGINAL_WINDOW_WIDTH - self.gap_width - extra_font:getWidth(extra_text) - score_font:getWidth(score_text)
+  local y = self:getStartYPosition() + self:getHeight()
+  local t = Txt.create_game_gui(x, y, extra_text, extra_font, score_text, "right", score_font)
+  --Create number text effect
+  t.alpha = 0
+  t.level_handles["fade-in-alpha"] =
+    LEVEL_TIMER:tween(fade_duration,
+                      t,
+                      {alpha = 255},
+                      'in-linear'
+   )
+   t.level_handles["fade-in-y"] =
+   LEVEL_TIMER:tween(fade_duration,
+                         t.pos,
+                         {y = t.pos.y + 5},
+                         'in-linear',
+                          function()
+                            t.level_handles["popup-duration"] =
+                              LEVEL_TIMER:after(popup_duration,
+                                                function()
+                                                  t.level_handles["fade-out-alpha"] =
+                                                    LEVEL_TIMER:tween(fade_duration,
+                                                                      t,
+                                                                      {alpha = 0},
+                                                                      'in-linear',
+                                                                      function()
+                                                                        t.death = true
+                                                                      end
+                                                   )
+                                                end
+                              )
+                          end
+    )
+  --Insert number text on counter popup table
+  table.insert(self.popup_texts, t)
 
 end
 
