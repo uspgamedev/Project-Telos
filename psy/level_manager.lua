@@ -101,8 +101,16 @@ end
 --Changes the level part text
 function level_manager.level_part(name)
     local level_part = Util.findId("level_part")
-    level_part.text = name --Update text
-    level_part.pos.x = ORIGINAL_WINDOW_WIDTH/2 - level_part.font:getWidth(name)/2 --Update position
+    if not level_part then return end
+
+    local off = 40
+    level_part.level_handles["up"] = LEVEL_TIMER:tween(.8, level_part.pos, {y = level_part.pos.y - off}, 'in-out-quad',
+      function()
+        level_part.text = name --Update text
+        level_part.pos.x = ORIGINAL_WINDOW_WIDTH/2 - level_part.font:getWidth(name)/2 --Update position
+        level_part.level_handles["down"] = LEVEL_TIMER:tween(.8, level_part.pos, {y = level_part.pos.y + off}, 'in-out-quad')
+      end
+    )
 end
 
 --Create a centralized level title, that fades out after 3 seconds

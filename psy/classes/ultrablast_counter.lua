@@ -31,9 +31,9 @@ UltrablastCounter = Class{
         self.ultra_ring_width = 4
         self.gap_between_ultras = 10
 
-        self.charge_bar_value = 0 --Current value of bar
-        self.charge_bar_max = 100 --Max value a bar can have before giving a utlrablast to player
-        self.charge_bar_speed = 20 --Speed to increase bar per second
+        self.charge_bar_value = 0  --Current value of bar
+        self.charge_bar_max = 100  --Max value a bar can have before giving a utlrablast to player
+        self.charge_bar_speed = 25 --Speed to increase bar per second
 
         self.charge_bar_w = 10 --Charge bar width
         self.charge_bar_h = 20 --Charge bar max height

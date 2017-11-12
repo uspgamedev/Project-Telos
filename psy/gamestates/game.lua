@@ -45,7 +45,7 @@ function state:enter()
     SLOWMO = false
 
     --Level part text
-    Txt.create_game_gui(350, 10, "Part X: Eletric Boogaloo", GUI_MED, nil, nil, nil, "level_part")
+    Txt.create_game_gui(350, 10, "", GUI_MED, nil, nil, nil, "level_part")
 
     --Life counter
     LifeCounter.create(25, 20)

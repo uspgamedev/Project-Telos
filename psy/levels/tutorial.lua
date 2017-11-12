@@ -73,34 +73,34 @@ function level_functions.part_1()
     DONT_ENABLE_ULTRA_AFTER_DEATH = false
     local counter = Util.findId("ultrablast_counter")
     counter:reset()
-    counter.charge_cooldown = .1
+    counter.charge_cooldown = .2
     counter.level_handles["become_visible"] = LEVEL_TIMER:tween(.6, counter, {alpha = 255}, 'in-linear')
     local sep = Util.findId("separator_1")
     sep.level_handles["become_visible"] = LEVEL_TIMER:tween(.6, sep, {alpha = 255}, 'in-linear')
 
-    LM.wait(5.5)
+    LM.wait(4.5)
 
     --Create tutorial icons for ultrablast
     local w, h = TutIcon.dimensions("space")
     local x, y = ORIGINAL_WINDOW_WIDTH/2 - w/2, ORIGINAL_WINDOW_HEIGHT/3 - 20
-    TutIcon.create(x, y, 'space', 7)
+    TutIcon.create(x, y, 'space', 6)
     x, y = x + w/2 - 10, y + h + 20
-    LM.text(x, y, "or", 7, 180)
+    LM.text(x, y, "or", 6, 180)
     w, h = TutIcon.dimensions("right_mouse_button")
     x, y = x - w/2 + 8, y + 35
-    TutIcon.create(x, y, 'right_mouse_button', 7)
+    TutIcon.create(x, y, 'right_mouse_button', 6)
     local font = GUI_MED
     local text = "for"
     x = ORIGINAL_WINDOW_WIDTH/2 - font:getWidth(text)/2
     y = y + h + 15
-    LM.text(x, y, text, 7, 180, font)
+    LM.text(x, y, text, 6, 180, font)
     font = GUI_MEDPLUS
     text = "ULTRABLAST"
     x = ORIGINAL_WINDOW_WIDTH/2 - font:getWidth(text)/2
     y = y + 30
-    LM.text(x, y, text, 7, 180, font)
+    LM.text(x, y, text, 6, 180, font)
 
-    LM.wait(3)
+    LM.wait(2)
 
     F.circle{enemy = {SB}, number = 18, radius = 630, speed_m = 1, score_mul = 0, ind_duration = 2, ind_side = 35}
 
@@ -127,12 +127,14 @@ function level_functions.part_1()
     LM.wait(3.2)
 
     LM.text(ORIGINAL_WINDOW_WIDTH/2 - 50, ORIGINAL_WINDOW_HEIGHT/2, "good luck", 6, 170)
+
+    LM.wait(2)
     --Reset psycho stats
     LM.giveScore(-p.score, "reset")
     p.life_score = 0
     LM.giveLives(p.default_lives-p.lives, "reset")
 
-    LM.wait(4)
+    LM.wait(2)
 
     --Turn fps counter visible
     txt = Util.findId("fps_counter")
