@@ -51,7 +51,7 @@ Logo = Class{
         end
 
         --Create effect to slowly populate true stack
-        self.effects_handle["delay"] = FX_TIMER:after(1.3,
+        self.effects_handle["delay"] = FX_TIMER:after(.5,
             function()
 
               --Create fade-in effect on menu buttons
@@ -70,7 +70,7 @@ Logo = Class{
                       end
                     )
                   end
-                  self.effects_handle["third_delay"] = FX_TIMER:after(2,
+                  self.effects_handle["third_delay"] = FX_TIMER:after(1,
                     function()
                         local button = Util.findId("menu_continue_button")
                         if button then

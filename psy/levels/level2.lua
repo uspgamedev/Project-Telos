@@ -25,7 +25,7 @@ function level_functions.part_1()
 
     LM.level_part("Part 1 - A Cross the Planes")
 
-    LM.wait(3)
+    LM.wait(4)
     F.fromHorizontal{enemy = {DB}, side = "left", mode = "top" , number = 7, ind_duration = 2.5, ind_side = 40, speed_m = 1.5}
     LM.wait(2.5)
     for i = 1,10 do
@@ -784,7 +784,7 @@ end
 function level_functions.setup()
 
     --Start Level
-    LM.level_title("LOST IN DARKNESS")
+    LM.level_title("LOST IN DARKNESS", "Chapter II")
     Audio.playBGM(BGM.level_2)
 
 end

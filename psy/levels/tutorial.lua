@@ -21,6 +21,7 @@ function level_functions.part_1()
     p.can_ultra = false --Disable ultrablast
     p.can_move = false --Disable movement
     p.can_shoot = false --Disable shooting
+    p.can_charge = false --Disable ultrablast bar charge
 
     --Make gui invisible here
     Util.findId("life_counter").alpha = 0
@@ -30,13 +31,13 @@ function level_functions.part_1()
     Util.findId("level_part").alpha = 0
     Util.findId("fps_counter").alpha = 0
 
-    LM.wait(4)
+    LM.wait(5.5)
 
     DONT_ENABLE_SHOOTING_AFTER_DEATH = true
     DONT_ENABLE_ULTRA_AFTER_DEATH = true
     DONT_ENABLE_MOVING_AFTER_DEATH = true
 
-    F.single{enemy = SB, x = ORIGINAL_WINDOW_WIDTH + 20, y = p.pos.y, dx = -11, dy = 0, speed_m = 1.8, e_radius = 20, score_mul = 0, ind_duration = 3.5, ind_side = 50}
+    F.single{enemy = SB, x = ORIGINAL_WINDOW_WIDTH + 20, y = p.pos.y, dx = -11, dy = 0, speed_m = 1.8, e_radius = 20, score_mul = 0, ind_duration = 3, ind_side = 50}
 
     LM.wait(2)
 
@@ -68,15 +69,16 @@ function level_functions.part_1()
     --Turn ultrablast counter visible
     p.ultrablast_counter = 0
     p.can_ultra = true
+    p.can_charge = true
     DONT_ENABLE_ULTRA_AFTER_DEATH = false
     local counter = Util.findId("ultrablast_counter")
     counter:reset()
-    counter.charge_cooldown = 0
+    counter.charge_cooldown = .1
     counter.level_handles["become_visible"] = LEVEL_TIMER:tween(.6, counter, {alpha = 255}, 'in-linear')
     local sep = Util.findId("separator_1")
     sep.level_handles["become_visible"] = LEVEL_TIMER:tween(.6, sep, {alpha = 255}, 'in-linear')
 
-    LM.wait(5.4)
+    LM.wait(5.5)
 
     --Create tutorial icons for ultrablast
     local w, h = TutIcon.dimensions("space")
@@ -159,7 +161,7 @@ end
 function level_functions.setup()
 
     --Start Level
-    LM.level_title("HELLO THERE...")
+    LM.level_title("HELLO THERE...", "Prologue")
     --Make tutorial music play at the same position menu music was playing
     local bgm = Audio.getCurrentBGM()
     if bgm then

@@ -106,30 +106,93 @@ function level_manager.level_part(name)
 end
 
 --Create a centralized level title, that fades out after 3 seconds
-function level_manager.level_title(name)
-    local txt, fx, fy, x, y, font, limit
+function level_manager.level_title(chapter_name, chapter_upper_text)
+    local fx, fy, x, y
 
-    font = GUI_LEVEL_TITLE
-    limit = 4*ORIGINAL_WINDOW_WIDTH/5
+    --Create texts and separator
+
+    local chapter_name_font = GUI_LEVEL_TITLE
+    local chapter_upper_text_font = GUI_MEDPLUS
+    local separator_font = GUI_MEDPLUS
+
+
+    local limit = 4*ORIGINAL_WINDOW_WIDTH/5
 
     --Get position so that the text is centralized on screen
-    fx = math.min(font:getWidth(name),limit) --Width of text
-    fy = font:getHeight(name)*  math.ceil(font:getWidth(name)/fx) --Height of text
+    fx = math.min(chapter_name_font:getWidth(chapter_name),limit) --Width of text
+    fy = chapter_name_font:getHeight(chapter_name)*  math.ceil(chapter_name_font:getWidth(chapter_name)/fx) --Height of text
     x = ORIGINAL_WINDOW_WIDTH/2 - fx/2
     y = ORIGINAL_WINDOW_HEIGHT/2 - fy/2
     --Create level title
-    txt = Txt.create_game_gui(x, y, name, GUI_LEVEL_TITLE, nil, "format", nil, "game_title", "center", fx)
-    --in the future, make a "PAAAM" sound here
+    local name_txt = Txt.create_game_gui(x, y, chapter_name, chapter_name_font, nil, "format", nil, "game_title", "center", fx)
+    name_txt.alpha = 0
 
-    --After two seconds, fades-out the title
-    txt.level_handles["fade-in"] = LEVEL_TIMER:after(2,
+
+    --Create separator between upper text and chapter name
+    local string = ""
+    while separator_font:getWidth(string) <= chapter_upper_text_font:getWidth(chapter_upper_text) + 10 do
+      string = string .. "—"
+    end
+    fx = separator_font:getWidth(string)
+    x = ORIGINAL_WINDOW_WIDTH/2 - fx/2
+    y = y - 25
+    --Create separator
+    local separator_txt = Txt.create_game_gui(x, y, string, separator_font, nil, nil, nil, "game_title_separator")
+    separator_txt.alpha = 0
+
+
+
+    --Get position so that the text is centralized on screen and above chapter name
+    fx = chapter_upper_text_font:getWidth(chapter_upper_text)
+    fy = chapter_upper_text_font:getHeight(chapter_upper_text)
+    x = ORIGINAL_WINDOW_WIDTH/2 - fx/2
+    y = y - fy/2 - 5
+    --Create upper text
+    local upper_txt = Txt.create_game_gui(x, y, chapter_upper_text, chapter_upper_text_font, nil, nil, nil, "game_upper_title")
+    upper_txt.alpha = 0
+
+    --Start animation
+
+    --Fade in first part
+    upper_txt.level_handles["fade-in"] = LEVEL_TIMER:tween(1, upper_txt, {alpha = 255}, 'in-linear')
+    separator_txt.level_handles["fade-in"] = LEVEL_TIMER:tween(1, separator_txt, {alpha = 255}, 'in-linear')
+
+    --Fade-in second part
+    name_txt.level_handles["fade-in-wait"] = LEVEL_TIMER:after(1.5,
         function()
-            txt.level_handles["fade-in"] = LEVEL_TIMER:tween(1, Util.findId("game_title"), {alpha = 0}, 'in-linear',
-                function()
-                    Util.findId("game_title").death = true
-                end
-            )
+            name_txt.level_handles["fade-in"] = LEVEL_TIMER:tween(1, name_txt, {alpha = 255}, 'in-linear')
         end
+    )
+
+    --Fade everything out
+    upper_txt.level_handles["fade-out-wait"] = LEVEL_TIMER:after(4,
+      function()
+        upper_txt.level_handles["fade-out"] = LEVEL_TIMER:tween(1, upper_txt, {alpha = 0}, 'in-linear',
+          function()
+            upper_txt.death = true
+          end
+        )
+      end
+    )
+
+    separator_txt.level_handles["fade-out-wait"] = LEVEL_TIMER:after(4,
+      function()
+        separator_txt.level_handles["fade-out"] = LEVEL_TIMER:tween(1, separator_txt, {alpha = 0}, 'in-linear',
+          function()
+            separator_txt.death = true
+          end
+        )
+      end
+    )
+
+    name_txt.level_handles["fade-out-wait"] = LEVEL_TIMER:after(4,
+      function()
+        name_txt.level_handles["fade-out"] = LEVEL_TIMER:tween(1, name_txt, {alpha = 0}, 'in-linear',
+          function()
+            name_txt.death = true
+          end
+        )
+      end
     )
 
 end

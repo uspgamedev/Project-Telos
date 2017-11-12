@@ -44,7 +44,7 @@ UltrablastCounter = Class{
 
         --Variables for penalty when psycho is shooting
         self.charge_cooldown_max = .6 --Time added when player is shooting
-        self.charge_cooldown = self.charge_cooldown_max
+        self.charge_cooldown = 0
         self.charge_penalty = 5 --Penalty deducted from charge value when psycho is shooting repeatedly
 
         self.overall_scale = 1 --Scale applied in everything being drawn
@@ -78,12 +78,12 @@ function UltrablastCounter:draw()
 
   end
 
-
+  local p = Util.findId("psycho")
 
   --Draw charge bar
   if s.ultra_cont < MAX_ULTRABLAST then
 
-    if s.charge_cooldown > 0 then
+    if s.charge_cooldown > 0 or (p and not p.can_charge) then
       color.h = (color.h + 127)%255
       Color.set(color)
     end
@@ -222,6 +222,8 @@ function UltrablastCounter:update(dt)
     if p then
       --Update utlrablast cont
       self.ultra_cont = p.ultrablast_counter
+
+      if not p.can_charge then return end
 
       --Update charge bar
       if self.ultra_cont >= MAX_ULTRABLAST then

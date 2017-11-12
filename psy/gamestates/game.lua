@@ -29,7 +29,7 @@ function state:enter()
     if TUTORIAL then
         level = Levels["tutorial"]
     elseif not CONTINUE then
-        level = Levels["level2"]
+        level = Levels["level1"]
     else
         level = Levels["level"..CONTINUE]
     end

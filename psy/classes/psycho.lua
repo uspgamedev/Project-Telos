@@ -42,6 +42,7 @@ Psy = Class{
 
         self.color_duration = 3 --Duration between color transitions
         self.ui_color = false --If its color should be the same as the ui
+        self.alpha = 255
 
         self.speedv = 265 --Speed value
         self.speed_multiplier = 0 --Multiplier for speed
@@ -64,6 +65,7 @@ Psy = Class{
         self.can_move = true --If psycho can move (for tutorial)
         self.can_focus = true --If psycho can focus (for tutorial)
         self.can_shoot = true --If psycho can shoot
+        self.can_charge = true --If psycho can charge his ultrablast bar
 
         self.default_lives = 10 --How many lives psycho by default has
         self.lives = self.default_lives --How many lives psycho has
@@ -87,14 +89,18 @@ function Psy:draw()
 
     p = self
 
-    --Draws the circle
-    if not p.ui_color then
-        Color.set(p.color)
-    else
-        Color.set(UI_COLOR.color)
-    end
+    local color = Color.black()
 
-    --Apply effect for invisible radius
+    --Get correct color
+    if not p.ui_color then
+        Color.copy(color, p.color)
+    else
+        Color.copy(color, UI_COLOR.color)
+    end
+    color.a = p.alpha
+    Color.set(color)
+
+    --Apply effect for invisible radius and draw the circle
     if p.invisible_circle_radius_ratio > 0 then
         Draw_Smooth_Ring(p.pos.x, p.pos.y, p.r, p.invisible_circle_radius_ratio*p.r)
     else
@@ -345,30 +351,34 @@ function psycho.create(x, y, is_tutorial)
     --Create aim
     p.aim = Aim.create("psycho_aim", is_tutorial)
 
-    --Make psycho first color to be the UI color (to blend with title)
-    p.ui_color = true
-    --Return to normal after 2.5 seconds
-    handle = COLOR_TIMER:after(2.5,
-        function()
-            p.ui_color = false
-            Color.copy(p.color, UI_COLOR.color)
-            p:startColorLoop()
-        end
-    )
-    table.insert(p.handles, handle)
-
+    --Disable action until psycho enter animation ends
     p.can_ultra = false
     p.can_shoot = false
+    p.can_charge = false
 
-    --Enable shooting after 2.5 seconds
-    if not is_tutorial then
-      LEVEL_TIMER:after(2.5,
-          function()
-              p.can_ultra = true
-              p.can_shoot = true
-          end
-      )
-    end
+    --Make psycho first color to be the UI color (to blend with title) and fade-in with title
+    --When title is leaving, make psycho normal and able to shoot
+    p.ui_color = true
+    p.alpha = 0
+    p.level_handles["init-wait"] = LEVEL_TIMER:after(1.5,
+        function()
+            p.level_handles["fade-in"] = LEVEL_TIMER:tween(1, p, {alpha = 255})
+            p.level_handles["turn-normal"] = LEVEL_TIMER:after(4,
+              function()
+
+                if not is_tutorial then
+                  p.can_ultra = true
+                  p.can_shoot = true
+                  p.can_charge = true
+                end
+
+                p.ui_color = false
+                Color.copy(p.color, UI_COLOR.color)
+                p:startColorLoop()
+              end
+            )
+        end
+    )
 
     return p
 end

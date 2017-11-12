@@ -18,7 +18,8 @@ function level_functions.part_1()
 
     LM.level_part("Part 1 - The Start of the End")
 
-    LM.wait(4)
+    LM.wait(5)
+
     INDICATOR_DEFAULT = 1.5
     F.single{enemy = SB, x = -20, y = ORIGINAL_WINDOW_HEIGHT/2, dx = 1, dy = 0, e_radius = 28, ind_duration = 2, ind_side = 35}
     LM.wait("noenemies")
@@ -308,7 +309,7 @@ end
 function level_functions.setup()
 
     --Start Level
-    LM.level_title("I - THE FALL OF PSYCHO")
+    LM.level_title("THE FALL OF PSYCHO", "Chapter I")
     Audio.playBGM(BGM.level_1)
 
 end
@@ -317,9 +318,9 @@ function level_functions.startPositions()
     local x, y
 
     if love.math.random() >= .9 then
-        x, y = 787, 321 --'O' of "Of"
+        x, y = 723, 321 --'O' of "Of"
     else
-        x, y = 662, 424 --'O' of "Psycho"
+      x, y = 662, 424 --'O' of "Psycho"
     end
 
     return x,y
