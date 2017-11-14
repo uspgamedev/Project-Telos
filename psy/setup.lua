@@ -37,6 +37,8 @@ function setup.config()
     GAMEOVER_BUTTONS_LOCK = false --If player can press or activate the gameover buttons
     PSYCHO_SCORE = 0 --Psycho score
 
+    USING_JOYSTICK = false --If player is using the joystick to control the game
+
     TUTORIAL = false --If the game gamestate should play the tutorial
     DONT_ENABLE_SHOOTING_AFTER_DEATH = false --for tutorial only
     DONT_ENABLE_ULTRA_AFTER_DEATH = false --for tutorial only

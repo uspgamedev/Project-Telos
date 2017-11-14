@@ -300,6 +300,25 @@ end
 
 end
 
+function Psy:joystickaxis(joystick, axis, value)
+
+  --Update psycho speed (left stick)
+  if self.can_move and axis == 1 then
+    self.speed.x = value * self.speedv
+  elseif self.can_move and axis == 2 then
+    self.speed.y = value * self.speedv
+
+  --Update psycho aim (right stick)
+  elseif self.can_shoot and axis == 3 then
+
+  elseif self.can_shoot and axis == 4 then
+
+  end
+
+
+
+end
+
 --Make psycho temporarily invincible
 function Psy:startInvincible(duration)
     local d, count, p

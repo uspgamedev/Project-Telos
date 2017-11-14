@@ -145,6 +145,20 @@ function love.quit()
     return true
 end
 
+
+--Update status of player using joystick or not
+function love.mousemoved(...)
+  USING_JOYSTICK = false
+end
+
+function love.joystickaxis(joystick, axis, value)
+  USING_JOYSTICK = true
+end
+
+function love.joystickpressed(joystick, button)
+  USING_JOYSTICK = true
+end
+
 --Used for debugging
 function love.update()
 end

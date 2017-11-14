@@ -195,5 +195,13 @@ function state:mousepressed(x, y, button, istouch)
 
 end
 
+function state:joystickaxis(joystick, axis, value)
+    local p = Util.findId("psycho")
+    if p then
+      p:joystickaxis(joystick, axis, value)
+    end
+
+end
+
 --Return state functions
 return state
