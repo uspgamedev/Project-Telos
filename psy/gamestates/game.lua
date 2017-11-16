@@ -202,5 +202,13 @@ function state:joystickaxis(joystick, axis, value)
     end
 end
 
+function state:joystickpressed(joystick, button)
+  local p = Util.findId("psycho")
+  if p then
+    p:joystickpressed(joystick, button)
+  end
+
+end
+
 --Return state functions
 return state

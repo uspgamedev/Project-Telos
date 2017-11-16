@@ -322,6 +322,15 @@ function Psy:joystickaxis(joystick, axis, value)
 
 end
 
+function Psy:joystickpressed(joystick, button)
+
+  --Use ultrablast (right or left trigger button)
+  if button == 7 or button == 8 then
+    self:ultrablast(self.default_ultrablast_power)
+  end
+
+end
+
 --Make psycho temporarily invincible
 function Psy:startInvincible(duration)
     local d, count, p
