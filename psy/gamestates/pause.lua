@@ -162,6 +162,14 @@ function state:keypressed(key)
 
 end
 
+function state:joystickpressed(joystick, button)
+
+  if button == 10 then
+      SWITCH = "GAME"
+  end
+
+end
+
 function state:mousepressed(x, y, button)
     local scale
 

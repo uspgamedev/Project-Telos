@@ -205,8 +205,8 @@ end
 function state:joystickpressed(joystick, button)
 
   print(button)
-  
-  if button == 'escape' then
+
+  if button == 10 then
       SWITCH = "PAUSE"
   end
 

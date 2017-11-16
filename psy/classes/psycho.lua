@@ -199,19 +199,23 @@ function Psy:update(dt)
         end
       end
     elseif CURRENT_JOYSTICK and
-           JOYSTICK_AIMING_MODE == "auto-shoot" and
+           (JOYSTICK_AUTO_SHOOT or CURRENT_JOYSTICK:isDown(5,6)) and
            (CURRENT_JOYSTICK:getAxis(3) ~= 0 or CURRENT_JOYSTICK:getAxis(4) ~= 0)
     then
       if p.shoot_tick <= 0 then
           p.shoot_tick = p.shoot_tick + p.shoot_fps
-          local v = Vector(CURRENT_JOYSTICK:getAxis(3), CURRENT_JOYSTICK:getAxis(4)):normalized()
-          local x, y = p.pos.x + v.x, p.pos.y + v.y
-          p:shoot(x, y)
+          local v = Vector(Util.getJoystickAxisValues(CURRENT_JOYSTICK, 3, 4)):normalized()
+          if v.x ~= 0 or v.y ~= 0 then --Check for deadzone case
+            local x, y = p.pos.x + v.x, p.pos.y + v.y
+            p:shoot(x, y)
+          end
       end
     end
 
     --Leave before moving psycho or creating circle effects
     if not p.can_move then return end
+
+    psycho.updateSpeed(p)
 
     --Create circle effect
     p.circle_fx_tick = p.circle_fx_tick - dt
@@ -285,29 +289,19 @@ function Psy:keypressed(key)
 
     p = self --Psycho
 
-    --Movement
-    if key == 'w' or key == 'a' or key == 's' or key == 'd' or
-       key == 'up' or key == 'left' or key == 'down' or key == 'right' then
-        psycho.updateSpeed(self)
-    elseif key == 'lshift' and p.can_focus then
+    if key == 'lshift' and p.can_focus then
         p.focused = true
-    elseif key == 'space' then
-        if p.can_ultra then
-            p:ultrablast(p.default_ultrablast_power)
-        end
+    elseif key == 'space' and p.can_ultra then
+        p:ultrablast(p.default_ultrablast_power)
     end
 
 end
 
 function Psy:keyreleased(key)
 
-    --Movement
-if key == 'w' or key == 'a' or key == 's' or key == 'd' or
-   key == 'up' or key == 'left' or key == 'down' or key == 'right' then
-      psycho.updateSpeed(self)
-elseif key == 'lshift' then
-    self.focused = false
-end
+    if key == 'lshift' then
+        self.focused = false
+    end
 
 end
 
