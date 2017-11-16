@@ -41,6 +41,15 @@ function setup.config()
     CURRENT_JOYSTICK = nil --Current joystick controlling psycho
     JOYSTICK_DEADZONE = .3 --Percentage of dead zone on all sticks (value between [0,1])
     JOYSTICK_AUTO_SHOOT = true --If psycho shoots whenever it is aiming
+    JOY_MAP = { --Mapping of joystick buttons
+      start = 10,
+      confirm = 3,
+      back = 2,
+      shoot1 = 5,
+      shoot2 = 6,
+      ultrablast1 = 7,
+      ultrablast2 = 8,
+    }
 
     TUTORIAL = false --If the game gamestate should play the tutorial
     DONT_ENABLE_SHOOTING_AFTER_DEATH = false --for tutorial only

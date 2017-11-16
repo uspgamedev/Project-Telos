@@ -164,7 +164,7 @@ end
 
 function state:joystickpressed(joystick, button)
 
-  if button == 10 then
+  if button == JOY_MAP.start then
       SWITCH = "GAME"
   end
 

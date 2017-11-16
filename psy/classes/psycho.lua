@@ -199,7 +199,7 @@ function Psy:update(dt)
         end
       end
     elseif CURRENT_JOYSTICK and
-           (JOYSTICK_AUTO_SHOOT or CURRENT_JOYSTICK:isDown(5,6)) and
+           (JOYSTICK_AUTO_SHOOT or CURRENT_JOYSTICK:isDown(JOY_MAP.shoot1,JOY_MAP.shoot2)) and
            (CURRENT_JOYSTICK:getAxis(3) ~= 0 or CURRENT_JOYSTICK:getAxis(4) ~= 0)
     then
       if p.shoot_tick <= 0 then
@@ -307,19 +307,12 @@ end
 
 function Psy:joystickaxis(joystick, axis, value)
 
-  --Update psycho speed (left stick)
-  if self.can_move and axis == 1 then
-    psycho.updateSpeed(self)
-  elseif self.can_move and axis == 2 then
-    psycho.updateSpeed(self)
-  end
-
 end
 
 function Psy:joystickpressed(joystick, button)
 
   --Use ultrablast (right or left trigger button)
-  if button == 7 or button == 8 then
+  if button == JOY_MAP.ultrablast1 or button == JOY_MAP.ultrablast2 then
     self:ultrablast(self.default_ultrablast_power)
   end
 

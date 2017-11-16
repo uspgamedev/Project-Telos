@@ -21,7 +21,7 @@ Aim = Class{
         self.pos = Vector(0,0)
         self.dir = Vector(0,0)
         self.distance = math.sqrt(ORIGINAL_WINDOW_WIDTH^2 + ORIGINAL_WINDOW_HEIGHT^2)
-        self.line_width = 1 --Thickness of aim line
+        self.line_width = 2 --Thickness of aim line
         self.circle_size = 6 --Radius of aim circle
         self.mouse_pos = Vector(0,0) --Position the mouse is
 

@@ -617,7 +617,8 @@ function util.defaultKeyPressed(key)
         love.mouse.setGrabbed(state)
         print("MOUSE CAPTURE IS", state)
     elseif key == "f2" then
-        HS.print()
+        JOYSTICK_AUTO_SHOOT = not JOYSTICK_AUTO_SHOOT
+        print("JOYSTICK_AUTO_SHOOT is ",JOYSTICK_AUTO_SHOOT)
     elseif key == "f3" then
         HS.reset()
     elseif key == "scrolllock" then
