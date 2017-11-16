@@ -181,7 +181,7 @@ function Psy:update(dt)
 
     --Update shooting
     p.shoot_tick = math.max(p.shoot_tick - dt, 0)
-    if not USING_JOYSTICK  then
+    if not USING_JOYSTICK then
       if love.mouse.isDown(1) or
          love.keyboard.isDown('z')
       then
@@ -199,7 +199,7 @@ function Psy:update(dt)
         end
       end
     elseif CURRENT_JOYSTICK and
-           (JOYSTICK_AUTO_SHOOT or CURRENT_JOYSTICK:isDown(JOY_MAP.shoot1,JOY_MAP.shoot2)) and
+           (JOYSTICK_AUTO_SHOOT or CURRENT_JOYSTICK:isDown(JOY_MAP.shoot)) and
            (CURRENT_JOYSTICK:getAxis(3) ~= 0 or CURRENT_JOYSTICK:getAxis(4) ~= 0)
     then
       if p.shoot_tick <= 0 then
@@ -311,9 +311,20 @@ end
 
 function Psy:joystickpressed(joystick, button)
 
-  --Use ultrablast (right or left trigger button)
+  --Use ultrablast (right or left trigger button by default)
   if button == JOY_MAP.ultrablast1 or button == JOY_MAP.ultrablast2 then
     self:ultrablast(self.default_ultrablast_power)
+  --Enter focus mode (left shoulder button by default)
+  elseif button == JOY_MAP.focus then
+    self.focused = true
+  end
+
+end
+
+function Psy:joystickreleased(joystick, button)
+
+  if button == JOY_MAP.focus then
+    self.focused = false
   end
 
 end
@@ -429,7 +440,27 @@ function psycho.updateSpeed(self)
       end
     else
       if CURRENT_JOYSTICK then
-        p.speed.x, p.speed.y = Util.getJoystickAxisValues(CURRENT_JOYSTICK, 1, 2)
+        --Prioritize hat, if not use axis value
+        local hat = CURRENT_JOYSTICK:getHat(1)
+        if hat == 'l' then
+          p.speed = Vector(-1,0)
+        elseif hat == 'u' then
+          p.speed = Vector(0,-1)
+        elseif hat == 'r' then
+          p.speed = Vector(1,0)
+        elseif hat == 'd' then
+          p.speed = Vector(0,1)
+        elseif hat == 'lu' then
+          p.speed = Vector(-1,-1)
+        elseif hat == 'ru' then
+          p.speed = Vector(1,-1)
+        elseif hat == 'rd' then
+          p.speed = Vector(1,1)
+        elseif hat == 'ld' then
+          p.speed = Vector(-1,1)
+        else --Hat == 'c'
+          p.speed.x, p.speed.y = Util.getJoystickAxisValues(CURRENT_JOYSTICK, 1, 2)
+        end
       end
     end
 

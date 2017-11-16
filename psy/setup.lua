@@ -45,10 +45,10 @@ function setup.config()
       start = 10,
       confirm = 3,
       back = 2,
-      shoot1 = 5,
-      shoot2 = 6,
+      shoot = 6,
       ultrablast1 = 7,
       ultrablast2 = 8,
+      focus = 5,
     }
 
     TUTORIAL = false --If the game gamestate should play the tutorial

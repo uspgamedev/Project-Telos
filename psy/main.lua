@@ -152,17 +152,26 @@ function love.mousemoved(...)
   USING_JOYSTICK = false
 end
 
-function love.joystickaxis(joystick, axis, value)
+function love.keypressed(...)
+  USING_JOYSTICK = false
+end
+
+function love.joystickaxis(joystick, ...)
   USING_JOYSTICK = true
   CURRENT_JOYSTICK = joystick
 end
 
-function love.joystickpressed(joystick, button)
+function love.joystickpressed(joystick, ...)
   USING_JOYSTICK = true
   CURRENT_JOYSTICK = joystick
 end
 
-function love.joystickaded(joystick)
+function love.joystickhat(joystick, ...)
+  USING_JOYSTICK = true
+  CURRENT_JOYSTICK = joystick
+end
+
+function love.joystickadded(joystick)
   CURRENT_JOYSTICK = joystick
 end
 
