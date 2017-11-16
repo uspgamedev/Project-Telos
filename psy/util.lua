@@ -413,6 +413,13 @@ end
 --GLOBAL FUNCTIONS
 --------------------
 
+--Return corrected joystick value given two axis
+function util.getJoystickAxisValues(joy, horizontal_axis, vertical_axis)
+
+  return joy:getAxis(horizontal_axis), joy:getAxis(vertical_axis)
+
+end
+
 --Makes all collisions
 function util.checkCollision()
     local p, cont, arg, col

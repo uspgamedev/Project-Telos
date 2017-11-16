@@ -200,7 +200,6 @@ function state:joystickaxis(joystick, axis, value)
     if p then
       p:joystickaxis(joystick, axis, value)
     end
-
 end
 
 --Return state functions

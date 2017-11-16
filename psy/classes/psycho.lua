@@ -117,14 +117,6 @@ function Psy:shoot(x,y)
 
     SFX.psychoball_shot:play()
 
-    --Fix mouse position click to respective distance
-    w, h = FreeRes.windowDistance()
-    scale = FreeRes.scale()
-    x = x - w
-    x = x*(1/scale)
-    y = y - h
-    y = y*(1/scale)
-
     c = HSL(Hsl.hsl(p.color)) --Color of bullet is current psycho color
     color_table = {
         HSL(Hsl.stdv(51,100,50)),
@@ -188,15 +180,34 @@ function Psy:update(dt)
     end
 
     --Update shooting
-    p.shoot_tick = p.shoot_tick - dt
-    if love.mouse.isDown(1) or love.keyboard.isDown('z') then
+    p.shoot_tick = math.max(p.shoot_tick - dt, 0)
+    if not USING_JOYSTICK  then
+      if love.mouse.isDown(1) or
+         love.keyboard.isDown('z')
+      then
         if p.shoot_tick <= 0 then
             p.shoot_tick = p.shoot_tick + p.shoot_fps
-            p:shoot(love.mouse.getPosition())
+            local x, y = love.mouse.getPosition()
+            --Fix mouse position click to respective distance
+            w, h = FreeRes.windowDistance()
+            scale = FreeRes.scale()
+            x = x - w
+            x = x*(1/scale)
+            y = y - h
+            y = y*(1/scale)
+            p:shoot(x, y)
         end
-    end
-    if p.shoot_tick < 0 then
-        p.shoot_tick = 0
+      end
+    elseif CURRENT_JOYSTICK and
+           JOYSTICK_AIMING_MODE == "auto-shoot" and
+           (CURRENT_JOYSTICK:getAxis(3) ~= 0 or CURRENT_JOYSTICK:getAxis(4) ~= 0)
+    then
+      if p.shoot_tick <= 0 then
+          p.shoot_tick = p.shoot_tick + p.shoot_fps
+          local v = Vector(CURRENT_JOYSTICK:getAxis(3), CURRENT_JOYSTICK:getAxis(4)):normalized()
+          local x, y = p.pos.x + v.x, p.pos.y + v.y
+          p:shoot(x, y)
+      end
     end
 
     --Leave before moving psycho or creating circle effects
@@ -304,18 +315,10 @@ function Psy:joystickaxis(joystick, axis, value)
 
   --Update psycho speed (left stick)
   if self.can_move and axis == 1 then
-    self.speed.x = value * self.speedv
+    psycho.updateSpeed(self)
   elseif self.can_move and axis == 2 then
-    self.speed.y = value * self.speedv
-
-  --Update psycho aim (right stick)
-  elseif self.can_shoot and axis == 3 then
-
-  elseif self.can_shoot and axis == 4 then
-
+    psycho.updateSpeed(self)
   end
-
-
 
 end
 
@@ -414,18 +417,24 @@ function psycho.updateSpeed(self)
     sp = p.speedv --Speed Value
 
     p.speed = Vector(0,0)
-    --Movement
-    if love.keyboard.isDown 'w' or love.keyboard.isDown 'up' then --move up
-        p.speed = p.speed + Vector(0,-1)
-    end
-    if love.keyboard.isDown 'a' or love.keyboard.isDown 'left' then --move left
-        p.speed = p.speed + Vector(-1,0)
-    end
-    if love.keyboard.isDown 's' or love.keyboard.isDown 'down' then --move down
-        p.speed = p.speed + Vector(0,1)
-    end
-    if love.keyboard.isDown'd' or love.keyboard.isDown 'right' then --move right
-        p.speed = p.speed + Vector(1,0)
+    if not USING_JOYSTICK then
+      --Movement
+      if love.keyboard.isDown 'w' or love.keyboard.isDown 'up' then --move up
+          p.speed = p.speed + Vector(0,-1)
+      end
+      if love.keyboard.isDown 'a' or love.keyboard.isDown 'left' then --move left
+          p.speed = p.speed + Vector(-1,0)
+      end
+      if love.keyboard.isDown 's' or love.keyboard.isDown 'down' then --move down
+          p.speed = p.speed + Vector(0,1)
+      end
+      if love.keyboard.isDown'd' or love.keyboard.isDown 'right' then --move right
+          p.speed = p.speed + Vector(1,0)
+      end
+    else
+      if CURRENT_JOYSTICK then
+        p.speed.x, p.speed.y = Util.getJoystickAxisValues(CURRENT_JOYSTICK, 1, 2)
+      end
     end
 
     p.speed = p.speed:normalized() * sp

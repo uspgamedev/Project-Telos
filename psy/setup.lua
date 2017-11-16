@@ -38,6 +38,8 @@ function setup.config()
     PSYCHO_SCORE = 0 --Psycho score
 
     USING_JOYSTICK = false --If player is using the joystick to control the game
+    CURRENT_JOYSTICK = nil --Current joystick controlling psycho
+    JOYSTICK_AIMING_MODE = "auto-shoot" --Can be "auto-shoot" or "aim-only"
 
     TUTORIAL = false --If the game gamestate should play the tutorial
     DONT_ENABLE_SHOOTING_AFTER_DEATH = false --for tutorial only
