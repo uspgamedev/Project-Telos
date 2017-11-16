@@ -100,7 +100,8 @@ function Aim:update(dt)
     if not USING_JOYSTICK then
       aim.dir.x, aim.dir.y = aim.mouse_pos.x - aim.pos.x, aim.mouse_pos.y - aim.pos.y
     elseif CURRENT_JOYSTICK and (CURRENT_JOYSTICK:getAxis(3) ~= 0 or CURRENT_JOYSTICK:getAxis(4) ~= 0) then
-      local v = Vector(CURRENT_JOYSTICK:getAxis(3), CURRENT_JOYSTICK:getAxis(4)):normalized()
+      local v = Vector(Util.getJoystickAxisValues(CURRENT_JOYSTICK, 3, 4))
+      v = v:normalized()
       aim.dir.x, aim.dir.y = (aim.pos.x + v.x)-aim.pos.x, (aim.pos.y + v.y)-aim.pos.y
     else
       aim.show = false

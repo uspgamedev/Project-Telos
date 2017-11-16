@@ -39,6 +39,7 @@ function setup.config()
 
     USING_JOYSTICK = false --If player is using the joystick to control the game
     CURRENT_JOYSTICK = nil --Current joystick controlling psycho
+    JOYSTICK_DEADZONE = .3 --Percentage of dead zone on all sticks (value between [0,1])
     JOYSTICK_AIMING_MODE = "auto-shoot" --Can be "auto-shoot" or "aim-only"
 
     TUTORIAL = false --If the game gamestate should play the tutorial

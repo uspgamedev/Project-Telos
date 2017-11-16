@@ -416,7 +416,13 @@ end
 --Return corrected joystick value given two axis
 function util.getJoystickAxisValues(joy, horizontal_axis, vertical_axis)
 
-  return joy:getAxis(horizontal_axis), joy:getAxis(vertical_axis)
+  local v = Vector(joy:getAxis(horizontal_axis), joy:getAxis(vertical_axis))
+  if(v:len() < JOYSTICK_DEADZONE) then
+      v = Vector(0,0)
+  else
+      v = v:normalized() * ((v:len() - JOYSTICK_DEADZONE) / (1 - JOYSTICK_DEADZONE))
+  end
+  return v.x, v.y
 
 end
 

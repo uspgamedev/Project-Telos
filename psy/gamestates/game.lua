@@ -203,6 +203,13 @@ function state:joystickaxis(joystick, axis, value)
 end
 
 function state:joystickpressed(joystick, button)
+
+  print(button)
+  
+  if button == 'escape' then
+      SWITCH = "PAUSE"
+  end
+
   local p = Util.findId("psycho")
   if p then
     p:joystickpressed(joystick, button)
