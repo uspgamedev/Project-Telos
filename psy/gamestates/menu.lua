@@ -135,7 +135,10 @@ function state:update(dt)
         joystick_moved = false
       else
         if not joystick_moved then
-          changeSelectedButton(joystick_direction)
+          local b = Util.findId(CURRENT_SELECTED_BUTTON.."_button")
+          if b and b.alpha_modifier >= .3 then
+            changeSelectedButton(joystick_direction)
+          end
         end
         --Set joystick as moved so it doesn't move to several buttons at once
         joystick_moved = true
