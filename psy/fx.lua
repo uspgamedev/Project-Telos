@@ -351,14 +351,20 @@ end
 --It's advisable to provide a label for the handle stored in each object
 --Provide a table that contains the handle tables for each object
 --You can provide an optional argument for tweening method. If not provided, linear will be used.
-function fx.change_value_objects(objects, value_name, target_values, speed, label, handles_table, tweening_method)
+--You can provide an optional argument "after_function" to execute after all effects are done
+function fx.change_value_objects(objects, value_name, target_values, speed, label, handles_table, tweening_method, after_function)
     tweening_method = tweening_method or "in-linear"
     label = label or "changing_value_"..value_name
+
+    local longest_duration = 0
     --Start applying effect on objects
     for i, ob in ipairs(objects) do
 
         --Calculate the duration of the effect based on the speed and differences between values
         local duration = math.abs(ob[value_name] - target_values[i])/speed
+        if duration > longest_duration then
+          longest_duration = duration
+        end
 
         --Cancel previously running effect
         if handles_table[i][label] then
@@ -367,6 +373,10 @@ function fx.change_value_objects(objects, value_name, target_values, speed, labe
 
         --Create tweening effect for the object
         handles_table[i][label] = FX_TIMER:tween(duration, ob, {[value_name] = target_values[i]}, tweening_method)
+    end
+
+    if after_function then
+      FX_TIMER:after(longest_duration, after_function)
     end
 
 end
