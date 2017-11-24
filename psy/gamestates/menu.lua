@@ -123,15 +123,21 @@ end
 
 function state:update(dt)
 
-    --Move selected buton ased on joystick axis input
+    --Move selected button based on joystick hat or axis input
     if USING_JOYSTICK and CURRENT_JOYSTICK then
-      joystick_direction = Vector(Util.getJoystickAxisValues(CURRENT_JOYSTICK, 1, 2)):normalized()
+      --First try to get hat input
+      joystick_direction = Util.getHatDirection(CURRENT_JOYSTICK:getHat(1))
+      if joystick_direction:len() == 0 then
+        --If there isn't a hat input, tries to get an axis input
+        joystick_direction = Vector(Util.getJoystickAxisValues(CURRENT_JOYSTICK, 1, 2)):normalized()
+      end
       if joystick_direction:len() == 0 then
         joystick_moved = false
       else
         if not joystick_moved then
           changeSelectedButton(joystick_direction)
         end
+        --Set joystick as moved so it doesn't move to several buttons at once
         joystick_moved = true
       end
     end

@@ -2,6 +2,7 @@ require "classes.primitive"
 local Color = require "classes.color.color"
 local FreeRes = require "FreeRes"
 local Particle = require "classes.particle"
+local Util = require "util"
 --BUTTON CLASS --
 
 local button = {}
@@ -92,7 +93,14 @@ function Circle_Button:update(dt)
 
     --If mouse is colliding with button total radius, or joystick is selecting ths button (and button is visible), increase ring radius
     local speed_mod = math.max((b.r-b.ring_r)/b.r,.4)
-    if (b.pos:dist(mousepos) <= b.r or (USING_JOYSTICK and self.selected_by_joystick)) and b.alpha_modifier >= .3 then
+    if ((not USING_JOYSTICK and b.pos:dist(mousepos) <= b.r) or (USING_JOYSTICK and self.selected_by_joystick)) and
+       b.alpha_modifier >= .3 then
+        --Update selected button on menu
+        if not USING_JOYSTICK and not self.selected_by_joystick then
+          Util.findId(CURRENT_SELECTED_BUTTON.."_button").selected_by_joystick = false
+          self.selected_by_joystick = true
+          CURRENT_SELECTED_BUTTON = string.sub(self.id, 1, -8)
+        end
         if b.ring_r < b.r then
             b.ring_r = b.ring_r + b.ring_growth_speed*speed_mod*dt
             if b.ring_r > b.r then b.ring_r = b.r end

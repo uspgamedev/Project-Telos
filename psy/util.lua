@@ -426,6 +426,31 @@ function util.getJoystickAxisValues(joy, horizontal_axis, vertical_axis)
 
 end
 
+--Given a hat value, returns the correspondent direction
+function util.getHatDirection(hat)
+  if hat == 'l' then
+    return Vector(-1,0)
+  elseif hat == 'u' then
+    return Vector(0,-1)
+  elseif hat == 'r' then
+    return Vector(1,0)
+  elseif hat == 'd' then
+    return Vector(0,1)
+  elseif hat == 'lu' then
+    return Vector(-1,-1)
+  elseif hat == 'ru' then
+    return Vector(1,-1)
+  elseif hat == 'rd' then
+    return Vector(1,1)
+  elseif hat == 'ld' then
+    return Vector(-1,1)
+  elseif hat == 'c' then
+    return Vector(0,0)
+  else
+    error("Not a valid hat value: "..hat)
+  end
+end
+
 --Makes all collisions
 function util.checkCollision()
     local p, cont, arg, col

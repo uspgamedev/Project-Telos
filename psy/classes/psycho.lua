@@ -442,23 +442,8 @@ function psycho.updateSpeed(self)
       if CURRENT_JOYSTICK then
         --Prioritize hat, if not use axis value
         local hat = CURRENT_JOYSTICK:getHat(1)
-        if hat == 'l' then
-          p.speed = Vector(-1,0)
-        elseif hat == 'u' then
-          p.speed = Vector(0,-1)
-        elseif hat == 'r' then
-          p.speed = Vector(1,0)
-        elseif hat == 'd' then
-          p.speed = Vector(0,1)
-        elseif hat == 'lu' then
-          p.speed = Vector(-1,-1)
-        elseif hat == 'ru' then
-          p.speed = Vector(1,-1)
-        elseif hat == 'rd' then
-          p.speed = Vector(1,1)
-        elseif hat == 'ld' then
-          p.speed = Vector(-1,1)
-        else --Hat == 'c'
+        p.speed = Util.getHatDirection(hat)
+        if p.speed.x == 0 and p.speed.y == 0 then --Hat == 'c'
           p.speed.x, p.speed.y = Util.getJoystickAxisValues(CURRENT_JOYSTICK, 1, 2)
         end
       end

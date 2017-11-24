@@ -56,7 +56,6 @@ return function()
       end
     end
 
-
     --Change x value of all menu objects
     FX.change_value_objects(objects_positions, "x", target_x_values, 1800, "moving_tween", handles_table, "out-back", after)
 
