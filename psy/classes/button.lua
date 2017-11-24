@@ -33,6 +33,8 @@ Circle_Button = Class{
         self.alpha_mod_v = 1 --Determines how fast alpha value will reach the peak
         self.alpha_modifier = 1 --Modifier applied on alpha value of button
 
+        self.selected_by_joystick = false
+
         self.sfx = nil --Sfx to play when button is pressed
 
         self.tp = "circlebutton" --Type of this class
@@ -88,9 +90,9 @@ function Circle_Button:update(dt)
     mousepos = Vector(x, y)
 
 
-    --If mouse is colliding with button total radius (and button is visible), increase ring radius
+    --If mouse is colliding with button total radius, or joystick is selecting ths button (and button is visible), increase ring radius
     local speed_mod = math.max((b.r-b.ring_r)/b.r,.4)
-    if b.pos:dist(mousepos) <= b.r and b.alpha_modifier >= .3 then
+    if (b.pos:dist(mousepos) <= b.r or (USING_JOYSTICK and self.selected_by_joystick)) and b.alpha_modifier >= .3 then
         if b.ring_r < b.r then
             b.ring_r = b.ring_r + b.ring_growth_speed*speed_mod*dt
             if b.ring_r > b.r then b.ring_r = b.r end

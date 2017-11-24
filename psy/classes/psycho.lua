@@ -199,7 +199,7 @@ function Psy:update(dt)
         end
       end
     elseif CURRENT_JOYSTICK and
-           (JOYSTICK_AUTO_SHOOT or CURRENT_JOYSTICK:isDown(JOY_MAP.shoot)) and
+           (JOYSTICK_AUTO_SHOOT or CURRENT_JOYSTICK:isDown(GENERIC_JOY_MAP.shoot)) and
            (CURRENT_JOYSTICK:getAxis(3) ~= 0 or CURRENT_JOYSTICK:getAxis(4) ~= 0)
     then
       if p.shoot_tick <= 0 then
@@ -312,10 +312,10 @@ end
 function Psy:joystickpressed(joystick, button)
 
   --Use ultrablast (right or left trigger button by default)
-  if button == JOY_MAP.ultrablast1 or button == JOY_MAP.ultrablast2 then
+  if button == GENERIC_JOY_MAP.ultrablast1 or button == GENERIC_JOY_MAP.ultrablast2 then
     self:ultrablast(self.default_ultrablast_power)
   --Enter focus mode (left shoulder button by default)
-  elseif button == JOY_MAP.focus then
+  elseif button == GENERIC_JOY_MAP.focus then
     self.focused = true
   end
 
@@ -323,7 +323,7 @@ end
 
 function Psy:joystickreleased(joystick, button)
 
-  if button == JOY_MAP.focus then
+  if button == GENERIC_JOY_MAP.focus then
     self.focused = false
   end
 

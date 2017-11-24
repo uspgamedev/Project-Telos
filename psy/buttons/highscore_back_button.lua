@@ -49,4 +49,12 @@ return function()
     --Change x value of all menu objects
     FX.change_value_objects(objects_positions, "x", target_x_values, 1800, "moving_tween", handles_table, "out-back")
 
+    --Update button selection for joystick
+    local b = Util.findId("menu_go2main_button")
+    if b then b.selected_by_joystick = false end
+    local b = Util.findId("menu_go2highscore_button")
+    if b then b.selected_by_joystick = true end
+    CURRENT_SELECTED_BUTTON = "menu_go2highscore"
+    CURRENT_MENU_SCREEN = "main_menu"
+
 end

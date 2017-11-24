@@ -172,17 +172,18 @@ function love.joystickhat(joystick, ...)
 end
 
 function love.joystickadded(joystick)
+  USING_JOYSTICK = true
   CURRENT_JOYSTICK = joystick
 end
 
 function love.joystickremoved(joystick)
   if joystick == CURRENT_JOYSTICK then
     CURRENT_JOYSTICK = nil
+    USING_JOYSTICK = false
   end
 end
 
 ------------------------------
 --Used for debugging
 function love.update()
-
 end
