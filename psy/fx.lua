@@ -66,8 +66,8 @@ end
 function fx.psychoExplosion(p)
     local d, multi, e, death_func, x, y, dir, pos, speed, c_pos, r, color, handle, part
 
-    d = 2 --Duration of effect's first part (expansion)
-    multi = 3 --Multiplier of speed in effects second part (going back)
+    d = 1.6 --Duration of effect's first part (expansion)
+    multi = 5 --Multiplier of speed in effects second part (going back)
 
     color = Color.white()
     Color.copy(color, p.color)
