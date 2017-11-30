@@ -36,6 +36,7 @@ function level_functions.part_1()
     DONT_ENABLE_SHOOTING_AFTER_DEATH = true
     DONT_ENABLE_ULTRA_AFTER_DEATH = true
     DONT_ENABLE_MOVING_AFTER_DEATH = true
+    DONT_ENABLE_CHARGE_AFTER_DEATH = true
 
     F.single{enemy = SB, x = ORIGINAL_WINDOW_WIDTH + 20, y = p.pos.y, dx = -11, dy = 0, speed_m = 1.8, e_radius = 20, score_mul = 0, ind_duration = 3, ind_side = 50}
 
@@ -71,6 +72,7 @@ function level_functions.part_1()
     p.can_ultra = true
     p.can_charge = true
     DONT_ENABLE_ULTRA_AFTER_DEATH = false
+    DONT_ENABLE_CHARGE_AFTER_DEATH = false
     local counter = Util.findId("ultrablast_counter")
     counter:reset()
     counter.charge_cooldown = .2
@@ -78,7 +80,7 @@ function level_functions.part_1()
     local sep = Util.findId("separator_1")
     sep.level_handles["become_visible"] = LEVEL_TIMER:tween(.6, sep, {alpha = 255}, 'in-linear')
 
-    LM.wait(4.5)
+    LM.wait(3.2)
 
     --Create tutorial icons for ultrablast
     local w, h = TutIcon.dimensions("space")
@@ -115,8 +117,8 @@ function level_functions.part_1()
     local x, y = ORIGINAL_WINDOW_WIDTH/2 - w/2, ORIGINAL_WINDOW_HEIGHT/2 - h/2
     TutIcon.create(x, y, 'left_mouse_button', 6.5)
 
-    LM.wait(3.5)
-    F.fromHorizontal{side = "right", mode = "center", number = 7, enemy = {SB}, ind_duration = 3, ind_side = 35, speed_m = 1.1, enemy_y_margin = 55, enemy_x_margin = 55, e_radius = 23}
+    LM.wait(3)
+    F.fromHorizontal{side = "right", mode = "center", number = 7, enemy = {SB}, ind_duration = 3.5, ind_side = 35, speed_m = 1.1, enemy_y_margin = 55, enemy_x_margin = 55, e_radius = 23}
 
     LM.wait(1.5)
     --Turn score counter visible
@@ -134,7 +136,7 @@ function level_functions.part_1()
     p.life_score = 0
     LM.giveLives(p.default_lives-p.lives, "reset")
 
-    LM.wait(2)
+    LM.wait(1.5)
 
     --Turn fps counter visible
     txt = Util.findId("fps_counter")
@@ -144,7 +146,7 @@ function level_functions.part_1()
     txt = Util.findId("level_part")
     txt.level_handles["become_visible"] = LEVEL_TIMER:tween(1, txt, {alpha = 255}, 'in-linear')
 
-    LM.wait(5)
+    LM.wait(4)
 
     LM.stop()
     TUTORIAL = false

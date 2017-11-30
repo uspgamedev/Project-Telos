@@ -83,6 +83,7 @@ function fx.psychoExplosion(p)
     p.can_move = false
     p.can_shoot = false
     p.can_ultra = false
+    p.can_charge = false
 
     --Config psycho so he disapears
     p.invisible = true
@@ -179,6 +180,9 @@ function fx.psychoExplosion(p)
             end
             if not DONT_ENABLE_MOVING_AFTER_DEATH then
                p.can_move = true
+            end
+            if not DONT_ENABLE_CHARGE_AFTER_DEATH then
+               p.can_charge = true
             end
 
             p.invisible = false

@@ -32,8 +32,11 @@ UltrablastCounter = Class{
         self.gap_between_ultras = 10
 
         self.charge_bar_value = 0  --Current value of bar
-        self.charge_bar_max = 100  --Max value a bar can have before giving a utlrablast to player
-        self.charge_bar_speed = 25 --Speed to increase bar per second
+        self.charge_bar_max = 120  --Max value a bar can have before giving a utlrablast to player
+        self.charge_bar_min_speed = 25 --Starting speed of charge bar
+        self.charge_bar_max_speed = 80 --Max speed of charge bar
+        self.charge_bar_accel_speed = 15 --How fast the speed increases per second
+        self.charge_bar_speed = self.charge_bar_min_speed --Speed to increase bar per second
 
         self.charge_bar_w = 10 --Charge bar width
         self.charge_bar_h = 20 --Charge bar max height
@@ -176,6 +179,7 @@ function UltrablastCounter:psychoShot()
     self.charge_bar_value = math.max(0, self.charge_bar_value - self.charge_penalty)
   end
   self.charge_cooldown = self.charge_cooldown_max
+  self.charge_bar_speed = self.charge_bar_min_speed
 
   --Remove previous animation, if any
   if self.level_handles["shake_animation"] then
@@ -204,6 +208,7 @@ function UltrablastCounter:reset()
   self:update(0)
 
   self.charge_bar_value = 0
+  self.charge_bar_speed = self.charge_bar_min_speed
   self.charge_cooldown = self.charge_cooldown_max
 
   --Create reset effect
@@ -232,6 +237,7 @@ function UltrablastCounter:update(dt)
         if self.charge_cooldown > 0 then
           self.charge_cooldown = math.max(0, self.charge_cooldown - dt)
         else
+          self.charge_bar_speed = math.min(self.charge_bar_max_speed, self.charge_bar_speed + self.charge_bar_accel_speed*dt)
           self.charge_bar_value = self.charge_bar_value + self.charge_bar_speed*dt
           if self.charge_bar_value >= self.charge_bar_max then
             self.charge_bar_value = self.charge_bar_value - self.charge_bar_max

@@ -41,6 +41,7 @@ function setup.config()
     DONT_ENABLE_SHOOTING_AFTER_DEATH = false --for tutorial only
     DONT_ENABLE_ULTRA_AFTER_DEATH = false --for tutorial only
     DONT_ENABLE_MOVING_AFTER_DEATH = false --for tutorial only
+    DONT_ENABLE_CHARGE_AFTER_DEATH = false --for tutorial only
 
     MAX_ULTRABLAST = 3 --Max number of ultrablasts psycho has
 
