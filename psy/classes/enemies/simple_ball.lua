@@ -29,7 +29,7 @@ Simple_Ball = Class{
 
 --CLASS FUNCTIONS--
 
-function Simple_Ball:kill(gives_score)
+function Simple_Ball:kill(gives_score, dont_explode)
 
     if self.death then return end
 
@@ -37,7 +37,9 @@ function Simple_Ball:kill(gives_score)
 
     if gives_score == nil then gives_score = true end --If this enemy should give score
 
-    FX.explosion(self.pos.x, self.pos.y, self.r, self.color)
+    if not dont_explode then
+      FX.explosion(self.pos.x, self.pos.y, self.r, self.color)
+    end
 
     if gives_score then
 
@@ -65,7 +67,7 @@ function Simple_Ball:update(dt)
     if not o.enter then
         if isInside(o) then o.enter = true end
     else
-        if not isInside(o) then o:kill(false) end --Don't give score if enemy is killed by leaving screen
+        if not isInside(o) then o:kill(false, true) end --Don't give score if enemy is killed by leaving screen
     end
 
 end

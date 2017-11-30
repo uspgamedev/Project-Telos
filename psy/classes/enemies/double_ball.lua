@@ -30,7 +30,7 @@ Double_Ball = Class{
 
 --CLASS FUNCTIONS--
 
-function Double_Ball:kill(gives_score, mode)
+function Double_Ball:kill(gives_score, mode, dont_explode)
     local e
 
     if self.death then return end
@@ -39,7 +39,9 @@ function Double_Ball:kill(gives_score, mode)
 
     if gives_score == nil then gives_score = true end --If this enemy should give score
 
-    FX.explosion(self.pos.x, self.pos.y, self.r, self.color)
+    if not dont_explode then
+      FX.explosion(self.pos.x, self.pos.y, self.r, self.color)
+    end
 
     if gives_score then
         if self.score_value*self.score_mul > 0 then
@@ -75,7 +77,7 @@ function Double_Ball:update(dt)
     if not o.enter then
         if isInside(o) then o.enter = true end
     else
-        if not isInside(o) then o:kill(false, "dontspawn") end --Don't give score or spawn if enemy is killed by leaving screen
+        if not isInside(o) then o:kill(false, "dontspawn", true) end --Don't give score or spawn if enemy is killed by leaving screen
     end
 
 end

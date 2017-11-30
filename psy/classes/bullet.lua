@@ -8,7 +8,7 @@ local bullet = {}
 --_dx and _dy are normalized
 Bullet = Class{
     __includes = {CIRC},
-    init = function(self, _x, _y, _dx, _dy, _c, _color_table)
+    init = function(self, _x  , _y, _dx, _dy, _c, _color_table)
         local r, color
 
         r = 5 --Radius of bullet
@@ -27,14 +27,16 @@ Bullet = Class{
 
 --CLASS FUNCTIONS--
 
-function Bullet:kill()
+function Bullet:kill(dont_explode)
     local important
 
     important = (self.subtp == "player_bullet") and true or false
 
     if self.death then return end
     self.death = true
-    FX.explosion(self.pos.x, self.pos.y, self.r, self.color, 8, nil, nil, 2, important)
+    if not dont_explode then
+      FX.explosion(self.pos.x, self.pos.y, self.r, self.color, 8, nil, nil, 2, important)
+    end
 
 end
 
@@ -50,7 +52,7 @@ function Bullet:update(dt)
        b.pos.x + b.r < 0 or
        b.pos.y - b.r > ORIGINAL_WINDOW_HEIGHT or
        b.pos.y + b.r < 0) then
-           b:kill()
+           b:kill(true)
     end
 end
 

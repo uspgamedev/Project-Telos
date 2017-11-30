@@ -33,13 +33,15 @@ Glitch_Ball = Class{
 
 --CLASS FUNCTIONS--
 
-function Glitch_Ball:kill()
+function Glitch_Ball:kill(dont_explode)
 
     if self.death then return end
 
     self.death = true
 
-    FX.explosion(self.pos.x, self.pos.y, self.r, self.color)
+    if not dont_explode then
+      FX.explosion(self.pos.x, self.pos.y, self.r, self.color)
+    end
 
 end
 
@@ -56,7 +58,7 @@ function Glitch_Ball:update(dt)
     if not o.enter then
         if isInside(o) then o.enter = true end
     else
-        if not isInside(o) then o:kill() end --Don't give score if enemy is killed by leaving screen
+        if not isInside(o) then o:kill(true) end --Don't give score if enemy is killed by leaving screen
     end
 
 end

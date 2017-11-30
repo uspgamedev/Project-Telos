@@ -101,7 +101,7 @@ function Turret:getHitAnimation()
     )
 end
 
-function Turret:kill(gives_score)
+function Turret:kill(gives_score, dont_explode)
 
     if self.death then return end
 
@@ -118,12 +118,14 @@ function Turret:kill(gives_score)
 
         if gives_score then
             LM.giveScore(math.ceil(self.score_value*self.score_mul))
+            FX.shake(.4,1.5)
             SFX.hit_simple:play()
         end
 
-        FX.shake(.4,1.5)
-
-        FX.explosion(self.pos.x, self.pos.y, self.r, self.color)
+        if dont_explode then
+          FX.explosion(self.pos.x, self.pos.y, self.r, self.color)
+        end
+        
     end
 
 
