@@ -28,7 +28,7 @@ function state:enter(_score)
 
     --Make everything black and white
     BLACK_WHITE_SHADER_FACTOR = 0
-    black_and_white_handle = FX_TIMER:tween(2, _G, {BLACK_WHITE_SHADER_FACTOR = 1}, 'in-linear')
+    black_and_white_handle = FX_TIMER:tween(2, _G, {BLACK_WHITE_SHADER_FACTOR = .7}, 'in-linear')
 
     --Shake Screen
     FX.shake(3,1)
