@@ -51,19 +51,22 @@ function state:enter(_score)
 
         --Restart button
         func = function() SWITCH = "GAME"; CONTINUE = false end
-        Button.create_inv_gui(140, 650, func, "(r)estart", GUI_MED, "start a new game", GUI_MEDLESS, "gameover_gui")
+        b = Button.create_circle_gui(140, 650, 75, func, "Restart", GUI_BIGLESSLESS, "gameover_gui", "restart_button")
+        b.selected_by_joystick = true --Mark as default selected button
+        CURRENT_SELECTED_BUTTON = "restart"
+
 
         if CONTINUE then
 
             --Continue button
             func = function() SWITCH = "GAME" end
-            Button.create_inv_gui(340, 650, func, "(c)ontinue", GUI_MED, "reset score, lives and progress on this level", GUI_MEDLESS, "gameover_gui")
+            b = Button.create_circle_gui(340, 650, 75, func, "Continue", GUI_BIGLESSLESS, "gameover_gui", "continue_button")
 
         end
 
         --Back to menu button
         func = function() SWITCH = "MENU" end
-        Button.create_inv_gui(540, 650, func, "(b)ack to menu", GUI_MED, "reset score, lives and progress on this level", GUI_MEDLESS, "gameover_gui")
+        b = Button.create_circle_gui(540, 650, 75, func, "Menu", GUI_BIGLESSLESS, "gameover_gui", "back2menu_button")
 
         GAMEOVER_BUTTONS_LOCK = false
     end
@@ -98,7 +101,7 @@ function state:leave()
         end
     end
 
-    --Stop highscore hihglight effect
+    --Stop highscore highlight effect
     if HIGHSCORE_HIGHLIGHT_EFFECT_HANDLE then
         FX_TIMER:cancel(HIGHSCORE_HIGHLIGHT_EFFECT_HANDLE)
     end
@@ -147,6 +150,7 @@ function state:update(dt)
     Util.updateSubTp(m_dt, "rotating_indicator")
     Util.updateId(dt, "highscore_button")
     Util.updateSubTp(dt, "gameover_gui") --Update buttons on the gui
+    Util.updateSubTp(dt, "button_particles")
     Util.checkCollision()
 
     --Kill dead objects
