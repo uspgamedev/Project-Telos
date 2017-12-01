@@ -157,7 +157,7 @@ function state:update(dt)
     Util.updateSubTp(dt, "gui")
     Util.updateSubTp(dt, "main_menu_buttons")
     Util.updateSubTp(dt, "highscore_menu_buttons")
-    Util.updateSubTp(dt, "decaying_particle")
+    Util.updateSubTp(dt, "button_particles")
     Util.updateId(dt, "logo")
 
     Util.updateTimers(dt)

@@ -108,6 +108,8 @@ function draw.allTables()
 
     MENU_CAM:attach() --Start tracking main menu camera
 
+    DrawTable(DRAW_TABLE.GUIl) --Behind Game GUI
+
     DrawTable(DRAW_TABLE.GUI) --Top GUI
 
     MENU_CAM:detach() --Start tracking main menu camera

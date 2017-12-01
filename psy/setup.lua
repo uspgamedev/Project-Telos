@@ -117,9 +117,10 @@ function setup.config()
     L4u = {}, --Layer 4 upper
     BOSS = {}, --Bosses
     BOSSu = {}, --Bosses upper
-    GAME_GUI = {}, --Game User Interface
+    GAME_GUI = {},  --Game User Interface
     L5  = {}, --Layer 5
     L5u = {}, --Layer 5 upper
+    GUIl = {}, --Behind Graphic User Interface
     GUI = {}  --Graphic User Interface (top layer, last to draw)
     }
 

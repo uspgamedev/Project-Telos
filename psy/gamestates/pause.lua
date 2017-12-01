@@ -26,11 +26,13 @@ function state:enter()
 
     --Unpause button
     func = function() SWITCH = "GAME" end
-    Button.create_inv_gui(140, 650, func, "un(p)ause", GUI_MED, nil, nil, "pause_gui")
+    b = Button.create_circle_gui(140, 650, 75, func, "Unpause", GUI_BIGLESSLESS, "pause_gui", "unpause_button")
+    b.selected_by_joystick = true --Mark as default selected button
+    CURRENT_SELECTED_BUTTON = "unpause"
 
     --"Go back" button
     func = function() SWITCH = "MENU" end
-    local b = Button.create_inv_gui(340, 650, func, "(b)ack to menu", GUI_MED, "reset score, lives and progress on this level", GUI_MEDLESS, "pause_gui")
+    b = Button.create_circle_gui(340, 650, 75, func, "Menu", GUI_BIGLESSLESS, "pause_gui", "back2menu_button")
 
     --AUDIO--
     Audio.pauseSFX()
@@ -129,6 +131,7 @@ function state:update(dt)
     AUDIO_TIMER:update(dt)
 
     Util.updateSubTp(dt, "pause_gui") --Update buttons on the gui
+    Util.updateSubTp(dt, "button_particles")
 
     Util.updateFPS()
 
@@ -164,8 +167,8 @@ end
 
 function state:joystickpressed(joystick, button)
 
-  if button == GENERIC_JOY_MAP.start then
-      SWITCH = "GAME"
+  if button == GENERIC_JOY_MAP.start or button == GENERIC_JOY_MAP.back then
+      SWITCH = "GAME" --Return to game
   end
 
 end
