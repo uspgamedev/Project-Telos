@@ -13,6 +13,11 @@ local highscore_menu_screen_buttons
 local joystick_moved
 local joystick_direction
 
+--LOCAL FUNCTION DECLARATIONS--
+
+local changeSelectedButton
+local getValidButtons
+
 --BUTTON FUNCTIONS--
 
 --------------------
