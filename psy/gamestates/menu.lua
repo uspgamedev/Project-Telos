@@ -79,7 +79,7 @@ function state:enter()
     b.sfx = SFX.back_button
 
     --AUDIO--
-    Audio.playBGM(BGM.menu)
+    Audio.playBGM(BGM.menu, nil, 3.5)
 
     --SHAKE--
     if SHAKE_HANDLE then

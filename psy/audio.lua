@@ -38,7 +38,7 @@ end
 --Optional fade_in_d and fade_out_d for fade-in/fade-ou durations on crossfade
 --Optional start_pos to determine what position to start the bgm
 function audio.playBGM(bgm, fade_out_d, fade_in_d, start_pos)
-    fade_in_d = fade_in_d or 2
+    fade_in_d = fade_in_d or 2.5
     fade_out_d = fade_out_d or .5
     start_pos = start_pos or 0
 
