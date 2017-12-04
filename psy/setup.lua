@@ -220,13 +220,13 @@ function setup.config()
         b1_angry_hurt_roar =  love.audio.newSource("assets/sfx/boss1/angry_hurt_roar.wav"),
         b1_angry_af_roar =  love.audio.newSource("assets/sfx/boss1/angry_af_roar.wav"),
     }
-    SFX.hit_simple:setVolume(.2*SFX_VOLUME_MULT)
-    SFX.hit_double:setVolume(.2*SFX_VOLUME_MULT)
-    SFX.generic_button:setVolume(.5*SFX_VOLUME_MULT)
-    SFX.psychoball_shot:setVolume(.2*SFX_VOLUME_MULT)
-    SFX.back_button:setVolume(.5*SFX_VOLUME_MULT)
-    SFX.play_button:setVolume(.3*SFX_VOLUME_MULT)
-    SFX.ultrablast_bar_complete:setVolume(.2*SFX_VOLUME_MULT)
+    SFX.hit_simple:setVolume(1*SFX_VOLUME_MULT)
+    SFX.hit_double:setVolume(1*SFX_VOLUME_MULT)
+    SFX.generic_button:setVolume(1*SFX_VOLUME_MULT)
+    SFX.psychoball_shot:setVolume(1*SFX_VOLUME_MULT)
+    SFX.back_button:setVolume(1*SFX_VOLUME_MULT)
+    SFX.play_button:setVolume(1*SFX_VOLUME_MULT)
+    SFX.ultrablast_bar_complete:setVolume(1*SFX_VOLUME_MULT)
 
     print("Finished setting up audio")
 
