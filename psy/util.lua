@@ -413,6 +413,44 @@ end
 --GLOBAL FUNCTIONS
 --------------------
 
+--Return corrected joystick value given two axis
+function util.getJoystickAxisValues(joy, horizontal_axis, vertical_axis)
+
+  local v = Vector(joy:getAxis(horizontal_axis), joy:getAxis(vertical_axis))
+  if(v:len() < JOYSTICK_DEADZONE) then
+      v = Vector(0,0)
+  else
+      v = v:normalized() * ((v:len() - JOYSTICK_DEADZONE) / (1 - JOYSTICK_DEADZONE))
+  end
+  return v.x, v.y
+
+end
+
+--Given a hat value, returns the correspondent direction
+function util.getHatDirection(hat)
+  if hat == 'l' then
+    return Vector(-1,0)
+  elseif hat == 'u' then
+    return Vector(0,-1)
+  elseif hat == 'r' then
+    return Vector(1,0)
+  elseif hat == 'd' then
+    return Vector(0,1)
+  elseif hat == 'lu' then
+    return Vector(-1,-1)
+  elseif hat == 'ru' then
+    return Vector(1,-1)
+  elseif hat == 'rd' then
+    return Vector(1,1)
+  elseif hat == 'ld' then
+    return Vector(-1,1)
+  elseif hat == 'c' then
+    return Vector(0,0)
+  else
+    error("Not a valid hat value: "..hat)
+  end
+end
+
 --Makes all collisions
 function util.checkCollision()
     local p, cont, arg, col
@@ -604,7 +642,8 @@ function util.defaultKeyPressed(key)
         love.mouse.setGrabbed(state)
         print("MOUSE CAPTURE IS", state)
     elseif key == "f2" then
-        HS.print()
+        JOYSTICK_AUTO_SHOOT = not JOYSTICK_AUTO_SHOOT
+        print("JOYSTICK_AUTO_SHOOT is ",JOYSTICK_AUTO_SHOOT)
     elseif key == "f3" then
         HS.reset()
     elseif key == "scrolllock" then

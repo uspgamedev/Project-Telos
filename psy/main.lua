@@ -145,6 +145,45 @@ function love.quit()
     return true
 end
 
+------------------------------------
+
+--Update status of player using joystick or not
+function love.mousemoved(...)
+  USING_JOYSTICK = false
+end
+
+function love.keypressed(...)
+  USING_JOYSTICK = false
+end
+
+function love.joystickaxis(joystick, ...)
+  USING_JOYSTICK = true
+  CURRENT_JOYSTICK = joystick
+end
+
+function love.joystickpressed(joystick, ...)
+  USING_JOYSTICK = true
+  CURRENT_JOYSTICK = joystick
+end
+
+function love.joystickhat(joystick, ...)
+  USING_JOYSTICK = true
+  CURRENT_JOYSTICK = joystick
+end
+
+function love.joystickadded(joystick)
+  USING_JOYSTICK = true
+  CURRENT_JOYSTICK = joystick
+end
+
+function love.joystickremoved(joystick)
+  if joystick == CURRENT_JOYSTICK then
+    CURRENT_JOYSTICK = nil
+    USING_JOYSTICK = false
+  end
+end
+
+------------------------------
 --Used for debugging
 function love.update()
 end

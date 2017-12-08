@@ -188,10 +188,39 @@ function state:mousepressed(x, y, button, istouch)
     --Secondary mouse button unleashes an ultrablast
     if button == 2 then
         p = Util.findId("psycho")
-        if p.can_ultra then
+        if p and p.can_ultra then
             p:ultrablast(p.default_ultrablast_power)
         end
     end
+
+end
+
+function state:joystickaxis(joystick, axis, value)
+    local p = Util.findId("psycho")
+    if p then
+      p:joystickaxis(joystick, axis, value)
+    end
+end
+
+function state:joystickpressed(joystick, button)
+
+  if button == GENERIC_JOY_MAP.start then
+      SWITCH = "PAUSE"
+  end
+
+  local p = Util.findId("psycho")
+  if p then
+    p:joystickpressed(joystick, button)
+  end
+
+end
+
+function state:joystickreleased(joystick, button)
+
+  local p = Util.findId("psycho")
+  if p then
+    p:joystickreleased(joystick, button)
+  end
 
 end
 

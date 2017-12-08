@@ -30,12 +30,29 @@ function setup.config()
     FIRST_TIME = args["first_time"] --If its the first time the player is playing (for tutorial)
     CONTINUE = args["continue"] --If player is in the middle of a run
 
+    CURRENT_MENU_SCREEN = nil --What screen on main menu player is
+    CURRENT_SELECTED_BUTTON = nil --What utton joystick is selecting
+
     HIGHSCORES = args["highscores"] --Highscores
     MAX_HIGHSCORE = 5 --Number of scores stored in the highscore table
     HIGHSCORE_HIGHLIGHT_EFFECT_HANDLE = nil --Handle for tween effect applied on highscore text (when a position is highlighed)
 
     GAMEOVER_BUTTONS_LOCK = false --If player can press or activate the gameover buttons
     PSYCHO_SCORE = 0 --Psycho score
+
+    USING_JOYSTICK = false --If player is using the joystick to control the game
+    CURRENT_JOYSTICK = nil --Current joystick controlling psycho
+    JOYSTICK_DEADZONE = .3 --Percentage of dead zone on all sticks (value between [0,1])
+    JOYSTICK_AUTO_SHOOT = true --If psycho shoots whenever it is aiming
+    GENERIC_JOY_MAP = { --Mapping of generic joystick buttons
+      start = 10,
+      confirm = 3,
+      back = 2,
+      shoot = 6,
+      ultrablast1 = 7,
+      ultrablast2 = 8,
+      focus = 5,
+    }
 
     TUTORIAL = false --If the game gamestate should play the tutorial
     DONT_ENABLE_SHOOTING_AFTER_DEATH = false --for tutorial only
@@ -101,9 +118,10 @@ function setup.config()
     L4u = {}, --Layer 4 upper
     BOSS = {}, --Bosses
     BOSSu = {}, --Bosses upper
-    GAME_GUI = {}, --Game User Interface
+    GAME_GUI = {},  --Game User Interface
     L5  = {}, --Layer 5
     L5u = {}, --Layer 5 upper
+    GUIl = {}, --Behind Graphic User Interface
     GUI = {}  --Graphic User Interface (top layer, last to draw)
     }
 

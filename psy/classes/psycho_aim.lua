@@ -21,9 +21,11 @@ Aim = Class{
         self.pos = Vector(0,0)
         self.dir = Vector(0,0)
         self.distance = math.sqrt(ORIGINAL_WINDOW_WIDTH^2 + ORIGINAL_WINDOW_HEIGHT^2)
-        self.line_width = 1 --Thickness of aim line
+        self.line_width = 2 --Thickness of aim line
         self.circle_size = 6 --Radius of aim circle
         self.mouse_pos = Vector(0,0) --Position the mouse is
+
+        self.show = true --If should show the aim or not (for joystick mode)
 
         self.alpha = 0 --Alpha of aim
 
@@ -53,21 +55,23 @@ function Aim:draw()
     --Draw the line
 
     --Draw line only if psycho can shoot
-    if p.can_shoot then
+    if p.can_shoot and self.show then
         Color.set(color)
         love.graphics.setLineWidth(aim.line_width)
         love.graphics.line(aim.pos.x, aim.pos.y, aim.pos.x + aim.distance*aim.dir.x, aim.pos.y + aim.distance*aim.dir.y)
     end
 
     --Draw the circle
-    color.h = (color.h + 127)%255
-    color.a = 255
+    if not USING_JOYSTICK then
+      color.h = (color.h + 127)%255
+      color.a = 255
 
-    Color.set(color)
-    size = aim.circle_size
-    --Shrink size of aim when psycho can't shoot
-    if not p.can_shoot then size = 3 end
-    Draw_Smooth_Circle(aim.mouse_pos.x, aim.mouse_pos.y, size)
+      Color.set(color)
+      size = aim.circle_size
+      --Shrink size of aim when psycho can't shoot
+      if not p.can_shoot then size = 3 end
+      Draw_Smooth_Circle(aim.mouse_pos.x, aim.mouse_pos.y, size)
+    end
 
 end
 
@@ -92,7 +96,16 @@ function Aim:update(dt)
 
     --Update line position
     aim.pos.x, aim.pos.y = p.pos.x, p.pos.y
-    aim.dir.x, aim.dir.y = aim.mouse_pos.x - aim.pos.x, aim.mouse_pos.y - aim.pos.y
+    aim.show = true
+    if not USING_JOYSTICK then
+      aim.dir.x, aim.dir.y = aim.mouse_pos.x - aim.pos.x, aim.mouse_pos.y - aim.pos.y
+    elseif CURRENT_JOYSTICK and (CURRENT_JOYSTICK:getAxis(3) ~= 0 or CURRENT_JOYSTICK:getAxis(4) ~= 0) then
+      local v = Vector(Util.getJoystickAxisValues(CURRENT_JOYSTICK, 3, 4))
+      v = v:normalized()
+      aim.dir.x, aim.dir.y = (aim.pos.x + v.x)-aim.pos.x, (aim.pos.y + v.y)-aim.pos.y
+    else
+      aim.show = false
+    end
     aim.dir = aim.dir:normalized()
 
 end

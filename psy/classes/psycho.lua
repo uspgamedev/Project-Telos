@@ -117,14 +117,6 @@ function Psy:shoot(x,y)
 
     SFX.psychoball_shot:play()
 
-    --Fix mouse position click to respective distance
-    w, h = FreeRes.windowDistance()
-    scale = FreeRes.scale()
-    x = x - w
-    x = x*(1/scale)
-    y = y - h
-    y = y*(1/scale)
-
     c = HSL(Hsl.hsl(p.color)) --Color of bullet is current psycho color
     color_table = {
         HSL(Hsl.stdv(51,100,50)),
@@ -188,19 +180,42 @@ function Psy:update(dt)
     end
 
     --Update shooting
-    p.shoot_tick = p.shoot_tick - dt
-    if love.mouse.isDown(1) or love.keyboard.isDown('z') then
+    p.shoot_tick = math.max(p.shoot_tick - dt, 0)
+    if not USING_JOYSTICK then
+      if love.mouse.isDown(1) or
+         love.keyboard.isDown('z')
+      then
         if p.shoot_tick <= 0 then
             p.shoot_tick = p.shoot_tick + p.shoot_fps
-            p:shoot(love.mouse.getPosition())
+            local x, y = love.mouse.getPosition()
+            --Fix mouse position click to respective distance
+            w, h = FreeRes.windowDistance()
+            scale = FreeRes.scale()
+            x = x - w
+            x = x*(1/scale)
+            y = y - h
+            y = y*(1/scale)
+            p:shoot(x, y)
         end
-    end
-    if p.shoot_tick < 0 then
-        p.shoot_tick = 0
+      end
+    elseif CURRENT_JOYSTICK and
+           (JOYSTICK_AUTO_SHOOT or CURRENT_JOYSTICK:isDown(GENERIC_JOY_MAP.shoot)) and
+           (CURRENT_JOYSTICK:getAxis(3) ~= 0 or CURRENT_JOYSTICK:getAxis(4) ~= 0)
+    then
+      if p.shoot_tick <= 0 then
+          p.shoot_tick = p.shoot_tick + p.shoot_fps
+          local v = Vector(Util.getJoystickAxisValues(CURRENT_JOYSTICK, 3, 4)):normalized()
+          if v.x ~= 0 or v.y ~= 0 then --Check for deadzone case
+            local x, y = p.pos.x + v.x, p.pos.y + v.y
+            p:shoot(x, y)
+          end
+      end
     end
 
     --Leave before moving psycho or creating circle effects
     if not p.can_move then return end
+
+    psycho.updateSpeed(p)
 
     --Create circle effect
     p.circle_fx_tick = p.circle_fx_tick - dt
@@ -274,29 +289,43 @@ function Psy:keypressed(key)
 
     p = self --Psycho
 
-    --Movement
-    if key == 'w' or key == 'a' or key == 's' or key == 'd' or
-       key == 'up' or key == 'left' or key == 'down' or key == 'right' then
-        psycho.updateSpeed(self)
-    elseif key == 'lshift' and p.can_focus then
+    if key == 'lshift' and p.can_focus then
         p.focused = true
-    elseif key == 'space' then
-        if p.can_ultra then
-            p:ultrablast(p.default_ultrablast_power)
-        end
+    elseif key == 'space' and p.can_ultra then
+        p:ultrablast(p.default_ultrablast_power)
     end
 
 end
 
 function Psy:keyreleased(key)
 
-    --Movement
-if key == 'w' or key == 'a' or key == 's' or key == 'd' or
-   key == 'up' or key == 'left' or key == 'down' or key == 'right' then
-      psycho.updateSpeed(self)
-elseif key == 'lshift' then
-    self.focused = false
+    if key == 'lshift' then
+        self.focused = false
+    end
+
 end
+
+function Psy:joystickaxis(joystick, axis, value)
+
+end
+
+function Psy:joystickpressed(joystick, button)
+
+  --Use ultrablast (right or left trigger button by default)
+  if button == GENERIC_JOY_MAP.ultrablast1 or button == GENERIC_JOY_MAP.ultrablast2 then
+    self:ultrablast(self.default_ultrablast_power)
+  --Enter focus mode (left shoulder button by default)
+  elseif button == GENERIC_JOY_MAP.focus then
+    self.focused = true
+  end
+
+end
+
+function Psy:joystickreleased(joystick, button)
+
+  if button == GENERIC_JOY_MAP.focus then
+    self.focused = false
+  end
 
 end
 
@@ -395,18 +424,29 @@ function psycho.updateSpeed(self)
     sp = p.speedv --Speed Value
 
     p.speed = Vector(0,0)
-    --Movement
-    if love.keyboard.isDown 'w' or love.keyboard.isDown 'up' then --move up
-        p.speed = p.speed + Vector(0,-1)
-    end
-    if love.keyboard.isDown 'a' or love.keyboard.isDown 'left' then --move left
-        p.speed = p.speed + Vector(-1,0)
-    end
-    if love.keyboard.isDown 's' or love.keyboard.isDown 'down' then --move down
-        p.speed = p.speed + Vector(0,1)
-    end
-    if love.keyboard.isDown'd' or love.keyboard.isDown 'right' then --move right
-        p.speed = p.speed + Vector(1,0)
+    if not USING_JOYSTICK then
+      --Movement
+      if love.keyboard.isDown 'w' or love.keyboard.isDown 'up' then --move up
+          p.speed = p.speed + Vector(0,-1)
+      end
+      if love.keyboard.isDown 'a' or love.keyboard.isDown 'left' then --move left
+          p.speed = p.speed + Vector(-1,0)
+      end
+      if love.keyboard.isDown 's' or love.keyboard.isDown 'down' then --move down
+          p.speed = p.speed + Vector(0,1)
+      end
+      if love.keyboard.isDown'd' or love.keyboard.isDown 'right' then --move right
+          p.speed = p.speed + Vector(1,0)
+      end
+    else
+      if CURRENT_JOYSTICK then
+        --Prioritize hat, if not use axis value
+        local hat = CURRENT_JOYSTICK:getHat(1)
+        p.speed = Util.getHatDirection(hat)
+        if p.speed.x == 0 and p.speed.y == 0 then --Hat == 'c'
+          p.speed.x, p.speed.y = Util.getJoystickAxisValues(CURRENT_JOYSTICK, 1, 2)
+        end
+      end
     end
 
     p.speed = p.speed:normalized() * sp

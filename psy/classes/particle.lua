@@ -174,14 +174,14 @@ end
 --UTILITY FUNCTIONS--
 
 --Create a particle in the (x,y) position, direction dir, color c, radius size and subtype st
-function particle.create_decaying(pos, dir, color, speed, decaying, size)
-    local part, st
+function particle.create_decaying(pos, dir, color, speed, decaying, size, draw_table, st)
+    local part
 
-    st = "decaying_particle" --subtype
+    st = st or "decaying_particle" --subtype
 
     part = Decaying_Particle(pos.x, pos.y, dir.x, dir.y, color, speed, decaying, size)
 
-    part:addElement(DRAW_TABLE.L2, st)
+    part:addElement(draw_table or DRAW_TABLE.L2, st)
 
     return part
 end
