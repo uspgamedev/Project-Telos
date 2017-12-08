@@ -29,7 +29,7 @@ function state:enter()
     if TUTORIAL then
         level = Levels["tutorial"]
     elseif not CONTINUE then
-        level = Levels["level2"]
+        level = Levels["level1"]
     else
         level = Levels["level"..CONTINUE]
     end
@@ -61,7 +61,7 @@ function state:enter()
 
     level.setup() --Make title and start BGM
 
-    Level.start(level.part_2) --Start first part of level
+    Level.start(level.part_1) --Start first part of level
 
     love.mouse.setVisible(false) --Make cursor invisible
     love.mouse.setGrabbed(true) --Resume mouse capture
@@ -188,7 +188,7 @@ function state:mousepressed(x, y, button, istouch)
     --Secondary mouse button unleashes an ultrablast
     if button == 2 then
         p = Util.findId("psycho")
-        if p.can_ultra then
+        if p and p.can_ultra then
             p:ultrablast(p.default_ultrablast_power)
         end
     end
