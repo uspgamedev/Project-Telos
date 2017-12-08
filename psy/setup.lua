@@ -218,7 +218,7 @@ function setup.config()
         b1_long_roar =  love.audio.newSource("assets/sfx/boss1/long_roar.wav"),
         b1_hurt_roar =  love.audio.newSource("assets/sfx/boss1/hurt_roar.wav"),
         b1_angry_hurt_roar =  love.audio.newSource("assets/sfx/boss1/angry_hurt_roar.wav"),
-        b1_angry_af_roar =  love.audio.newSource("assets/sfx/boss1/angry_af_roar.wav"),
+        b1_angry_af_roar =  love.audio.newSource("assets/sfx/boss1/crying.wav"),
     }
     SFX.hit_simple:setVolume(1*SFX_VOLUME_MULT)
     SFX.hit_double:setVolume(1*SFX_VOLUME_MULT)
