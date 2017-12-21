@@ -84,64 +84,70 @@ function state:leave()
 
 end
 
-
+local lag = 0
+local frame = 1/60
 function state:update(dt)
-    local m_dt
+    local m_frame
 
-    --Change state if required
-    if SWITCH == "PAUSE" or not FOCUS then
-        --Make use of canvas so screen won't blink
-        USE_CANVAS = true
-        Draw.allTables()
+    lag = lag + dt
+    while lag >= frame do
+      lag = lag - frame
 
-        SWITCH = nil
-        Gamestate.push(GS.PAUSE)
-    elseif SWITCH == "GAMEOVER" then
-        --Make use of canvas so screen won't blink
-        USE_CANVAS = true
-        Draw.allTables()
+      --Change state if required
+      if SWITCH == "PAUSE" or not FOCUS then
+          --Make use of canvas so screen won't blink
+          USE_CANVAS = true
+          Draw.allTables()
 
-        SWITCH = nil
-        Util.gameElementException("GAMEOVER")
+          SWITCH = nil
+          Gamestate.push(GS.PAUSE)
+      elseif SWITCH == "GAMEOVER" then
+          --Make use of canvas so screen won't blink
+          USE_CANVAS = true
+          Draw.allTables()
 
-        Gamestate.switch(GS.GAMEOVER)
+          SWITCH = nil
+          Util.gameElementException("GAMEOVER")
+
+          Gamestate.switch(GS.GAMEOVER)
+      end
+
+      Util.updateTimers(frame)
+
+      Util.updateFPS()
+
+      --Update psycho
+      p:update(frame)
+
+      --Update other objects (if slow mo, make them slow)
+      if SLOWMO then
+          m_frame = frame*SLOWMO_M
+      else
+          m_frame = frame
+      end
+
+      Util.updateSubTp(m_frame, "player_bullet")
+      Util.updateSubTp(m_frame, "enemies")
+      Util.updateSubTp(m_frame, "bosses")
+      Util.updateSubTp(m_frame, "decaying_particle")
+      Util.updateSubTp(frame, "psycho_explosion") --Are not affected by slowmo
+      Util.updateSubTp(m_frame, "particle_batch")
+      Util.updateSubTp(m_frame, "enemy_indicator_batch")
+      Util.updateSubTp(m_frame, "growing_circle")
+      Util.updateSubTp(m_frame, "enemy_indicator")
+      Util.updateSubTp(m_frame, "rotating_indicator")
+      Util.updateSubTp(m_frame, "ultrablast")
+      Util.updateSubTp(m_frame, "tutorial_icon")
+      Util.updateId(frame, "psycho_aim") --Is not affected by slowmo
+      Util.updateId(frame, "ultrablast_counter") --Is not affected by slowmo
+      Util.updateId(frame, "life_counter") --Is not affected by slowmo
+      Util.updateId(frame, "score_counter") --Is not affected by slowmo
+
+      Util.checkCollision()
+
+      --Kill dead objects
+      Util.killAll()
     end
-
-    Util.updateTimers(dt)
-
-    Util.updateFPS()
-
-    --Update psycho
-    p:update(dt)
-
-    --Update other objects (if slow mo, make them slow)
-    if SLOWMO then
-        m_dt = dt*SLOWMO_M
-    else
-        m_dt = dt
-    end
-
-    Util.updateSubTp(m_dt, "player_bullet")
-    Util.updateSubTp(m_dt, "enemies")
-    Util.updateSubTp(m_dt, "bosses")
-    Util.updateSubTp(m_dt, "decaying_particle")
-    Util.updateSubTp(dt, "psycho_explosion") --Are not affected by slowmo
-    Util.updateSubTp(m_dt, "particle_batch")
-    Util.updateSubTp(m_dt, "enemy_indicator_batch")
-    Util.updateSubTp(m_dt, "growing_circle")
-    Util.updateSubTp(m_dt, "enemy_indicator")
-    Util.updateSubTp(m_dt, "rotating_indicator")
-    Util.updateSubTp(m_dt, "ultrablast")
-    Util.updateSubTp(m_dt, "tutorial_icon")
-    Util.updateId(dt, "psycho_aim") --Is not affected by slowmo
-    Util.updateId(dt, "ultrablast_counter") --Is not affected by slowmo
-    Util.updateId(dt, "life_counter") --Is not affected by slowmo
-    Util.updateId(dt, "score_counter") --Is not affected by slowmo
-
-    Util.checkCollision()
-
-    --Kill dead objects
-    Util.killAll()
 
 
 end
