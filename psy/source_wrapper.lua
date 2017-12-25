@@ -18,7 +18,7 @@
 -----------------------------------
 
 local SFX_BUFFER_SIZE = 16
-local BGM_BUFFER_SIZE = 1
+local BGM_BUFFER_SIZE = 2
 
 -----------------------------------
 -- Source Buffer Managing ---------
@@ -55,7 +55,7 @@ end
 function Source:play()
     self.buffer[self.next_index]:play()
     self.next_index = self.next_index % self.buffer_size + 1
-    return self
+    return self:getLast()
 end
 
 -----------------------------------
