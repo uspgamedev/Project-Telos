@@ -5,6 +5,8 @@ GAME DESIGN DOCUMENT
 DEV LOG
 =======
 
+### DEVLOG IS NO LONGER BEING UPDATED
+
 #### 10/11/2016:
 
 Fixed lots of bugs, and added a tutorial level!

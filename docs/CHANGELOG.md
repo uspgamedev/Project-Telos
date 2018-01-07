@@ -2,7 +2,18 @@
 THE HISTORY OF PSYCHO: THE BALL
 ===============================
 
-#### (xx/xx/2017) Version 0.0.0.10 (indev)  -  Releasing the Ball
+#### (xx/xx/2018) Version 0.2 (indev) -  Releasing the Ball
+
+- Refactored Ultrablasts
+    - Refactored Ultrablast mechanic to improve overall experience
+- Polish the heck out of the balls
+    - Whole game is nicer, juicier and smoother
+- First attempt at controller support
+    - Get those joysticks out of the closet!
+- Improved soundtrack and sfxs!
+    - Everything remastered by our expert musician
+
+#### (28/06/2017) Version 0.1 -  Releasing the Ball
 
 - Added tutorial!
     - Learn the ropes when first playing the game

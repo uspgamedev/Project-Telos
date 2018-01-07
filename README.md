@@ -1,5 +1,5 @@
 
-# PsyChO: The Ball version 0.0.0.10 indev
+# PsyChO: The Ball version 0.2 indev
 ===========================================  
  *a game by* **USPGAMEDEV** *&* **MARVELLOUS SOFT**  
 
