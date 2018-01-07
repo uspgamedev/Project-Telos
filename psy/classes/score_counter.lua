@@ -26,8 +26,6 @@ ScoreCounter = Class{
         self.score_cont = 0 --Player score counter number
         self.score_to_add = 0 --Score player has received but hasn't yet being added to score counter.
 
-        self.popup_texts = {} --Tale containing all popup texts when player receives score
-
         --Variables to add gradually score to score counter
         self.tick = 0
         self.tick_max = .05 --Time between gradually additions to score
@@ -78,23 +76,32 @@ function ScoreCounter:getHeight()
   return s.score_font:getHeight(s.score_cont)
 end
 
-function ScoreCounter:giveScore(score, text)
+--Move all popups down, making them a little more transparent
+function ScoreCounter:rearrangePopups()
 
-  --Score will be gradually added
-  self.score_to_add = self.score_to_add + score
+  local all_popups = Util.findSbTp("score_popup_text")
 
-  --Move all other popups down, making them a little more transparent
-  for _,popup in pairs(self.popup_texts) do
+  if not all_popups then return end
+
+  for popup in pairs(all_popups) do
     local handle1 = LEVEL_TIMER:tween(.3, popup.pos, {y = popup.pos.y + 27})
     local handle2 = LEVEL_TIMER:tween(.3, popup, {alpha = popup.alpha - 50})
     table.insert(popup.level_handles, handle1)
     table.insert(popup.level_handles, handle2)
   end
 
-  --Create popup text--
+end
+
+--Create new popup text--
+function ScoreCounter:createPopup(score, text)
+
+  --First rearrange all popups down
+  self:rearrangePopups()
+
   local fade_duration = .3 --Time for popup to appear/disappear
-  local popup_duration = 2.1 --time popup remains visible
-  --Create number text
+  local popup_duration = 2.1 --Time popup remains visible
+
+  --Create text
   if score > 0 then signal = "+" else signal = "" end --Get correct sign
   local score_text = signal..score
   local extra_text = text and (text .. "  ") or ""
@@ -102,8 +109,11 @@ function ScoreCounter:giveScore(score, text)
   local extra_font = GUI_MEDLESS
   local x = ORIGINAL_WINDOW_WIDTH - self.gap_width - extra_font:getWidth(extra_text) - score_font:getWidth(score_text)
   local y = self:getStartYPosition() + self:getHeight()
-  local t = Txt.create_game_gui(x, y, extra_text, extra_font, score_text, "right", score_font)
-  --Create number text effect
+
+  --Create popup
+  local t = Txt.create_game_gui(x, y, extra_text, extra_font, score_text, "right", score_font, nil, nil, nil, nil, "score_popup_text")
+
+  --Create popup effect
   t.alpha = 0
   t.level_handles["fade-in-alpha"] =
     LEVEL_TIMER:tween(fade_duration,
@@ -133,9 +143,16 @@ function ScoreCounter:giveScore(score, text)
                               )
                           end
     )
-  --Insert number text on counter popup table
-  table.insert(self.popup_texts, t)
 
+end
+
+
+function ScoreCounter:giveScore(score, text)
+
+  --Score will be gradually added
+  self.score_to_add = self.score_to_add + score
+
+  self:createPopup(score,text)
 end
 
 function ScoreCounter:update(dt)

@@ -109,11 +109,12 @@ function text.create_gui(x, y, text, font, var, mode, var_font, id, align, limit
 end
 
 --Create a text in the game_gui draw table
-function text.create_game_gui(x, y, text, font, var, mode, var_font, id, align, limit, invert)
+function text.create_game_gui(x, y, text, font, var, mode, var_font, id, align, limit, invert, st)
     local txt
 
+    st = st or "game_gui"
     txt = Text(x, y, text, font, var, mode, var_font, align, limit, invert)
-    txt:addElement(DRAW_TABLE.GAME_GUI, "game_gui", id)
+    txt:addElement(DRAW_TABLE.GAME_GUI, st, id)
 
     return txt
 end

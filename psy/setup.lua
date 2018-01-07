@@ -93,7 +93,7 @@ function setup.config()
     COROUTINE_HANDLE = nil --Handle timer for current coroutine
     INDICATOR_DEFAULT = 1.5 --Indicator timer default
 
-    SHAKE_HANDLE = nil --Handle for shake effect
+    SHAKE_HANDLES = {} --Table containing all handles for shake effect
 
     SLOWMO = false --If (most) game elements will move in slow-mo
     SLOWMO_M = .5 --Slowmo multiplier effect

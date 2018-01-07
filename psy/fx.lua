@@ -206,16 +206,23 @@ function fx.shake(d, s)
     orig_x = CAM.x
     orig_y = CAM.y
 
-    SHAKE_HANDLE = LEVEL_TIMER:during(d,
-        function()
-            CAM.x = orig_x + love.math.random(-str,str)
-            CAM.y = orig_y + love.math.random(-str,str)
-        end,
-        function()
-            -- reset camera position
-            CAM.x = orig_x
-            CAM.y = orig_y
-        end
+
+    local handle = LEVEL_TIMER:during(d,
+                function()
+                    CAM.x = orig_x + love.math.random(-str,str)
+                    CAM.y = orig_y + love.math.random(-str,str)
+                end
+    )
+    SHAKE_HANDLES[handle] = true
+    LEVEL_TIMER:after(d,
+                function()
+                    SHAKE_HANDLES[handle] = nil
+                    if Util.tableLen(SHAKE_HANDLES) <= 0 then
+                      -- reset camera position to center screen if this is the last active shake effect
+                      CAM.x = ORIGINAL_WINDOW_WIDTH/2
+                      CAM.y = ORIGINAL_WINDOW_HEIGHT/2
+                    end
+                end
     )
 end
 

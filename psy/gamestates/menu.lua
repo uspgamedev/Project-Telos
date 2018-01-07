@@ -105,9 +105,14 @@ function state:enter()
     Audio.playBGM(BGM.menu, nil, 3.5)
 
     --SHAKE--
-    if SHAKE_HANDLE then
-        LEVEL_TIMER:cancel(SHAKE_HANDLE)
+    if Util.tableLen(SHAKE_HANDLES) > 0 then
+        for handle in pairs(SHAKE_HANDLES) do
+          LEVEL_TIMER:cancel(handle)
+        end
     end
+    --Reset camera center pos
+    CAM.x = ORIGINAL_WINDOW_WIDTH/2
+    CAM.y = ORIGINAL_WINDOW_HEIGHT/2
 
     love.mouse.setGrabbed(false) --Stop mouse capture
 
