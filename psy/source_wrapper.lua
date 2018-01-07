@@ -17,8 +17,8 @@
 -- Constants ----------------------
 -----------------------------------
 
-local SFX_BUFFER_SIZE = 16
-local BGM_BUFFER_SIZE = 2
+local STATIC_BUFFER_SIZE = 16
+local STREAM_BUFFER_SIZE = 2
 
 -----------------------------------
 -- Source Buffer Managing ---------
@@ -71,9 +71,9 @@ function love.audio.newSource(filepath, mode)
 
     mode = mode or 'stream'
     if mode == 'static' then
-      buffer_size = SFX_BUFFER_SIZE
+      buffer_size = STATIC_BUFFER_SIZE
     elseif mode == 'stream' then
-      buffer_size = BGM_BUFFER_SIZE
+      buffer_size = STREAM_BUFFER_SIZE
     end
 
     buffer = {}
