@@ -64,7 +64,7 @@ return function()
     if b then b.selected_by_joystick = false end
     local b = Util.findId("menu_go2highscore_button")
     if b then b.selected_by_joystick = true end
-    CURRENT_SELECTED_BUTTON = "menu_go2highscore"
-    CURRENT_MENU_SCREEN = "main_menu"
+    _current_selected_button = "menu_go2highscore"
+    _current_menu_screen = "main_menu"
 
 end

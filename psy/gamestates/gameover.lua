@@ -9,19 +9,19 @@ require "classes.primitive"
 --MODULE FOR THE GAMESTATE: GAMEOVER--
 
 --LOCAL VARIABLES--
-
-local black_and_white_handle
-
-local gameover_menu_screen_buttons
-local highscore_menu_screen_buttons
-local joystick_moved
-local joystick_direction
+local _black_and_white_handle
+local _gameover_menu_screen_buttons
+local _highscore_menu_screen_buttons
+local _current_selected_button
+local _current_menu_screen
+local _joystick_moved
+local _joystick_direction
 
 --LOCAL FUNCTION DECLARATIONS--
-
+local chooseDeathMessage
 local changeSelectedButton
 local getValidButtons
-local chooseDeathMessage
+local getCurrentSelectedButton
 
 --------------------
 
@@ -30,12 +30,15 @@ local state = {}
 function state:enter(_score)
     local t, b
 
+    _current_selected_button = nil
+    _current_menu_screen = "gameover_menu"
+
     --Blur gamescreen
     USE_BLUR_CANVAS = true
 
     --Make everything black and white
     BLACK_WHITE_SHADER_FACTOR = 0
-    black_and_white_handle = FX_TIMER:tween(2, _G, {BLACK_WHITE_SHADER_FACTOR = .7}, 'in-linear')
+    _black_and_white_handle = FX_TIMER:tween(2, _G, {BLACK_WHITE_SHADER_FACTOR = .7}, 'in-linear')
 
     --Shake Screen
     FX.shake(3,1)
@@ -53,7 +56,7 @@ function state:enter(_score)
     else
         --Normal gameover text and buttons
 
-        gameover_menu_screen_buttons = {}
+        _gameover_menu_screen_buttons = {}
 
         t = Txt.create_gui(400, 300, "GAMEOVER", GUI_BOSS_TITLE, nil, "format", nil, "gameover_text", "center")
         chooseDeathMessage(t)
@@ -62,33 +65,31 @@ function state:enter(_score)
         func = function() SWITCH = "GAME"; CONTINUE = false end
         b = Button.create_circle_gui(140, 650, 75, func, "Restart", GUI_BIGLESSLESS, "gameover_gui", "restart_button")
         b.selected_by_joystick = true --Mark as default selected button
-        CURRENT_SELECTED_BUTTON = "restart"
-        table.insert(gameover_menu_screen_buttons, "restart")
+        _current_selected_button = "restart"
+        table.insert(_gameover_menu_screen_buttons, "restart")
 
         if CONTINUE then
 
             --Continue button
             func = function() SWITCH = "GAME" end
             b = Button.create_circle_gui(340, 650, 75, func, "Continue", GUI_BIGLESSLESS, "gameover_gui", "continue_button")
-            table.insert(gameover_menu_screen_buttons, "continue")
+            table.insert(_gameover_menu_screen_buttons, "continue")
 
         end
 
         --Back to menu button
         func = function() SWITCH = "MENU" end
         b = Button.create_circle_gui(540, 650, 75, func, "Menu", GUI_BIGLESSLESS, "gameover_gui", "back2menu_button")
-        table.insert(gameover_menu_screen_buttons, "back2menu")
+        table.insert(_gameover_menu_screen_buttons, "back2menu")
 
         GAMEOVER_BUTTONS_LOCK = false
-
-        CURRENT_MENU_SCREEN = "gameover_menu"
     end
 
     --Add slowmotion effect
     SLOWMO_M = .2
 
-    joystick_moved = false
-    joystick_direction = Vector(0,0)
+    _joystick_moved = false
+    _joystick_direction = Vector(0,0)
     love.mouse.setGrabbed(false) --Stop mouse capture
 
 end
@@ -102,8 +103,8 @@ function state:leave()
 
     --Stop using black and white effect
     BLACK_WHITE_SHADER_FACTOR = 0
-    if black_and_white_handle then
-      FX_TIMER:cancel(black_and_white_handle)
+    if _black_and_white_handle then
+      FX_TIMER:cancel(_black_and_white_handle)
     end
 
     Util.addExceptionId("background")
@@ -132,22 +133,22 @@ function state:update(dt)
     --Move selected button based on joystick hat or axis input
     if USING_JOYSTICK and CURRENT_JOYSTICK then
       --First try to get hat input
-      joystick_direction = Util.getHatDirection(CURRENT_JOYSTICK:getHat(1))
-      if joystick_direction:len() == 0 then
+      _joystick_direction = Util.getHatDirection(CURRENT_JOYSTICK:getHat(1))
+      if _joystick_direction:len() == 0 then
         --If there isn't a hat input, tries to get an axis input
-        joystick_direction = Vector(Util.getJoystickAxisValues(CURRENT_JOYSTICK, 1, 2)):normalized()
+        _joystick_direction = Vector(Util.getJoystickAxisValues(CURRENT_JOYSTICK, 1, 2)):normalized()
       end
-      if joystick_direction:len() == 0 then
-        joystick_moved = false
+      if _joystick_direction:len() == 0 then
+        _joystick_moved = false
       else
-        if not joystick_moved then
-          local b = Util.findId(CURRENT_SELECTED_BUTTON.."_button")
+        if not _joystick_moved then
+          local b = Util.findId(_current_selected_button.."_button")
           if b and b.alpha_modifier >= .3 then
-            changeSelectedButton(joystick_direction)
+            changeSelectedButton(_joystick_direction)
           end
         end
         --Set joystick as moved so it doesn't move to several buttons at once
-        joystick_moved = true
+        _joystick_moved = true
       end
     end
 
@@ -239,7 +240,7 @@ function state:joystickpressed(joystick, button)
 
   if joystick == CURRENT_JOYSTICK then
     if button == GENERIC_JOY_MAP.confirm then
-      local b = Util.findId(CURRENT_SELECTED_BUTTON.."_button")
+      local b = Util.findId(_current_selected_button.."_button")
       if b and not b.lock then
         b:func()
         if b.sfx then b.sfx:play() end
@@ -277,19 +278,19 @@ end
 
 function changeSelectedButton(dir)
 
-  if CURRENT_SELECTED_BUTTON then
+  if _current_selected_button then
     local valid_buttons
 
-    if CURRENT_MENU_SCREEN == "gameover_menu" then
-      valid_buttons = getValidButtons(dir, gameover_menu_screen_buttons)
-    elseif CURRENT_MENU_SCREEN == "highscore_menu" then
-      valid_buttons = getValidButtons(dir, highscore_menu_screen_buttons)
+    if _current_menu_screen == "gameover_menu" then
+      valid_buttons = getValidButtons(dir, _gameover_menu_screen_buttons)
+    elseif _current_menu_screen == "highscore_menu" then
+      valid_buttons = getValidButtons(dir, _highscore_menu_screen_buttons)
     else
-      error("Not a valid menu screen "..CURRENT_MENU_SCREEN)
+      error("Not a valid menu screen ".._current_menu_screen)
     end
 
     --Find closes button
-    local b = Util.findId(CURRENT_SELECTED_BUTTON.."_button")
+    local b = Util.findId(_current_selected_button.."_button")
     if not b then return end
     local min_len = 9999999
     local target_button = nil
@@ -304,7 +305,7 @@ function changeSelectedButton(dir)
 
     --Change currently selected button
     if target_button then
-      CURRENT_SELECTED_BUTTON = target_button
+      _current_selected_button = target_button
       local new_button = Util.findId(target_button.."_button")
       b.selected_by_joystick = false
       new_button.selected_by_joystick = true
@@ -319,11 +320,11 @@ end
 function getValidButtons(direction, available_buttons_table)
   local range = math.pi/4
   local valid_buttons = {}
-  local b = Util.findId(CURRENT_SELECTED_BUTTON.."_button")
+  local b = Util.findId(_current_selected_button.."_button")
   if not b then return valid_buttons end
 
   for _,k in ipairs(available_buttons_table) do
-    if k ~= CURRENT_SELECTED_BUTTON then
+    if k ~= _current_selected_button then
       local temp = Util.findId(k.."_button")
       if temp then
         local vector = Vector(temp.pos.x - b.pos.x, temp.pos.y - b.pos.y):normalized()
@@ -338,6 +339,10 @@ function getValidButtons(direction, available_buttons_table)
 
   return valid_buttons
 
+end
+
+function getCurrentSelectedButton()
+  return _current_selected_button
 end
 
 --Return state functions

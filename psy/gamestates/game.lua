@@ -23,15 +23,16 @@ local state = {}
 
 local p --Psycho
 
-function state:enter()
+function state:enter(last_gs, go_to_level, go_to_part)
     local x, y, level, t
 
-    if TUTORIAL then
-        level = Levels["tutorial"]
-    elseif not CONTINUE then
-        level = Levels["level1"]
+    love.mouse.setVisible(false) --Make cursor invisible
+    love.mouse.setGrabbed(true) --Resume mouse capture
+
+    if go_to_level then
+      level = Levels[go_to_level]
     else
-        level = Levels["level"..CONTINUE]
+      level = Levels["level1"]
     end
 
     x, y = level.startPositions()
@@ -61,11 +62,11 @@ function state:enter()
 
     level.setup() --Make title and start BGM
 
-    Level.start(level.part_1) --Start first part of level
-
-    love.mouse.setVisible(false) --Make cursor invisible
-    love.mouse.setGrabbed(true) --Resume mouse capture
-
+    if go_to_part then
+      Level.start(level[level_part]) --Start desired part
+    else
+      Level.start(level.part_1) --Start first part of level
+    end
 
 end
 
@@ -88,25 +89,6 @@ local lag = 0
 local frame = 1/60
 function state:update(dt)
     local m_dt
-
-    --Change state if required
-    if SWITCH == "PAUSE" or not FOCUS then
-        --Make use of canvas so screen won't blink
-        USE_CANVAS = true
-        Draw.allTables()
-
-        SWITCH = nil
-        Gamestate.push(GS.PAUSE)
-    elseif SWITCH == "GAMEOVER" then
-        --Make use of canvas so screen won't blink
-        USE_CANVAS = true
-        Draw.allTables()
-
-        SWITCH = nil
-        Util.gameElementException("GAMEOVER")
-
-        Gamestate.switch(GS.GAMEOVER)
-    end
 
     Util.updateTimers(dt)
 
@@ -143,6 +125,25 @@ function state:update(dt)
 
     --Kill dead objects
     Util.killAll()
+
+    --Change state if required
+    if SWITCH == "PAUSE" or not FOCUS then
+        --Make use of canvas so screen won't blink
+        USE_CANVAS = true
+        Draw.allTables()
+
+        SWITCH = nil
+        Gamestate.push(GS.PAUSE)
+    elseif SWITCH == "GAMEOVER" then
+        --Make use of canvas so screen won't blink
+        USE_CANVAS = true
+        Draw.allTables()
+
+        SWITCH = nil
+        Util.gameElementException("GAMEOVER")
+
+        Gamestate.switch(GS.GAMEOVER)
+    end
 
 end
 
@@ -222,6 +223,14 @@ function state:joystickreleased(joystick, button)
     p:joystickreleased(joystick, button)
   end
 
+end
+
+-------------------
+--LOCAL FUNCTIONS--
+-------------------
+
+local function getCurrentSelectedButton()
+  return
 end
 
 --Return state functions

@@ -8,15 +8,20 @@ local Logo = require "classes.logo"
 
 --LOCAL VARIABLES--
 
-local main_menu_screen_buttons
-local highscore_menu_screen_buttons
-local joystick_moved
-local joystick_direction
+local _main_menu_screen_buttons
+local _highscore_menu_screen_buttons
+local _joystick_moved
+local _joystick_direction
+local _current_selected_button
+local _current_menu_screen
+local _go_to_level
+local _go_to_part
 
---LOCAL FUNCTION DECLARATIONS--
+--LOCAL FUNCTIONS DECLARATIONS--
 
 local changeSelectedButton
 local getValidButtons
+local getCurrentSelectedButton
 
 --BUTTON FUNCTIONS--
 
@@ -27,6 +32,20 @@ local state = {}
 function state:enter()
     local b, func, offset
 
+    _go_to_level = nil
+    _go_to_part = nil
+    _current_selected_button = nil
+    _current_menu_screen = "main_menu"
+
+    --Reset camera center pos
+    CAM.x = ORIGINAL_WINDOW_WIDTH/2
+    CAM.y = ORIGINAL_WINDOW_HEIGHT/2
+
+    love.mouse.setGrabbed(false) --Stop mouse capture
+
+    _joystick_moved = false
+    _joystick_direction = Vector(0,0)
+
     --GUI--
 
     --------------------
@@ -35,7 +54,7 @@ function state:enter()
 
     offset = 0
 
-    main_menu_screen_buttons = {} --Reset available buttons for joystick
+    _main_menu_screen_buttons = {} --Reset available buttons for joystick
 
     if CONTINUE then
         offset = 105 --Move "Tutorial" button to the right
@@ -46,7 +65,7 @@ function state:enter()
         b.sfx = SFX.play_button
         b.alpha_modifier = 0
         b.lock = true
-        table.insert(main_menu_screen_buttons, "menu_continue")
+        table.insert(_main_menu_screen_buttons, "menu_continue")
     end
 
     --Play Button
@@ -58,8 +77,8 @@ function state:enter()
     b.alpha_modifier = 0
     b.lock = true
     b.selected_by_joystick = true --Mark as default selected button
-    CURRENT_SELECTED_BUTTON = "menu_play"
-    table.insert(main_menu_screen_buttons, "menu_play")
+    _current_selected_button = "menu_play"
+    table.insert(_main_menu_screen_buttons, "menu_play")
 
     if not FIRST_TIME then
 
@@ -69,7 +88,7 @@ function state:enter()
         b.sfx = SFX.play_button
         b.alpha_modifier = 0
         b.lock = true
-        table.insert(main_menu_screen_buttons, "menu_tutorial")
+        table.insert(_main_menu_screen_buttons, "menu_tutorial")
 
 
         --"Go to Highscore Menu Screen" button
@@ -78,7 +97,7 @@ function state:enter()
         b.sfx = SFX.generic_button
         b.alpha_modifier = 0
         b.lock = true
-        table.insert(main_menu_screen_buttons, "menu_go2highscore")
+        table.insert(_main_menu_screen_buttons, "menu_go2highscore")
 
     end
 
@@ -90,7 +109,7 @@ function state:enter()
     --HIGHSCORE MENU SCREEN--
     -------------------------
 
-    highscore_menu_screen_buttons = {} --Reset available buttons for joystick
+    _highscore_menu_screen_buttons = {} --Reset available buttons for joystick
 
 
     HS.draw(nil, ORIGINAL_WINDOW_WIDTH, 0) --Create highscore table "one screen to the right"
@@ -99,7 +118,7 @@ function state:enter()
     func = require "buttons.highscore_back_button"
     b = Button.create_circle_gui(ORIGINAL_WINDOW_WIDTH + 110, 680, 55, func, "Back", GUI_BIGLESSLESS, "highscore_menu_buttons", "menu_go2main_button")
     b.sfx = SFX.back_button
-    table.insert(highscore_menu_screen_buttons, "menu_go2menu")
+    table.insert(_highscore_menu_screen_buttons, "menu_go2menu")
 
     --AUDIO--
     Audio.playBGM(BGM.menu, nil, 3.5)
@@ -110,15 +129,6 @@ function state:enter()
           LEVEL_TIMER:cancel(handle)
         end
     end
-    --Reset camera center pos
-    CAM.x = ORIGINAL_WINDOW_WIDTH/2
-    CAM.y = ORIGINAL_WINDOW_HEIGHT/2
-
-    love.mouse.setGrabbed(false) --Stop mouse capture
-
-    joystick_moved = false
-    joystick_direction = Vector(0,0)
-    CURRENT_MENU_SCREEN = "main_menu"
 
 end
 
@@ -136,32 +146,23 @@ function state:update(dt)
     --Move selected button based on joystick hat or axis input
     if USING_JOYSTICK and CURRENT_JOYSTICK then
       --First try to get hat input
-      joystick_direction = Util.getHatDirection(CURRENT_JOYSTICK:getHat(1))
-      if joystick_direction:len() == 0 then
+      _joystick_direction = Util.getHatDirection(CURRENT_JOYSTICK:getHat(1))
+      if _joystick_direction:len() == 0 then
         --If there isn't a hat input, tries to get an axis input
-        joystick_direction = Vector(Util.getJoystickAxisValues(CURRENT_JOYSTICK, 1, 2)):normalized()
+        _joystick_direction = Vector(Util.getJoystickAxisValues(CURRENT_JOYSTICK, 1, 2)):normalized()
       end
-      if joystick_direction:len() == 0 then
-        joystick_moved = false
+      if _joystick_direction:len() == 0 then
+        _joystick_moved = false
       else
-        if not joystick_moved then
-          local b = Util.findId(CURRENT_SELECTED_BUTTON.."_button")
+        if not _joystick_moved then
+          local b = Util.findId(_current_selected_button.."_button")
           if b and b.alpha_modifier >= .3 then
-            changeSelectedButton(joystick_direction)
+            changeSelectedButton(_joystick_direction)
           end
         end
         --Set joystick as moved so it doesn't move to several buttons at once
-        joystick_moved = true
+        _joystick_moved = true
       end
-    end
-
-    if SWITCH == "GAME" then
-        --Make use of canvas so screen won't blink
-        USE_CANVAS = true
-        Draw.allTables()
-
-        SWITCH = nil
-        Gamestate.switch(GS.GAME)
     end
 
     Util.updateSubTp(dt, "gui")
@@ -176,6 +177,20 @@ function state:update(dt)
 
     Util.killAll()
 
+    if SWITCH == "GAME" then
+        --Make use of canvas so screen won't blink
+        USE_CANVAS = true
+        Draw.allTables()
+
+        SWITCH = nil
+        if TUTORIAL then
+          Gamestate.switch(GS.GAME, "tutorial")
+        elseif CONTINUE then
+          Gamestate.switch(GS.GAME, "level"..CONTINUE)
+        else
+          Gamestate.switch(GS.GAME, _go_to_level, _go_to_part)
+        end
+    end
 end
 
 function state:draw()
@@ -209,7 +224,7 @@ function state:joystickpressed(joystick, button)
 
   if joystick == CURRENT_JOYSTICK then
     if button == GENERIC_JOY_MAP.confirm then
-      local b = Util.findId(CURRENT_SELECTED_BUTTON.."_button")
+      local b = Util.findId(_current_selected_button.."_button")
       if b and not b.lock then
         b:func()
         if b.sfx then b.sfx:play() end
@@ -223,19 +238,19 @@ end
 
 function changeSelectedButton(dir)
 
-  if CURRENT_SELECTED_BUTTON then
+  if _current_selected_button then
     local valid_buttons
 
-    if CURRENT_MENU_SCREEN == "main_menu" then
-      valid_buttons = getValidButtons(dir, main_menu_screen_buttons)
-    elseif CURRENT_MENU_SCREEN == "highscore_menu" then
-      valid_buttons = getValidButtons(dir, highscore_menu_screen_buttons)
+    if _current_menu_screen == "main_menu" then
+      valid_buttons = getValidButtons(dir, _main_menu_screen_buttons)
+    elseif _current_menu_screen == "highscore_menu" then
+      valid_buttons = getValidButtons(dir, _highscore_menu_screen_buttons)
     else
-      error("Not a valid menu screen "..CURRENT_MENU_SCREEN)
+      error("Not a valid menu screen ".._current_menu_screen)
     end
 
     --Find closes button
-    local b = Util.findId(CURRENT_SELECTED_BUTTON.."_button")
+    local b = Util.findId(_current_selected_button.."_button")
     if not b then return end
     local min_len = 9999999
     local target_button = nil
@@ -250,7 +265,7 @@ function changeSelectedButton(dir)
 
     --Change currently selected button
     if target_button then
-      CURRENT_SELECTED_BUTTON = target_button
+      _current_selected_button = target_button
       local new_button = Util.findId(target_button.."_button")
       b.selected_by_joystick = false
       new_button.selected_by_joystick = true
@@ -265,11 +280,11 @@ end
 function getValidButtons(direction, available_buttons_table)
   local range = math.pi/4
   local valid_buttons = {}
-  local b = Util.findId(CURRENT_SELECTED_BUTTON.."_button")
+  local b = Util.findId(_current_selected_button.."_button")
   if not b then return valid_buttons end
 
   for _,k in ipairs(available_buttons_table) do
-    if k ~= CURRENT_SELECTED_BUTTON then
+    if k ~= _current_selected_button then
       local temp = Util.findId(k.."_button")
       if temp then
         local vector = Vector(temp.pos.x - b.pos.x, temp.pos.y - b.pos.y):normalized()
@@ -284,6 +299,10 @@ function getValidButtons(direction, available_buttons_table)
 
   return valid_buttons
 
+end
+
+function getCurrentSelectedButton()
+  return _current_selected_button
 end
 
 --Return state functions

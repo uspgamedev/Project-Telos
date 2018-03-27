@@ -30,9 +30,6 @@ function setup.config()
     FIRST_TIME = args["first_time"] --If its the first time the player is playing (for tutorial)
     CONTINUE = args["continue"] --If player is in the middle of a run
 
-    CURRENT_MENU_SCREEN = nil --What screen on main menu player is
-    CURRENT_SELECTED_BUTTON = nil --What utton joystick is selecting
-
     HIGHSCORES = args["highscores"] --Highscores
     MAX_HIGHSCORE = 5 --Number of scores stored in the highscore table
     HIGHSCORE_HIGHLIGHT_EFFECT_HANDLE = nil --Handle for tween effect applied on highscore text (when a position is highlighed)

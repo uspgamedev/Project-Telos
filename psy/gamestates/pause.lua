@@ -10,15 +10,14 @@ local Txt = require "classes.text"
 --LOCAL VARIABLES--
 
 local pause_menu_screen_buttons
+local _current_selected_button
 local joystick_moved
 local joystick_direction
 
---LOCAL FUNCTION DECLARATIONS--
-
-local changeSelectedButton
+--LOCAL FUNCTION DECLARATION--
 local getValidButtons
-
---BUTTON FUNCTIONS--
+local changeCurrentSelectedButton
+local getCurrentSelectedButton
 
 --------------------
 
@@ -26,6 +25,8 @@ local state = {}
 
 function state:enter()
     local t, b, func
+
+    _current_selected_button = nil
 
     --Blur gamescreen
     USE_BLUR_CANVAS = true
@@ -41,7 +42,7 @@ function state:enter()
     func = function() SWITCH = "GAME" end
     b = Button.create_circle_gui(140, 650, 75, func, "Unpause", GUI_BIGLESSLESS, "pause_gui", "unpause_button")
     b.selected_by_joystick = true --Mark as default selected button
-    CURRENT_SELECTED_BUTTON = "unpause"
+    _current_selected_button = "unpause"
     table.insert(pause_menu_screen_buttons, "unpause")
 
 
@@ -109,9 +110,9 @@ function state:update(dt)
         joystick_moved = false
       else
         if not joystick_moved then
-          local b = Util.findId(CURRENT_SELECTED_BUTTON.."_button")
+          local b = Util.findId(_current_selected_button.."_button")
           if b and b.alpha_modifier >= .3 then
-            changeSelectedButton(joystick_direction)
+            changeCurrentSelectedButton(joystick_direction)
           end
         end
         --Set joystick as moved so it doesn't move to several buttons at once
@@ -215,7 +216,7 @@ function state:joystickpressed(joystick, button)
     if button == GENERIC_JOY_MAP.start or button == GENERIC_JOY_MAP.back then
       SWITCH = "GAME" --Return to game
     elseif button == GENERIC_JOY_MAP.confirm then
-      local b = Util.findId(CURRENT_SELECTED_BUTTON.."_button")
+      local b = Util.findId(_current_selected_button.."_button")
       if b and not b.lock then
         b:func()
         if b.sfx then b.sfx:play() end
@@ -236,15 +237,15 @@ end
 
 --LOCAL FUNCTIONS--
 
-function changeSelectedButton(dir)
+function changeCurrentSelectedButton(dir)
 
-  if CURRENT_SELECTED_BUTTON then
+  if _current_selected_button then
     local valid_buttons
 
     valid_buttons = getValidButtons(dir, pause_menu_screen_buttons)
 
     --Find closes button
-    local b = Util.findId(CURRENT_SELECTED_BUTTON.."_button")
+    local b = Util.findId(_current_selected_button.."_button")
     if not b then return end
     local min_len = 9999999
     local target_button = nil
@@ -259,7 +260,7 @@ function changeSelectedButton(dir)
 
     --Change currently selected button
     if target_button then
-      CURRENT_SELECTED_BUTTON = target_button
+      _current_selected_button = target_button
       local new_button = Util.findId(target_button.."_button")
       b.selected_by_joystick = false
       new_button.selected_by_joystick = true
@@ -274,11 +275,11 @@ end
 function getValidButtons(direction, available_buttons_table)
   local range = math.pi/4
   local valid_buttons = {}
-  local b = Util.findId(CURRENT_SELECTED_BUTTON.."_button")
+  local b = Util.findId(_current_selected_button.."_button")
   if not b then return valid_buttons end
 
   for _,k in ipairs(available_buttons_table) do
-    if k ~= CURRENT_SELECTED_BUTTON then
+    if k ~= _current_selected_button then
       local temp = Util.findId(k.."_button")
       if temp then
         local vector = Vector(temp.pos.x - b.pos.x, temp.pos.y - b.pos.y):normalized()
@@ -295,6 +296,9 @@ function getValidButtons(direction, available_buttons_table)
 
 end
 
+function getCurrentSelectedButton()
+  return _current_selected_button
+end
 
 --Return state functions
 return state
