@@ -48,7 +48,7 @@ function state:enter()
 
     --"Go back" button
     func = function() SWITCH = "MENU" end
-    b = Button.create_circle_gui(340, 650, 75, func, "Menu", GUI_BIGLESSLESS, "pause_gui", "back2menu_button")
+    b = Button.create_circle_gui(340, 650, 75, func, "Menu", GUI_BIGLESSLESS, "pause_gui", "back2menu_button", "reset lives, score and level progress")
     table.insert(pause_menu_screen_buttons, "back2menu")
 
 

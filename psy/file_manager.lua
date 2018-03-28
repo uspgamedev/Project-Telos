@@ -20,7 +20,11 @@ ARGUMENTS(format):
 
 continue(x.y): if x.y exists, it tells which level the player stopped playing (level x, part y). Can be false if there isn't one
 
+used_continue(bool): true if player has used continue in current run. False otherwise
+
 first_time(bool): true if player never played, false otherwise
+
+highscore(table): table of tuplets "name" and "score" for correspondent highscore
 
 ]]
 function fm.load()

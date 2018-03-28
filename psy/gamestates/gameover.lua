@@ -59,7 +59,6 @@ function state:enter(_score)
         GAMEOVER_BUTTONS_LOCK = true
     else
         --Normal gameover text and buttons
-
         _gameover_menu_screen_buttons = {}
 
         t = Txt.create_gui(400, 300, "GAMEOVER", GUI_BOSS_TITLE, nil, "format", nil, "gameover_text", "center")
@@ -67,7 +66,7 @@ function state:enter(_score)
 
         --Restart button
         func = function() SWITCH = "GAME"; CONTINUE = false end
-        b = Button.create_circle_gui(140, 650, 75, func, "Restart", GUI_BIGLESSLESS, "gameover_gui", "restart_button")
+        b = Button.create_circle_gui(140, 650, 75, func, "Restart", GUI_BIGLESSLESS, "gameover_gui", "restart_button", "start a new game")
         b.selected_by_joystick = true --Mark as default selected button
         _current_selected_button = "restart"
         table.insert(_gameover_menu_screen_buttons, "restart")
@@ -81,14 +80,14 @@ function state:enter(_score)
                 USED_CONTINUE = true
                 SWITCH = "GAME"
             end
-            b = Button.create_circle_gui(340, 650, 75, func, "Continue", GUI_BIGLESSLESS, "gameover_gui", "continue_button")
+            b = Button.create_circle_gui(340, 650, 75, func, "Continue", GUI_BIGLESSLESS, "gameover_gui", "continue_button", "reset lives, score and level progress")
             table.insert(_gameover_menu_screen_buttons, "continue")
 
         end
 
         --Back to menu button
         func = function() SWITCH = "MENU" end
-        b = Button.create_circle_gui(540, 650, 75, func, "Menu", GUI_BIGLESSLESS, "gameover_gui", "back2menu_button")
+        b = Button.create_circle_gui(540, 650, 75, func, "Menu", GUI_BIGLESSLESS, "gameover_gui", "back2menu_button", "reset lives, score and level progress")
         table.insert(_gameover_menu_screen_buttons, "back2menu")
 
         GAMEOVER_BUTTONS_LOCK = false

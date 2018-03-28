@@ -18,7 +18,7 @@ When mouse is over, a circle ring increses size until it reaches button radius
 ]]
 Circle_Button = Class{
     __includes = {CIRC, WTXT},
-    init = function(self, _x, _y, _r, _func, _text, _font)
+    init = function(self, _x, _y, _r, _func, _text, _font, _overtext, _overfont)
         CIRC.init(self, _x, _y, _r, nil, "fill") --Set atributes
 
         self.func  = _func  --Function to call when pressed
@@ -34,7 +34,11 @@ Circle_Button = Class{
         self.alpha_mod_v = 1 --Determines how fast alpha value will reach the peak
         self.alpha_modifier = 1 --Modifier applied on alpha value of button
 
+        self.is_selected = false
         self.selected_by_joystick = false
+
+        self.overtext = _overtext --Text to display above button when highlighted, if any
+        self.overfont = _overfont or GUI_DEFAULT_UNDERFONT --Font of overtext, if any
 
         self.sfx = nil --Sfx to play when button is pressed
 
@@ -46,7 +50,7 @@ Circle_Button = Class{
 
 --Draws a given circle button with centralized text
 function Circle_Button:draw()
-    local fwidth, fheight, tx, ty, b, color
+    local tx, ty, b, color
 
     b = self
 
@@ -55,23 +59,32 @@ function Circle_Button:draw()
     color = Color.black()
     Color.copy(color, UI_COLOR.color)
     color.h = (color.h + 125)%255
-    color.a = math.min((b.ring_r/(b.r/b.alpha_mod_v))^4, 1)*256*b.alpha_modifier
+    local alfa = math.min((b.ring_r/(b.r/b.alpha_mod_v))^4, 1)*256*b.alpha_modifier
+    color.a = alfa
     Color.set(color)
     love.graphics.setLineWidth(b.line_width)
     love.graphics.circle("line", b.pos.x, b.pos.y, b.ring_r)
 
-    fwidth  = b.font:getWidth(b.text)  --Width of font
-    fheight = b.font:getHeight(b.text) --Height of font
-    tx = fwidth/2      --Relative x position of font on textbox
-    ty = fheight/2     --Relative y position of font on textbox
 
     --Draws button text
+    tx = b.font:getWidth(b.text)/2  --Relative x position of font on textbox
+    ty = b.font:getHeight(b.text)/2 --Relative y position of font on textbox
     Color.copy(color, UI_COLOR.color)
     color.a = 256*b.alpha_modifier
     Color.set(color)
     love.graphics.setFont(b.font)
     love.graphics.print(b.text, b.pos.x - tx , b.pos.y - ty)
 
+    --Draws button overtext, if any
+    if b.overtext then
+        tx = b.overfont:getWidth(b.overtext)/2   --Relative x position of font on textbox
+        ty = b.overfont:getHeight(b.overtext)  --Relative y position of font on textbox
+        Color.copy(color, UI_COLOR.color)
+        color.a = alfa
+        Color.set(color)
+        love.graphics.setFont(b.overfont)
+        love.graphics.print(b.overtext, b.pos.x - tx , b.pos.y - b.r - ty - 6)
+    end
 end
 
 function Circle_Button:update(dt)
@@ -95,7 +108,7 @@ function Circle_Button:update(dt)
     local speed_mod = math.max((b.r-b.ring_r)/b.r,.4)
     if ((not USING_JOYSTICK and b.pos:dist(mousepos) <= b.r) or (USING_JOYSTICK and self.selected_by_joystick)) and
     b.alpha_modifier >= .3 then
-
+        b.is_selected = true
         --Update selected button on menu
         if not USING_JOYSTICK and not self.selected_by_joystick then
           --Remove previous selection of button
@@ -112,6 +125,7 @@ function Circle_Button:update(dt)
             if b.ring_r > b.r then b.ring_r = b.r end
         end
     else
+        b.is_selected = false
         if b.ring_r > 0 then
             b.ring_r = b.ring_r - b.ring_growth_speed*speed_mod*dt
             if b.ring_r < 0 then b.ring_r = 0 end
@@ -148,11 +162,11 @@ end
 
 --UTILITY FUNCTIONS--
 
-function button.create_circle_gui(x, y, r, func, text, font, st, id)
+function button.create_circle_gui(x, y, r, func, text, font, st, id, overtext, overfont)
     local b
 
     st = st or "gui"
-    b = Circle_Button(x, y, r, func, text, font)
+    b = Circle_Button(x, y, r, func, text, font, overtext, overfont)
     b:addElement(DRAW_TABLE.GUI, st, id)
 
     return b
