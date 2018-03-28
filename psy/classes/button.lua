@@ -38,7 +38,7 @@ Circle_Button = Class{
         self.selected_by_joystick = false
 
         self.overtext = _overtext --Text to display above button when highlighted, if any
-        self.overfont = _overfont or GUI_DEFAULT_UNDERFONT --Font of overtext, if any
+        self.overfont = _overfont or GUI_DEFAULT_OVERFONT --Font of overtext, if any
 
         self.sfx = nil --Sfx to play when button is pressed
 

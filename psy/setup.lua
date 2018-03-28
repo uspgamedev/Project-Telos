@@ -171,7 +171,7 @@ function setup.config()
     GUI_BOSS_TITLE = love.graphics.newFont("assets/fonts/Nevis.ttf", 60)
     GUI_TUTORIAL_ICON = love.graphics.newFont("assets/fonts/Nevis.ttf", 24)
     GUI_TUTORIAL_SHIFT_ICON = love.graphics.newFont("assets/fonts/Nevis.ttf", 28)
-    GUI_DEFAULT_UNDERFONT = love.graphics.newFont("assets/fonts/Nevis.ttf", 23)
+    GUI_DEFAULT_OVERFONT = love.graphics.newFont("assets/fonts/Nevis.ttf", 23)
 
     --Generic sizes
     GUI_BIG = love.graphics.newFont("assets/fonts/vanadine_bold.ttf", 60)
