@@ -25,7 +25,6 @@ local p --Psycho
 
 function state:enter(last_gs, go_to_level, go_to_part)
     local x, y, level, t
-
     love.mouse.setVisible(false) --Make cursor invisible
     love.mouse.setGrabbed(true) --Resume mouse capture
 
@@ -63,7 +62,7 @@ function state:enter(last_gs, go_to_level, go_to_part)
     level.setup() --Make title and start BGM
 
     if go_to_part then
-      Level.start(level[level_part]) --Start desired part
+      Level.start(level[go_to_part]) --Start desired part
     else
       Level.start(level.part_1) --Start first part of level
     end
@@ -162,6 +161,7 @@ end
 
 function state:keypressed(key)
     local x, y
+
     p:keypressed(key) --Key handling of psycho
 
     if key == 'escape' or key == 'p' then --Pause game
@@ -171,6 +171,27 @@ function state:keypressed(key)
         if p.can_ultra then
             p:ultrablast(p.default_ultrablast_power)
         end
+    elseif key == '0' then
+      Util.toggleGODMODE()
+    elseif key == '4' then
+      p = Util.findId("psycho")
+      if p and not p.death then
+        p:kill()
+      end
+    elseif key == '5' then
+      Util.countDrawables()
+    elseif key == '6' then
+      p = Util.findId("psycho")
+      print("psycho position",p.pos.x, p.pos.y)
+    elseif key == '7' then
+      p = Util.findId("psycho")
+      p.ultrablast_counter = MAX_ULTRABLAST
+    elseif key == '8' then
+      p = Util.findId("psycho")
+      p.lives = 1
+    elseif key == '9' then
+        p = Util.findId("psycho")
+        p.lives = p.lives + 10
     else
         Util.defaultKeyPressed(key)
     end

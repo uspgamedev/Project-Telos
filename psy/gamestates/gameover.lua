@@ -16,6 +16,8 @@ local _current_selected_button
 local _current_menu_screen
 local _joystick_moved
 local _joystick_direction
+local _go_to_level
+local _go_to_part
 
 --LOCAL FUNCTION DECLARATIONS--
 local chooseDeathMessage
@@ -30,6 +32,8 @@ local state = {}
 function state:enter(_score)
     local t, b
 
+    _go_to_level = nil
+    _go_to_part = nil
     _current_selected_button = nil
     _current_menu_screen = "gameover_menu"
 
@@ -71,7 +75,12 @@ function state:enter(_score)
         if CONTINUE then
 
             --Continue button
-            func = function() SWITCH = "GAME" end
+            func = function()
+                _go_to_level = "level"..CONTINUE
+                _go_to_part = "part_1"
+                USED_CONTINUE = true
+                SWITCH = "GAME"
+            end
             b = Button.create_circle_gui(340, 650, 75, func, "Continue", GUI_BIGLESSLESS, "gameover_gui", "continue_button")
             table.insert(_gameover_menu_screen_buttons, "continue")
 
@@ -159,7 +168,7 @@ function state:update(dt)
         Draw.allTables()
 
         SWITCH = nil
-        Gamestate.switch(GS.GAME)
+        Gamestate.switch(GS.GAME, _go_to_level, _go_to_part)
     elseif SWITCH == "MENU" then
         --Make use of canvas so screen won't blink
         USE_CANVAS = true

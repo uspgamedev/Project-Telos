@@ -2,6 +2,19 @@
 
 local fm = {}
 
+local _default_savefile_args = {
+    continue = false,  --Continue status
+    used_continue = false, --If player used a continue in the current run
+    first_time = true, --Make player play the tutorial the first time
+    highscores = {     --Reset highscores with default values
+        {name = "---", score = 0},
+        {name = "---", score = 0},
+        {name = "---", score = 0},
+        {name = "---", score = 0},
+        {name = "---", score = 0}
+    }
+}
+
 --[[Load from the save files and return arguments. If not found save or metafiles, will create new ones.
 ARGUMENTS(format):
 
@@ -68,18 +81,11 @@ function fm.load()
         file, err = love.filesystem.newFile("savefile", "w") --Create savefile file
         if err then print("Problems on creating savefile:", err); os.exit() end
 
-        --Setting initial arguments for savefile
-        args = {
-            continue = false,  --Reset continue status
-            first_time = true, --Make player play the tutorial the first time
-            highscores = {     --Reset highscores with default values
-                {name = "---", score = 0},
-                {name = "---", score = 0},
-                {name = "---", score = 0},
-                {name = "---", score = 0},
-                {name = "---", score = 0}
-            }
-        }
+        --Copy default arguments for savefile
+        args = {}
+        for i,k in pairs(_default_savefile_args) do
+            args[i] = k
+        end
 
         content = Tserial.pack(args) --Serialize the table into a string
 
@@ -96,6 +102,15 @@ function fm.load()
     args, err = Tserial.unpack(content, true) --Get table from savefile
     if err then print("Problem loading the current savefile. Error:"); print(err); os.exit() end
 
+    --Checks if there is any undefined (missing) field in savefile arguments
+    --(compares with default savefile args)
+    for index,value in pairs(_default_savefile_args) do
+        if args[index] == nil then
+            args[index] = value
+            print("Missing field "..tostring(index).." was added on default value to your savefile.")
+        end
+    end
+
     print("---------------------------")
 
     return args
@@ -108,6 +123,7 @@ function fm.save()
     --Save all status on the files
     args = {
         continue = CONTINUE,
+        used_continue = USED_CONTINUE,
         first_time = FIRST_TIME,
         highscores = {}
     }

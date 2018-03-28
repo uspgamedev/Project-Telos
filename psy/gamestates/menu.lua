@@ -16,14 +16,17 @@ local _current_selected_button
 local _current_menu_screen
 local _go_to_level
 local _go_to_part
+--Buttons
+local _but_high = require "buttons.highscore_button"
+local _but_high_back = require "buttons.highscore_back_button"
 
 --LOCAL FUNCTIONS DECLARATIONS--
 
 local changeSelectedButton
 local getValidButtons
 local getCurrentSelectedButton
-
---BUTTON FUNCTIONS--
+local setCurrentSelectedButton
+local setCurrentMenuScreen
 
 --------------------
 
@@ -32,10 +35,12 @@ local state = {}
 function state:enter()
     local b, func, offset
 
+    --Reset local variables
     _go_to_level = nil
     _go_to_part = nil
     _current_selected_button = nil
     _current_menu_screen = "main_menu"
+    _main_menu_screen_buttons = {}
 
     --Reset camera center pos
     CAM.x = ORIGINAL_WINDOW_WIDTH/2
@@ -54,13 +59,17 @@ function state:enter()
 
     offset = 0
 
-    _main_menu_screen_buttons = {} --Reset available buttons for joystick
 
     if CONTINUE then
         offset = 105 --Move "Tutorial" button to the right
 
         --Continue Button
-        func = function() SWITCH = "GAME" end
+        func = function()
+            _go_to_level = "level"..CONTINUE
+            _go_to_part = "part_1"
+            USED_CONTINUE = true
+            SWITCH = "GAME"
+        end
         b = Button.create_circle_gui(430, 610, 75, func, "Continue", GUI_BIGLESSLESS, "main_menu_buttons", "menu_continue_button")
         b.sfx = SFX.play_button
         b.alpha_modifier = 0
@@ -69,7 +78,14 @@ function state:enter()
     end
 
     --Play Button
-    func = require "buttons.play_button"
+    func = function()
+        SWITCH = "GAME"
+        CONTINUE = false
+        USED_CONTINUE = false
+        if FIRST_TIME then
+            TUTORIAL = true
+        end
+    end
     b = Button.create_circle_gui(528, 340, 140, func, "New Game", GUI_BIGLESS, "main_menu_buttons", "menu_play_button")
     b.sfx = SFX.play_button
     b.ring_growth_speed = b.ring_growth_speed
@@ -92,7 +108,11 @@ function state:enter()
 
 
         --"Go to Highscore Menu Screen" button
-        local func = require "buttons.highscore_button"
+        func = function()
+             _but_high()
+             setCurrentSelectedButton("menu_go2main")
+             setCurrentMenuScreen("highscore_menu")
+        end
         b = Button.create_circle_gui(880, 650, 90, func, "Highscores", GUI_BIGLESSLESS, "main_menu_buttons", "menu_go2highscore_button")
         b.sfx = SFX.generic_button
         b.alpha_modifier = 0
@@ -115,7 +135,11 @@ function state:enter()
     HS.draw(nil, ORIGINAL_WINDOW_WIDTH, 0) --Create highscore table "one screen to the right"
 
     --"Go to Main Menu Screen" button
-    func = require "buttons.highscore_back_button"
+    func = function()
+         _but_high_back()
+         setCurrentSelectedButton("menu_go2highscore")
+         setCurrentMenuScreen("main_menu")
+    end
     b = Button.create_circle_gui(ORIGINAL_WINDOW_WIDTH + 110, 680, 55, func, "Back", GUI_BIGLESSLESS, "highscore_menu_buttons", "menu_go2main_button")
     b.sfx = SFX.back_button
     table.insert(_highscore_menu_screen_buttons, "menu_go2menu")
@@ -185,8 +209,6 @@ function state:update(dt)
         SWITCH = nil
         if TUTORIAL then
           Gamestate.switch(GS.GAME, "tutorial")
-        elseif CONTINUE then
-          Gamestate.switch(GS.GAME, "level"..CONTINUE)
         else
           Gamestate.switch(GS.GAME, _go_to_level, _go_to_part)
         end
@@ -207,9 +229,49 @@ function state:draw()
 end
 
 function state:keypressed(key)
-
-    Util.defaultKeyPressed(key)
-
+    if key == '1' then
+        _go_to_level = "level1"
+        _go_to_part = "part_1"
+        SWITCH = "GAME"
+        CONTINUE = false
+    elseif key == '2' then
+        _go_to_level = "level1"
+        _go_to_part = "part_2"
+        SWITCH = "GAME"
+        CONTINUE = false
+    elseif key == '3' then
+        _go_to_level = "level1"
+        _go_to_part = "part_3"
+        SWITCH = "GAME"
+        CONTINUE = false
+    elseif key == '4' then
+        _go_to_level = "level1"
+        _go_to_part = "part_4"
+        SWITCH = "GAME"
+        CONTINUE = false
+    elseif key == '5' then
+        _go_to_level = "level2"
+        _go_to_part = "part_1"
+        SWITCH = "GAME"
+        CONTINUE = false
+    elseif key == '6' then
+        _go_to_level = "level2"
+        _go_to_part = "part_2"
+        SWITCH = "GAME"
+        CONTINUE = false
+    elseif key == '7' then
+        _go_to_level = "level2"
+        _go_to_part = "part_3"
+        SWITCH = "GAME"
+        CONTINUE = false
+    elseif key == '8' then
+        _go_to_level = "level2"
+        _go_to_part = "part_4"
+        SWITCH = "GAME"
+        CONTINUE = false
+    else
+        Util.defaultKeyPressed(key)
+    end
 end
 
 function state:mousepressed(x, y, button)
@@ -303,6 +365,14 @@ end
 
 function getCurrentSelectedButton()
   return _current_selected_button
+end
+
+function setCurrentSelectedButton(but)
+  _current_selected_button = but
+end
+
+function setCurrentMenuScreen(scr)
+  _current_menu_screen = scr
 end
 
 --Return state functions

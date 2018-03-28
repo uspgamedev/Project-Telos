@@ -29,6 +29,7 @@ function setup.config()
 
     FIRST_TIME = args["first_time"] --If its the first time the player is playing (for tutorial)
     CONTINUE = args["continue"] --If player is in the middle of a run
+    USED_CONTINUE = args["used_continue"] --If player used a continue
 
     HIGHSCORES = args["highscores"] --Highscores
     MAX_HIGHSCORE = 5 --Number of scores stored in the highscore table

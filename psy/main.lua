@@ -26,7 +26,6 @@ require "classes.bosses.boss1"
 require "classes.bosses.boss2"
 
 --levels
-
 require "levels.tutorial"
 require "levels.level1"
 require "levels.level2"

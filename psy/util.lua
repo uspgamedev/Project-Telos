@@ -608,46 +608,25 @@ function util.defaultKeyPressed(key)
     local p
 
     if  key == 'f1' then
-        util.quit()
-    elseif key == 'f4' then
-        print("Closing the game without saving")
-        os.exit()
-    elseif key == 'f11' then
-        util.toggleFullscreen()
-    elseif key == 'f9' then
-        util.toggleDebug()
-    elseif key == '0' then
-        util.toggleGODMODE()
-    elseif key == '9' then
-        p = util.findId("psycho")
-        p.lives = p.lives + 10
-    elseif key == '8' then
-        p = util.findId("psycho")
-        p.lives = 1
-    elseif key == '7' then
-        p = util.findId("psycho")
-        p.ultrablast_counter = MAX_ULTRABLAST
-    elseif key == '6' then
-        p = util.findId("psycho")
-        print("psycho position",p.pos.x, p.pos.y)
-    elseif key == '5' then
-        util.countDrawables()
-    elseif key == '4' then
-        p = util.findId("psycho")
-        if p and not p.death then
-            p:kill()
-        end
-    elseif key == "tab" then
-        local state = not love.mouse.isGrabbed()   -- the opposite of whatever it currently is
-        love.mouse.setGrabbed(state)
-        print("MOUSE CAPTURE IS", state)
+      util.quit()
     elseif key == "f2" then
-        JOYSTICK_AUTO_SHOOT = not JOYSTICK_AUTO_SHOOT
-        print("JOYSTICK_AUTO_SHOOT is ",JOYSTICK_AUTO_SHOOT)
+      JOYSTICK_AUTO_SHOOT = not JOYSTICK_AUTO_SHOOT
+      print("JOYSTICK_AUTO_SHOOT is ",JOYSTICK_AUTO_SHOOT)
     elseif key == "f3" then
-        HS.reset()
-    elseif key == "scrolllock" then
-        USE_ANTI_ALIASING = not USE_ANTI_ALIASING
+      HS.reset()
+    elseif key == 'f4' then
+      print("Closing the game without saving")
+      os.exit()
+    elseif key == "f5" then
+      USE_ANTI_ALIASING = not USE_ANTI_ALIASING
+    elseif key == 'f11' then
+      util.toggleFullscreen()
+    elseif key == 'f9' then
+      util.toggleDebug()
+    elseif key == "tab" then
+      local state = not love.mouse.isGrabbed()   -- the opposite of whatever it currently is
+      love.mouse.setGrabbed(state)
+      print("MOUSE CAPTURE IS", state)
     end
 
 

@@ -198,7 +198,6 @@ function Boss_2_Main:kill()
     b.death = true
 
     FX.explosion(b.pos.x, b.pos.y, 20, HSL(255, 180, 150), 600, 600, 100, 4, true)
-    print("exploded")
 
 end
 

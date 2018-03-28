@@ -62,8 +62,6 @@ return function()
     --Update button selection for joystick
     local b = Util.findId("menu_go2main_button")
     if b then b.selected_by_joystick = true end
-    _current_selected_button = "menu_go2main"
     local b = Util.findId("menu_go2highscore_button")
     if b then b.selected_by_joystick = false end
-    _current_menu_screen = "highscore_menu"
 end

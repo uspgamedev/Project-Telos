@@ -215,6 +215,8 @@ end
 function level_functions.part_2()
     local p
 
+    CONTINUE = 2 --Setup continue variable to later continue from where you started
+
     p = Util.findId("psycho")
 
     LM.level_part("Part 2 - The Outsider")
@@ -481,6 +483,8 @@ end
 function level_functions.part_3()
     local p
 
+    CONTINUE = 2 --Setup continue variable to later continue from where you started
+
     p = Util.findId("psycho")
 
     LM.level_part("Part 3 - Standing Still")
@@ -733,6 +737,8 @@ end
 --Part 4 - Violent Love with Friends
 function level_functions.part_4()
     local p
+
+    CONTINUE = 2 --Setup continue variable to later continue from where you started
 
     p = Util.findId("psycho")
 
