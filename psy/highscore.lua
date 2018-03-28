@@ -422,29 +422,8 @@ function confirm_arrow_func(arrow, hs_button)
     text = Util.findId("highscore_text2")
     if text then text.death = true end
 
-    --Create regular gameover buttons
-    local func
-    --Restart button
-    func = function() SWITCH = "GAME"; CONTINUE = false end
-    Button.create_inv_gui(140, 650, func, "(r)estart", GUI_MED, "start a new game", GUI_MEDLESS, "gameover_gui")
-
-    if CONTINUE then
-
-        --Continue button
-        func = function() SWITCH = "GAME" end
-        Button.create_inv_gui(340, 650, func, "(c)ontinue", GUI_MED, "reset score, lives and progress on this level", GUI_MEDLESS, "gameover_gui")
-
-    end
-
-    --Back to menu button
-    func = function() SWITCH = "MENU" end
-    Button.create_inv_gui(540, 650, func, "(b)ack to menu", GUI_MED, "reset score, lives and progress on this level", GUI_MEDLESS, "gameover_gui")
-
-    --Unlock buttons shortkeys
-    GAMEOVER_BUTTONS_LOCK = false
-
     --Draw highscores on the screen
-    hs.draw(hs_button.position)
+    hs.draw(hs_button.position, 0, -70)
 
 end
 
@@ -452,12 +431,10 @@ end
 --HIGHSCORE BUTTON UTILITY FUNCTION--
 
 function hs.createHighscoreButton(x, y, score, pos)
-    local b
+    local hsb = Highscore_Button(x, y, score, pos)
+    hsb:addElement(DRAW_TABLE.GUI, nil, "highscore_button")
 
-    b = Highscore_Button(x, y, score, pos)
-    b:addElement(DRAW_TABLE.GUI, nil, "highscore_button")
-
-    return but
+    return hsb
 end
 
 

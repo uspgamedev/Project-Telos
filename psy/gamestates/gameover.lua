@@ -18,12 +18,15 @@ local _joystick_moved
 local _joystick_direction
 local _go_to_level
 local _go_to_part
+local _hs
+local _gameover_buttons_lock
 
 --LOCAL FUNCTION DECLARATIONS--
 local chooseDeathMessage
 local changeSelectedButton
 local getValidButtons
 local getCurrentSelectedButton
+local createRegularGameoverButtons
 
 --------------------
 
@@ -34,7 +37,7 @@ function state:enter(_score)
 
     _go_to_level = nil
     _go_to_part = nil
-    _current_selected_button = nil
+    _hs = nil
     _current_menu_screen = "gameover_menu"
 
     --Blur gamescreen
@@ -54,43 +57,12 @@ function state:enter(_score)
         --"Got a highscore" text
         Txt.create_gui(180, 100, "You got a highscore on position #"..pos.."!", GUI_BOSS_TITLE, nil, "format", nil, "highscore_text", "center", ORIGINAL_WINDOW_WIDTH/1.5)
         Txt.create_gui(260, 260, "please enter your name and confirm", GUI_MEDMED, nil, "format", nil, "highscore_text2", "center")
-        HS.createHighscoreButton(330, 410, score, pos)
+        _hs = HS.createHighscoreButton(330, 410, score, pos)
 
-        GAMEOVER_BUTTONS_LOCK = true
+        _gameover_buttons_lock = true
     else
         --Normal gameover text and buttons
-        _gameover_menu_screen_buttons = {}
-
-        t = Txt.create_gui(400, 300, "GAMEOVER", GUI_BOSS_TITLE, nil, "format", nil, "gameover_text", "center")
-        chooseDeathMessage(t)
-
-        --Restart button
-        func = function() SWITCH = "GAME"; CONTINUE = false end
-        b = Button.create_circle_gui(140, 650, 75, func, "Restart", GUI_BIGLESSLESS, "gameover_gui", "restart_button", "start a new game")
-        b.selected_by_joystick = true --Mark as default selected button
-        _current_selected_button = "restart"
-        table.insert(_gameover_menu_screen_buttons, "restart")
-
-        if CONTINUE then
-
-            --Continue button
-            func = function()
-                _go_to_level = "level"..CONTINUE
-                _go_to_part = "part_1"
-                USED_CONTINUE = true
-                SWITCH = "GAME"
-            end
-            b = Button.create_circle_gui(340, 650, 75, func, "Continue", GUI_BIGLESSLESS, "gameover_gui", "continue_button", "reset lives, score and level progress")
-            table.insert(_gameover_menu_screen_buttons, "continue")
-
-        end
-
-        --Back to menu button
-        func = function() SWITCH = "MENU" end
-        b = Button.create_circle_gui(540, 650, 75, func, "Menu", GUI_BIGLESSLESS, "gameover_gui", "back2menu_button", "reset lives, score and level progress")
-        table.insert(_gameover_menu_screen_buttons, "back2menu")
-
-        GAMEOVER_BUTTONS_LOCK = false
+        createRegularGameoverButtons()
     end
 
     --Add slowmotion effect
@@ -137,6 +109,11 @@ end
 
 function state:update(dt)
     local m_dt
+
+    if _hs and _hs.death then
+        _hs = nil
+        createRegularGameoverButtons("got_highscore")
+    end
 
     --Move selected button based on joystick hat or axis input
     if USING_JOYSTICK and CURRENT_JOYSTICK then
@@ -221,12 +198,12 @@ end
 
 function state:keypressed(key)
 
-    if     key == 'r' and not GAMEOVER_BUTTONS_LOCK then
+    if     key == 'r' and not _gameover_buttons_lock then
         SWITCH = "GAME"
         CONTINUE = false
-    elseif key == 'c' and CONTINUE and not GAMEOVER_BUTTONS_LOCK then
+    elseif key == 'c' and CONTINUE and not _gameover_buttons_lock then
         SWITCH = "GAME"
-    elseif key == 'b' and not GAMEOVER_BUTTONS_LOCK then
+    elseif key == 'b' and not _gameover_buttons_lock then
         SWITCH = "MENU"
     else
         Util.defaultKeyPressed(key)
@@ -247,7 +224,7 @@ end
 function state:joystickpressed(joystick, button)
 
   if joystick == CURRENT_JOYSTICK then
-    if button == GENERIC_JOY_MAP.confirm then
+    if button == GENERIC_JOY_MAP.confirm and _current_selected_button then
       local b = Util.findId(_current_selected_button.."_button")
       if b and not b.lock then
         b:func()
@@ -297,7 +274,7 @@ function changeSelectedButton(dir)
       error("Not a valid menu screen ".._current_menu_screen)
     end
 
-    --Find closes button
+    --Find closest button
     local b = Util.findId(_current_selected_button.."_button")
     if not b then return end
     local min_len = 9999999
@@ -351,6 +328,43 @@ end
 
 function getCurrentSelectedButton()
   return _current_selected_button
+end
+
+function createRegularGameoverButtons(mode)
+    _gameover_menu_screen_buttons = {}
+
+    if mode ~= "got_highscore" then
+        t = Txt.create_gui(400, 300, "GAMEOVER", GUI_BOSS_TITLE, nil, "format", nil, "gameover_text", "center")
+        chooseDeathMessage(t)
+    end
+
+    --Restart button
+    func = function() SWITCH = "GAME"; CONTINUE = false end
+    b = Button.create_circle_gui(140, 650, 75, func, "Restart", GUI_BIGLESSLESS, "gameover_gui", "restart_button", "start a new game")
+    b.selected_by_joystick = true --Mark as default selected button
+    _current_selected_button = "restart"
+    table.insert(_gameover_menu_screen_buttons, "restart")
+
+    if CONTINUE then
+
+        --Continue button
+        func = function()
+            _go_to_level = "level"..CONTINUE
+            _go_to_part = "part_1"
+            USED_CONTINUE = true
+            SWITCH = "GAME"
+        end
+        b = Button.create_circle_gui(340, 650, 75, func, "Continue", GUI_BIGLESSLESS, "gameover_gui", "continue_button", "reset lives, score and level progress")
+        table.insert(_gameover_menu_screen_buttons, "continue")
+
+    end
+
+    --Back to menu button
+    func = function() SWITCH = "MENU" end
+    b = Button.create_circle_gui(540, 650, 75, func, "Menu", GUI_BIGLESSLESS, "gameover_gui", "back2menu_button", "reset lives, score and level progress")
+    table.insert(_gameover_menu_screen_buttons, "back2menu")
+
+    _gameover_buttons_lock = false
 end
 
 --Return state functions

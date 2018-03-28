@@ -26,8 +26,6 @@ local state = {}
 function state:enter()
     local t, b, func
 
-    _current_selected_button = nil
-
     --Blur gamescreen
     USE_BLUR_CANVAS = true
 
