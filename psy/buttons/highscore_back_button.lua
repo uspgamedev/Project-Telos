@@ -48,6 +48,15 @@ return function()
             table.insert(handles_table, ob.handles)
         end
     end
+    --Iterate through all options screen texts and add objects positions (and target values) to the tables
+    local table_ = Util.findSbTp("options_screen_texts")
+    if table_ then
+        for ob in pairs(table_) do
+            table.insert(objects_positions, ob.pos)
+            table.insert(target_x_values, ob.pos.x + ORIGINAL_WINDOW_WIDTH) --Move objects to the right
+            table.insert(handles_table, ob.handles)
+        end
+    end
 
     --Add logo to table
     local logo = Util.findId("logo")

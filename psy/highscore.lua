@@ -29,7 +29,7 @@ end
 
 --Create text related to highscores in the middle of the screen. Can provide an optional argument "position", to highlight a position in the highscore
 --An optional x_offset or y_offset argument will create all texts with an offset to their original position
-function hs.draw(position, x_offset, y_offset)
+function hs.create_table(position, x_offset, y_offset)
     x_offset = x_offset or 0
     y_offset = y_offset or 0
 
@@ -511,7 +511,7 @@ function confirm_arrow_func(arrow, hs_button)
     if text then text.death = true end
 
     --Draw highscores on the screen
-    hs.draw(hs_button.position, 0, -70)
+    hs.create_table(hs_button.position, 0, -70)
 
 end
 

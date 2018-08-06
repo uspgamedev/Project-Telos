@@ -11,6 +11,7 @@ local Logo = require "classes.logo"
 local _main_menu_screen_buttons
 local _highscore_menu_screen_buttons
 local _options_menu_screen_buttons
+local _options_mode
 local _joystick_moved
 local _joystick_direction
 local _current_selected_button
@@ -22,6 +23,7 @@ local _but_high = require "buttons.highscore_button"
 local _but_high_back = require "buttons.highscore_back_button"
 local _but_opt = require "buttons.options_button"
 local _but_opt_back = require "buttons.options_back_button"
+local _but_options_controls = require "buttons.options_controls_button"
 
 
 --LOCAL FUNCTIONS DECLARATIONS--
@@ -148,7 +150,7 @@ function state:enter()
     _highscore_menu_screen_buttons = {} --Reset available buttons for joystick
 
 
-    HS.draw(nil, ORIGINAL_WINDOW_WIDTH, 0) --Create highscore table "one screen to the right"
+    HS.create_table(nil, ORIGINAL_WINDOW_WIDTH, 0) --Create highscore table "one screen to the right"
 
     --"Go to Main Menu Screen" button
     func = function()
@@ -165,6 +167,21 @@ function state:enter()
     -----------------------
 
     _options_menu_screen_buttons = {} --Reset available buttons for joystick
+    _options_mode = "controls"
+
+    --Draw header
+    Txt.create_gui(180 - ORIGINAL_WINDOW_WIDTH, 80, "OPTIONS", GUI_HIGHSCORE, nil, "format", nil, "options_title", "center", ORIGINAL_WINDOW_WIDTH/1.5, nil, "options_screen_texts")
+    Txt.create_gui(180 - ORIGINAL_WINDOW_WIDTH, 90, "_______", GUI_HIGHSCORE, nil, "format", nil, "options_title_underscore", "center", ORIGINAL_WINDOW_WIDTH/1.5, nil, "options_screen_texts")
+
+    --Create options button
+    func = function()
+        if _options_mode ~= "controls" then
+         _but_option_controls(_options_menu_screen_buttons)
+        end
+    end
+    b = Button.create_circle_gui(500 - ORIGINAL_WINDOW_WIDTH, 650, 80, func, "Controls", GUI_BIGLESSLESS, "options_menu_buttons", "opt_controls_button")
+    b.sfx = SFX.generic_button
+    table.insert(_options_menu_screen_buttons, "opt_controls")
 
     --"Go to Main Menu Screen" button
     func = function()
