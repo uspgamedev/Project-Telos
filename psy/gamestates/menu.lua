@@ -10,6 +10,7 @@ local Logo = require "classes.logo"
 
 local _main_menu_screen_buttons
 local _highscore_menu_screen_buttons
+local _options_menu_screen_buttons
 local _joystick_moved
 local _joystick_direction
 local _current_selected_button
@@ -19,6 +20,9 @@ local _go_to_part
 --Buttons
 local _but_high = require "buttons.highscore_button"
 local _but_high_back = require "buttons.highscore_back_button"
+local _but_opt = require "buttons.options_button"
+local _but_opt_back = require "buttons.options_back_button"
+
 
 --LOCAL FUNCTIONS DECLARATIONS--
 
@@ -70,11 +74,11 @@ function state:enter()
             USED_CONTINUE = true
             SWITCH = "GAME"
         end
-        b = Button.create_circle_gui(430, 610, 75, func, "Continue", GUI_BIGLESSLESS, "main_menu_buttons", "menu_continue_button")
+        b = Button.create_circle_gui(430, 610, 75, func, "Continue", GUI_BIGLESSLESS, "main_menu_buttons", "main_continue_button")
         b.sfx = SFX.play_button
         b.alpha_modifier = 0
         b.lock = true
-        table.insert(_main_menu_screen_buttons, "menu_continue")
+        table.insert(_main_menu_screen_buttons, "main_continue")
     end
 
     --Play Button
@@ -86,40 +90,52 @@ function state:enter()
             TUTORIAL = true
         end
     end
-    b = Button.create_circle_gui(528, 340, 140, func, "New Game", GUI_BIGLESS, "main_menu_buttons", "menu_play_button")
+    b = Button.create_circle_gui(528, 340, 140, func, "New Game", GUI_BIGLESS, "main_menu_buttons", "main_play_button")
     b.sfx = SFX.play_button
     b.ring_growth_speed = b.ring_growth_speed
     b.alpha_mod_v = 1.5
     b.alpha_modifier = 0
     b.lock = true
     b.selected_by_joystick = true --Mark as default selected button
-    _current_selected_button = "menu_play"
-    table.insert(_main_menu_screen_buttons, "menu_play")
+    _current_selected_button = "main_play"
+    table.insert(_main_menu_screen_buttons, "main_play")
 
     if not FIRST_TIME then
 
         --Tutorial Button
         func = function() SWITCH = "GAME"; TUTORIAL = true end
-        b = Button.create_circle_gui(525+offset, 610, 75, func, "Tutorial", GUI_BIGLESSLESS, "main_menu_buttons", "menu_tutorial_button")
+        b = Button.create_circle_gui(525+offset, 610, 75, func, "Tutorial", GUI_BIGLESSLESS, "main_menu_buttons", "main_tutorial_button")
         b.sfx = SFX.play_button
         b.alpha_modifier = 0
         b.lock = true
-        table.insert(_main_menu_screen_buttons, "menu_tutorial")
+        table.insert(_main_menu_screen_buttons, "main_tutorial")
 
 
         --"Go to Highscore Menu Screen" button
         func = function()
              _but_high()
-             setCurrentSelectedButton("menu_go2main")
+             setCurrentSelectedButton("high_go2main")
              setCurrentMenuScreen("highscore_menu")
         end
-        b = Button.create_circle_gui(880, 650, 90, func, "Highscores", GUI_BIGLESSLESS, "main_menu_buttons", "menu_go2highscore_button")
+        b = Button.create_circle_gui(880, 650, 90, func, "Highscores", GUI_BIGLESSLESS, "main_menu_buttons", "main_go2highscore_button")
         b.sfx = SFX.generic_button
         b.alpha_modifier = 0
         b.lock = true
-        table.insert(_main_menu_screen_buttons, "menu_go2highscore")
+        table.insert(_main_menu_screen_buttons, "main_go2highscore")
 
     end
+
+    --"Go to Options Menu Screen" button
+    func = function()
+         _but_opt()
+         setCurrentSelectedButton("options_go2main")
+         setCurrentMenuScreen("options_menu")
+    end
+    b = Button.create_circle_gui(ORIGINAL_WINDOW_WIDTH - 880, 650, 90, func, "Options", GUI_BIGLESSLESS, "main_menu_buttons", "main_go2options_button")
+    b.sfx = SFX.generic_button
+    b.alpha_modifier = 0
+    b.lock = true
+    table.insert(_main_menu_screen_buttons, "main_go2options")
 
 
     --Create main menu logo
@@ -137,12 +153,29 @@ function state:enter()
     --"Go to Main Menu Screen" button
     func = function()
          _but_high_back()
-         setCurrentSelectedButton("menu_go2highscore")
+         setCurrentSelectedButton("main_go2highscore")
          setCurrentMenuScreen("main_menu")
     end
-    b = Button.create_circle_gui(ORIGINAL_WINDOW_WIDTH + 110, 680, 55, func, "Back", GUI_BIGLESSLESS, "highscore_menu_buttons", "menu_go2main_button")
+    b = Button.create_circle_gui(ORIGINAL_WINDOW_WIDTH + 110, 680, 55, func, "Back", GUI_BIGLESSLESS, "highscore_menu_buttons", "high_go2main_button")
     b.sfx = SFX.back_button
-    table.insert(_highscore_menu_screen_buttons, "menu_go2menu")
+    table.insert(_highscore_menu_screen_buttons, "high_go2main")
+
+    -----------------------
+    --OPTIONS MENU SCREEN--
+    -----------------------
+
+    _options_menu_screen_buttons = {} --Reset available buttons for joystick
+
+    --"Go to Main Menu Screen" button
+    func = function()
+         _but_opt_back()
+         setCurrentSelectedButton("main_go2options")
+         setCurrentMenuScreen("main_menu")
+    end
+    b = Button.create_circle_gui(880 - ORIGINAL_WINDOW_WIDTH, 650, 55, func, "Back", GUI_BIGLESSLESS, "options_menu_buttons", "opt_go2main_button")
+    b.sfx = SFX.back_button
+    table.insert(_options_menu_screen_buttons, "opt_go2main")
+
 
     --AUDIO--
     Audio.playBGM(BGM.menu, nil, 3.5)
@@ -191,6 +224,7 @@ function state:update(dt)
     Util.updateSubTp(dt, "gui")
     Util.updateSubTp(dt, "main_menu_buttons")
     Util.updateSubTp(dt, "highscore_menu_buttons")
+    Util.updateSubTp(dt, "options_menu_buttons")
     Util.updateSubTp(dt, "button_particles")
     Util.updateId(dt, "logo")
 
@@ -305,6 +339,8 @@ function changeSelectedButton(dir)
       valid_buttons = getValidButtons(dir, _main_menu_screen_buttons)
     elseif _current_menu_screen == "highscore_menu" then
       valid_buttons = getValidButtons(dir, _highscore_menu_screen_buttons)
+  elseif _current_menu_screen == "options_menu" then
+      valid_buttons = getValidButtons(dir, _options_menu_screen_buttons)
     else
       error("Not a valid menu screen ".._current_menu_screen)
     end

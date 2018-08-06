@@ -58,12 +58,12 @@ Logo = Class{
               self.effects_handle["second_delay"] = FX_TIMER:after(.5,
                 function()
                   local button
-                  button = Util.findId("menu_play_button")
+                  button = Util.findId("main_play_button")
                   if button then
                     self.effects_handle["play_alpha"] = FX_TIMER:tween(2, button, {alpha_modifier = 1}, 'in-linear')
                     self.effects_handle["play_lock"] = FX_TIMER:after(.7,
                       function()
-                        local b = Util.findId("menu_play_button")
+                        local b = Util.findId("main_play_button")
                         if b then
                           b.lock = false
                         end
@@ -72,36 +72,48 @@ Logo = Class{
                   end
                   self.effects_handle["third_delay"] = FX_TIMER:after(1,
                     function()
-                        local button = Util.findId("menu_continue_button")
+                        local button = Util.findId("main_continue_button")
                         if button then
                           self.effects_handle["continue_alpha"] = FX_TIMER:tween(.6, button, {alpha_modifier = 1}, 'in-linear')
                           self.effects_handle["continue_lock"] = FX_TIMER:after(.2,
                             function()
-                              local b = Util.findId("menu_continue_button")
+                              local b = Util.findId("main_continue_button")
                               if b then
                                 b.lock = false
                               end
                             end
                           )
                         end
-                        button = Util.findId("menu_go2highscore_button")
+                        button = Util.findId("main_go2highscore_button")
                         if button then
                           self.effects_handle["go2highscore_alpha"] = FX_TIMER:tween(.6, button, {alpha_modifier = 1}, 'in-linear')
                           self.effects_handle["go2highscore_lock"] = FX_TIMER:after(.3,
                             function()
-                              local b = Util.findId("menu_go2highscore_button")
+                              local b = Util.findId("main_go2highscore_button")
                               if b then
                                 b.lock = false
                               end
                             end
                           )
                         end
-                        button = Util.findId("menu_tutorial_button")
+                        button = Util.findId("main_go2options_button")
+                        if button then
+                          self.effects_handle["go2options_alpha"] = FX_TIMER:tween(.6, button, {alpha_modifier = 1}, 'in-linear')
+                          self.effects_handle["go2options_lock"] = FX_TIMER:after(.3,
+                            function()
+                              local b = Util.findId("main_go2options_button")
+                              if b then
+                                b.lock = false
+                              end
+                            end
+                          )
+                        end
+                        button = Util.findId("main_tutorial_button")
                         if button then
                           self.effects_handle["tutorial_alpha"] = FX_TIMER:tween(.6, button, {alpha_modifier = 1}, 'in-linear')
                           self.effects_handle["tutorial_lock"] = FX_TIMER:after(.2,
                             function()
-                              local b = Util.findId("menu_tutorial_button")
+                              local b = Util.findId("main_tutorial_button")
                               if b then
                                 b.lock = false
                               end
@@ -204,7 +216,7 @@ end
 function Logo:update(dt)
 
   --Update circle radius based on "new game" button ring radius
-  local b = Util.findId("menu_play_button")
+  local b = Util.findId("main_play_button")
   if b then
     self.circle_radius = math.max(self.circle_min_radius, b.ring_r + self.circle_gap)
   end

@@ -28,6 +28,17 @@ return function()
         end
     end
 
+    --Iterate through all options menu buttons and add objects positions (and target values) to the tables
+    local table_ = Util.findSbTp("options_menu_buttons")
+    if table_ then
+        for ob in pairs(table_) do
+            table.insert(objects_positions, ob.pos)
+            table.insert(target_x_values, ob.pos.x + ORIGINAL_WINDOW_WIDTH) --Move objects to the right
+            table.insert(handles_table, ob.handles)
+            ob.lock = true
+        end
+    end
+
     --Iterate through all highscore screen texts and add objects positions (and target values) to the tables
     local table_ = Util.findSbTp("highscore_screen_texts")
     if table_ then
@@ -60,8 +71,8 @@ return function()
     FX.change_value_objects(objects_positions, "x", target_x_values, 1800, "moving_tween", handles_table, "out-back", after)
 
     --Update button selection for joystick
-    local b = Util.findId("menu_go2main_button")
+    local b = Util.findId("high_go2main_button")
     if b then b.selected_by_joystick = false end
-    local b = Util.findId("menu_go2highscore_button")
+    local b = Util.findId("main_go2highscore_button")
     if b then b.selected_by_joystick = true end
 end
