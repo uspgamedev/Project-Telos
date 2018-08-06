@@ -121,7 +121,7 @@ function state:update(dt)
       _joystick_direction = Util.getHatDirection(CURRENT_JOYSTICK:getHat(1))
       if _joystick_direction:len() == 0 then
         --If there isn't a hat input, tries to get an axis input
-        _joystick_direction = Vector(Util.getJoystickAxisValues(CURRENT_JOYSTICK, 1, 2)):normalized()
+        _joystick_direction = Vector(Util.getJoystickAxisValues(CURRENT_JOYSTICK, GENERIC_JOY_MAP.laxis_horizontal, GENERIC_JOY_MAP.laxis_vertical)):normalized()
       end
       if _joystick_direction:len() == 0 then
         _joystick_moved = false

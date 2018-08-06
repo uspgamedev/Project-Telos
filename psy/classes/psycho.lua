@@ -204,7 +204,7 @@ function Psy:update(dt)
     then
       if p.shoot_tick <= 0 then
           p.shoot_tick = p.shoot_tick + p.shoot_fps
-          local v = Vector(Util.getJoystickAxisValues(CURRENT_JOYSTICK, 3, 4)):normalized()
+          local v = Vector(Util.getJoystickAxisValues(CURRENT_JOYSTICK, GENERIC_JOY_MAP.raxis_horizontal, GENERIC_JOY_MAP.raxis_vertical)):normalized()
           if v.x ~= 0 or v.y ~= 0 then --Check for deadzone case
             local x, y = p.pos.x + v.x, p.pos.y + v.y
             p:shoot(x, y)
@@ -440,11 +440,10 @@ function psycho.updateSpeed(self)
       end
     else
       if CURRENT_JOYSTICK then
-        --Prioritize hat, if not use axis value
-        local hat = CURRENT_JOYSTICK:getHat(1)
-        p.speed = Util.getHatDirection(hat)
+        --Prioritize hat (if exists), if not use axis value
+        p.speed = Util.getHatDirection(CURRENT_JOYSTICK:getHat(1))
         if p.speed.x == 0 and p.speed.y == 0 then --Hat == 'c'
-          p.speed.x, p.speed.y = Util.getJoystickAxisValues(CURRENT_JOYSTICK, 1, 2)
+          p.speed.x, p.speed.y = Util.getJoystickAxisValues(CURRENT_JOYSTICK, GENERIC_JOY_MAP.laxis_horizontal, GENERIC_JOY_MAP.laxis_vertical)
         end
       end
     end

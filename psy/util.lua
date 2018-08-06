@@ -447,7 +447,7 @@ function util.getHatDirection(hat)
   elseif hat == 'c' then
     return Vector(0,0)
   else
-    error("Not a valid hat value: "..hat)
+    return Vector(0,0)
   end
 end
 

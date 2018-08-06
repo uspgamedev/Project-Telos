@@ -166,14 +166,13 @@ end
 
 
 function state:update(dt)
-
     --Move selected button based on joystick hat or axis input
     if USING_JOYSTICK and CURRENT_JOYSTICK then
-      --First try to get hat input
+      --First try to get hat input, if there is
       _joystick_direction = Util.getHatDirection(CURRENT_JOYSTICK:getHat(1))
       if _joystick_direction:len() == 0 then
         --If there isn't a hat input, tries to get an axis input
-        _joystick_direction = Vector(Util.getJoystickAxisValues(CURRENT_JOYSTICK, 1, 2)):normalized()
+        _joystick_direction = Vector(Util.getJoystickAxisValues(CURRENT_JOYSTICK, GENERIC_JOY_MAP.laxis_horizontal, GENERIC_JOY_MAP.laxis_vertical)):normalized()
       end
       if _joystick_direction:len() == 0 then
         _joystick_moved = false
@@ -283,7 +282,7 @@ function state:mousepressed(x, y, button)
 end
 
 function state:joystickpressed(joystick, button)
-
+  print(button)
   if joystick == CURRENT_JOYSTICK then
     if button == GENERIC_JOY_MAP.confirm then
       local b = Util.findId(_current_selected_button.."_button")
