@@ -128,7 +128,7 @@ function state:enter()
     --"Go to Options Menu Screen" button
     func = function()
          _but_opt()
-         setCurrentSelectedButton("options_go2main")
+         setCurrentSelectedButton("opt_go2main")
          setCurrentMenuScreen("options_menu")
     end
     b = Button.create_circle_gui(ORIGINAL_WINDOW_WIDTH - 880, 650, 90, func, "Options", GUI_BIGLESSLESS, "main_menu_buttons", "main_go2options_button")
@@ -156,7 +156,7 @@ function state:enter()
          setCurrentSelectedButton("main_go2highscore")
          setCurrentMenuScreen("main_menu")
     end
-    b = Button.create_circle_gui(ORIGINAL_WINDOW_WIDTH + 110, 680, 55, func, "Back", GUI_BIGLESSLESS, "highscore_menu_buttons", "high_go2main_button")
+    b = Button.create_circle_gui(ORIGINAL_WINDOW_WIDTH + 110, 650, 55, func, "Back", GUI_BIGLESSLESS, "highscore_menu_buttons", "high_go2main_button")
     b.sfx = SFX.back_button
     table.insert(_highscore_menu_screen_buttons, "high_go2main")
 
