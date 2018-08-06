@@ -282,7 +282,6 @@ function state:mousepressed(x, y, button)
 end
 
 function state:joystickpressed(joystick, button)
-  print(button)
   if joystick == CURRENT_JOYSTICK then
     if button == GENERIC_JOY_MAP.confirm then
       local b = Util.findId(_current_selected_button.."_button")

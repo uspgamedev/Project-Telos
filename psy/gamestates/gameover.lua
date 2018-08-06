@@ -116,7 +116,7 @@ function state:update(dt)
     end
 
     --Move selected button based on joystick hat or axis input
-    if USING_JOYSTICK and CURRENT_JOYSTICK then
+    if USING_JOYSTICK and CURRENT_JOYSTICK and _current_selected_button then
       --First try to get hat input
       _joystick_direction = Util.getHatDirection(CURRENT_JOYSTICK:getHat(1))
       if _joystick_direction:len() == 0 then
@@ -231,6 +231,8 @@ function state:joystickpressed(joystick, button)
         if b.sfx then b.sfx:play() end
       end
     end
+    local hsb = Util.findId("highscore_button")
+    if hsb then hsb:joystickpressed(button) end
   end
 
 end

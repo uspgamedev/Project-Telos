@@ -137,6 +137,7 @@ end
 --HIGHSCORE BUTTON--
 
 local up_arrow_func, down_arrow_func, confirm_arrow_func --Functions for arrows above and below displays, and confirm arrow
+local _buttons_positions = {}
 
 --[[3 individual circular displays, each containing a letter, and two arrow buttons above and below for changing the letter. On the right of the individual displays, an arrow for confirming]]--
 Highscore_Button = Class{
@@ -179,14 +180,14 @@ Highscore_Button = Class{
             local pos1 = Vector(center_x - s.arrow_size/2, center_y - s.display_r - s.arrow_gap) --Bottom left vertex
             local pos2 = Vector(center_x + s.arrow_size/2, center_y - s.display_r - s.arrow_gap) --Bottom right vertex
             local pos3 = Vector(center_x, center_y - s.display_r - s.arrow_gap - s.arrow_size*sqrt3/2) --Top vertex
-            self.change_button_up[i] =  Highscore_Arrow(pos1, pos2, pos3, up_arrow_func, self, i, nil, true)
-
+            self.change_button_up[i] =  Highscore_Arrow(pos1, pos2, pos3, up_arrow_func, self, i, nil, true, "up_"..i)
+            _buttons_positions["up_"..i] = self.change_button_up[i].center
             --Create down arrow
             pos1 = Vector(center_x - s.arrow_size/2, center_y + s.display_r + s.arrow_gap) --Top left vertex
             pos2 = Vector(center_x + s.arrow_size/2, center_y + s.display_r + s.arrow_gap) --Top right vertex
             pos3 = Vector(center_x, center_y + s.display_r + s.arrow_gap + s.arrow_size*sqrt3/2) --Bottom vertex
-            self.change_button_down[i] =  Highscore_Arrow(pos1, pos2, pos3, down_arrow_func, self, i, nil, false)
-
+            self.change_button_down[i] =  Highscore_Arrow(pos1, pos2, pos3, down_arrow_func, self, i, nil, false,"down_"..i)
+            _buttons_positions["down_"..i] = self.change_button_down[i].center
         end
 
         --Create confirm arrow
@@ -194,9 +195,13 @@ Highscore_Button = Class{
         pos1 = Vector(s.pos.x + 6*s.display_r + 2*s.display_gap + s.arrow_gap, s.pos.y + (2*s.display_r - s.arrow_size)/2) --Top left vertex
         pos2 = Vector(s.pos.x + 6*s.display_r + 2*s.display_gap + s.arrow_gap, s.pos.y + (2*s.display_r - s.arrow_size)/2 + s.arrow_size) --Bottom left vertex
         pos3 = Vector(s.pos.x + 6*s.display_r + 2*s.display_gap + s.arrow_gap + s.arrow_size*sqrt3/2, s.pos.y + (2*s.display_r - s.arrow_size)/2 + s.arrow_size/2) --Right vertex
-        self.confirm_button =  Highscore_Arrow(pos1, pos2, pos3, confirm_arrow_func, self, nil, true)
+        self.confirm_button =  Highscore_Arrow(pos1, pos2, pos3, confirm_arrow_func, self, nil, true, nil, "center")
+        _buttons_positions["center"] = self.confirm_button.center
+
+        self.current_selected = "up_1" --current selected button
 
         self.type = "highscore_button"
+
     end
 
 }
@@ -229,6 +234,26 @@ end
 
 --Call update functions of buttons
 function Highscore_Button:update(dt)
+
+    --Move selected button based on joystick hat or axis input
+    if USING_JOYSTICK and CURRENT_JOYSTICK and self.current_selected then
+      --First try to get hat input
+      local _joystick_direction = Util.getHatDirection(CURRENT_JOYSTICK:getHat(1))
+      if _joystick_direction:len() == 0 then
+        --If there isn't a hat input, tries to get an axis input
+        _joystick_direction = Vector(Util.getJoystickAxisValues(CURRENT_JOYSTICK, GENERIC_JOY_MAP.laxis_horizontal, GENERIC_JOY_MAP.laxis_vertical)):normalized()
+      end
+      if _joystick_direction:len() == 0 then
+        _joystick_moved = false
+      else
+        if not _joystick_moved then
+            self:changeSelectedButton(_joystick_direction)
+        end
+        --Set joystick as moved so it doesn't move to several buttons at once
+        _joystick_moved = true
+      end
+    end
+
 
     for i = 1,3 do
         self.change_button_up[i]:update(dt)
@@ -279,6 +304,67 @@ function Highscore_Button:mousepressed(x,y)
 
 end
 
+function Highscore_Button:changeSelectedButton(direction)
+    --First get list of valid buttons given the direction
+    local cur_pos = _buttons_positions[self.current_selected]
+    local range = math.pi/4
+    local valid_buttons = {}
+    for i,pos in pairs(_buttons_positions) do
+      if i ~= self.current_selected then
+          local vector = Vector(pos.x - cur_pos.x, pos.y - cur_pos.y):normalized()
+          local angle = math.abs(direction:angleTo(vector))
+          if angle > math.pi then angle = 2*math.pi - angle end
+          if angle <= range then
+            valid_buttons[i] = pos
+          end
+      end
+    end
+
+    --No valid buttons in that direction
+    if Util.tableLen(valid_buttons) == 0 then return end
+
+    --Find closest button
+    local min_len = 9999999
+    local target_button = nil
+    for i, pos in pairs(valid_buttons) do
+      local len = Vector(pos.x - cur_pos.x, pos.y - cur_pos.y):len()
+      if len < min_len then
+        min_len = len
+        target_button = i
+      end
+    end
+
+    self.current_selected = target_button
+end
+
+function Highscore_Button:joystickpressed(button)
+    if button == GENERIC_JOY_MAP.confirm then
+        --Check arrows buttons
+        for i = 1,3 do
+            --Top buttons
+            local a = self.change_button_up[i]
+            if self.current_selected == a.name then
+                a.func(a, a.highscore_button)
+                return
+            end
+
+            --Bottom buttons
+            local a = self.change_button_down[i]
+            if self.current_selected == a.name then
+                a.func(a, a.highscore_button)
+                return
+            end
+        end
+
+        --Check confirm button
+        local a = self.confirm_button
+        if self.current_selected == a.name then
+            a.func(a, a.highscore_button)
+            return
+        end
+    end
+end
+
 --Correct the sign of the points given for collision
 function sign (p1, p2, p3)
     return (p1.x - p3.x) * (p2.y - p3.y) - (p2.x - p3.x) * (p1.y - p3.y)
@@ -298,7 +384,7 @@ end
 --Triangle with a function for when its pressed
 Highscore_Arrow = Class{
     __includes = {TRIANGLE},
-    init = function(self, _pos1, _pos2, _pos3, _func, _highscore_button, _number, _confirm, _up)
+    init = function(self, _pos1, _pos2, _pos3, _func, _highscore_button, _number, _confirm, _up, _name)
         TRIANGLE.init(self, _pos1, _pos2, _pos3, Color.purple(), nil, "line")
 
         self.center = Vector((_pos1.x + _pos2.x + _pos3.x)/3, (_pos1.y + _pos2.y + _pos3.y)/3) --Coordenates of center of the arrow button
@@ -318,6 +404,7 @@ Highscore_Arrow = Class{
         self.func = _func --Function when the triangle is pressed
         self.highscore_button = _highscore_button --Reference to highscore button
         self.number = _number --Number of correspondent display
+        self.name = _name --Identification of this button
 
         self.type = "highscore_arrow"
     end
@@ -373,7 +460,8 @@ function Highscore_Arrow:update(dt)
     mousepos = Vector(x, y)
 
     --If mouse is colliding with button collision radius, increase effect radius
-    if b.center:dist(mousepos) <= b.col_radius then
+    if b.center:dist(mousepos) <= b.col_radius or (USING_JOYSTICK and b.highscore_button.current_selected == b.name) then
+        b.highscore_button.current_selected = b.name
         if b.effect_radius < b.col_radius then
             b.effect_radius = b.effect_radius + b.effect_growth_speed*dt
             if b.effect_radius > b.col_radius then b.effect_radius = b.col_radius end
