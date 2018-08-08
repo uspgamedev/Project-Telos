@@ -172,9 +172,9 @@ function button.create_circle_gui(x, y, r, func, text, font, st, id, overtext, o
     return b
 end
 
-------------
---INV BUTTON
-------------
+--------------
+--INV BUTTON--
+--------------
 
 --[[Text button with an invisible box behind (for collision)]]
 Inv_Button = Class{
@@ -264,6 +264,101 @@ function button.create_inv_gui(x, y, func, text, font, overtext, overfont, st)
     return b
 end
 
+----------------------
+--KEY BINDING BUTTON--
+----------------------
+
+--[[Text button with an invisible box behind (for collision)]]
+KeyBinding_Button = Class{
+    __includes = {RECT, WTXT},
+    init = function(self, _x, _y, _command_id, _current_key)
+        local w, h = 80, 42
+
+        RECT.init(self, _x, _y, w, h, Color.transp(), "line") --Set atributes
+
+        self.command_id = _command_id --Command it can change
+        self.current_key = _current_key --Current key associated with that command
+
+        self.key_font = GUI_MED
+        self.command_font = GUI_MEDMED
+
+        self.isOver = false --If mouse is over the button
+        self.lock = false --If this button can't be activated
+
+        self.tp = "keybindingbutton" --Type of this class
+    end
+}
+
+function KeyBinding_Button:update(dt)
+    local b, x, y, mousepos
+
+    b = self
+
+    --Fix mouse position click to respective distance
+    x, y = love.mouse.getPosition()
+    w, h = FreeRes.windowDistance()
+    scale = FreeRes.scale()
+    x = x - w
+    x = x*(1/scale)
+    y = y - h
+    y = y*(1/scale)
+
+    --If mouse is colliding with button, then create over_effect
+    if x >= b.pos.x and
+       x <= b.pos.x + b.w and
+       y >= b.pos.y and
+       y <= b.pos.y + b.h then
+           b.isOver = true
+   else
+       b.isOver = false
+   end
+
+end
+
+--Draws a given key binding button
+function KeyBinding_Button:draw()
+    local b, x, w, y
+
+    b = self
+
+    --Draws button box
+    if b.isOver then
+        Color.set(UI_COLOR.color) --invert
+        love.graphics.setLineWidth(4)
+    else
+        Color.set(UI_COLOR.color)
+        love.graphics.setLineWidth(4)
+    end
+    love.graphics.rectangle("line", b.pos.x , b.pos.y, b.w, b.h, 7)
+
+    --Draw current key associated with command
+    love.graphics.setFont(b.key_font)
+    local x = b.pos.x + b.w/2 - b.key_font:getWidth(b.current_key)/2
+    local y = b.pos.y + b.h/2 - b.key_font:getHeight(b.current_key)/2
+    love.graphics.print(b.current_key, x, y)
+
+    --Draw command name
+    local command = COMMAND_ID_NAME[b.command_id]
+    local limit = 200
+    local width, table = b.command_font:getWrap(command, limit)
+    love.graphics.setFont(b.command_font)
+    local x = b.pos.x - math.min(width, limit) - 15
+    local y = b.pos.y + b.h/2 - b.command_font:getHeight(command)*#table/2
+    love.graphics.printf(command, x, y, math.min(width, limit), "right")
+
+end
+
+--UTILITY FUNCTIONS--
+
+function button.create_keybinding_gui(x, y, command, current_key, st)
+    local b
+
+    st = st or "gui"
+    b = KeyBinding_Button(x, y, command, current_key)
+    b:addElement(DRAW_TABLE.GUI, st)
+
+    return b
+end
 
 ---------------------
 --COLLISION FUNCTIONS

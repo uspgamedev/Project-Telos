@@ -121,7 +121,7 @@ function state:update(dt)
       _joystick_direction = Util.getHatDirection(CURRENT_JOYSTICK:getHat(1))
       if _joystick_direction:len() == 0 then
         --If there isn't a hat input, tries to get an axis input
-        _joystick_direction = Vector(Util.getJoystickAxisValues(CURRENT_JOYSTICK, GENERIC_JOY_MAP.laxis_horizontal, GENERIC_JOY_MAP.laxis_vertical)):normalized()
+        _joystick_direction = Vector(Util.getJoystickAxisValues(CURRENT_JOYSTICK, DEFAULT_GAMEPAD_MAPPING.laxis_horizontal, DEFAULT_GAMEPAD_MAPPING.laxis_vertical)):normalized()
       end
       if _joystick_direction:len() == 0 then
         _joystick_moved = false
@@ -224,7 +224,7 @@ end
 function state:joystickpressed(joystick, button)
 
   if joystick == CURRENT_JOYSTICK then
-    if button == GENERIC_JOY_MAP.confirm and _current_selected_button then
+    if button == DEFAULT_GAMEPAD_MAPPING.confirm and _current_selected_button then
       local b = Util.findId(_current_selected_button.."_button")
       if b and not b.lock then
         b:func()

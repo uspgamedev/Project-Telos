@@ -41,7 +41,7 @@ function setup.config()
     CURRENT_JOYSTICK = nil --Current joystick controlling psycho
     JOYSTICK_DEADZONE = .3 --Percentage of dead zone on all sticks (value between [0,1])
     JOYSTICK_AUTO_SHOOT = true --If psycho shoots whenever it is aiming
-    GENERIC_JOY_MAP = { --Mapping of generic joystick buttons
+    DEFAULT_GAMEPAD_MAPPING = { --Mapping of generic joystick buttons
       start = 4,
       confirm = 15,
       back = 14,
@@ -54,6 +54,20 @@ function setup.config()
       raxis_horizontal = 3,
       raxis_vertical = 4,
     }
+    COMMAND_ID_NAME = { --Verbose name of each command id
+      start = "Start",
+      confirm = "Confirm",
+      back = "Back",
+      shoot = "Shoot",
+      ultrablast1 = "Ultrablast",
+      ultrablast2 = "Ultrablast (secondary)",
+      focus = "Focus",
+      laxis_horizontal = "Left Stick (horizontal axis)",
+      laxis_vertical = "Left Stick (vertical axis)",
+      raxis_horizontal = "Right Stick (horizontal axis)",
+      raxis_vertical = "Left Stick (vertical axis)",
+    }
+
 
     TUTORIAL = false --If the game gamestate should play the tutorial
     DONT_ENABLE_SHOOTING_AFTER_DEATH = false --for tutorial only
@@ -180,6 +194,7 @@ function setup.config()
     GUI_BIG = love.graphics.newFont("assets/fonts/vanadine_bold.ttf", 60)
     GUI_BIGLESS = love.graphics.newFont("assets/fonts/vanadine_bold.ttf", 45)
     GUI_BIGLESSLESS = love.graphics.newFont("assets/fonts/vanadine_bold.ttf", 35)
+    GUI_BIGLESSEST = love.graphics.newFont("assets/fonts/vanadine_bold.ttf", 28)
     GUI_MEDPLUSEXTRA = love.graphics.newFont("assets/fonts/Nevis.ttf", 45)
     GUI_MEDPLUSPLUS = love.graphics.newFont("assets/fonts/Nevis.ttf", 35)
     GUI_MEDPLUS = love.graphics.newFont("assets/fonts/Nevis.ttf", 30)

@@ -226,7 +226,7 @@ end
 
 function state:joystickpressed(joystick, button)
 
-  if button == GENERIC_JOY_MAP.start then
+  if button == DEFAULT_GAMEPAD_MAPPING.start then
       SWITCH = "PAUSE"
   end
 
