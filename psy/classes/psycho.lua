@@ -200,7 +200,7 @@ function Psy:update(dt)
       end
     elseif CURRENT_JOYSTICK and
            (JOYSTICK_AUTO_SHOOT or CURRENT_JOYSTICK:isDown(DEFAULT_GAMEPAD_MAPPING.shoot)) and
-           (CURRENT_JOYSTICK:getAxis(3) ~= 0 or CURRENT_JOYSTICK:getAxis(4) ~= 0)
+           (CURRENT_JOYSTICK:getAxis(DEFAULT_GAMEPAD_MAPPING.raxis_horizontal) ~= 0 or CURRENT_JOYSTICK:getAxis(DEFAULT_GAMEPAD_MAPPING.raxis_vertical) ~= 0)
     then
       if p.shoot_tick <= 0 then
           p.shoot_tick = p.shoot_tick + p.shoot_fps

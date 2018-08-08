@@ -67,7 +67,8 @@ function setup.config()
       raxis_horizontal = "Right Stick (horizontal axis)",
       raxis_vertical = "Left Stick (vertical axis)",
     }
-
+    GETTING_INPUT = false --If game is looking for input
+    INPUT_GOT = nil --Input game got
 
     TUTORIAL = false --If the game gamestate should play the tutorial
     DONT_ENABLE_SHOOTING_AFTER_DEATH = false --for tutorial only

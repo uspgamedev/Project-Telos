@@ -99,7 +99,7 @@ function state:enter()
     b.alpha_modifier = 0
     b.lock = true
     b.selected_by_joystick = true --Mark as default selected button
-    _current_selected_button = "main_play"
+    setCurrentSelectedButton("main_play")
     table.insert(_main_menu_screen_buttons, "main_play")
 
     if not FIRST_TIME then
@@ -173,13 +173,13 @@ function state:enter()
     Txt.create_gui(180 - ORIGINAL_WINDOW_WIDTH, 35, "OPTIONS", GUI_HIGHSCORE, nil, "format", nil, "options_title", "center", ORIGINAL_WINDOW_WIDTH/1.5, nil, "options_screen_texts")
     Txt.create_gui(180 - ORIGINAL_WINDOW_WIDTH, 45, "_______", GUI_HIGHSCORE, nil, "format", nil, "options_title_underscore", "center", ORIGINAL_WINDOW_WIDTH/1.5, nil, "options_screen_texts")
 
-    --Create options button
+    --Create modes button
     func = function()
         if _options_mode ~= "controls" then
          _but_options_controls(_options_menu_screen_buttons)
         end
     end
-    b = Button.create_circle_gui(500 - ORIGINAL_WINDOW_WIDTH, 660, 70, func, "Controls", GUI_BIGLESSEST, "options_menu_buttons", "opt_controls_button")
+    b = Button.create_circle_gui(500 - ORIGINAL_WINDOW_WIDTH, 660, 70, func, "Gamepad", GUI_BIGLESSEST, "options_menu_buttons", "opt_controls_button")
     b.sfx = SFX.generic_button
     table.insert(_options_menu_screen_buttons, "opt_controls")
 
@@ -219,7 +219,7 @@ end
 
 function state:update(dt)
     --Move selected button based on joystick hat or axis input
-    if USING_JOYSTICK and CURRENT_JOYSTICK then
+    if USING_JOYSTICK and CURRENT_JOYSTICK and not GETTING_INPUT then
       --First try to get hat input, if there is
       _joystick_direction = Util.getHatDirection(CURRENT_JOYSTICK:getHat(1))
       if _joystick_direction:len() == 0 then
@@ -238,6 +238,17 @@ function state:update(dt)
         --Set joystick as moved so it doesn't move to several buttons at once
         _joystick_moved = true
       end
+    end
+    if CURRENT_JOYSTICK and GETTING_INPUT == "axis" and not INPUT_GOT then
+        local difference_needed = .5
+        for i = 1, CURRENT_JOYSTICK:getAxisCount() do
+            local v = CURRENT_JOYSTICK:getAxis(i)
+            if math.abs(v - PREVIOUS_AXIS[i])  >= difference_needed then
+                INPUT_GOT = i
+                _joystick_moved = true
+            end
+        end
+        return
     end
 
     Util.updateSubTp(dt, "gui")
@@ -327,7 +338,7 @@ function state:keypressed(key)
 end
 
 function state:mousepressed(x, y, button)
-
+    if GETTING_INPUT then return end
     if button == 1 then  --Left mouse button
         Button.checkCollision(x,y)
     end
@@ -336,9 +347,14 @@ end
 
 function state:joystickpressed(joystick, button)
   if joystick == CURRENT_JOYSTICK then
-    if button == DEFAULT_GAMEPAD_MAPPING.confirm then
+    if GETTING_INPUT then
+      if GETTING_INPUT == "button" then
+          INPUT_GOT = button
+      end
+      return
+    elseif button == DEFAULT_GAMEPAD_MAPPING.confirm then
       local b = Util.findId(_current_selected_button.."_button")
-      if b and not b.lock then
+      if b and not b.lock and b.func then
         b:func()
         if b.sfx then b.sfx:play() end
       end
@@ -421,7 +437,12 @@ function getCurrentSelectedButton()
 end
 
 function setCurrentSelectedButton(but)
+  if _current_selected_button then
+      Util.findId(_current_selected_button.."_button").selected_by_joystick = false
+  end
   _current_selected_button = but
+  local b = Util.findId(but.."_button")
+  b.selected_by_joystick = true
 end
 
 function setCurrentMenuScreen(scr)

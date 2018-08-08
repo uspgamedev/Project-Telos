@@ -34,7 +34,6 @@ Circle_Button = Class{
         self.alpha_mod_v = 1 --Determines how fast alpha value will reach the peak
         self.alpha_modifier = 1 --Modifier applied on alpha value of button
 
-        self.is_selected = false
         self.selected_by_joystick = false
 
         self.overtext = _overtext --Text to display above button when highlighted, if any
@@ -90,6 +89,8 @@ end
 function Circle_Button:update(dt)
     local b, x, y, mousepos
 
+    if GETTING_INPUT then return end
+
     b = self
 
     --Fix mouse position click to respective distance
@@ -108,16 +109,13 @@ function Circle_Button:update(dt)
     local speed_mod = math.max((b.r-b.ring_r)/b.r,.4)
     if ((not USING_JOYSTICK and b.pos:dist(mousepos) <= b.r) or (USING_JOYSTICK and self.selected_by_joystick)) and
     b.alpha_modifier >= .3 then
-        b.is_selected = true
         --Update selected button on menu
-        if not USING_JOYSTICK and not self.selected_by_joystick then
-          --Remove previous selection of button
-          local cur_selec_but = Gamestate.getCurrentSelectedButton()
-          if cur_selec_but then
+        local cur_selec_but = Gamestate.getCurrentSelectedButton()
+        if cur_selec_but then
             Util.findId(cur_selec_but.."_button").selected_by_joystick = false
-          end
-          self.selected_by_joystick = true
         end
+        Gamestate.setCurrentSelectedButton(string.sub(self.id, 1, -8))
+        self.selected_by_joystick = true
 
         --Increase ring size until max
         if b.ring_r < b.r then
@@ -125,7 +123,7 @@ function Circle_Button:update(dt)
             if b.ring_r > b.r then b.ring_r = b.r end
         end
     else
-        b.is_selected = false
+        b.selected_by_joystick = false
         if b.ring_r > 0 then
             b.ring_r = b.ring_r - b.ring_growth_speed*speed_mod*dt
             if b.ring_r < 0 then b.ring_r = 0 end
@@ -220,7 +218,8 @@ function Inv_Button:update(dt)
     y = y*(1/scale)
 
     --If mouse is colliding with button, then show message below
-    if x >= b.pos.x and
+    if not USING_JOYSTICK and
+       x >= b.pos.x and
        x <= b.pos.x + b.w and
        y >= b.pos.y and
        y <= b.pos.y + b.h then
@@ -272,7 +271,7 @@ end
 KeyBinding_Button = Class{
     __includes = {RECT, WTXT},
     init = function(self, _x, _y, _command_id, _current_key)
-        local w, h = 80, 42
+        local w, h = 170, 45
 
         RECT.init(self, _x, _y, w, h, Color.transp(), "line") --Set atributes
 
@@ -281,6 +280,13 @@ KeyBinding_Button = Class{
 
         self.key_font = GUI_MED
         self.command_font = GUI_MEDMED
+
+        self.alpha_modifier = 1
+
+        self.getting_input = false
+        self.input_type = (string.sub(_command_id, 2, 5) == "axis") and "axis" or  "button"
+
+        self.selected_by_joystick = false
 
         self.isOver = false --If mouse is over the button
         self.lock = false --If this button can't be activated
@@ -294,6 +300,19 @@ function KeyBinding_Button:update(dt)
 
     b = self
 
+    if GETTING_INPUT then
+        if self.getting_input and INPUT_GOT then
+            self.current_key = INPUT_GOT
+            DEFAULT_GAMEPAD_MAPPING[self.command_id] = INPUT_GOT
+            self.getting_input = false
+            INPUT_GOT = nil
+            GETTING_INPUT = false
+            return
+        else
+            return
+        end
+    end
+
     --Fix mouse position click to respective distance
     x, y = love.mouse.getPosition()
     w, h = FreeRes.windowDistance()
@@ -304,7 +323,8 @@ function KeyBinding_Button:update(dt)
     y = y*(1/scale)
 
     --If mouse is colliding with button, then create over_effect
-    if x >= b.pos.x and
+    if not USING_JOYSTICK and
+       x >= b.pos.x and
        x <= b.pos.x + b.w and
        y >= b.pos.y and
        y <= b.pos.y + b.h then
@@ -322,8 +342,11 @@ function KeyBinding_Button:draw()
     b = self
 
     --Draws button box
-    if b.isOver then
-        Color.set(UI_COLOR.color) --invert
+    if (not USING_JOYSTICK and b.isOver) or (USING_JOYSTICK and b.selected_by_joystick) or self.getting_input then
+        local color = Color.black()
+        Color.copy(color, UI_COLOR.color)
+        color.h = (color.h + 127)%255
+        Color.set(color)
         love.graphics.setLineWidth(4)
     else
         Color.set(UI_COLOR.color)
@@ -348,14 +371,29 @@ function KeyBinding_Button:draw()
 
 end
 
+--Activate keybinding button
+function KeyBinding_Button:func()
+    if not self.getting_key then
+        self.getting_input = true
+        GETTING_INPUT = self.input_type
+        INPUT_GOT = nil
+        if self.input_type == "button" then
+            self.current_key = "pick button"
+        else
+            self.current_key = "pick axis"
+            PREVIOUS_AXIS = {CURRENT_JOYSTICK:getAxes()}
+        end
+    end
+end
+
 --UTILITY FUNCTIONS--
 
-function button.create_keybinding_gui(x, y, command, current_key, st)
+function button.create_keybinding_gui(x, y, command, current_key, st, id)
     local b
 
     st = st or "gui"
     b = KeyBinding_Button(x, y, command, current_key)
-    b:addElement(DRAW_TABLE.GUI, st)
+    b:addElement(DRAW_TABLE.GUI, st, id)
 
     return b
 end
@@ -379,6 +417,8 @@ function button.checkCollision(x,y)
     checkCircleButtonCollision(x,y)
 
     checkInvButtonCollision(x,y)
+
+    checkKeyBindingButtonCollision(x,y)
 
 end
 
@@ -436,6 +476,34 @@ function checkInvButtonCollision(x,y)
     end
 
 end
+
+--Check if a mouse click collides with any keybinding button
+function checkKeyBindingButtonCollision(x,y)
+
+    if BUTTON_LOCK then return end --If buttons are locked, does nothing
+    --Iterate on drawable buttons table
+    for _,t in pairs(DRAW_TABLE) do
+        for b in pairs(t) do
+            if  b.tp == "keybindingbutton"
+              and
+              not b.lock
+              and
+              x  <= b.pos.x + b.w
+              and
+              x >= b.pos.x
+              and
+              y  <= b.pos.y + b.h
+              and
+              y >= b.pos.y then
+                b:func()
+                --play SFX
+                return
+            end
+        end
+    end
+
+end
+
 
 --Return functions
 return button

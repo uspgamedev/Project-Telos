@@ -99,7 +99,7 @@ function Aim:update(dt)
     aim.show = true
     if not USING_JOYSTICK then
       aim.dir.x, aim.dir.y = aim.mouse_pos.x - aim.pos.x, aim.mouse_pos.y - aim.pos.y
-    elseif CURRENT_JOYSTICK and (CURRENT_JOYSTICK:getAxis(3) ~= 0 or CURRENT_JOYSTICK:getAxis(4) ~= 0) then
+  elseif CURRENT_JOYSTICK and (CURRENT_JOYSTICK:getAxis(DEFAULT_GAMEPAD_MAPPING.raxis_horizontal) ~= 0 or CURRENT_JOYSTICK:getAxis(DEFAULT_GAMEPAD_MAPPING.raxis_vertical) ~= 0) then
       local v = Vector(Util.getJoystickAxisValues(CURRENT_JOYSTICK, DEFAULT_GAMEPAD_MAPPING.raxis_horizontal, DEFAULT_GAMEPAD_MAPPING.raxis_vertical))
       v = v:normalized()
       aim.dir.x, aim.dir.y = (aim.pos.x + v.x)-aim.pos.x, (aim.pos.y + v.y)-aim.pos.y
