@@ -303,7 +303,7 @@ function KeyBinding_Button:update(dt)
     if GETTING_INPUT then
         if self.getting_input and INPUT_GOT then
             self.current_key = INPUT_GOT
-            DEFAULT_GAMEPAD_MAPPING[self.command_id] = INPUT_GOT
+            GAMEPAD_MAPPING[self.command_id] = INPUT_GOT
             self.getting_input = false
             INPUT_GOT = nil
             GETTING_INPUT = false

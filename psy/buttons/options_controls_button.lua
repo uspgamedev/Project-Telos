@@ -23,12 +23,12 @@ local function f(options_buttons)
         "raxis_vertical"
     }
     for i,command in ipairs(command_order) do
-        local key = DEFAULT_GAMEPAD_MAPPING[command]
+        local key = GAMEPAD_MAPPING[command]
         Button.create_keybinding_gui(x - ORIGINAL_WINDOW_WIDTH, y, command, key, "options_menu_buttons", command.."_command_button")
         table.insert(options_buttons, command.."_command")
         y = y + gap_y
         cont = cont + 1
-        if cont > math.ceil(Util.tableLen(DEFAULT_GAMEPAD_MAPPING)/2) then
+        if cont > math.ceil(Util.tableLen(GAMEPAD_MAPPING)/2) then
             cont = 1
             y = original_y
             x = x + gap_x

@@ -241,7 +241,7 @@ function Highscore_Button:update(dt)
       local _joystick_direction = Util.getHatDirection(CURRENT_JOYSTICK:getHat(1))
       if _joystick_direction:len() == 0 then
         --If there isn't a hat input, tries to get an axis input
-        _joystick_direction = Vector(Util.getJoystickAxisValues(CURRENT_JOYSTICK, DEFAULT_GAMEPAD_MAPPING.laxis_horizontal, DEFAULT_GAMEPAD_MAPPING.laxis_vertical)):normalized()
+        _joystick_direction = Vector(Util.getJoystickAxisValues(CURRENT_JOYSTICK, GAMEPAD_MAPPING.laxis_horizontal, GAMEPAD_MAPPING.laxis_vertical)):normalized()
       end
       if _joystick_direction:len() == 0 then
         _joystick_moved = false
@@ -338,7 +338,7 @@ function Highscore_Button:changeSelectedButton(direction)
 end
 
 function Highscore_Button:joystickpressed(button)
-    if button == DEFAULT_GAMEPAD_MAPPING.confirm then
+    if button == GAMEPAD_MAPPING.confirm then
         --Check arrows buttons
         for i = 1,3 do
             --Top buttons

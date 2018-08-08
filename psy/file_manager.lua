@@ -12,6 +12,19 @@ local _default_savefile_args = {
         {name = "---", score = 0},
         {name = "---", score = 0},
         {name = "---", score = 0}
+    },
+    gamepad_mapping = { --Mapping of generic joystick buttons
+      start = 4,
+      confirm = 15,
+      back = 14,
+      shoot = 12,
+      ultrablast1 = 10,
+      ultrablast2 = 9,
+      focus = 11,
+      laxis_horizontal = 1,
+      laxis_vertical = 2,
+      raxis_horizontal = 3,
+      raxis_vertical = 4,
     }
 }
 
@@ -129,10 +142,14 @@ function fm.save()
         continue = CONTINUE,
         used_continue = USED_CONTINUE,
         first_time = FIRST_TIME,
-        highscores = {}
+        highscores = {},
+        gamepad_mapping = {},
     }
     for i,k in ipairs(HIGHSCORES) do
         args.highscores[i] = k
+    end
+    for i,k in pairs(GAMEPAD_MAPPING) do
+        args.gamepad_mapping[i] = k
     end
 
     content = Tserial.pack(args) --Transform data into a string
