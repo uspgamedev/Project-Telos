@@ -115,7 +115,6 @@ function Circle_Button:update(dt)
             Util.findId(cur_selec_but.."_button").selected_by_joystick = false
         end
         Gamestate.setCurrentSelectedButton(string.sub(self.id, 1, -8))
-        self.selected_by_joystick = true
 
         --Increase ring size until max
         if b.ring_r < b.r then
@@ -123,7 +122,6 @@ function Circle_Button:update(dt)
             if b.ring_r > b.r then b.ring_r = b.r end
         end
     else
-        b.selected_by_joystick = false
         if b.ring_r > 0 then
             b.ring_r = b.ring_r - b.ring_growth_speed*speed_mod*dt
             if b.ring_r < 0 then b.ring_r = 0 end
