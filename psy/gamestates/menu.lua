@@ -346,6 +346,8 @@ function state:mousepressed(x, y, button)
 end
 
 function state:joystickpressed(joystick, button)
+  local opt_back = Util.findId("opt_go2main_button")
+  local high_back = Util.findId("high_go2main_button")
   if joystick == CURRENT_JOYSTICK then
     if GETTING_INPUT then
       if GETTING_INPUT == "button" then
@@ -357,6 +359,16 @@ function state:joystickpressed(joystick, button)
       if b and not b.lock and b.func then
         b:func()
         if b.sfx then b.sfx:play() end
+      end
+  elseif button == GAMEPAD_MAPPING.back then
+      if _current_menu_screen == "highscore_menu" and high_back and not high_back.lock then
+          _but_high_back()
+          setCurrentSelectedButton("main_go2highscore")
+          setCurrentMenuScreen("main_menu")
+      elseif _current_menu_screen == "options_menu" and opt_back and not opt_back.lock then
+          _but_opt_back()
+          setCurrentSelectedButton("main_go2options")
+          setCurrentMenuScreen("main_menu")
       end
     end
   end
