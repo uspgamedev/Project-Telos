@@ -99,10 +99,10 @@ function state:update(dt)
     --Move selected button based on joystick hat or axis input
     if USING_JOYSTICK and CURRENT_JOYSTICK then
       --First try to get hat input
-      joystick_direction = Util.getHatDirection(CURRENT_JOYSTICK:getHat(1))
+      joystick_direction = Controls.getHatDirection(CURRENT_JOYSTICK:getHat(1))
       if joystick_direction:len() == 0 then
         --If there isn't a hat input, tries to get an axis input
-        joystick_direction = Vector(Util.getJoystickAxisValues(CURRENT_JOYSTICK, GAMEPAD_MAPPING.laxis_horizontal, GAMEPAD_MAPPING.laxis_vertical)):normalized()
+        joystick_direction = Vector(Controls.getJoystickAxisValues(CURRENT_JOYSTICK, "laxis_horizontal", "laxis_vertical")):normalized()
       end
       if joystick_direction:len() == 0 then
         joystick_moved = false
@@ -211,9 +211,9 @@ function state:joystickpressed(joystick, button)
 
 
   if joystick == CURRENT_JOYSTICK then
-    if button == GAMEPAD_MAPPING.start or button == GAMEPAD_MAPPING.back then
+    if button == Controls.getCommand("start") or button == Controls.getCommand("back") then
       SWITCH = "GAME" --Return to game
-    elseif button == GAMEPAD_MAPPING.confirm then
+  elseif button == Controls.getCommand("confirm") then
       local b = Util.findId(_current_selected_button.."_button")
       if b and not b.lock then
         b:func()

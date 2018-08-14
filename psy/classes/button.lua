@@ -89,7 +89,7 @@ end
 function Circle_Button:update(dt)
     local b, x, y, mousepos
 
-    if GETTING_INPUT then return end
+    if Controls.isGettingInput() then return end
 
     b = self
 
@@ -298,17 +298,17 @@ function KeyBinding_Button:update(dt)
 
     b = self
 
-    if GETTING_INPUT then
-        if self.getting_input and INPUT_GOT then
-            self.current_key = INPUT_GOT
-            GAMEPAD_MAPPING[self.command_id] = INPUT_GOT
+    if self.getting_input then
+        local input = Controls.getPlayerInput()
+        if input then
+            self.current_key = input.value
+            Controls.setCommand(self.command_id, input)
             self.getting_input = false
-            INPUT_GOT = nil
-            GETTING_INPUT = false
-            return
-        else
-            return
+            Controls.setGettingInputFlag(false)
         end
+        return
+    elseif Controls.isGettingInput() then
+        return
     end
 
     --Fix mouse position click to respective distance
@@ -359,7 +359,7 @@ function KeyBinding_Button:draw()
     love.graphics.print(b.current_key, x, y)
 
     --Draw command name
-    local command = COMMAND_ID_NAME[b.command_id]
+    local command = Controls.getCommandName(b.command_id)
     local limit = 200
     local width, table = b.command_font:getWrap(command, limit)
     love.graphics.setFont(b.command_font)
@@ -373,13 +373,12 @@ end
 function KeyBinding_Button:func()
     if not self.getting_key then
         self.getting_input = true
-        GETTING_INPUT = self.input_type
-        INPUT_GOT = nil
+        Controls.setGettingInputFlag(self.input_type)
+        Controls.setPreviousAxis(CURRENT_JOYSTICK)
         if self.input_type == "button" then
             self.current_key = "pick button"
         else
             self.current_key = "pick axis"
-            PREVIOUS_AXIS = {CURRENT_JOYSTICK:getAxes()}
         end
     end
 end

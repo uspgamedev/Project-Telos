@@ -219,12 +219,12 @@ end
 
 function state:update(dt)
     --Move selected button based on joystick hat or axis input
-    if USING_JOYSTICK and CURRENT_JOYSTICK and not GETTING_INPUT then
+    if USING_JOYSTICK and CURRENT_JOYSTICK and not Controls.isGettingInput() then
       --First try to get hat input, if there is
-      _joystick_direction = Util.getHatDirection(CURRENT_JOYSTICK:getHat(1))
+      _joystick_direction = Controls.getHatDirection(CURRENT_JOYSTICK:getHat(1))
       if _joystick_direction:len() == 0 then
         --If there isn't a hat input, tries to get an axis input
-        _joystick_direction = Vector(Util.getJoystickAxisValues(CURRENT_JOYSTICK, GAMEPAD_MAPPING.laxis_horizontal, GAMEPAD_MAPPING.laxis_vertical)):normalized()
+        _joystick_direction = Vector(Controls.getJoystickAxisValues(CURRENT_JOYSTICK, "laxis_horizontal", "laxis_vertical")):normalized()
       end
       if _joystick_direction:len() == 0 then
         _joystick_moved = false
@@ -238,17 +238,6 @@ function state:update(dt)
         --Set joystick as moved so it doesn't move to several buttons at once
         _joystick_moved = true
       end
-    end
-    if CURRENT_JOYSTICK and GETTING_INPUT == "axis" and not INPUT_GOT then
-        local difference_needed = .5
-        for i = 1, CURRENT_JOYSTICK:getAxisCount() do
-            local v = CURRENT_JOYSTICK:getAxis(i)
-            if math.abs(v - PREVIOUS_AXIS[i])  >= difference_needed then
-                INPUT_GOT = i
-                _joystick_moved = true
-            end
-        end
-        return
     end
 
     Util.updateSubTp(dt, "gui")
@@ -338,7 +327,7 @@ function state:keypressed(key)
 end
 
 function state:mousepressed(x, y, button)
-    if GETTING_INPUT then return end
+    if Controls.isGettingInput() then return end
     if button == 1 then  --Left mouse button
         Button.checkCollision(x,y)
     end
@@ -346,33 +335,28 @@ function state:mousepressed(x, y, button)
 end
 
 function state:joystickpressed(joystick, button)
+  if Controls.isGettingInput() then return end
   local opt_back = Util.findId("opt_go2main_button")
   local high_back = Util.findId("high_go2main_button")
-  if joystick == CURRENT_JOYSTICK then
-    if GETTING_INPUT then
-      if GETTING_INPUT == "button" then
-          INPUT_GOT = button
-      end
-      return
-    elseif button == GAMEPAD_MAPPING.confirm then
+  if button == Controls.getCommand("confirm") then
       local b = Util.findId(_current_selected_button.."_button")
       if b and not b.lock and b.func then
         b:func()
         if b.sfx then b.sfx:play() end
       end
-  elseif button == GAMEPAD_MAPPING.back then
+  elseif button == Controls.getCommand("back") then
       if _current_menu_screen == "highscore_menu" and high_back and not high_back.lock then
+          if high_back.sfx then high_back.sfx:play() end
           _but_high_back()
           setCurrentSelectedButton("main_go2highscore")
           setCurrentMenuScreen("main_menu")
       elseif _current_menu_screen == "options_menu" and opt_back and not opt_back.lock then
+          if opt_back.sfx then opt_back.sfx:play() end
           _but_opt_back()
           setCurrentSelectedButton("main_go2options")
           setCurrentMenuScreen("main_menu")
       end
-    end
   end
-
 end
 
 --LOCAL FUNCTIONS--

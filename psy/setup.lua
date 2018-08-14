@@ -15,7 +15,7 @@ local setup = {}
 function setup.config()
     local args
     --LOAD/SAVE
-    SAVE_VERSION = 1.1 --Current save version
+    SAVE_VERSION = 1.2 --Current save version
     args = FM.load() --Load from savefile (or create one if needed)
 
     --RANDOM SEED--
@@ -39,25 +39,8 @@ function setup.config()
 
     USING_JOYSTICK = false --If player is using the joystick to control the game
     CURRENT_JOYSTICK = nil --Current joystick controlling psycho
-    JOYSTICK_DEADZONE = .3 --Percentage of dead zone on all sticks (value between [0,1])
     JOYSTICK_AUTO_SHOOT = true --If psycho shoots whenever it is aiming
-    GAMEPAD_MAPPING = args["gamepad_mapping"] --Mapping of generic joystick buttons
-    COMMAND_ID_NAME = { --Verbose name of each command id
-      start = "Start",
-      confirm = "Confirm",
-      back = "Back",
-      shoot = "Shoot",
-      ultrablast1 = "Ultrablast",
-      ultrablast2 = "Ultrablast (secondary)",
-      focus = "Focus",
-      laxis_horizontal = "Left Stick (horizontal axis)",
-      laxis_vertical = "Left Stick (vertical axis)",
-      raxis_horizontal = "Right Stick (horizontal axis)",
-      raxis_vertical = "Left Stick (vertical axis)",
-    }
-    GETTING_INPUT = false --If game is looking for input
-    INPUT_GOT = nil --Input game got
-    PREVIOUS_AXIS = nil --Previous values for all axis
+    Controls.setGamepadMapping(args["gamepad_mapping"]) --Mapping of generic joystick buttons
 
     TUTORIAL = false --If the game gamestate should play the tutorial
     DONT_ENABLE_SHOOTING_AFTER_DEATH = false --for tutorial only

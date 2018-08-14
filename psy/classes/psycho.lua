@@ -199,12 +199,12 @@ function Psy:update(dt)
         end
       end
     elseif CURRENT_JOYSTICK and
-           (JOYSTICK_AUTO_SHOOT or CURRENT_JOYSTICK:isDown(GAMEPAD_MAPPING.shoot)) and
-           (CURRENT_JOYSTICK:getAxis(GAMEPAD_MAPPING.raxis_horizontal) ~= 0 or CURRENT_JOYSTICK:getAxis(GAMEPAD_MAPPING.raxis_vertical) ~= 0)
+           (JOYSTICK_AUTO_SHOOT or Controls.isActive(CURRENT_JOYSTICK, "shoot")) and
+           (Controls.isActive(CURRENT_JOYSTICK, "raxis_horizontal") or Controls.isActive(CURRENT_JOYSTICK, "raxis_vertical"))
     then
       if p.shoot_tick <= 0 then
           p.shoot_tick = p.shoot_tick + p.shoot_fps
-          local v = Vector(Util.getJoystickAxisValues(CURRENT_JOYSTICK, GAMEPAD_MAPPING.raxis_horizontal, GAMEPAD_MAPPING.raxis_vertical)):normalized()
+          local v = Vector(Controls.getJoystickAxisValues(CURRENT_JOYSTICK, "raxis_horizontal", "raxis_vertical")):normalized()
           if v.x ~= 0 or v.y ~= 0 then --Check for deadzone case
             local x, y = p.pos.x + v.x, p.pos.y + v.y
             p:shoot(x, y)
@@ -298,11 +298,9 @@ function Psy:keypressed(key)
 end
 
 function Psy:keyreleased(key)
-
     if key == 'lshift' then
         self.focused = false
     end
-
 end
 
 function Psy:joystickaxis(joystick, axis, value)
@@ -310,20 +308,18 @@ function Psy:joystickaxis(joystick, axis, value)
 end
 
 function Psy:joystickpressed(joystick, button)
-
   --Use ultrablast (right or left trigger button by default)
-  if button == GAMEPAD_MAPPING.ultrablast1 or button == GAMEPAD_MAPPING.ultrablast2 then
+  if button == Controls.getCommand("ultrablast1") or button == Controls.getCommand("ultrablast2") then
     self:ultrablast(self.default_ultrablast_power)
   --Enter focus mode (left shoulder button by default)
-  elseif button == GAMEPAD_MAPPING.focus then
+  elseif button == Controls.getCommand("focus") then
     self.focused = true
   end
-
 end
 
 function Psy:joystickreleased(joystick, button)
 
-  if button == GAMEPAD_MAPPING.focus then
+  if button == Controls.getCommand("focus") then
     self.focused = false
   end
 
@@ -441,9 +437,9 @@ function psycho.updateSpeed(self)
     else
       if CURRENT_JOYSTICK then
         --Prioritize hat (if exists), if not use axis value
-        p.speed = Util.getHatDirection(CURRENT_JOYSTICK:getHat(1))
+        p.speed = Controls.getHatDirection(CURRENT_JOYSTICK:getHat(1))
         if p.speed.x == 0 and p.speed.y == 0 then --Hat == 'c'
-          p.speed.x, p.speed.y = Util.getJoystickAxisValues(CURRENT_JOYSTICK, GAMEPAD_MAPPING.laxis_horizontal, GAMEPAD_MAPPING.laxis_vertical)
+          p.speed.x, p.speed.y = Controls.getJoystickAxisValues(CURRENT_JOYSTICK, "laxis_horizontal", "laxis_vertical")
         end
       end
     end

@@ -13,19 +13,7 @@ local _default_savefile_args = {
         {name = "---", score = 0},
         {name = "---", score = 0}
     },
-    gamepad_mapping = { --Mapping of generic joystick buttons
-      start = 4,
-      confirm = 15,
-      back = 14,
-      shoot = 12,
-      ultrablast1 = 10,
-      ultrablast2 = 9,
-      focus = 11,
-      laxis_horizontal = 1,
-      laxis_vertical = 2,
-      raxis_horizontal = 3,
-      raxis_vertical = 4,
-    }
+    gamepad_mapping = Controls.getDefaultGamepadMapping()
 }
 
 --[[Load from the save files and return arguments. If not found save or metafiles, will create new ones.
@@ -65,6 +53,13 @@ function fm.load()
                 print("Metafile sucessfully removed")
             else
                 print("Couldn't erase metafile. Please erase metafile manually and restart the game")
+                os.exit()
+            end
+            sucess = love.filesystem.remove("savefile")
+            if sucess then
+                print("Savefile sucessfully removed")
+            else
+                print("Couldn't erase savefile. Please erase savefile manually and restart the game")
                 os.exit()
             end
 
@@ -148,7 +143,7 @@ function fm.save()
     for i,k in ipairs(HIGHSCORES) do
         args.highscores[i] = k
     end
-    for i,k in pairs(GAMEPAD_MAPPING) do
+    for i,k in pairs(Controls.getGamepadMapping()) do
         args.gamepad_mapping[i] = k
     end
 
