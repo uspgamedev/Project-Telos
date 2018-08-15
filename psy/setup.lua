@@ -172,6 +172,7 @@ function setup.config()
     GUI_MEDPLUSPLUS = love.graphics.newFont("assets/fonts/Nevis.ttf", 35)
     GUI_MEDPLUS = love.graphics.newFont("assets/fonts/Nevis.ttf", 30)
     GUI_MEDMED = love.graphics.newFont("assets/fonts/Nevis.ttf", 25)
+    GUI_MEDMEDLESS = love.graphics.newFont("assets/fonts/Nevis.ttf", 23)
     GUI_MED = love.graphics.newFont("assets/fonts/Nevis.ttf", 20)
     GUI_MEDLESS = love.graphics.newFont("assets/fonts/Nevis.ttf", 15)
 

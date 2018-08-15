@@ -167,7 +167,6 @@ function state:enter()
     -----------------------
 
     _options_menu_screen_buttons = {} --Reset available buttons for joystick
-    _options_mode = "controls"
 
     --Draw header
     Txt.create_gui(180 - ORIGINAL_WINDOW_WIDTH, 35, "OPTIONS", GUI_HIGHSCORE, nil, "format", nil, "options_title", "center", ORIGINAL_WINDOW_WIDTH/1.5, nil, "options_screen_texts")
@@ -176,7 +175,8 @@ function state:enter()
     --Create modes button
     func = function()
         if _options_mode ~= "controls" then
-         _but_options_controls(_options_menu_screen_buttons)
+         _options_mode = "controls"
+         _but_options_controls(_options_menu_screen_buttons, _current_menu_screen)
         end
     end
     b = Button.create_circle_gui(500 - ORIGINAL_WINDOW_WIDTH, 660, 70, func, "Gamepad", GUI_BIGLESSEST, "options_menu_buttons", "opt_controls_button")
@@ -194,7 +194,7 @@ function state:enter()
     table.insert(_options_menu_screen_buttons, "opt_go2main")
 
     --Initialize options screen with current mode
-    _but_options_controls(_options_menu_screen_buttons)
+    _options_mode = nil
 
     --AUDIO--
     Audio.playBGM(BGM.menu, nil, 3.5)

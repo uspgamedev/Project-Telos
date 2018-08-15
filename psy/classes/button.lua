@@ -269,7 +269,7 @@ end
 KeyBinding_Button = Class{
     __includes = {RECT, WTXT},
     init = function(self, _x, _y, _command_id, _current_key, _current_key_type)
-        local w, h = 170, 45
+        local w, h = 160, 45
 
         RECT.init(self, _x, _y, w, h, Color.transp(), "line") --Set atributes
 
@@ -278,7 +278,7 @@ KeyBinding_Button = Class{
         self.current_key_type = _current_key_type --Type of current key associated
 
         self.key_font = GUI_MED
-        self.command_font = GUI_MEDMED
+        self.command_font = GUI_MEDMEDLESS
 
         self.alpha_modifier = 1
 
