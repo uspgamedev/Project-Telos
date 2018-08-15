@@ -23,8 +23,8 @@ local function f(options_buttons)
         "raxis_vertical"
     }
     for i,command in ipairs(command_order) do
-        local key = Controls.getCommand(command)
-        Button.create_keybinding_gui(x - ORIGINAL_WINDOW_WIDTH, y, command, key, "options_menu_buttons", command.."_command_button")
+        local key, type = Controls.getCommand(command)
+        Button.create_keybinding_gui(x - ORIGINAL_WINDOW_WIDTH, y, command, key, type, "options_menu_buttons", command.."_command_button")
         table.insert(options_buttons, command.."_command")
         y = y + gap_y
         cont = cont + 1

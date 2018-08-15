@@ -268,13 +268,14 @@ end
 --[[Text button with an invisible box behind (for collision)]]
 KeyBinding_Button = Class{
     __includes = {RECT, WTXT},
-    init = function(self, _x, _y, _command_id, _current_key)
+    init = function(self, _x, _y, _command_id, _current_key, _current_key_type)
         local w, h = 170, 45
 
         RECT.init(self, _x, _y, w, h, Color.transp(), "line") --Set atributes
 
         self.command_id = _command_id --Command it can change
         self.current_key = _current_key --Current key associated with that command
+        self.current_key_type = _current_key_type --Type of current key associated
 
         self.key_font = GUI_MED
         self.command_font = GUI_MEDMED
@@ -282,7 +283,7 @@ KeyBinding_Button = Class{
         self.alpha_modifier = 1
 
         self.getting_input = false
-        self.input_type = (string.sub(_command_id, 2, 5) == "axis") and "axis" or  "button"
+        self.input_type_desired = (string.sub(_command_id, 2, 5) == "axis") and "axis" or  "button"
 
         self.selected_by_joystick = false
 
@@ -353,10 +354,11 @@ function KeyBinding_Button:draw()
     love.graphics.rectangle("line", b.pos.x , b.pos.y, b.w, b.h, 7)
 
     --Draw current key associated with command
+    local text = b.current_key_type..": "..b.current_key
     love.graphics.setFont(b.key_font)
-    local x = b.pos.x + b.w/2 - b.key_font:getWidth(b.current_key)/2
-    local y = b.pos.y + b.h/2 - b.key_font:getHeight(b.current_key)/2
-    love.graphics.print(b.current_key, x, y)
+    local x = b.pos.x + b.w/2 - b.key_font:getWidth(text)/2
+    local y = b.pos.y + b.h/2 - b.key_font:getHeight(text)/2
+    love.graphics.print(text, x, y)
 
     --Draw command name
     local command = Controls.getCommandName(b.command_id)
@@ -373,10 +375,10 @@ end
 function KeyBinding_Button:func()
     if not Controls.isGettingInput() and not self.getting_key and CURRENT_JOYSTICK then
         self.getting_input = true
-        Controls.setGettingInputFlag(self.input_type)
+        Controls.setGettingInputFlag(self.input_type_desired)
         Controls.setPreviousAxis(CURRENT_JOYSTICK)
         Controls.setPreviousButton(CURRENT_JOYSTICK)
-        if self.input_type == "button" then
+        if self.input_type_desired == "button" then
             self.current_key = "pick button"
         else
             self.current_key = "pick axis"
@@ -386,11 +388,11 @@ end
 
 --UTILITY FUNCTIONS--
 
-function button.create_keybinding_gui(x, y, command, current_key, st, id)
+function button.create_keybinding_gui(x, y, command, current_key, current_key_type, st, id)
     local b
 
     st = st or "gui"
-    b = KeyBinding_Button(x, y, command, current_key)
+    b = KeyBinding_Button(x, y, command, current_key, current_key_type)
     b:addElement(DRAW_TABLE.GUI, st, id)
 
     return b
