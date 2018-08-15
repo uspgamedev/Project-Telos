@@ -34,14 +34,15 @@ local function f(options_buttons, current_menu_screen)
         "raxis_vertical"
     }
     local command_image = {
-        "normal", "normal", "normal", "normal", "normal",
-        "normal", "normal", "normal", "normal", "normal",
+        "normal", "normal", "rightbumper", "lefttrigger", "righttrigger",
+        "leftbumper", "normal", "normal", "normal", "normal",
         "normal"
     }
     for i,command in ipairs(command_order) do
         local key, type = Controls.getCommand(command)
         local image = IMG["controller_"..command_image[i]]
-        Button.create_keybinding_gui(x - offset, y, command, key, type, image, "options_menu_buttons", command.."_command_button")
+        local image_empty = IMG["controller_"..command_image[i].."_empty"]
+        Button.create_keybinding_gui(x - offset, y, command, key, type, image, image_empty, "options_menu_buttons", command.."_command_button")
         table.insert(options_buttons, command.."_command")
         y = y + gap_y
     end

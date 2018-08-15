@@ -144,6 +144,18 @@ function setup.config()
       right_mouse_button_icon = love.graphics.newImage("assets/images/right_mouse_button.png"),
       shift_icon = love.graphics.newImage("assets/images/shift_icon.png"),
       controller_normal = love.graphics.newImage("assets/images/controller_normal.png"),
+      controller_rightbumper = love.graphics.newImage("assets/images/controller_rightbumper.png"),
+      controller_rightbumper_empty = love.graphics.newImage("assets/images/controller_rightbumper_empty.png"),
+      controller_leftbumper = love.graphics.newImage("assets/images/controller_leftbumper.png"),
+      controller_leftbumper_empty = love.graphics.newImage("assets/images/controller_leftbumper_empty.png"),
+      controller_righttrigger = love.graphics.newImage("assets/images/controller_righttrigger.png"),
+      controller_righttrigger_empty = love.graphics.newImage("assets/images/controller_righttrigger_empty.png"),
+      controller_lefttrigger = love.graphics.newImage("assets/images/controller_lefttrigger.png"),
+      controller_lefttrigger_empty = love.graphics.newImage("assets/images/controller_lefttrigger_empty.png"),
+      controller_rightstick = love.graphics.newImage("assets/images/controller_rightstick.png"),
+      controller_rightstick_empty = love.graphics.newImage("assets/images/controller_rightstick_empty.png"),
+      controller_leftstick = love.graphics.newImage("assets/images/controller_leftstick.png"),
+      controller_leftstick_empty = love.graphics.newImage("assets/images/controller_leftstick_empty.png"),
     }
 
     print("Finished setting up images")

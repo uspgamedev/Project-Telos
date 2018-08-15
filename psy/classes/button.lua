@@ -268,7 +268,7 @@ end
 --[[Text button with an invisible box behind (for collision)]]
 KeyBinding_Button = Class{
     __includes = {RECT, WTXT},
-    init = function(self, _x, _y, _command_id, _current_key, _current_key_type, _recommended_image)
+    init = function(self, _x, _y, _command_id, _current_key, _current_key_type, _recommended_image, _recommended_image_empty)
         local w, h = 160, 38
 
         RECT.init(self, _x, _y, w, h, Color.transp(), "line") --Set atributes
@@ -282,10 +282,11 @@ KeyBinding_Button = Class{
 
         --Recommended image for input
         self.recommended_image = _recommended_image
+        self.recommended_image_empty = _recommended_image_empty
         self.rec_x = 500
         self.rec_y = 350
         self.rec_scale = .7
-        self.rec_alpha_speed = 600 --Speed to increase alpha
+        self.rec_alpha_speed = 650 --Speed to increase alpha
         self.rec_alpha = 0 --Alpha value of image for cool effect
         self.rec_max_alpha = 255
         self.rec_offset_speed = 400 --Speed to increase offset
@@ -403,10 +404,14 @@ function KeyBinding_Button:draw()
     if b.rec_alpha > 0 then
         local color = Color.black()
         Color.copy(color, UI_COLOR.color)
-        color.h = (color.h + 127)%255
         color.a = b.rec_alpha
         Color.set(color)
         love.graphics.draw(b.recommended_image, b.rec_x, b.rec_y - b.rec_offset, nil, b.rec_scale)
+        if b.recommended_image_empty then
+            color.h = (color.h + 127)%255
+            Color.set(color)
+            love.graphics.draw(b.recommended_image_empty, b.rec_x, b.rec_y - b.rec_offset, nil, b.rec_scale)
+        end
     end
 end
 
@@ -427,11 +432,11 @@ end
 
 --UTILITY FUNCTIONS--
 
-function button.create_keybinding_gui(x, y, command, current_key, current_key_type, rec_img, st, id)
+function button.create_keybinding_gui(x, y, command, current_key, current_key_type, rec_img, rec_empty, st, id)
     local b
 
     st = st or "gui"
-    b = KeyBinding_Button(x, y, command, current_key, current_key_type, rec_img)
+    b = KeyBinding_Button(x, y, command, current_key, current_key_type, rec_img, rec_empty)
     b:addElement(DRAW_TABLE.GUI, st, id)
 
     return b
