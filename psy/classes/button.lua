@@ -371,7 +371,7 @@ end
 
 --Activate keybinding button
 function KeyBinding_Button:func()
-    if not self.getting_key then
+    if not Controls.isGettingInput() and not self.getting_key and CURRENT_JOYSTICK then
         self.getting_input = true
         Controls.setGettingInputFlag(self.input_type)
         Controls.setPreviousAxis(CURRENT_JOYSTICK)

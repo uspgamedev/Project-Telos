@@ -130,7 +130,10 @@ end
 --PLAYER INPUT FUNCTIONS--
 
 function func.setPreviousAxis(joystick)
-    _previous_axis = joystick:getAxes()
+    _previous_axis = {}
+    for i = 1, joystick:getAxisCount() do
+        _previous_axis[i] = joystick:getAxis(i)
+    end
 end
 
 function func.setGettingInputFlag(value)
