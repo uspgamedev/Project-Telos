@@ -375,6 +375,7 @@ function KeyBinding_Button:func()
         self.getting_input = true
         Controls.setGettingInputFlag(self.input_type)
         Controls.setPreviousAxis(CURRENT_JOYSTICK)
+        Controls.setPreviousButton(CURRENT_JOYSTICK)
         if self.input_type == "button" then
             self.current_key = "pick button"
         else

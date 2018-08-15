@@ -36,6 +36,7 @@ local _gamepad_mapping = {} --Current gamepad mapping
 local _joystick_deadzone = .3 --Percentage of dead zone on all sticks (value between [0,1])
 local _getting_input = false --If game is looking for input
 local _previous_axis = nil --Previous values for all axis
+local _previous_button = nil --Previous values for all joystick buttons
 
 --Functions--
 
@@ -129,12 +130,22 @@ end
 
 --PLAYER INPUT FUNCTIONS--
 
+--Set previous state of axis
 function func.setPreviousAxis(joystick)
     _previous_axis = {}
     for i = 1, joystick:getAxisCount() do
         _previous_axis[i] = joystick:getAxis(i)
     end
 end
+
+--Set previous state of buttons
+function func.setPreviousButton(joystick)
+    _previous_button = {}
+    for i = 1, joystick:getButtonCount() do
+        _previous_button[i] = joystick:isDown(i)
+    end
+end
+
 
 function func.setGettingInputFlag(value)
     _getting_input = value
@@ -153,7 +164,12 @@ function func.getPlayerInput()
     if _getting_input ~= "axis" then
         for i = 1, CURRENT_JOYSTICK:getButtonCount() do
             if CURRENT_JOYSTICK:isDown(i) then
-                return {type = "button", value = i}
+                --Check for repeating input
+                if not _previous_button[i] then
+                    return {type = "button", value = i}
+                end
+            else
+                _previous_button[i] = false
             end
         end
     end
