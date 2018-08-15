@@ -143,6 +143,7 @@ function setup.config()
       left_mouse_button_icon = love.graphics.newImage("assets/images/left_mouse_button.png"),
       right_mouse_button_icon = love.graphics.newImage("assets/images/right_mouse_button.png"),
       shift_icon = love.graphics.newImage("assets/images/shift_icon.png"),
+      controller_normal = love.graphics.newImage("assets/images/controller_normal.png"),
     }
 
     print("Finished setting up images")
@@ -155,6 +156,7 @@ function setup.config()
     GUI_LOGO = love.graphics.newFont("assets/fonts/Nevis.ttf", 100)
     GUI_LEVEL_TITLE = love.graphics.newFont("assets/fonts/Nevis.ttf", 90)
     GUI_HIGHSCORE = love.graphics.newFont("assets/fonts/Nevis.ttf", 85)
+    GUI_CONTROLS = love.graphics.newFont("assets/fonts/Nevis.ttf", 55)
     GUI_LIFE_COUNTER = love.graphics.newFont("assets/fonts/Nevis.ttf", 40)
     GUI_SCORE_COUNTER = love.graphics.newFont("assets/fonts/Nevis.ttf", 50)
     GUI_LIFE_COUNTER_X = love.graphics.newFont("assets/fonts/Nevis.ttf", 35)

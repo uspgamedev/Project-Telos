@@ -26,27 +26,26 @@ local function f(options_buttons, current_menu_screen)
     if current_menu_screen == "main_menu" then
         offset = ORIGINAL_WINDOW_WIDTH
     end
-    local x, original_y, gap_y, gap_x = 170, 170, 70, 370
-    local y = original_y
+    local x, y, gap_y = 230, 100, 55, 370
     local cont = 1
     local command_order = {
         "confirm", "back", "shoot", "ultrablast1", "ultrablast2",
         "focus", "start", "laxis_horizontal", "laxis_vertical", "raxis_horizontal",
         "raxis_vertical"
     }
+    local command_image = {
+        "normal", "normal", "normal", "normal", "normal",
+        "normal", "normal", "normal", "normal", "normal",
+        "normal"
+    }
     for i,command in ipairs(command_order) do
         local key, type = Controls.getCommand(command)
-        Button.create_keybinding_gui(x - offset, y, command, key, type, "options_menu_buttons", command.."_command_button")
+        local image = IMG["controller_"..command_image[i]]
+        Button.create_keybinding_gui(x - offset, y, command, key, type, image, "options_menu_buttons", command.."_command_button")
         table.insert(options_buttons, command.."_command")
         y = y + gap_y
-        cont = cont + 1
-        if cont > math.ceil(Util.tableLen(Controls.getGamepadMapping())/2) then
-            cont = 1
-            y = original_y
-            x = x + gap_x
-        end
     end
     --Create recomended text
-    Txt.create_gui(780 - offset, 180, "recommended", GUI_MED, nil, nil, nil, "controls_recommended", nil, nil, nil, "options_screen_normal_texts")
+    Txt.create_gui(480 - offset, 200, "Recommended:", GUI_MEDMED, nil, nil, nil, "controls_recommended", nil, nil, nil, "options_screen_normal_texts")
 end
 return f

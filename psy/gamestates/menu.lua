@@ -169,8 +169,8 @@ function state:enter()
     _options_menu_screen_buttons = {} --Reset available buttons for joystick
 
     --Draw header
-    Txt.create_gui(180 - ORIGINAL_WINDOW_WIDTH, 35, "OPTIONS", GUI_HIGHSCORE, nil, "format", nil, "options_title", "center", ORIGINAL_WINDOW_WIDTH/1.5, nil, "options_screen_texts")
-    Txt.create_gui(180 - ORIGINAL_WINDOW_WIDTH, 45, "_______", GUI_HIGHSCORE, nil, "format", nil, "options_title_underscore", "center", ORIGINAL_WINDOW_WIDTH/1.5, nil, "options_screen_texts")
+    Txt.create_gui(180 - ORIGINAL_WINDOW_WIDTH, 20, "OPTIONS", GUI_CONTROLS, nil, "format", nil, "options_title", "center", ORIGINAL_WINDOW_WIDTH/1.5, nil, "options_screen_texts")
+    Txt.create_gui(180 - ORIGINAL_WINDOW_WIDTH, 30, "_______", GUI_CONTROLS, nil, "format", nil, "options_title_underscore", "center", ORIGINAL_WINDOW_WIDTH/1.5, nil, "options_screen_texts")
 
     --Create modes button
     func = function()
@@ -179,7 +179,7 @@ function state:enter()
          _but_options_controls(_options_menu_screen_buttons, _current_menu_screen)
         end
     end
-    b = Button.create_circle_gui(500 - ORIGINAL_WINDOW_WIDTH, 660, 70, func, "Gamepad", GUI_BIGLESSEST, "options_menu_buttons", "opt_controls_button")
+    b = Button.create_circle_gui(750 - ORIGINAL_WINDOW_WIDTH, 650, 70, func, "Gamepad", GUI_BIGLESSEST, "options_menu_buttons", "opt_controls_button")
     b.sfx = SFX.generic_button
     table.insert(_options_menu_screen_buttons, "opt_controls")
 

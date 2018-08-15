@@ -268,8 +268,8 @@ end
 --[[Text button with an invisible box behind (for collision)]]
 KeyBinding_Button = Class{
     __includes = {RECT, WTXT},
-    init = function(self, _x, _y, _command_id, _current_key, _current_key_type)
-        local w, h = 160, 45
+    init = function(self, _x, _y, _command_id, _current_key, _current_key_type, _recommended_image)
+        local w, h = 160, 38
 
         RECT.init(self, _x, _y, w, h, Color.transp(), "line") --Set atributes
 
@@ -279,6 +279,23 @@ KeyBinding_Button = Class{
 
         self.key_font = GUI_MED
         self.command_font = GUI_MEDMEDLESS
+
+        --Recommended image for input
+        self.recommended_image = _recommended_image
+        self.rec_x = 500
+        self.rec_y = 350
+        self.rec_scale = .7
+        self.rec_alpha_speed = 600 --Speed to increase alpha
+        self.rec_alpha = 0 --Alpha value of image for cool effect
+        self.rec_max_alpha = 255
+        self.rec_offset_speed = 400 --Speed to increase offset
+        self.rec_offset = 0 --Vertical offset value of image for cool effect
+        self.rec_max_offset = 100
+
+        --Recommended text
+        self.rec_t_x = 500
+        self.rec_t_y = 200
+        self.rec_t_font = GUI_MED
 
         self.alpha_modifier = 1
 
@@ -337,6 +354,8 @@ end
 --Draws a given key binding button
 function KeyBinding_Button:draw()
     local b, x, w, y
+    local draw_recommended = false
+
 
     b = self
 
@@ -347,6 +366,7 @@ function KeyBinding_Button:draw()
         color.h = (color.h + 127)%255
         Color.set(color)
         love.graphics.setLineWidth(4)
+        draw_recommended = true
     else
         Color.set(UI_COLOR.color)
         love.graphics.setLineWidth(4)
@@ -369,6 +389,25 @@ function KeyBinding_Button:draw()
     local y = b.pos.y + b.h/2 - b.command_font:getHeight(command)*#table/2
     love.graphics.printf(command, x, y, math.min(width, limit), "right")
 
+    --Draw recommended image
+    local dt = love.timer.getDelta()
+    if draw_recommended then
+        --Update alpha and offset values
+        b.rec_alpha = math.min(b.rec_alpha+b.rec_alpha_speed*dt, b.rec_max_alpha)
+        b.rec_offset = math.min(b.rec_offset+b.rec_offset_speed*dt, b.rec_max_offset)
+    else
+        --Decrease alpha and offet values
+        b.rec_alpha = math.max(b.rec_alpha-b.rec_alpha_speed*dt, 0)
+        b.rec_offset = math.max(b.rec_offset-b.rec_offset_speed*dt, 0)
+    end
+    if b.rec_alpha > 0 then
+        local color = Color.black()
+        Color.copy(color, UI_COLOR.color)
+        color.h = (color.h + 127)%255
+        color.a = b.rec_alpha
+        Color.set(color)
+        love.graphics.draw(b.recommended_image, b.rec_x, b.rec_y - b.rec_offset, nil, b.rec_scale)
+    end
 end
 
 --Activate keybinding button
@@ -388,11 +427,11 @@ end
 
 --UTILITY FUNCTIONS--
 
-function button.create_keybinding_gui(x, y, command, current_key, current_key_type, st, id)
+function button.create_keybinding_gui(x, y, command, current_key, current_key_type, rec_img, st, id)
     local b
 
     st = st or "gui"
-    b = KeyBinding_Button(x, y, command, current_key, current_key_type)
+    b = KeyBinding_Button(x, y, command, current_key, current_key_type, rec_img)
     b:addElement(DRAW_TABLE.GUI, st, id)
 
     return b
