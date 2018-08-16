@@ -73,6 +73,9 @@ Psy = Class{
         self.default_ultrablast_number = 1 --How many ultrablasts psycho by default has in every life
         self.ultrablast_counter = self.default_ultrablast_number--How many ultrablasts psycho has
         self.default_ultrablast_power = 50 --Ultrablast power when using right mouse button
+        --Variables used to control repetition of same input triggering several ultrablasts
+        self.ultra1_active = false
+        self.ultra2_active = false
 
         self.invincible = false --If psycho can't collide with enemies
         self.invincible_handles = {} --Handles for psycho invencibility timers
@@ -169,6 +172,35 @@ function Psy:update(dt)
     local p
 
     p = self
+
+    --Check for joystick input
+    if CURRENT_JOYSTICK then
+        --Enter or leave focus mode (left shoulder button by default)
+        if Controls.isActive(CURRENT_JOYSTICK,"focus") then
+            self.focused = true
+        else
+            self.focused = false
+        end
+
+        --Activate ultrablast (right or left trigger button by default)
+        --Checks for repetition of command press
+        if Controls.isActive(CURRENT_JOYSTICK,"ultrablast1") then
+            if not p.ultra1_active then
+                self:ultrablast(self.default_ultrablast_power)
+            end
+            p.ultra1_active = true
+        else
+            p.ultra1_active = false
+        end
+        if Controls.isActive(CURRENT_JOYSTICK,"ultrablast2") then
+            if not p.ultra2_active then
+                self:ultrablast(self.default_ultrablast_power)
+            end
+            p.ultra2_active = true
+        else
+            p.ultra2_active = false
+        end
+    end
 
     --Update psycho radius
     if p.focused and p.r > p.collision_r + 2 then
@@ -308,20 +340,10 @@ function Psy:joystickaxis(joystick, axis, value)
 end
 
 function Psy:joystickpressed(joystick, button)
-  --Use ultrablast (right or left trigger button by default)
-  if button == Controls.getCommand("ultrablast1") or button == Controls.getCommand("ultrablast2") then
-    self:ultrablast(self.default_ultrablast_power)
-  --Enter focus mode (left shoulder button by default)
-  elseif button == Controls.getCommand("focus") then
-    self.focused = true
-  end
+
 end
 
 function Psy:joystickreleased(joystick, button)
-
-  if button == Controls.getCommand("focus") then
-    self.focused = false
-  end
 
 end
 

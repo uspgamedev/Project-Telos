@@ -107,7 +107,7 @@ end
 function func.isActive(joystick, command_id)
     local command = _gamepad_mapping[command_id]
     if command.type == "button" then
-        return love.joystickpressed(joystick, command.value)
+        return joystick:isDown(command.value)
     elseif command.type == "axis" then
         local direction = joystick:getAxis(command.value)
         return (math.abs(direction) > _joystick_deadzone)
