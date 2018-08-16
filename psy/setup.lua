@@ -152,10 +152,20 @@ function setup.config()
       controller_righttrigger_empty = love.graphics.newImage("assets/images/controller_righttrigger_empty.png"),
       controller_lefttrigger = love.graphics.newImage("assets/images/controller_lefttrigger.png"),
       controller_lefttrigger_empty = love.graphics.newImage("assets/images/controller_lefttrigger_empty.png"),
+      controller_rightstickvertical = love.graphics.newImage("assets/images/controller_rightstickvertical.png"),
+      controller_rightstickhorizontal = love.graphics.newImage("assets/images/controller_rightstickhorizontal.png"),
       controller_rightstick = love.graphics.newImage("assets/images/controller_rightstick.png"),
       controller_rightstick_empty = love.graphics.newImage("assets/images/controller_rightstick_empty.png"),
+      controller_leftstickvertical = love.graphics.newImage("assets/images/controller_leftstickvertical.png"),
+      controller_leftstickhorizontal = love.graphics.newImage("assets/images/controller_leftstickhorizontal.png"),
       controller_leftstick = love.graphics.newImage("assets/images/controller_leftstick.png"),
       controller_leftstick_empty = love.graphics.newImage("assets/images/controller_leftstick_empty.png"),
+      controller_start = love.graphics.newImage("assets/images/controller_start.png"),
+      controller_start_empty = love.graphics.newImage("assets/images/controller_start_empty.png"),
+      controller_confirm = love.graphics.newImage("assets/images/controller_confirm.png"),
+      controller_confirm_empty = love.graphics.newImage("assets/images/controller_confirm_empty.png"),
+      controller_back = love.graphics.newImage("assets/images/controller_back.png"),
+      controller_back_empty = love.graphics.newImage("assets/images/controller_back_empty.png"),
     }
 
     print("Finished setting up images")
@@ -213,7 +223,7 @@ function setup.config()
     --AUDIO--
     print("Setting up audio...")
 
-    BGM_VOLUME_LEVEL = 1 --Volume of BGM
+    BGM_VOLUME_LEVEL = 0 --Volume of BGM
     SFX_VOLUME_MULT = 1 --Volume multiplier for SFX
     --Tracks
     BGM = {
