@@ -375,7 +375,12 @@ function KeyBinding_Button:draw()
     love.graphics.rectangle("line", b.pos.x , b.pos.y, b.w, b.h, 7)
 
     --Draw current key associated with command
-    local text = b.current_key_type..": "..b.current_key
+    local text
+    if b.current_key ~= "pick button" and b.current_key ~= "pick axis" then
+        text = b.current_key_type..": "..b.current_key
+    else
+        text = b.current_key
+    end
     love.graphics.setFont(b.key_font)
     local x = b.pos.x + b.w/2 - b.key_font:getWidth(text)/2
     local y = b.pos.y + b.h/2 - b.key_font:getHeight(text)/2
