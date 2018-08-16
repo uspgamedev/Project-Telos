@@ -321,6 +321,7 @@ function KeyBinding_Button:update(dt)
         local input = Controls.getPlayerInput()
         if input then
             self.current_key = input.value
+            self.current_key_type = input.type
             Controls.setCommand(self.command_id, input)
             self.getting_input = false
             Controls.setGettingInputFlag(false)
