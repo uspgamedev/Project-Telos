@@ -23,9 +23,7 @@ local _gameover_buttons_lock
 
 --LOCAL FUNCTION DECLARATIONS--
 local chooseDeathMessage
-local changeSelectedButton
 local getValidButtons
-local getCurrentSelectedButton
 local createRegularGameoverButtons
 
 --------------------
@@ -129,7 +127,7 @@ function state:update(dt)
         if not _joystick_moved then
           local b = Util.findId(_current_selected_button.."_button")
           if b and b.alpha_modifier >= .3 then
-            changeSelectedButton(_joystick_direction)
+            state:changeSelectedButton(_joystick_direction)
           end
         end
         --Set joystick as moved so it doesn't move to several buttons at once
@@ -263,7 +261,7 @@ function chooseDeathMessage(t)
     return message
 end
 
-function changeSelectedButton(dir)
+function state:changeSelectedButton(dir)
 
   if _current_selected_button then
     local valid_buttons
@@ -328,8 +326,17 @@ function getValidButtons(direction, available_buttons_table)
 
 end
 
-function getCurrentSelectedButton()
+function state:getCurrentSelectedButton()
   return _current_selected_button
+end
+
+function state:setCurrentSelectedButton(but)
+  if _current_selected_button then
+      Util.findId(_current_selected_button.."_button").selected_by_joystick = false
+  end
+  _current_selected_button = but
+  local b = Util.findId(but.."_button")
+  b.selected_by_joystick = true
 end
 
 function createRegularGameoverButtons(mode)

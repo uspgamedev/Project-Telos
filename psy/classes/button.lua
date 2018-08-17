@@ -114,6 +114,7 @@ function Circle_Button:update(dt)
         if cur_selec_but then
             Util.findId(cur_selec_but.."_button").selected_by_joystick = false
         end
+        
         Gamestate.setCurrentSelectedButton(string.sub(self.id, 1, -8))
 
         --Increase ring size until max
@@ -320,6 +321,7 @@ function KeyBinding_Button:update(dt)
     if self.getting_input then
         local input = Controls.getPlayerInput()
         if input then
+            Gamestate.joystickMoved()
             self.current_key = input.value
             self.current_key_type = input.type
             Controls.setCommand(self.command_id, input)

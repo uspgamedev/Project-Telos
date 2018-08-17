@@ -246,11 +246,10 @@ function state:joystickreleased(joystick, button)
 
 end
 
--------------------
---LOCAL FUNCTIONS--
--------------------
-
-local function getCurrentSelectedButton()
+function state:getCurrentSelectedButton()
+    return
+end
+function state:setCurrentSelectedButton(but)
   return
 end
 

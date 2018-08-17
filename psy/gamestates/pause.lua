@@ -17,7 +17,6 @@ local joystick_direction
 --LOCAL FUNCTION DECLARATION--
 local getValidButtons
 local changeCurrentSelectedButton
-local getCurrentSelectedButton
 
 --------------------
 
@@ -294,8 +293,17 @@ function getValidButtons(direction, available_buttons_table)
 
 end
 
-function getCurrentSelectedButton()
+function state:getCurrentSelectedButton()
   return _current_selected_button
+end
+
+function state:setCurrentSelectedButton(but)
+  if _current_selected_button then
+      Util.findId(_current_selected_button.."_button").selected_by_joystick = false
+  end
+  _current_selected_button = but
+  local b = Util.findId(but.."_button")
+  b.selected_by_joystick = true
 end
 
 --Return state functions

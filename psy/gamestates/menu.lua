@@ -30,8 +30,6 @@ local _but_options_controls = require "buttons.options_controls_button"
 
 local changeSelectedButton
 local getValidButtons
-local getCurrentSelectedButton
-local setCurrentSelectedButton
 local setCurrentMenuScreen
 
 --------------------
@@ -99,7 +97,7 @@ function state:enter()
     b.alpha_modifier = 0
     b.lock = true
     b.selected_by_joystick = true --Mark as default selected button
-    setCurrentSelectedButton("main_play")
+    state:setCurrentSelectedButton("main_play")
     table.insert(_main_menu_screen_buttons, "main_play")
 
     if not FIRST_TIME then
@@ -116,7 +114,7 @@ function state:enter()
         --"Go to Highscore Menu Screen" button
         func = function()
              _but_high()
-             setCurrentSelectedButton("high_go2main")
+             state:setCurrentSelectedButton("high_go2main")
              setCurrentMenuScreen("highscore_menu")
         end
         b = Button.create_circle_gui(880, 650, 90, func, "Highscores", GUI_BIGLESSLESS, "main_menu_buttons", "main_go2highscore_button")
@@ -130,7 +128,7 @@ function state:enter()
     --"Go to Options Menu Screen" button
     func = function()
          _but_opt()
-         setCurrentSelectedButton("opt_go2main")
+         state:setCurrentSelectedButton("opt_go2main")
          setCurrentMenuScreen("options_menu")
     end
     b = Button.create_circle_gui(ORIGINAL_WINDOW_WIDTH - 880, 650, 90, func, "Options", GUI_BIGLESSLESS, "main_menu_buttons", "main_go2options_button")
@@ -155,7 +153,7 @@ function state:enter()
     --"Go to Main Menu Screen" button
     func = function()
          _but_high_back()
-         setCurrentSelectedButton("main_go2highscore")
+         state:setCurrentSelectedButton("main_go2highscore")
          setCurrentMenuScreen("main_menu")
     end
     b = Button.create_circle_gui(ORIGINAL_WINDOW_WIDTH + 110, 650, 55, func, "Back", GUI_BIGLESSLESS, "highscore_menu_buttons", "high_go2main_button")
@@ -186,7 +184,7 @@ function state:enter()
     --"Go to Main Menu Screen" button
     func = function()
          _but_opt_back()
-         setCurrentSelectedButton("main_go2options")
+         state:setCurrentSelectedButton("main_go2options")
          setCurrentMenuScreen("main_menu")
     end
     b = Button.create_circle_gui(880 - ORIGINAL_WINDOW_WIDTH, 650, 55, func, "Back", GUI_BIGLESSLESS, "options_menu_buttons", "opt_go2main_button")
@@ -348,12 +346,12 @@ function state:joystickpressed(joystick, button)
       if _current_menu_screen == "highscore_menu" and high_back and not high_back.lock then
           if high_back.sfx then high_back.sfx:play() end
           _but_high_back()
-          setCurrentSelectedButton("main_go2highscore")
+          state:setCurrentSelectedButton("main_go2highscore")
           setCurrentMenuScreen("main_menu")
       elseif _current_menu_screen == "options_menu" and opt_back and not opt_back.lock then
           if opt_back.sfx then opt_back.sfx:play() end
           _but_opt_back()
-          setCurrentSelectedButton("main_go2options")
+          state:setCurrentSelectedButton("main_go2options")
           setCurrentMenuScreen("main_menu")
       end
   end
@@ -428,11 +426,11 @@ function getValidButtons(direction, available_buttons_table)
 
 end
 
-function getCurrentSelectedButton()
+function state:getCurrentSelectedButton()
   return _current_selected_button
 end
 
-function setCurrentSelectedButton(but)
+function state:setCurrentSelectedButton(but, oi)
   if _current_selected_button then
       Util.findId(_current_selected_button.."_button").selected_by_joystick = false
   end
@@ -443,6 +441,10 @@ end
 
 function setCurrentMenuScreen(scr)
   _current_menu_screen = scr
+end
+
+function state.joystickMoved()
+  _joystick_moved = true
 end
 
 --Return state functions
