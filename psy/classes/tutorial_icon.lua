@@ -7,6 +7,8 @@ local Util = require "util"
 
 local funcs = {}
 
+local _controller_scale = .45 --Scaling for controller images
+
 ---------------------------
 --TUTORIAL ICON CLASS--
 ---------------------------
@@ -17,6 +19,12 @@ local funcs = {}
   --"shift": Creates a shift key
   --"left_mouse_button": Creates a mouse icon with left button highlighted
   --"right_mouse_button": Creates a mouse icon with right button highlighted
+  --"left_stick": Creates a gamepad icon with left stick highlighted
+  --"right_stick": Creates a gamepad icon with right stick highlighted
+  --"left_trigger": Creates a gamepad icon with left trigger highlighted
+  --"right_trigger": Creates a gamepad icon with right trigger highlighted
+  --"left_bumper": Creates a gamepad icon with left bumper highlighted
+  --"right_bumper": Creates a gamepad icon with right bumper highlighted
   --Other text: Creates a keyboard key with given type as text
 TutorialIcon = Class{
     __includes = {ELEMENT},
@@ -137,6 +145,7 @@ function TutorialIcon:draw()
 
     --Draw left mouse button icon
     color.a = color.a + 20
+    color.h = (color.h + 127)%256
     Color.set(color)
     love.graphics.draw(IMG.left_mouse_button_icon, s.pos.x, s.pos.y)
   elseif self.type == "right_mouse_button" then
@@ -145,8 +154,63 @@ function TutorialIcon:draw()
 
     --Draw right mouse button icon
     color.a = color.a + 20
+    color.h = (color.h + 127)%256
     Color.set(color)
     love.graphics.draw(IMG.right_mouse_button_icon, s.pos.x, s.pos.y)
+  elseif self.type == "left_stick" then
+    --Draw gamepad outline
+    love.graphics.draw(IMG.controller_leftstick_empty, s.pos.x, s.pos.y, nil, _controller_scale)
+
+    --Draw left stick
+    color.a = color.a + 20
+    color.h = (color.h + 127)%256
+    Color.set(color)
+    love.graphics.draw(IMG.controller_leftstick, s.pos.x, s.pos.y, nil, _controller_scale)
+  elseif self.type == "right_stick" then
+    --Draw gamepad outline
+    love.graphics.draw(IMG.controller_rightstick_empty, s.pos.x, s.pos.y, nil, _controller_scale)
+
+    --Draw right stick
+    color.a = color.a + 20
+    color.h = (color.h + 127)%256
+    Color.set(color)
+    love.graphics.draw(IMG.controller_rightstick, s.pos.x, s.pos.y, nil, _controller_scale)
+  elseif self.type == "left_trigger" then
+    --Draw gamepad outline
+    love.graphics.draw(IMG.controller_lefttrigger_empty, s.pos.x, s.pos.y, nil, _controller_scale)
+
+    --Draw left trigger
+    color.a = color.a + 20
+    color.h = (color.h + 127)%256
+    Color.set(color)
+    love.graphics.draw(IMG.controller_lefttrigger, s.pos.x, s.pos.y, nil, _controller_scale)
+  elseif self.type == "right_trigger" then
+    --Draw gamepad outline
+    love.graphics.draw(IMG.controller_righttrigger_empty, s.pos.x, s.pos.y, nil, _controller_scale)
+
+    --Draw right trigger
+    color.a = color.a + 20
+    color.h = (color.h + 127)%256
+    Color.set(color)
+    love.graphics.draw(IMG.controller_righttrigger, s.pos.x, s.pos.y, nil, _controller_scale)
+  elseif self.type == "left_bumper" then
+    --Draw gamepad outline
+    love.graphics.draw(IMG.controller_leftbumper_empty, s.pos.x, s.pos.y, nil, _controller_scale)
+
+    --Draw left bumper
+    color.a = color.a + 20
+    color.h = (color.h + 127)%256
+    Color.set(color)
+    love.graphics.draw(IMG.controller_leftbumper, s.pos.x, s.pos.y, nil, _controller_scale)
+elseif self.type == "right_bumper" then
+    --Draw gamepad outline
+    love.graphics.draw(IMG.controller_rightbumper_empty, s.pos.x, s.pos.y, nil, _controller_scale)
+
+    --Draw right bumper
+    color.a = color.a + 20
+    color.h = (color.h + 127)%256
+    Color.set(color)
+    love.graphics.draw(IMG.controller_rightbumper, s.pos.x, s.pos.y, nil, _controller_scale)
   else
     --Draw keyboard-key outer outline
     local x, y, w, h = s.pos.x, s.pos.y, s.w, s.h
@@ -217,6 +281,24 @@ function funcs.dimensions(type)
     return IMG.mouse_icon:getDimensions()
   elseif type == "right_mouse_button" then
     return IMG.mouse_icon:getDimensions()
+  elseif type == "left_stick" then
+    local w, h = IMG.controller_leftstick:getDimensions()
+    return w*_controller_scale, h*_controller_scale
+  elseif type == "right_stick" then
+    local w, h = IMG.controller_rightstick:getDimensions()
+    return w*_controller_scale, h*_controller_scale
+  elseif type == "left_trigger" then
+    local w, h = IMG.controller_lefttrigger:getDimensions()
+    return w*_controller_scale, h*_controller_scale
+  elseif type == "right_trigger" then
+    local w, h = IMG.controller_righttrigger:getDimensions()
+    return w*_controller_scale, h*_controller_scale
+  elseif type == "left_bumper" then
+    local w, h = IMG.controller_leftbumper:getDimensions()
+    return w*_controller_scale, h*_controller_scale
+  elseif type == "right_bumper" then
+    local w, h = IMG.controller_rightbumper:getDimensions()
+    return w*_controller_scale, h*_controller_scale
   else
     return 50, 50
   end

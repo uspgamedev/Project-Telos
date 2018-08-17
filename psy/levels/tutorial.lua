@@ -55,12 +55,18 @@ function level_functions.part_1()
     LM.wait(1.5)
 
     --Create tutorial icons for moving
-    local w, h = TutIcon.dimensions("letter")
-    local gap = 15
-    TutIcon.create(p.pos.x - w/2, p.pos.y - p.r - gap - h, 'W', 4.2, true)
-    TutIcon.create(p.pos.x + p.r + gap, p.pos.y - h/2, 'D', 4.2, true)
-    TutIcon.create(p.pos.x - w/2, p.pos.y + p.r + gap, 'S', 4.2, true)
-    TutIcon.create(p.pos.x - p.r - gap - w, p.pos.y - h/2, 'A', 4.2, true)
+    if not USING_JOYSTICK then
+        local w, h = TutIcon.dimensions("letter")
+        local gap = 15
+        TutIcon.create(p.pos.x - w/2, p.pos.y - p.r - gap - h, 'W', 4.2, true)
+        TutIcon.create(p.pos.x + p.r + gap, p.pos.y - h/2, 'D', 4.2, true)
+        TutIcon.create(p.pos.x - w/2, p.pos.y + p.r + gap, 'S', 4.2, true)
+        TutIcon.create(p.pos.x - p.r - gap - w, p.pos.y - h/2, 'A', 4.2, true)
+    else
+        local w, h = TutIcon.dimensions("left_stick")
+        local gap = 30
+        TutIcon.create(p.pos.x - w/2, p.pos.y - p.r - h - gap, 'left_stick', 4.2, true)
+    end
     LM.wait(.6)
     p.can_move = true
     DONT_ENABLE_MOVING_AFTER_DEATH = false
@@ -83,14 +89,26 @@ function level_functions.part_1()
     LM.wait(3.2)
 
     --Create tutorial icons for ultrablast
-    local w, h = TutIcon.dimensions("space")
-    local x, y = ORIGINAL_WINDOW_WIDTH/2 - w/2, ORIGINAL_WINDOW_HEIGHT/3 - 20
-    TutIcon.create(x, y, 'space', 6)
-    x, y = x + w/2 - 10, y + h + 20
-    LM.text(x, y, "or", 6, 180)
-    w, h = TutIcon.dimensions("right_mouse_button")
-    x, y = x - w/2 + 8, y + 35
-    TutIcon.create(x, y, 'right_mouse_button', 6)
+    local w, h, x, y
+    if not USING_JOYSTICK then
+        w, h = TutIcon.dimensions("space")
+        x, y = ORIGINAL_WINDOW_WIDTH/2 - w/2, ORIGINAL_WINDOW_HEIGHT/3 - 20
+        TutIcon.create(x, y, 'space', 6)
+        x, y = x + w/2 - 10, y + h + 20
+        LM.text(x, y, "or", 6, 180)
+        w, h = TutIcon.dimensions("right_mouse_button")
+        x, y = x - w/2 + 8, y + 35
+        TutIcon.create(x, y, 'right_mouse_button', 6)
+    else
+        w, h = TutIcon.dimensions("left_trigger")
+        x, y = ORIGINAL_WINDOW_WIDTH/2 - w/2, ORIGINAL_WINDOW_HEIGHT/5 - 20
+        TutIcon.create(x, y, 'left_trigger', 6)
+        x, y = x + w/2 - 10, y + h + 20
+        LM.text(x, y, "or", 6, 180)
+        w, h = TutIcon.dimensions("right_trigger")
+        x, y = x - w/2 + 8, y + 35
+        TutIcon.create(x, y, 'right_trigger', 6)
+    end
     local font = GUI_MED
     local text = "for"
     x = ORIGINAL_WINDOW_WIDTH/2 - font:getWidth(text)/2
@@ -107,15 +125,27 @@ function level_functions.part_1()
     F.circle{enemy = {SB}, number = 18, radius = 630, speed_m = 1, score_mul = 0, ind_duration = 2, ind_side = 35}
 
     LM.wait("noenemies")
-    LM.wait(2)
+    LM.wait(3)
 
     --Fade-in psycho aim and tutorial for shooting
     p.can_shoot = true
     DONT_ENABLE_SHOOTING_AFTER_DEATH = false
     LEVEL_TIMER:tween(.3, p.aim, {alpha = 90}, 'in-linear')
-    local w, h = TutIcon.dimensions("left_mouse_button")
-    local x, y = ORIGINAL_WINDOW_WIDTH/2 - w/2, ORIGINAL_WINDOW_HEIGHT/2 - h/2
-    TutIcon.create(x, y, 'left_mouse_button', 6.5)
+    local w, h, x, y
+    if not USING_JOYSTICK then
+        w, h = TutIcon.dimensions("left_mouse_button")
+        x, y = ORIGINAL_WINDOW_WIDTH/2 - w/2, ORIGINAL_WINDOW_HEIGHT/2 - h/2
+        TutIcon.create(x, y, 'left_mouse_button', 6.5)
+    else
+        w, h = TutIcon.dimensions("right_stick")
+        x, y = ORIGINAL_WINDOW_WIDTH/2 - w, ORIGINAL_WINDOW_HEIGHT/2 - h/2
+        TutIcon.create(x, y, 'right_stick', 6.5)
+        x, y = x + w + 20, y + h/2 - 10
+        LM.text(x, y, "+", 6, 180)
+        w, h = TutIcon.dimensions("right_bumper")
+        x, y = x + 35, y - h/2 + 10
+        TutIcon.create(x, y, 'right_bumper', 6.5)
+    end
 
     LM.wait(3)
     F.fromHorizontal{side = "right", mode = "center", number = 7, enemy = {SB}, ind_duration = 3.5, ind_side = 35, speed_m = 1.1, enemy_y_margin = 55, enemy_x_margin = 55, e_radius = 23}

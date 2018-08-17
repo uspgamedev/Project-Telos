@@ -692,11 +692,20 @@ function level_functions.part_3()
         if i == (size-7) then
             local text = "hold"
             local font = GUI_MED
-            local w, h = TutIcon.dimensions("shift")
+            local w, h
+            if not USING_JOYSTICK then
+                w, h = TutIcon.dimensions("shift")
+            else
+                w, h = TutIcon.dimensions("left_bumper")
+            end
             local x = ORIGINAL_WINDOW_WIDTH/2 - font:getWidth(text)/2
             local y = ORIGINAL_WINDOW_HEIGHT/2 - h/2 - font:getHeight(text) - 25
             LM.text(x, y, text, 8, 210, font)
-            TutIcon.create(ORIGINAL_WINDOW_WIDTH/2 - w/2, ORIGINAL_WINDOW_HEIGHT/2 - h/2 - 20, 'shift', 8)
+            if not USING_JOYSTICK then
+                TutIcon.create(ORIGINAL_WINDOW_WIDTH/2 - w/2, ORIGINAL_WINDOW_HEIGHT/2 - h/2 - 20, 'shift', 8)
+            else
+                TutIcon.create(ORIGINAL_WINDOW_WIDTH/2 - w/2, ORIGINAL_WINDOW_HEIGHT/2 - h/2 - 20, 'left_bumper', 8)
+            end
             text = "to enter"
             x = ORIGINAL_WINDOW_WIDTH/2 - font:getWidth(text)/2
             y = ORIGINAL_WINDOW_HEIGHT/2 + h/2 - 10
