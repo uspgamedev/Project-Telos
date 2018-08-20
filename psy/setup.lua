@@ -39,7 +39,7 @@ function setup.config()
 
     USING_JOYSTICK = false --If player is using the joystick to control the game
     CURRENT_JOYSTICK = nil --Current joystick controlling psycho
-    JOYSTICK_AUTO_SHOOT = false --If psycho shoots whenever it is aiming
+    JOYSTICK_AUTO_SHOOT = args["auto_shoot"] --If psycho shoots whenever it is aiming
     Controls.setGamepadMapping(args["gamepad_mapping"]) --Mapping of generic joystick buttons
 
     TUTORIAL = false --If the game gamestate should play the tutorial

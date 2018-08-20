@@ -6,6 +6,7 @@ local _default_savefile_args = {
     continue = false,  --Continue status
     used_continue = false, --If player used a continue in the current run
     first_time = true, --Make player play the tutorial the first time
+    auto_shoot = false, --If psycho autoshoots when using gamepad
     highscores = {     --Reset highscores with default values
         {name = "---", score = 0},
         {name = "---", score = 0},
@@ -137,6 +138,7 @@ function fm.save()
         continue = CONTINUE,
         used_continue = USED_CONTINUE,
         first_time = FIRST_TIME,
+        auto_shoot = JOYSTICK_AUTO_SHOOT,
         highscores = {},
         gamepad_mapping = {},
     }
