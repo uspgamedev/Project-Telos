@@ -285,14 +285,14 @@ KeyBinding_Button = Class{
         self.recommended_image = _recommended_image
         self.recommended_image_empty = _recommended_image_empty
         self.rec_x = 500
-        self.rec_y = 320
+        self.rec_y = 180
         self.rec_scale = .7
         self.rec_alpha_speed = 650 --Speed to increase alpha
         self.rec_alpha = 0 --Alpha value of image for cool effect
         self.rec_max_alpha = 255
-        self.rec_offset_speed = 390 --Speed to increase offset
+        self.rec_offset_speed = 220 --Speed to increase offset
         self.rec_offset = 0 --Vertical offset value of image for cool effect
-        self.rec_max_offset = 80
+        self.rec_max_offset = 45
 
         --Recommended text
         self.rec_t_x = 500
@@ -413,11 +413,13 @@ function KeyBinding_Button:draw()
         color.a = b.rec_alpha
         Color.set(color)
         love.graphics.draw(b.recommended_image, b.rec_x, b.rec_y - b.rec_offset, nil, b.rec_scale)
+        color.h = (color.h + 127)%255
+        Color.set(color)
         if b.recommended_image_empty then
-            color.h = (color.h + 127)%255
-            Color.set(color)
             love.graphics.draw(b.recommended_image_empty, b.rec_x, b.rec_y - b.rec_offset, nil, b.rec_scale)
         end
+        love.graphics.setFont(GUI_MEDMED)
+        love.graphics.print("Recommended:", b.rec_x, b.rec_y - 80)
     end
 end
 

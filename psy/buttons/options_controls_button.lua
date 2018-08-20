@@ -53,11 +53,9 @@ local function f(options_buttons, current_menu_screen)
         table.insert(options_buttons, command.."_command")
         y = y + gap_y
     end
-    --Create recomended text
-    Txt.create_gui(480 - offset, 200, "Recommended:", GUI_MEDMED, nil, nil, nil, "controls_recommended", nil, nil, nil, "options_screen_normal_texts")
 
     --Create autoshoot toggle button
-    Button.create_toggle_gui(480 - offset, 150, "Auto Shoot",
+    Button.create_toggle_gui(500 - offset, 450, "Auto Shoot",
         function()
             JOYSTICK_AUTO_SHOOT = not JOYSTICK_AUTO_SHOOT
         end,
