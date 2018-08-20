@@ -114,7 +114,7 @@ function Circle_Button:update(dt)
         if cur_selec_but then
             Util.findId(cur_selec_but.."_button").selected_by_joystick = false
         end
-        
+
         Gamestate.setCurrentSelectedButton(string.sub(self.id, 1, -8))
 
         --Increase ring size until max
@@ -266,7 +266,7 @@ end
 --KEY BINDING BUTTON--
 ----------------------
 
---[[Text button with an invisible box behind (for collision)]]
+--[[Button to help bind inputs to game commands]]
 KeyBinding_Button = Class{
     __includes = {RECT, WTXT},
     init = function(self, _x, _y, _command_id, _current_key, _current_key_type, _recommended_image, _recommended_image_empty)
@@ -285,14 +285,14 @@ KeyBinding_Button = Class{
         self.recommended_image = _recommended_image
         self.recommended_image_empty = _recommended_image_empty
         self.rec_x = 500
-        self.rec_y = 350
+        self.rec_y = 320
         self.rec_scale = .7
         self.rec_alpha_speed = 650 --Speed to increase alpha
         self.rec_alpha = 0 --Alpha value of image for cool effect
         self.rec_max_alpha = 255
-        self.rec_offset_speed = 400 --Speed to increase offset
+        self.rec_offset_speed = 390 --Speed to increase offset
         self.rec_offset = 0 --Vertical offset value of image for cool effect
-        self.rec_max_offset = 100
+        self.rec_max_offset = 80
 
         --Recommended text
         self.rec_t_x = 500
@@ -360,21 +360,19 @@ function KeyBinding_Button:draw()
     local b, x, w, y
     local draw_recommended = false
 
-
     b = self
 
-    --Draws button box
+    --Choose color and draw button box
     if (not USING_JOYSTICK and b.isOver) or (USING_JOYSTICK and b.selected_by_joystick) or self.getting_input then
         local color = Color.black()
         Color.copy(color, UI_COLOR.color)
         color.h = (color.h + 127)%255
         Color.set(color)
-        love.graphics.setLineWidth(4)
         draw_recommended = true
     else
         Color.set(UI_COLOR.color)
-        love.graphics.setLineWidth(4)
     end
+    love.graphics.setLineWidth(4)
     love.graphics.rectangle("line", b.pos.x , b.pos.y, b.w, b.h, 7)
 
     --Draw current key associated with command
@@ -450,6 +448,125 @@ function button.create_keybinding_gui(x, y, command, current_key, current_key_ty
     return b
 end
 
+-----------------
+--TOGGLE BUTTON--
+-----------------
+
+--[[Button that toggles something]]
+Toggle_Button = Class{
+    __includes = {RECT, WTXT},
+    init = function(self, _x, _y, _name, _toggle_func, _status_func, _help_text)
+
+
+        self.name = _name --Name displayed next to the button
+        self.help_text = _help_text --Optional explanatory text of button
+
+
+        self.toggle_func = _toggle_func --Function to be called when button is pressed
+        self.status_func = _status_func --Function that returns current button status (bool value)
+
+        self.name_font = GUI_MEDMED
+        self.help_text_font = GUI_MEDLESS
+
+        self.status = self.status_func() --If button is "on" or "off"
+
+        self.gap = 10 --Horizontal gap between name and toggle circle
+        self.ring_circle_width = 4 --Radius of toggle circle
+        self.ring_circle_r = 18 --Radius of toggle circle
+        self.inner_circle_r = 0 --Total radius inner circle has
+        self.circle_speed = 100 --Speed to increase or decrease inner circle radius
+        self.max_inner_circle_r = self.ring_circle_r - 8 --Max radius inner circle can have
+        local w, h = self.name_font:getWidth(_name)+self.gap+2*self.ring_circle_r, self.name_font:getHeight(_name)
+        RECT.init(self, _x, _y, w, h, Color.transp(), "line") --Set atributes
+
+        self.alpha_modifier = 1
+
+        self.selected_by_joystick = false
+        self.isOver = false --If mouse is over the button
+        self.lock = false --If this button can't be activated
+
+        self.tp = "togglebutton" --Type of this class
+    end
+}
+
+function Toggle_Button:update(dt)
+    local b, x, y, mousepos
+
+    b = self
+
+    --Fix mouse position click to respective distance
+    x, y = love.mouse.getPosition()
+    w, h = FreeRes.windowDistance()
+    scale = FreeRes.scale()
+    x = x - w
+    x = x*(1/scale)
+    y = y - h
+    y = y*(1/scale)
+
+    --If mouse is colliding with button, then create over_effect
+    if not USING_JOYSTICK and
+       x >= b.pos.x and
+       x <= b.pos.x + b.w and
+       y >= b.pos.y and
+       y <= b.pos.y + b.h then
+           b.isOver = true
+   else
+       b.isOver = false
+   end
+
+   if b.status then
+       b.inner_circle_r = math.min(b.inner_circle_r + dt*b.circle_speed, b.max_inner_circle_r)
+   else
+       b.inner_circle_r = math.max(b.inner_circle_r - dt*b.circle_speed, 0)
+   end
+end
+
+function Toggle_Button:draw()
+    local b, x, w, y
+
+    b = self
+
+    --Choose color
+    local color = Color.black()
+    Color.copy(color, UI_COLOR.color)
+    if (not USING_JOYSTICK and b.isOver) or (USING_JOYSTICK and b.selected_by_joystick) then
+        color.h = (color.h + 127)%255
+    end
+    Color.set(color)
+
+    --Draw button name
+    love.graphics.setFont(b.name_font)
+    love.graphics.print(b.name, b.pos.x , b.pos.y)
+
+    --Draw toggle circle
+    local circle_pos = Vector(self.pos.x+self.name_font:getWidth(self.name)+self.gap+self.ring_circle_r,
+                              self.pos.y+self.name_font:getHeight(self.name)/2)
+    Draw_Smooth_Ring(circle_pos.x, circle_pos.y, b.ring_circle_r, b.ring_circle_r - b.ring_circle_width)
+    if b.inner_circle_r > 0 then
+        Draw_Smooth_Circle(circle_pos.x, circle_pos.y, b.inner_circle_r)
+    end
+
+end
+
+--Activate keybinding button
+function Toggle_Button:func()
+    self.toggle_func()
+    self.status = self.status_func()
+end
+
+--UTILITY FUNCTIONS--
+
+function button.create_toggle_gui(x, y, name, toggle_func, status_func, help_text, st, id)
+    local b
+
+    st = st or "gui"
+    b = Toggle_Button(x, y, name, toggle_func, status_func, help_text)
+    b:addElement(DRAW_TABLE.GUI, st, id)
+
+    return b
+end
+
+
 ---------------------
 --COLLISION FUNCTIONS
 ---------------------
@@ -471,6 +588,8 @@ function button.checkCollision(x,y)
     checkInvButtonCollision(x,y)
 
     checkKeyBindingButtonCollision(x,y)
+
+    checkToggleButtonCollision(x,y)
 
 end
 
@@ -548,14 +667,39 @@ function checkKeyBindingButtonCollision(x,y)
               and
               y >= b.pos.y then
                 b:func()
-                --play SFX
+                if b.sfx then b.sfx:play() end
+                return
+            end
+        end
+    end
+end
+
+--Check if a mouse click collides with any toggle button
+function checkToggleButtonCollision(x,y)
+
+    if BUTTON_LOCK then return end --If buttons are locked, does nothing
+    --Iterate on drawable buttons table
+    for _,t in pairs(DRAW_TABLE) do
+        for b in pairs(t) do
+            if  b.tp == "togglebutton"
+              and
+              not b.lock
+              and
+              x  <= b.pos.x + b.w
+              and
+              x >= b.pos.x
+              and
+              y  <= b.pos.y + b.h
+              and
+              y >= b.pos.y then
+                b:func()
+                if b.sfx then b.sfx:play() end
                 return
             end
         end
     end
 
 end
-
 
 --Return functions
 return button

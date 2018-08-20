@@ -55,5 +55,17 @@ local function f(options_buttons, current_menu_screen)
     end
     --Create recomended text
     Txt.create_gui(480 - offset, 200, "Recommended:", GUI_MEDMED, nil, nil, nil, "controls_recommended", nil, nil, nil, "options_screen_normal_texts")
+
+    --Create autoshoot toggle button
+    Button.create_toggle_gui(480 - offset, 150, "Auto Shoot",
+        function()
+            JOYSTICK_AUTO_SHOOT = not JOYSTICK_AUTO_SHOOT
+        end,
+        function()
+            return JOYSTICK_AUTO_SHOOT
+        end,
+        nil, "options_menu_buttons", "autoshoot_toggle"
+    )
+
 end
 return f

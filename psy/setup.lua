@@ -378,7 +378,8 @@ function setup.config()
   for size = 36, 49 do
       SMOOTH_CIRCLE_TABLE[size] = love.graphics.newShader(Smooth_Circle_Shader:format(size))
   end
-  SMOOTH_CIRCLE_TABLE[6] = love.graphics.newShader(Smooth_Circle_Shader:format(10))
+
+  SMOOTH_CIRCLE_TABLE[6] = love.graphics.newShader(Smooth_Circle_Shader:format(6))
   SMOOTH_CIRCLE_TABLE[10] = love.graphics.newShader(Smooth_Circle_Shader:format(10))
   SMOOTH_CIRCLE_TABLE[12] = love.graphics.newShader(Smooth_Circle_Shader:format(12))
   SMOOTH_CIRCLE_TABLE[24] = love.graphics.newShader(Smooth_Circle_Shader:format(24))
@@ -393,6 +394,7 @@ function setup.config()
   for i_r =1, 16 do
       SMOOTH_RING_TABLE["38-"..i_r] = love.graphics.newShader(Smooth_Ring_Shader:format(38,i_r))
   end
+  SMOOTH_RING_TABLE["36-14"] = love.graphics.newShader(Smooth_Ring_Shader:format(36,14))
 
   print("Finished setting up shaders")
 
