@@ -64,8 +64,9 @@ local function f(options_buttons, current_menu_screen)
         function()
             return JOYSTICK_AUTO_SHOOT
         end,
-        nil, "options_menu_buttons", "autoshoot_toggle"
+        nil, "options_menu_buttons", "autoshoot_button"
     )
+    table.insert(options_buttons, "autoshoot")
 
 end
 return f
