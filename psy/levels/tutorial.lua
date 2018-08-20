@@ -125,7 +125,16 @@ function level_functions.part_1()
     F.circle{enemy = {SB}, number = 18, radius = 630, speed_m = 1, score_mul = 0, ind_duration = 2, ind_side = 35}
 
     LM.wait("noenemies")
-    LM.wait(3)
+    LM.wait(2)
+
+    --Explain ultrablast makes you invincible
+    font = GUI_MEDPLUS
+    text = "using ULTRABLAST makes you briefly invunerable"
+    x = ORIGINAL_WINDOW_WIDTH/2 - font:getWidth(text)/2
+    y = ORIGINAL_WINDOW_HEIGHT/2 - font:getHeight(text)/2
+    LM.text(x, y, text, 4, 230, font)
+
+    LM.wait(6)
 
     --Fade-in psycho aim and tutorial for shooting
     p.can_shoot = true
@@ -156,11 +165,17 @@ function level_functions.part_1()
     counter.level_handles["become_visible"] = LEVEL_TIMER:tween(1, counter, {alpha = 255}, 'in-linear')
 
     LM.wait("noenemies")
-    LM.wait(3.2)
+    LM.wait(1.5)
 
-    LM.text(ORIGINAL_WINDOW_WIDTH/2 - 50, ORIGINAL_WINDOW_HEIGHT/2, "good luck", 6, 170)
+    --Explain ultrablast makes you invincible
+    font = GUI_MEDPLUS
+    text = "shooting depletes your ULTRABLAST charge bar"
+    x = ORIGINAL_WINDOW_WIDTH/2 - font:getWidth(text)/2
+    y = ORIGINAL_WINDOW_HEIGHT/2 - font:getHeight(text)/2
+    LM.text(x, y, text, 4, 230, font)
 
-    LM.wait(2)
+    LM.wait(6)
+
     --Reset psycho stats
     LM.giveScore(-p.score, "reset")
     p.life_score = 0
@@ -175,6 +190,10 @@ function level_functions.part_1()
     --Turn level part visible
     txt = Util.findId("level_part")
     txt.level_handles["become_visible"] = LEVEL_TIMER:tween(1, txt, {alpha = 255}, 'in-linear')
+
+    LM.wait(1.5)
+
+    LM.text(ORIGINAL_WINDOW_WIDTH/2 - 50, ORIGINAL_WINDOW_HEIGHT/2, "good luck", 3, 170)
 
     LM.wait(4)
 
