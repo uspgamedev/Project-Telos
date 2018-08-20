@@ -572,7 +572,6 @@ function util.defaultKeyPressed(key)
     if  key == 'f1' then
       util.quit()
     elseif key == "f2" then
-      JOYSTICK_AUTO_SHOOT = not JOYSTICK_AUTO_SHOOT
       print("JOYSTICK_AUTO_SHOOT is ",JOYSTICK_AUTO_SHOOT)
     elseif key == "f3" then
       HS.reset()
