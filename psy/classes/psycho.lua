@@ -174,7 +174,7 @@ function Psy:update(dt)
     p = self
 
     --Check for joystick input
-    if CURRENT_JOYSTICK then
+    if USING_JOYSTICK and CURRENT_JOYSTICK then
         --Enter or leave focus mode (left shoulder button by default)
         if Controls.isActive(CURRENT_JOYSTICK,"focus") then
             self.focused = true
