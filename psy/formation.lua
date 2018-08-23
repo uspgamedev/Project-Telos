@@ -790,7 +790,7 @@ function formation.line(a)
 end
 
 --[[
-Create a single turrt enemy starting in a (x,y) position, moving to a target position, spawn a given enemy, then leaving after duration
+Create a single turret enemy starting in a (x,y) position, moving to a target position, spawn a given enemy, then leaving after duration
 
 Arguments
 
@@ -857,6 +857,37 @@ function formation.turret(a)
     end
 
 end
+
+--[[
+Create a single cage starting in a (x,y) position, reducing radius to target radius
+Returns the enemy to call subsequent methods
+
+Arguments
+
+x: central x position of cage
+y: central y position of cage
+radius: target radius to tween-to
+speed_radius: optional speed to tween radius
+]]
+function formation.cage(a)
+    local p, l_pos, l_r, l_speed_r
+
+    --Default values
+    p = Psycho.get()
+    a.x = a.x or ORIGINAL_WINDOW_WIDTH/2
+    a.y = a.y or ORIGINAL_WINDOW_HEIGHT/2
+    a.radius = a.radius or 200
+    a.speed_radius = a.speed_radius or 200
+
+    --Setting local variables
+    l_pos = Vector(a.x, a.y)
+    l_r = a.radius
+    l_speed_r = a.speed_radius
+
+    --Just create the enemy
+    return Cge.create(l_pos.x, l_pos.y, l_r, l_speed_r)
+end
+
 
 --Return functions
 return formation

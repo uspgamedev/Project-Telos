@@ -105,6 +105,7 @@ function state:update(dt)
 
     Util.updateSubTp(m_dt, "player_bullet")
     Util.updateSubTp(m_dt, "enemies")
+    Util.updateSubTp(m_dt, "cages")
     Util.updateSubTp(m_dt, "bosses")
     Util.updateSubTp(m_dt, "decaying_particle")
     Util.updateSubTp(dt, "psycho_explosion") --Are not affected by slowmo

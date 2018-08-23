@@ -193,6 +193,10 @@ function util.gameElementException(mode)
         util.addExceptionSubtype("enemies")
     end
 
+    if util.findSbTp("cages") then
+        util.addExceptionSubtype("cages")
+    end
+
     if util.findSbTp("bosses") then
         util.addExceptionSubtype("bosses")
     end

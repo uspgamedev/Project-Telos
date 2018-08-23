@@ -343,7 +343,7 @@ function Draw_Smooth_Circle(x, y, r)
         x = x - r
         y = y - r
 
-        size = math.ceil(2*r)
+        local size = math.ceil(2*r)
         --Create smooth circle shader if it hasn't been yet
         if not SMOOTH_CIRCLE_TABLE[size] then
             print("creating circle shader for size ".. size)
@@ -368,7 +368,7 @@ function Draw_Smooth_Ring(x, y, r, i_r)
         x = x - r
         y = y - r
 
-        size = math.ceil(2*r)
+        local size = math.ceil(2*r)
         i_r = math.ceil(i_r)
         --Create smooth circle shader if it hasn't been yet
         if not SMOOTH_RING_TABLE[size..'-'..i_r] then

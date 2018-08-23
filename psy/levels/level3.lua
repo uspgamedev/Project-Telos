@@ -15,13 +15,9 @@ function level_functions.part_1()
 
     LM.level_part("-- to be continued --")
 
-    LM.wait(3)
+    LM.wait(1)
 
-    p = Util.findId("psycho")
-    if p then
-        p.lives = 1
-        p:kill()
-    end
+    F.cage{radius = 100}
 
     LM.stop()
 
