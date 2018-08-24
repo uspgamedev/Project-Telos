@@ -33,20 +33,20 @@ function level_functions.part_1()
         F.fromHorizontal{enemy = {DB}, side = "left", mode = "top" , number = 7, ind_mode = false, ind_mode = false, speed_m = 1.5}
         if i == 9 then
             INDICATOR_DEFAULT = .5
-            F.line{enemy = {DB}, x = ORIGINAL_WINDOW_WIDTH/2, y =  -20, dy = 1, number = 170, speed_m = 1.5, ind_side = 35}
-            F.line{enemy = {DB}, x = - 20, y = ORIGINAL_WINDOW_HEIGHT/2, dx = 1, number = 38, speed_m = 1.5, ind_side = 35}
+            F.line{enemy = {DB}, x = WINDOW_WIDTH/2, y =  -20, dy = 1, number = 170, speed_m = 1.5, ind_side = 35}
+            F.line{enemy = {DB}, x = - 20, y = WINDOW_HEIGHT/2, dx = 1, number = 38, speed_m = 1.5, ind_side = 35}
         end
     end
 
     INDICATOR_DEFAULT = 1.5
     LM.wait(5.85)
     --Make traverse easy
-    F.line{enemy = {SB}, x = - 20, y = ORIGINAL_WINDOW_HEIGHT/2, dx = 1, number = 38, ind_mode = false, speed_m = 1.5, enemy_margin = 70}
+    F.line{enemy = {SB}, x = - 20, y = WINDOW_HEIGHT/2, dx = 1, number = 38, ind_mode = false, speed_m = 1.5, enemy_margin = 70}
     LM.wait(2)
 
     --Choose mode based on psycho position
     local chosen_mode
-    if p and p.pos.y < ORIGINAL_WINDOW_HEIGHT/2 then
+    if p and p.pos.y < WINDOW_HEIGHT/2 then
         chosen_mode = "top"
     else
         chosen_mode = "bottom"
@@ -55,7 +55,7 @@ function level_functions.part_1()
     F.fromHorizontal{enemy = {DB}, side = "right", mode = chosen_mode , number = 7, ind_duration = 5.1, ind_side = 40, speed_m = 1.5}
     LM.wait(4.55)
     --Make traverse difficult
-    F.line{enemy = {DB}, x = - 20, y = ORIGINAL_WINDOW_HEIGHT/2, dx = 1, number = 40, speed_m = 1.5, ind_mode = false}
+    F.line{enemy = {DB}, x = - 20, y = WINDOW_HEIGHT/2, dx = 1, number = 40, speed_m = 1.5, ind_mode = false}
     LM.wait(.55)
     for i = 1,5 do
         LM.wait(.3)
@@ -64,11 +64,11 @@ function level_functions.part_1()
 
     LM.wait(3.9)
     --Make traverse easy
-    F.line{enemy = {SB}, x = - 20, y = ORIGINAL_WINDOW_HEIGHT/2, dx = 1, number = 20, ind_mode = false, speed_m = 1.5, enemy_margin = 70}
+    F.line{enemy = {SB}, x = - 20, y = WINDOW_HEIGHT/2, dx = 1, number = 20, ind_mode = false, speed_m = 1.5, enemy_margin = 70}
     LM.wait(1)
 
     --Choose mode based on psycho position
-    if p and p.pos.y < ORIGINAL_WINDOW_HEIGHT/2 then
+    if p and p.pos.y < WINDOW_HEIGHT/2 then
         chosen_mode = "top"
     else
         chosen_mode = "bottom"
@@ -77,7 +77,7 @@ function level_functions.part_1()
     F.fromHorizontal{enemy = {DB}, side = "left", mode = chosen_mode , number = 7, ind_duration = 2.5, ind_side = 40, speed_m = 1.5}
     LM.wait(2.45)
     --Make traverse difficult
-    F.line{enemy = {DB}, x = - 20, y = ORIGINAL_WINDOW_HEIGHT/2, dx = 1, number = 88, speed_m = 1.5, ind_mode = false}
+    F.line{enemy = {DB}, x = - 20, y = WINDOW_HEIGHT/2, dx = 1, number = 88, speed_m = 1.5, ind_mode = false}
     LM.wait(.2)
     for i = 1,5 do
         LM.wait(.3)
@@ -87,18 +87,18 @@ function level_functions.part_1()
 
     LM.wait(1.9)
     --Make traverse easy
-    F.line{enemy = {SB}, x = ORIGINAL_WINDOW_WIDTH/2, y =  -20, dy = 1, number = 16, speed_m = 1.5, ind_mode = false}
+    F.line{enemy = {SB}, x = WINDOW_WIDTH/2, y =  -20, dy = 1, number = 16, speed_m = 1.5, ind_mode = false}
     LM.wait(.85)
 
     --Choose mode based on psycho position
-    if p and p.pos.x < ORIGINAL_WINDOW_WIDTH/2 then
+    if p and p.pos.x < WINDOW_WIDTH/2 then
         chosen_mode = "left"
     else
         chosen_mode = "right"
     end
     local chosen_side
     --Choose mode based on psycho position
-    if p and p.pos.y < ORIGINAL_WINDOW_HEIGHT/2 then
+    if p and p.pos.y < WINDOW_HEIGHT/2 then
         chosen_side = "bottom"
     else
         chosen_side = "top"
@@ -107,24 +107,24 @@ function level_functions.part_1()
     F.fromVertical{enemy = {DB}, side = chosen_side, mode = chosen_mode , number = 9, ind_duration = 1.5, ind_side = 40, speed_m = 1.5, screen_margin = 10}
     LM.wait(1.5)
     --Make traverse difficult
-    F.line{enemy = {DB}, x = ORIGINAL_WINDOW_WIDTH/2, y =  -20, dy = 1, number = 14, speed_m = 1.5, ind_mode = false}
+    F.line{enemy = {DB}, x = WINDOW_WIDTH/2, y =  -20, dy = 1, number = 14, speed_m = 1.5, ind_mode = false}
     for i = 1,5 do
         LM.wait(.3)
         F.fromVertical{enemy = {DB}, side = chosen_side, mode = chosen_mode , number = 9, ind_mode = false, ind_mode = false, speed_m = 1.5, screen_margin = 10}
     end
     LM.wait(.6)
     --Make traverse easy
-    F.line{enemy = {SB}, x = ORIGINAL_WINDOW_WIDTH/2, y =  -20, dy = 1, number = 9, speed_m = 1.5, ind_mode = false}
+    F.line{enemy = {SB}, x = WINDOW_WIDTH/2, y =  -20, dy = 1, number = 9, speed_m = 1.5, ind_mode = false}
 
     --Choose mode based on psycho position
-    if p and p.pos.x < ORIGINAL_WINDOW_WIDTH/2 then
+    if p and p.pos.x < WINDOW_WIDTH/2 then
         chosen_mode = "left"
     else
         chosen_mode = "right"
     end
 
     --Choose mode based on psycho position
-    if p and p.pos.y < ORIGINAL_WINDOW_HEIGHT/2 then
+    if p and p.pos.y < WINDOW_HEIGHT/2 then
         chosen_side = "bottom"
     else
         chosen_side = "top"
@@ -137,27 +137,27 @@ function level_functions.part_1()
         F.fromVertical{enemy = {DB}, side = chosen_side, mode = chosen_mode , number = 9, ind_mode = false, ind_mode = false, speed_m = 1.5, screen_margin = 10}
         if i == 1 then
             --Make traverse difficult
-            F.line{enemy = {DB}, x = ORIGINAL_WINDOW_WIDTH/2, y =  -20, dy = 1, number = 25, speed_m = 1.5, ind_mode = false}
+            F.line{enemy = {DB}, x = WINDOW_WIDTH/2, y =  -20, dy = 1, number = 25, speed_m = 1.5, ind_mode = false}
         end
     end
     LM.wait(2.5)
 
     --Make both traverse easy
-    F.line{enemy = {SB}, x = ORIGINAL_WINDOW_WIDTH/2, y =  -20, dy = 1, number = 216, speed_m = 1.5, ind_mode = false, enemy_margin = 65}
-    F.line{enemy = {SB}, x = - 20, y = ORIGINAL_WINDOW_HEIGHT/2, dx = 1, number = 212, speed_m = 1.5, ind_mode = false, enemy_margin = 65}
+    F.line{enemy = {SB}, x = WINDOW_WIDTH/2, y =  -20, dy = 1, number = 216, speed_m = 1.5, ind_mode = false, enemy_margin = 65}
+    F.line{enemy = {SB}, x = - 20, y = WINDOW_HEIGHT/2, dx = 1, number = 212, speed_m = 1.5, ind_mode = false, enemy_margin = 65}
 
     LM.wait(2)
 
     INDICATOR_DEFAULT = 2.6
     for i = 1,5 do
         --Choose mode based on psycho position
-        if p and p.pos.x < ORIGINAL_WINDOW_WIDTH/2 then
+        if p and p.pos.x < WINDOW_WIDTH/2 then
             chosen_mode = "left"
         else
             chosen_mode = "right"
         end
 
-        if p and p.pos.y < ORIGINAL_WINDOW_HEIGHT/2 then
+        if p and p.pos.y < WINDOW_HEIGHT/2 then
             chosen_side = "top"
         else
             chosen_side = "bottom"
@@ -222,7 +222,7 @@ function level_functions.part_2()
     LM.level_part("Part 2 - The Outsider")
 
     LM.wait(3)
-    F.single{enemy = GrB, x = -20, y = ORIGINAL_WINDOW_HEIGHT/2, dx = 1, dy = 0, ind_duration = 2, ind_side = 35, speed_m = .7, e_radius = 30}
+    F.single{enemy = GrB, x = -20, y = WINDOW_HEIGHT/2, dx = 1, dy = 0, ind_duration = 2, ind_side = 35, speed_m = .7, e_radius = 30}
     LM.wait("noenemies")
 
     INDICATOR_DEFAULT = 1.5
@@ -322,12 +322,12 @@ function level_functions.part_2()
     F.fromHorizontal{side = "right", mode = "bottom", enemy = {GrB}, number = 1, speed_m = .85}
     LM.wait("noenemies")
 
-    F.single{enemy = GlB, x = ORIGINAL_WINDOW_WIDTH + 20, y = ORIGINAL_WINDOW_HEIGHT/2, dx = -1, dy = 0, ind_duration = 2, ind_side = 35, speed_m = .7}
+    F.single{enemy = GlB, x = WINDOW_WIDTH + 20, y = WINDOW_HEIGHT/2, dx = -1, dy = 0, ind_duration = 2, ind_side = 35, speed_m = .7}
     LM.wait("noenemies")
 
     --Lines trapping psycho in the middle
-    F.line{enemy = {GlB}, x = ORIGINAL_WINDOW_WIDTH + 20, y = ORIGINAL_WINDOW_HEIGHT/2 + 57, number = 103, dx = -1}
-    F.line{enemy = {GlB}, x = - 20, y = ORIGINAL_WINDOW_HEIGHT/2 - 57, number = 103, dx = 1}
+    F.line{enemy = {GlB}, x = WINDOW_WIDTH + 20, y = WINDOW_HEIGHT/2 + 57, number = 103, dx = -1}
+    F.line{enemy = {GlB}, x = - 20, y = WINDOW_HEIGHT/2 - 57, number = 103, dx = 1}
     F.fromHorizontal{side = "left", mode = "top", number = 6, enemy = {GlB}}
     F.fromHorizontal{side = "right", mode = "top", number = 7, enemy = {GlB}}
     F.fromHorizontal{side = "left", mode = "bottom", number = 7, enemy = {GlB}}
@@ -365,8 +365,8 @@ function level_functions.part_2()
             F.fromVertical{side = "top", mode = "left", number =  6, enemy = {GrB}}
             F.fromVertical{side = "top", mode = "right", number =  13, enemy = {GrB}}
             LM.wait(.5)
-            F.line{enemy = {GlB}, x = ORIGINAL_WINDOW_WIDTH + 20, y = ORIGINAL_WINDOW_HEIGHT/2 + 57, number = 103, dx = -1}
-            F.line{enemy = {GlB}, x = - 20, y = ORIGINAL_WINDOW_HEIGHT/2 - 57, number = 103, dx = 1}
+            F.line{enemy = {GlB}, x = WINDOW_WIDTH + 20, y = WINDOW_HEIGHT/2 + 57, number = 103, dx = -1}
+            F.line{enemy = {GlB}, x = - 20, y = WINDOW_HEIGHT/2 - 57, number = 103, dx = 1}
             wait = .5
         elseif i == 14 then
             wait = 1
@@ -428,8 +428,8 @@ function level_functions.part_2()
         elseif i == 36 then
             F.fromVertical{side = "top", mode = "center", number =  20, enemy = {SB}}
             LM.wait(.25)
-            F.line{enemy = {GlB}, x = ORIGINAL_WINDOW_WIDTH + 20, y = ORIGINAL_WINDOW_HEIGHT/2 + 57, number = 103, dx = -1}
-            F.line{enemy = {GlB}, x = - 20, y = ORIGINAL_WINDOW_HEIGHT/2 - 57, number = 103, dx = 1}
+            F.line{enemy = {GlB}, x = WINDOW_WIDTH + 20, y = WINDOW_HEIGHT/2 + 57, number = 103, dx = -1}
+            F.line{enemy = {GlB}, x = - 20, y = WINDOW_HEIGHT/2 - 57, number = 103, dx = 1}
             wait = wait -.25
             --Continue stream
         elseif i == 37 then
@@ -460,15 +460,15 @@ function level_functions.part_2()
             F.circle{radius = 640, dir_follow = true, number = 20, enemy = {DB,SB}, ind_duration = 4, ind_side = 35}
         elseif i == 51 then
             LM.wait(.1)
-            F.line{enemy = {GlB}, x = ORIGINAL_WINDOW_WIDTH + 20, y = ORIGINAL_WINDOW_HEIGHT/2 + 57, number = 103, dx = -1}
-            F.line{enemy = {GlB}, x = - 20, y = ORIGINAL_WINDOW_HEIGHT/2 - 57, number = 103, dx = 1}
+            F.line{enemy = {GlB}, x = WINDOW_WIDTH + 20, y = WINDOW_HEIGHT/2 + 57, number = 103, dx = -1}
+            F.line{enemy = {GlB}, x = - 20, y = WINDOW_HEIGHT/2 - 57, number = 103, dx = 1}
             wait = wait - .1
         elseif i == 54 then
             wait = wait + .1
             F.circle{radius = 640, number = 20, enemy = {DB,SB}, ind_duration = 2, ind_side = 35}
         elseif i == 58 then
-            F.line{x = -20, y = ORIGINAL_WINDOW_HEIGHT/2, dx = 1, number = 28, enemy = {SB}, ind_duration = 5, ind_side = 35, speed_m = .85}
-            F.line{x = ORIGINAL_WINDOW_WIDTH + 20, y = ORIGINAL_WINDOW_HEIGHT/2, dx = -1, number = 28, enemy = {SB}, ind_duration = 5, ind_side = 35, speed_m = .85}
+            F.line{x = -20, y = WINDOW_HEIGHT/2, dx = 1, number = 28, enemy = {SB}, ind_duration = 5, ind_side = 35, speed_m = .85}
+            F.line{x = WINDOW_WIDTH + 20, y = WINDOW_HEIGHT/2, dx = -1, number = 28, enemy = {SB}, ind_duration = 5, ind_side = 35, speed_m = .85}
         end
     end
     LM.wait("noenemies")
@@ -492,11 +492,11 @@ function level_functions.part_3()
     LM.wait(3)
     INDICATOR_DEFAULT = 1.5
 
-    F.turret{x = -60, y = ORIGINAL_WINDOW_HEIGHT/2, t_x = ORIGINAL_WINDOW_WIDTH/2, t_y = ORIGINAL_WINDOW_HEIGHT/2, enemy = SB, number = 8, life = 20, duration = 15, rot_angle = math.pi/4, speed_m = 2, ind_duration = 2.5}
+    F.turret{x = -60, y = WINDOW_HEIGHT/2, t_x = WINDOW_WIDTH/2, t_y = WINDOW_HEIGHT/2, enemy = SB, number = 8, life = 20, duration = 15, rot_angle = math.pi/4, speed_m = 2, ind_duration = 2.5}
     LM.wait("noenemies")
 
-    F.turret{x = ORIGINAL_WINDOW_WIDTH/2, y = -60, t_x = ORIGINAL_WINDOW_WIDTH/2, t_y = 2*ORIGINAL_WINDOW_HEIGHT/5, enemy = DB, number = 6, life = 20, duration = 15, rot_angle = math.pi/3, speed_m = 1.5}
-    F.turret{x = ORIGINAL_WINDOW_WIDTH/2, y = ORIGINAL_WINDOW_HEIGHT + 60, t_x = ORIGINAL_WINDOW_WIDTH/2, t_y = 3*ORIGINAL_WINDOW_HEIGHT/5, enemy = DB, number = 6, life = 20, duration = 15, rot_angle = math.pi/3, speed_m = 1.5}
+    F.turret{x = WINDOW_WIDTH/2, y = -60, t_x = WINDOW_WIDTH/2, t_y = 2*WINDOW_HEIGHT/5, enemy = DB, number = 6, life = 20, duration = 15, rot_angle = math.pi/3, speed_m = 1.5}
+    F.turret{x = WINDOW_WIDTH/2, y = WINDOW_HEIGHT + 60, t_x = WINDOW_WIDTH/2, t_y = 3*WINDOW_HEIGHT/5, enemy = DB, number = 6, life = 20, duration = 15, rot_angle = math.pi/3, speed_m = 1.5}
     LM.wait(5)
     F.fromHorizontal{side = "left", mode = "distribute", number = 10, enemy = {SB}}
     LM.wait(3)
@@ -508,9 +508,9 @@ function level_functions.part_3()
     LM.wait("noenemies")
 
     F.turret{x = -60, y = -60, t_x = 60, t_y = 60, enemy = DB, number = 3, life = 15, duration = 32, start_angle = math.pi/2, rot_angle = -math.pi/4, speed_m = 1.5, ind_duration = 1, e_speed_m = 1.1}
-    F.turret{x = ORIGINAL_WINDOW_WIDTH + 60, y = -60, t_x = ORIGINAL_WINDOW_WIDTH - 60, t_y = 60, enemy = DB, number = 3, life = 15, duration = 32, start_angle = -math.pi/2, rot_angle = math.pi/4, speed_m = 1.5, ind_duration = 1, e_speed_m = 1.1}
-    F.turret{x = ORIGINAL_WINDOW_WIDTH + 60, y = ORIGINAL_WINDOW_HEIGHT + 60, t_x = ORIGINAL_WINDOW_WIDTH  - 60, t_y = ORIGINAL_WINDOW_HEIGHT - 60, enemy = DB, number = 3, life = 15, duration = 32, start_angle = math.pi, rot_angle = math.pi/4, speed_m = 1.5, ind_duration = 1, e_speed_m = 1.1}
-    F.turret{x = -60, y = ORIGINAL_WINDOW_HEIGHT + 60, t_x = 60, t_y = ORIGINAL_WINDOW_HEIGHT - 60, enemy = DB, number = 3, life = 15, duration = 32, start_angle = math.pi, rot_angle = -math.
+    F.turret{x = WINDOW_WIDTH + 60, y = -60, t_x = WINDOW_WIDTH - 60, t_y = 60, enemy = DB, number = 3, life = 15, duration = 32, start_angle = -math.pi/2, rot_angle = math.pi/4, speed_m = 1.5, ind_duration = 1, e_speed_m = 1.1}
+    F.turret{x = WINDOW_WIDTH + 60, y = WINDOW_HEIGHT + 60, t_x = WINDOW_WIDTH  - 60, t_y = WINDOW_HEIGHT - 60, enemy = DB, number = 3, life = 15, duration = 32, start_angle = math.pi, rot_angle = math.pi/4, speed_m = 1.5, ind_duration = 1, e_speed_m = 1.1}
+    F.turret{x = -60, y = WINDOW_HEIGHT + 60, t_x = 60, t_y = WINDOW_HEIGHT - 60, enemy = DB, number = 3, life = 15, duration = 32, start_angle = math.pi, rot_angle = -math.
     pi/4, speed_m = 1.5, ind_duration = 1, e_speed_m = 1.1}
     LM.wait(5)
     F.fromHorizontal{side = "left", mode = "distribute", number = 10, enemy = {SB}}
@@ -532,18 +532,18 @@ function level_functions.part_3()
     LM.wait("noenemies")
 
     INDICATOR_DEFAULT = 1.5
-    F.turret{x = -60, y = -60, t_x = 2*ORIGINAL_WINDOW_WIDTH/7, t_y = ORIGINAL_WINDOW_HEIGHT/2, enemy = GrB, number = 2, life = 12, duration = 11, start_angle = 0, rot_angle = math.pi, speed_m = 1.5, e_speed_m = 2, fps = .2}
-    F.turret{x = ORIGINAL_WINDOW_WIDTH + 60, y = ORIGINAL_WINDOW_HEIGHT + 60, t_x = 5*ORIGINAL_WINDOW_WIDTH/7, t_y = ORIGINAL_WINDOW_HEIGHT/2, enemy = GrB, number = 2, life = 12, duration = 11, start_angle = 0, rot_angle = math.pi, speed_m = 1.5, e_speed_m = 2, fps = .2}
+    F.turret{x = -60, y = -60, t_x = 2*WINDOW_WIDTH/7, t_y = WINDOW_HEIGHT/2, enemy = GrB, number = 2, life = 12, duration = 11, start_angle = 0, rot_angle = math.pi, speed_m = 1.5, e_speed_m = 2, fps = .2}
+    F.turret{x = WINDOW_WIDTH + 60, y = WINDOW_HEIGHT + 60, t_x = 5*WINDOW_WIDTH/7, t_y = WINDOW_HEIGHT/2, enemy = GrB, number = 2, life = 12, duration = 11, start_angle = 0, rot_angle = math.pi, speed_m = 1.5, e_speed_m = 2, fps = .2}
 
     LM.wait(3)
 
     local pos1, pos2 --Positions the psycho can be ("left" for left, "center" for middle and "right" for right)
     local num --Number of enemies to create
 
-    if p.pos.x <= 2*ORIGINAL_WINDOW_WIDTH/7 then
+    if p.pos.x <= 2*WINDOW_WIDTH/7 then
         pos1 = "left"
         num = 6
-    elseif p.pos.x <= 5*ORIGINAL_WINDOW_WIDTH/7 then
+    elseif p.pos.x <= 5*WINDOW_WIDTH/7 then
         pos1 = "center"
         num = 7
     else
@@ -564,10 +564,10 @@ function level_functions.part_3()
 
     dist1, dist2 = nil, nil
 
-    if p.pos.x <= 2*ORIGINAL_WINDOW_WIDTH/7 then
+    if p.pos.x <= 2*WINDOW_WIDTH/7 then
         pos2 = "left"
         dist2 = 60
-    elseif p.pos.x <= 5*ORIGINAL_WINDOW_WIDTH/7 then
+    elseif p.pos.x <= 5*WINDOW_WIDTH/7 then
         pos2 = "center"
     else
         pos2 = "right"
@@ -605,10 +605,10 @@ function level_functions.part_3()
     LM.wait("noenemies")
 
     INDICATOR_DEFAULT = 1.5
-    F.turret{x = -60, y = -60, t_x = ORIGINAL_WINDOW_WIDTH/3, t_y = ORIGINAL_WINDOW_HEIGHT/3, enemy = SB, number = 2, life = 30, duration = 28, start_angle = 0, rot_angle = math.pi, fps = .3}
-    F.turret{x = ORIGINAL_WINDOW_WIDTH + 60, y = -60, t_x = 2*ORIGINAL_WINDOW_WIDTH/3, t_y = ORIGINAL_WINDOW_HEIGHT/3, enemy = SB, number = 2, life = 30, duration = 28, start_angle = math.pi/2, rot_angle = math.pi, fps = .3}
-    F.turret{x = ORIGINAL_WINDOW_WIDTH + 60, y = ORIGINAL_WINDOW_HEIGHT + 60, t_x = 2*ORIGINAL_WINDOW_WIDTH/3, t_y = 2*ORIGINAL_WINDOW_HEIGHT/3, enemy = SB, number = 2, life = 30, duration = 28, start_angle = 0, rot_angle = math.pi, fps = .3}
-    F.turret{x = -60, y = ORIGINAL_WINDOW_HEIGHT + 60, t_x = ORIGINAL_WINDOW_WIDTH/3, t_y = 2*ORIGINAL_WINDOW_HEIGHT/3, enemy = SB, number = 2, life = 30, duration = 28, start_angle = math.pi/2, rot_angle = math.pi, fps = .3}
+    F.turret{x = -60, y = -60, t_x = WINDOW_WIDTH/3, t_y = WINDOW_HEIGHT/3, enemy = SB, number = 2, life = 30, duration = 28, start_angle = 0, rot_angle = math.pi, fps = .3}
+    F.turret{x = WINDOW_WIDTH + 60, y = -60, t_x = 2*WINDOW_WIDTH/3, t_y = WINDOW_HEIGHT/3, enemy = SB, number = 2, life = 30, duration = 28, start_angle = math.pi/2, rot_angle = math.pi, fps = .3}
+    F.turret{x = WINDOW_WIDTH + 60, y = WINDOW_HEIGHT + 60, t_x = 2*WINDOW_WIDTH/3, t_y = 2*WINDOW_HEIGHT/3, enemy = SB, number = 2, life = 30, duration = 28, start_angle = 0, rot_angle = math.pi, fps = .3}
+    F.turret{x = -60, y = WINDOW_HEIGHT + 60, t_x = WINDOW_WIDTH/3, t_y = 2*WINDOW_HEIGHT/3, enemy = SB, number = 2, life = 30, duration = 28, start_angle = math.pi/2, rot_angle = math.pi, fps = .3}
     LM.wait(6)
 
     INDICATOR_DEFAULT = 2
@@ -698,21 +698,21 @@ function level_functions.part_3()
             else
                 w, h = TutIcon.dimensions("left_bumper")
             end
-            local x = ORIGINAL_WINDOW_WIDTH/2 - font:getWidth(text)/2
-            local y = ORIGINAL_WINDOW_HEIGHT/2 - h/2 - font:getHeight(text) - 25
+            local x = WINDOW_WIDTH/2 - font:getWidth(text)/2
+            local y = WINDOW_HEIGHT/2 - h/2 - font:getHeight(text) - 25
             LM.text(x, y, text, 8, 210, font)
             if not USING_JOYSTICK then
-                TutIcon.create(ORIGINAL_WINDOW_WIDTH/2 - w/2, ORIGINAL_WINDOW_HEIGHT/2 - h/2 - 20, 'shift', 8)
+                TutIcon.create(WINDOW_WIDTH/2 - w/2, WINDOW_HEIGHT/2 - h/2 - 20, 'shift', 8)
             else
-                TutIcon.create(ORIGINAL_WINDOW_WIDTH/2 - w/2, ORIGINAL_WINDOW_HEIGHT/2 - h/2 - 20, 'left_bumper', 8)
+                TutIcon.create(WINDOW_WIDTH/2 - w/2, WINDOW_HEIGHT/2 - h/2 - 20, 'left_bumper', 8)
             end
             text = "to enter"
-            x = ORIGINAL_WINDOW_WIDTH/2 - font:getWidth(text)/2
-            y = ORIGINAL_WINDOW_HEIGHT/2 + h/2 - 10
+            x = WINDOW_WIDTH/2 - font:getWidth(text)/2
+            y = WINDOW_HEIGHT/2 + h/2 - 10
             LM.text(x, y, text, 8, 210, font)
             font = GUI_MEDPLUSPLUS
             text = "FOCUS MODE"
-            x = ORIGINAL_WINDOW_WIDTH/2 - font:getWidth(text)/2
+            x = WINDOW_WIDTH/2 - font:getWidth(text)/2
             y = y + 25
             LM.text(x, y, text, 8, 210, font)
         end
@@ -761,7 +761,7 @@ function level_functions.part_4()
 
     --Penguin shooter adaptation (original idea by yan)
     INDICATOR_DEFAULT = 1.25
-    local all = 2*ORIGINAL_WINDOW_WIDTH+2*ORIGINAL_WINDOW_HEIGHT
+    local all = 2*WINDOW_WIDTH+2*WINDOW_HEIGHT
     for i = 1, 60 do
         local _x, _y = LM.outsidePosition(all * i / 60)
         local en = {SB, DB}
@@ -776,7 +776,7 @@ function level_functions.part_4()
     LM.wait(1)
     LM.text(600, 260, "nevermind", .8, 150)
     LM.wait(1)
-    LM.text(ORIGINAL_WINDOW_WIDTH/2 - 70, ORIGINAL_WINDOW_HEIGHT/2 - 10, "I'LL GET HIM", 1.5, 230, GUI_MEDPLUS)
+    LM.text(WINDOW_WIDTH/2 - 70, WINDOW_HEIGHT/2 - 10, "I'LL GET HIM", 1.5, 230, GUI_MEDPLUS)
     LM.wait(3)
     Boss.create()
     LM.wait(10)

@@ -53,7 +53,7 @@ function state:enter(_score)
     local pos = HS.isHighscore(score)
     if pos then
         --"Got a highscore" text
-        Txt.create_gui(180, 100, "You got a highscore on position #"..pos.."!", GUI_BOSS_TITLE, nil, "format", nil, "highscore_text", "center", ORIGINAL_WINDOW_WIDTH/1.5)
+        Txt.create_gui(180, 100, "You got a highscore on position #"..pos.."!", GUI_BOSS_TITLE, nil, "format", nil, "highscore_text", "center", WINDOW_WIDTH/1.5)
         Txt.create_gui(260, 260, "please enter your name and confirm", GUI_MEDMED, nil, "format", nil, "highscore_text2", "center")
         _hs = HS.createHighscoreButton(330, 410, score, pos)
 
@@ -243,13 +243,13 @@ function chooseDeathMessage(t)
 
     message = Util.randomElement(DEATH_TEXTS) --Get a random death message
 
-    limit = ORIGINAL_WINDOW_WIDTH/2
+    limit = WINDOW_WIDTH/2
 
     --Get position so that the text is centralized on screen
     fx = math.min(t.font:getWidth(message),limit) --Width of text
     fy = t.font:getHeight(message)*  math.ceil(t.font:getWidth(message)/fx) --Height of text
-    x = ORIGINAL_WINDOW_WIDTH/2 - fx/2
-    y = ORIGINAL_WINDOW_HEIGHT/2 - fy/2
+    x = WINDOW_WIDTH/2 - fx/2
+    y = WINDOW_HEIGHT/2 - fy/2
 
     --Update gameover text, position and limit
     t.pos = Vector(x, y)

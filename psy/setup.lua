@@ -51,8 +51,6 @@ function setup.config()
 
     MAX_ULTRABLAST = 3 --Max number of ultrablasts psycho has
 
-    ORIGINAL_WINDOW_WIDTH = 1000
-    ORIGINAL_WINDOW_HEIGHT = 750
     WINDOW_WIDTH = 1000 --Default width of the game window
     WINDOW_HEIGHT = 750 --Default height of the game window
     PREVIOUS_WINDOW_WIDTH = WINDOW_WIDTH --Window width before fullscreen
@@ -60,7 +58,7 @@ function setup.config()
 
     --Game screen params
     TOP_LEFT_CORNER = Vector(0,0)
-    BOTTOM_RIGHT_CORNER = Vector(ORIGINAL_WINDOW_WIDTH, ORIGINAL_WINDOW_HEIGHT)
+    BOTTOM_RIGHT_CORNER = Vector(WINDOW_WIDTH, WINDOW_HEIGHT)
 
     SCREEN_CANVAS = nil --Screen canvas that can be draw or apllied effects
     USE_CANVAS = false --If game should draw the SCREEN_CANVAS
@@ -205,8 +203,8 @@ function setup.config()
 
 
     --CAMERA--
-    CAM = Camera(ORIGINAL_WINDOW_WIDTH/2, ORIGINAL_WINDOW_HEIGHT/2) --Set camera position to center of screen
-    MENU_CAM = Camera(ORIGINAL_WINDOW_WIDTH/2, ORIGINAL_WINDOW_HEIGHT/2) --Set camera position to center of screen, camera used for menu transitions
+    CAM = Camera(WINDOW_WIDTH/2, WINDOW_HEIGHT/2) --Set camera position to center of screen
+    MENU_CAM = Camera(WINDOW_WIDTH/2, WINDOW_HEIGHT/2) --Set camera position to center of screen, camera used for menu transitions
 
     --DEATH MESSAGE
     DEATH_TEXTS = {
@@ -406,7 +404,7 @@ function setup.config()
   BG.create()
 
   --FPS Counter
-  Txt.create_gui(5, ORIGINAL_WINDOW_HEIGHT - 20, "FPS: ", GUI_MEDLESS, love.timer.getFPS(), "right", GUI_MEDLESS, "fps_counter")
+  Txt.create_gui(5, WINDOW_HEIGHT - 20, "FPS: ", GUI_MEDLESS, love.timer.getFPS(), "right", GUI_MEDLESS, "fps_counter")
 
   print("---------------------------")
 

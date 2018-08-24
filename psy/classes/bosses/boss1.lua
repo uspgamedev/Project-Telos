@@ -38,7 +38,7 @@ Boss_1 = Class{
 
         self.color_pulse_duration = 1 --Duration between color saturation transitions
 
-        CIRC.init(self, ORIGINAL_WINDOW_WIDTH/2, ORIGINAL_WINDOW_HEIGHT/2, r, color, nil, "fill") --Set atributes
+        CIRC.init(self, WINDOW_WIDTH/2, WINDOW_HEIGHT/2, r, color, nil, "fill") --Set atributes
         ELEMENT.setSubTp(self, "boss")
 
         --Boss speed value
@@ -66,9 +66,9 @@ Boss_1 = Class{
 
         self.validPositions = {}
         self.validPositions[1] = Vector(self.r + 5, self.r + 5) --Top Left
-        self.validPositions[2] = Vector(ORIGINAL_WINDOW_WIDTH - self.r - 5, self.r + 5) --Top Right
-        self.validPositions[3] = Vector(ORIGINAL_WINDOW_WIDTH - self.r - 5, ORIGINAL_WINDOW_HEIGHT - self.r  - 5) --Bottom Right
-        self.validPositions[4] = Vector(self.r + 5, ORIGINAL_WINDOW_HEIGHT - self.r - 5) --Bottom Left
+        self.validPositions[2] = Vector(WINDOW_WIDTH - self.r - 5, self.r + 5) --Top Right
+        self.validPositions[3] = Vector(WINDOW_WIDTH - self.r - 5, WINDOW_HEIGHT - self.r  - 5) --Bottom Right
+        self.validPositions[4] = Vector(self.r + 5, WINDOW_HEIGHT - self.r - 5) --Bottom Left
 
         self.behaviour = Stage_1_and_2 --What behaviour this boss is following
         self.tp = "boss_one" --Type of this class
@@ -282,7 +282,7 @@ function Boss_1:changeStage()
             function()
 
                  --Move to the center
-                 b.level_handles["move"] = LEVEL_TIMER:tween((b.pos:dist(Vector(ORIGINAL_WINDOW_WIDTH/2, ORIGINAL_WINDOW_HEIGHT/2))) / b.speedv, b.pos, {x = ORIGINAL_WINDOW_WIDTH/2, y = ORIGINAL_WINDOW_HEIGHT/2}, 'in-linear',
+                 b.level_handles["move"] = LEVEL_TIMER:tween((b.pos:dist(Vector(WINDOW_WIDTH/2, WINDOW_HEIGHT/2))) / b.speedv, b.pos, {x = WINDOW_WIDTH/2, y = WINDOW_HEIGHT/2}, 'in-linear',
                      function()
                          b.static, b.invincible, b.getIndicator = false, false, true --Make boss walk, be able to die and get a direction for spin attack
                      end
@@ -381,7 +381,7 @@ function boss.create()
     b = Boss_1()
 
     --Create shadow of boss
-    shadow = CIRC(ORIGINAL_WINDOW_WIDTH/2, -1200, 800, HSL(0,0,8,200))
+    shadow = CIRC(WINDOW_WIDTH/2, -1200, 800, HSL(0,0,8,200))
     shadow:addElement(DRAW_TABLE.L5u, "boss_effect")
     shadow.draw = shadow_draw --Change draw function of shadow
 
@@ -401,7 +401,7 @@ function boss.create()
     )
 
     --Moves shadow
-    shadow.level_handles["create_boss"] = LEVEL_TIMER:tween(9, shadow.pos, {y = ORIGINAL_WINDOW_HEIGHT/2}, 'in-linear',
+    shadow.level_handles["create_boss"] = LEVEL_TIMER:tween(9, shadow.pos, {y = WINDOW_HEIGHT/2}, 'in-linear',
         function()
             --Shrinks shadow
             shadow.level_handles["create_boss"] = LEVEL_TIMER:tween(1, shadow, {r = 120}, 'in-cubic' ,
@@ -525,9 +525,9 @@ Stage_3 = function(b, dt)
     if b.spawn_tick >= b.spawn_fps then
         b.spawn_tick = b.spawn_tick - b.spawn_fps
         F.single{x = -25, y = 25, dx = 1, enemy = DB, speed_m = 2, ind_mode = false, score_mul = 0} --Top left corner, shooting right
-        F.single{x = ORIGINAL_WINDOW_WIDTH - 25, y = - 25, dy = 1, enemy = DB, speed_m = 2, ind_mode = false, score_mul = 0} --Top right corner, shooting down
-        F.single{x = ORIGINAL_WINDOW_WIDTH + 25, y = ORIGINAL_WINDOW_HEIGHT - 25, dx = -1, enemy = DB, speed_m = 2, ind_mode = false, score_mul = 0} --Bottom right corner, shooting left
-        F.single{x = 25, y = ORIGINAL_WINDOW_HEIGHT + 25, dy = -1, enemy = DB, speed_m = 2, ind_mode = false, score_mul = 0} --Bottom left corner, shooting up
+        F.single{x = WINDOW_WIDTH - 25, y = - 25, dy = 1, enemy = DB, speed_m = 2, ind_mode = false, score_mul = 0} --Top right corner, shooting down
+        F.single{x = WINDOW_WIDTH + 25, y = WINDOW_HEIGHT - 25, dx = -1, enemy = DB, speed_m = 2, ind_mode = false, score_mul = 0} --Bottom right corner, shooting left
+        F.single{x = 25, y = WINDOW_HEIGHT + 25, dy = -1, enemy = DB, speed_m = 2, ind_mode = false, score_mul = 0} --Bottom left corner, shooting up
     end
 
     --Shoot enemies

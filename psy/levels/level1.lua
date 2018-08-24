@@ -21,11 +21,11 @@ function level_functions.part_1()
     LM.wait(5)
 
     INDICATOR_DEFAULT = 1.5
-    F.single{enemy = SB, x = -20, y = ORIGINAL_WINDOW_HEIGHT/2, dx = 1, dy = 0, e_radius = 28, ind_duration = 2, ind_side = 35}
+    F.single{enemy = SB, x = -20, y = WINDOW_HEIGHT/2, dx = 1, dy = 0, e_radius = 28, ind_duration = 2, ind_side = 35}
     LM.wait("noenemies")
 
-    F.single{enemy = SB, x = -20, y = ORIGINAL_WINDOW_HEIGHT/2, dx = 1, dy = 0}
-    F.single{enemy = SB, x = ORIGINAL_WINDOW_WIDTH + 20, y = ORIGINAL_WINDOW_HEIGHT/2, dx = -1, dy = 0}
+    F.single{enemy = SB, x = -20, y = WINDOW_HEIGHT/2, dx = 1, dy = 0}
+    F.single{enemy = SB, x = WINDOW_WIDTH + 20, y = WINDOW_HEIGHT/2, dx = -1, dy = 0}
     LM.wait(1.5)
     F.circle{enemy = {SB}, number = 4, radius = 610}
     LM.wait("noenemies")
@@ -58,18 +58,18 @@ function level_functions.part_1()
     LM.wait("noenemies")
 
     INDICATOR_DEFAULT = 1.5
-    F.single{enemy = DB, x = ORIGINAL_WINDOW_WIDTH/2, y = ORIGINAL_WINDOW_HEIGHT + 25, dy = -1, e_radius = 28}
+    F.single{enemy = DB, x = WINDOW_WIDTH/2, y = WINDOW_HEIGHT + 25, dy = -1, e_radius = 28}
     LM.wait("noenemies")
 
-    F.line{enemy = {DB}, x = ORIGINAL_WINDOW_WIDTH + 25, y = ORIGINAL_WINDOW_HEIGHT/2, dx = -1, number = 36, ind_side = 35}
+    F.line{enemy = {DB}, x = WINDOW_WIDTH + 25, y = WINDOW_HEIGHT/2, dx = -1, number = 36, ind_side = 35}
     LM.wait(5)
     F.fromVertical{side = "top", mode = "center", enemy = {DB}, number = 20, speed_m = .55}
     LM.wait(3)
     F.fromHorizontal{side = "left", mode = "center", enemy = {DB}, number = 14, speed_m = 1.2}
     LM.wait("noenemies")
 
-    F.line{enemy = {DB}, x = ORIGINAL_WINDOW_WIDTH/2 - 200, y = ORIGINAL_WINDOW_HEIGHT + 25, dy = -1, number = 56, ind_side = 35}
-    F.line{enemy = {DB}, x = ORIGINAL_WINDOW_WIDTH/2 + 200, y = - 25, dy = 1, number = 56, ind_side = 35}
+    F.line{enemy = {DB}, x = WINDOW_WIDTH/2 - 200, y = WINDOW_HEIGHT + 25, dy = -1, number = 56, ind_side = 35}
+    F.line{enemy = {DB}, x = WINDOW_WIDTH/2 + 200, y = - 25, dy = 1, number = 56, ind_side = 35}
     LM.wait(4)
     INDICATOR_DEFAULT = 1.2
     F.fromVertical{side = "top", mode = "distribute", number = 9, enemy = {SB}, speed_m = 1.3}
@@ -172,14 +172,14 @@ function level_functions.part_3()
     F.fromHorizontal{side = "left", mode = "distribute", number = 15, ind_duration = 4, dir_follow = true, enemy = {DB}, speed_m = 1.5}
     LM.wait(6)
 
-    F.line{ x = -25, y = ORIGINAL_WINDOW_HEIGHT/2, dx = 1, number = 40, enemy = {DB}, speed_m = .8}
-    F.line{ x = ORIGINAL_WINDOW_WIDTH + 25, y = ORIGINAL_WINDOW_HEIGHT/2, dx = -1, number = 40, enemy = {DB}, speed_m = .8}
-    F.line{ x = ORIGINAL_WINDOW_WIDTH/2 , y = -25, dy = 1, number = 40, enemy = {DB}, speed_m = .8}
-    F.line{ x = ORIGINAL_WINDOW_WIDTH/2 , y = ORIGINAL_WINDOW_HEIGHT + 25, dy = -1, number = 40, enemy = {DB}, speed_m = .8}
+    F.line{ x = -25, y = WINDOW_HEIGHT/2, dx = 1, number = 40, enemy = {DB}, speed_m = .8}
+    F.line{ x = WINDOW_WIDTH + 25, y = WINDOW_HEIGHT/2, dx = -1, number = 40, enemy = {DB}, speed_m = .8}
+    F.line{ x = WINDOW_WIDTH/2 , y = -25, dy = 1, number = 40, enemy = {DB}, speed_m = .8}
+    F.line{ x = WINDOW_WIDTH/2 , y = WINDOW_HEIGHT + 25, dy = -1, number = 40, enemy = {DB}, speed_m = .8}
     F.line{ x = -25 , y = -25, dx = 1, dy = 1, number = 40, enemy = {DB}, speed_m = .8}
-    F.line{ x = ORIGINAL_WINDOW_WIDTH + 25 , y = -25, dx = -1, dy = 1, number = 40, enemy = {DB}, speed_m = .8}
-    F.line{ x = ORIGINAL_WINDOW_WIDTH + 25 , y = ORIGINAL_WINDOW_HEIGHT + 25, dx = -1, dy = -1, number = 40, enemy = {DB}, speed_m = .8}
-    F.line{ x = - 25 , y = ORIGINAL_WINDOW_HEIGHT + 25, dx = 1, dy = -1, number = 40, enemy = {DB}, speed_m = .8}
+    F.line{ x = WINDOW_WIDTH + 25 , y = -25, dx = -1, dy = 1, number = 40, enemy = {DB}, speed_m = .8}
+    F.line{ x = WINDOW_WIDTH + 25 , y = WINDOW_HEIGHT + 25, dx = -1, dy = -1, number = 40, enemy = {DB}, speed_m = .8}
+    F.line{ x = - 25 , y = WINDOW_HEIGHT + 25, dx = 1, dy = -1, number = 40, enemy = {DB}, speed_m = .8}
     LM.wait(4)
     F.fromHorizontal{side = "left", mode = "center", enemy = {SB}, number = 20, enemy_x_margin = 60, enemy_y_margin = 40, speed_m = .6}
     LM.wait(1)
@@ -229,21 +229,21 @@ function level_functions.part_3()
     LM.wait(2)
     LM.wait("noenemies")
 
-    F.line{x = -25, y = ORIGINAL_WINDOW_HEIGHT/2, dx = 1, number = 190, enemy = {DB,SB}, ind_duration = 2.5, dir_follow = true, ind_side = 40}
+    F.line{x = -25, y = WINDOW_HEIGHT/2, dx = 1, number = 190, enemy = {DB,SB}, ind_duration = 2.5, dir_follow = true, ind_side = 40}
     LM.wait(4)
-    F.line{x = ORIGINAL_WINDOW_WIDTH + 25, y = ORIGINAL_WINDOW_HEIGHT/2, dx = -1, number = 170, enemy = {DB,SB}, ind_duration = 2.5, dir_follow = true, ind_side = 40}
+    F.line{x = WINDOW_WIDTH + 25, y = WINDOW_HEIGHT/2, dx = -1, number = 170, enemy = {DB,SB}, ind_duration = 2.5, dir_follow = true, ind_side = 40}
     LM.wait(4)
-    F.line{x = ORIGINAL_WINDOW_WIDTH/2 , y = -25, dy = 1, number = 150, enemy = {DB,SB}, ind_duration = 2.5, dir_follow = true, ind_side = 40}
+    F.line{x = WINDOW_WIDTH/2 , y = -25, dy = 1, number = 150, enemy = {DB,SB}, ind_duration = 2.5, dir_follow = true, ind_side = 40}
     LM.wait(4)
-    F.line{x = ORIGINAL_WINDOW_WIDTH/2 , y = ORIGINAL_WINDOW_HEIGHT + 25, dy = -1, number = 130, enemy = {DB,SB}, ind_duration = 2.5, dir_follow = true, ind_side = 40}
+    F.line{x = WINDOW_WIDTH/2 , y = WINDOW_HEIGHT + 25, dy = -1, number = 130, enemy = {DB,SB}, ind_duration = 2.5, dir_follow = true, ind_side = 40}
     LM.wait(4)
     F.line{x = -25 , y = -25, dx = 1, dy = 1, number = 110, enemy = {DB,SB}, ind_duration = 2.5, dir_follow = true, ind_side = 40}
     LM.wait(4)
-    F.line{x = ORIGINAL_WINDOW_WIDTH + 25 , y = -25, dx = -1, dy = 1, number = 90, enemy = {DB,SB}, ind_duration = 2.5, dir_follow = true, ind_side = 40}
+    F.line{x = WINDOW_WIDTH + 25 , y = -25, dx = -1, dy = 1, number = 90, enemy = {DB,SB}, ind_duration = 2.5, dir_follow = true, ind_side = 40}
     LM.wait(4)
-    F.line{x = ORIGINAL_WINDOW_WIDTH + 25 , y = ORIGINAL_WINDOW_HEIGHT + 25, dx = -1, dy = -1, number = 70, enemy = {DB,SB}, ind_duration = 2.5, dir_follow = true, ind_side = 40}
+    F.line{x = WINDOW_WIDTH + 25 , y = WINDOW_HEIGHT + 25, dx = -1, dy = -1, number = 70, enemy = {DB,SB}, ind_duration = 2.5, dir_follow = true, ind_side = 40}
     LM.wait(4)
-    F.line{x = - 25 , y = ORIGINAL_WINDOW_HEIGHT + 25, dx = 1, dy = -1, number = 50, enemy = {DB,SB}, ind_duration = 2.5, dir_follow = true, ind_side = 40}
+    F.line{x = - 25 , y = WINDOW_HEIGHT + 25, dx = 1, dy = -1, number = 50, enemy = {DB,SB}, ind_duration = 2.5, dir_follow = true, ind_side = 40}
     LM.wait(6)
     F.fromVertical{side = "bottom", mode = "center", number = 20, ind_duration = 2, enemy = {SB}, speed_m = .6}
     LM.wait(.2)
@@ -256,7 +256,7 @@ function level_functions.part_3()
 
     LM.wait(1)
     for i= 1, 30 do
-        local _x, _y = LM.outsidePosition(love.math.random(2*ORIGINAL_WINDOW_WIDTH+2*ORIGINAL_WINDOW_HEIGHT+1)-1)
+        local _x, _y = LM.outsidePosition(love.math.random(2*WINDOW_WIDTH+2*WINDOW_HEIGHT+1)-1)
         if i == 1 then
             F.single{enemy = SB, x = _x, y = _y, dir_follow = true, speed_m = 5, ind_side = 35, ind_duration = 2.5, score_mul = 6}
             LM.wait(3)

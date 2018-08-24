@@ -24,7 +24,7 @@ local function f(options_buttons, current_menu_screen)
     --Create controls buttons
     local offset = 0
     if current_menu_screen == "main_menu" then
-        offset = ORIGINAL_WINDOW_WIDTH
+        offset = WINDOW_WIDTH
     end
     local x, y, gap_y = 230, 100, 55, 370
     local cont = 1

@@ -48,9 +48,9 @@ function Bullet:update(dt)
     b.pos = b.pos + dt*b.speed
 
     if not b.death and
-       (b.pos.x - b.r > ORIGINAL_WINDOW_WIDTH or
+       (b.pos.x - b.r > WINDOW_WIDTH or
        b.pos.x + b.r < 0 or
-       b.pos.y - b.r > ORIGINAL_WINDOW_HEIGHT or
+       b.pos.y - b.r > WINDOW_HEIGHT or
        b.pos.y + b.r < 0) then
            b:kill(true)
     end

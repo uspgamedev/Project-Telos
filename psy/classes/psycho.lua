@@ -382,7 +382,7 @@ end
 function psycho.create(x, y, is_tutorial)
     local p, handle
 
-    x, y = x or ORIGINAL_WINDOW_WIDTH/2, y or  ORIGINAL_WINDOW_HEIGHT/2
+    x, y = x or WINDOW_WIDTH/2, y or  WINDOW_HEIGHT/2
 
     --Create psycho
     p = Psy(x, y)

@@ -3,7 +3,7 @@
 --PENGUIN - SHOOTER by yan
 LM.wait(2)
 INDICATOR_DEFAULT = 1.25
-local all = 2*ORIGINAL_WINDOW_WIDTH+2*ORIGINAL_WINDOW_HEIGHT
+local all = 2*WINDOW_WIDTH+2*WINDOW_HEIGHT
 for i = 1, 60 do
     local _x, _y = LM.outsidePosition(all * i / 60)
     local en = {SB, DB}

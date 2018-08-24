@@ -47,8 +47,8 @@ function state:enter()
     _main_menu_screen_buttons = {}
 
     --Reset camera center pos
-    CAM.x = ORIGINAL_WINDOW_WIDTH/2
-    CAM.y = ORIGINAL_WINDOW_HEIGHT/2
+    CAM.x = WINDOW_WIDTH/2
+    CAM.y = WINDOW_HEIGHT/2
 
     love.mouse.setGrabbed(false) --Stop mouse capture
 
@@ -131,7 +131,7 @@ function state:enter()
          state:setCurrentSelectedButton("opt_go2main")
          setCurrentMenuScreen("options_menu")
     end
-    b = Button.create_circle_gui(ORIGINAL_WINDOW_WIDTH - 880, 650, 90, func, "Options", GUI_BIGLESSLESS, "main_menu_buttons", "main_go2options_button")
+    b = Button.create_circle_gui(WINDOW_WIDTH - 880, 650, 90, func, "Options", GUI_BIGLESSLESS, "main_menu_buttons", "main_go2options_button")
     b.sfx = SFX.generic_button
     b.alpha_modifier = 0
     b.lock = true
@@ -148,7 +148,7 @@ function state:enter()
     _highscore_menu_screen_buttons = {} --Reset available buttons for joystick
 
 
-    HS.create_table(nil, ORIGINAL_WINDOW_WIDTH, 0) --Create highscore table "one screen to the right"
+    HS.create_table(nil, WINDOW_WIDTH, 0) --Create highscore table "one screen to the right"
 
     --"Go to Main Menu Screen" button
     func = function()
@@ -156,7 +156,7 @@ function state:enter()
          state:setCurrentSelectedButton("main_go2highscore")
          setCurrentMenuScreen("main_menu")
     end
-    b = Button.create_circle_gui(ORIGINAL_WINDOW_WIDTH + 110, 650, 55, func, "Back", GUI_BIGLESSLESS, "highscore_menu_buttons", "high_go2main_button")
+    b = Button.create_circle_gui(WINDOW_WIDTH + 110, 650, 55, func, "Back", GUI_BIGLESSLESS, "highscore_menu_buttons", "high_go2main_button")
     b.sfx = SFX.back_button
     table.insert(_highscore_menu_screen_buttons, "high_go2main")
 
@@ -167,8 +167,8 @@ function state:enter()
     _options_menu_screen_buttons = {} --Reset available buttons for joystick
 
     --Draw header
-    Txt.create_gui(180 - ORIGINAL_WINDOW_WIDTH, 20, "OPTIONS", GUI_CONTROLS, nil, "format", nil, "options_title", "center", ORIGINAL_WINDOW_WIDTH/1.5, nil, "options_screen_texts")
-    Txt.create_gui(180 - ORIGINAL_WINDOW_WIDTH, 30, "_______", GUI_CONTROLS, nil, "format", nil, "options_title_underscore", "center", ORIGINAL_WINDOW_WIDTH/1.5, nil, "options_screen_texts")
+    Txt.create_gui(180 - WINDOW_WIDTH, 20, "OPTIONS", GUI_CONTROLS, nil, "format", nil, "options_title", "center", WINDOW_WIDTH/1.5, nil, "options_screen_texts")
+    Txt.create_gui(180 - WINDOW_WIDTH, 30, "_______", GUI_CONTROLS, nil, "format", nil, "options_title_underscore", "center", WINDOW_WIDTH/1.5, nil, "options_screen_texts")
 
     --Create modes button
     func = function()
@@ -177,7 +177,7 @@ function state:enter()
          _but_options_controls(_options_menu_screen_buttons, _current_menu_screen)
         end
     end
-    b = Button.create_circle_gui(750 - ORIGINAL_WINDOW_WIDTH, 650, 70, func, "Gamepad", GUI_BIGLESSEST, "options_menu_buttons", "opt_controls_button")
+    b = Button.create_circle_gui(750 - WINDOW_WIDTH, 650, 70, func, "Gamepad", GUI_BIGLESSEST, "options_menu_buttons", "opt_controls_button")
     b.sfx = SFX.generic_button
     table.insert(_options_menu_screen_buttons, "opt_controls")
 
@@ -187,7 +187,7 @@ function state:enter()
          state:setCurrentSelectedButton("main_go2options")
          setCurrentMenuScreen("main_menu")
     end
-    b = Button.create_circle_gui(880 - ORIGINAL_WINDOW_WIDTH, 650, 55, func, "Back", GUI_BIGLESSLESS, "options_menu_buttons", "opt_go2main_button")
+    b = Button.create_circle_gui(880 - WINDOW_WIDTH, 650, 55, func, "Back", GUI_BIGLESSLESS, "options_menu_buttons", "opt_go2main_button")
     b.sfx = SFX.back_button
     table.insert(_options_menu_screen_buttons, "opt_go2main")
 

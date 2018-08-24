@@ -107,7 +107,7 @@ function level_manager.level_part(name)
     level_part.level_handles["up"] = LEVEL_TIMER:tween(.8, level_part.pos, {y = level_part.pos.y - off}, 'in-out-quad',
       function()
         level_part.text = name --Update text
-        level_part.pos.x = ORIGINAL_WINDOW_WIDTH/2 - level_part.font:getWidth(name)/2 --Update position
+        level_part.pos.x = WINDOW_WIDTH/2 - level_part.font:getWidth(name)/2 --Update position
         level_part.level_handles["down"] = LEVEL_TIMER:tween(.8, level_part.pos, {y = level_part.pos.y + off}, 'in-out-quad')
       end
     )
@@ -124,13 +124,13 @@ function level_manager.level_title(chapter_name, chapter_upper_text)
     local separator_font = GUI_MEDPLUS
 
 
-    local limit = 4*ORIGINAL_WINDOW_WIDTH/5
+    local limit = 4*WINDOW_WIDTH/5
 
     --Get position so that the text is centralized on screen
     fx = math.min(chapter_name_font:getWidth(chapter_name),limit) --Width of text
     fy = chapter_name_font:getHeight(chapter_name)*  math.ceil(chapter_name_font:getWidth(chapter_name)/fx) --Height of text
-    x = ORIGINAL_WINDOW_WIDTH/2 - fx/2
-    y = ORIGINAL_WINDOW_HEIGHT/2 - fy/2
+    x = WINDOW_WIDTH/2 - fx/2
+    y = WINDOW_HEIGHT/2 - fy/2
     --Create level title
     local name_txt = Txt.create_game_gui(x, y, chapter_name, chapter_name_font, nil, "format", nil, "game_title", "center", fx)
     name_txt.alpha = 0
@@ -142,7 +142,7 @@ function level_manager.level_title(chapter_name, chapter_upper_text)
       string = string .. "—"
     end
     fx = separator_font:getWidth(string)
-    x = ORIGINAL_WINDOW_WIDTH/2 - fx/2
+    x = WINDOW_WIDTH/2 - fx/2
     y = y - 25
     --Create separator
     local separator_txt = Txt.create_game_gui(x, y, string, separator_font, nil, nil, nil, "game_title_separator")
@@ -153,7 +153,7 @@ function level_manager.level_title(chapter_name, chapter_upper_text)
     --Get position so that the text is centralized on screen and above chapter name
     fx = chapter_upper_text_font:getWidth(chapter_upper_text)
     fy = chapter_upper_text_font:getHeight(chapter_upper_text)
-    x = ORIGINAL_WINDOW_WIDTH/2 - fx/2
+    x = WINDOW_WIDTH/2 - fx/2
     y = y - fy/2 - 5
     --Create upper text
     local upper_txt = Txt.create_game_gui(x, y, chapter_upper_text, chapter_upper_text_font, nil, nil, nil, "game_upper_title")
@@ -210,13 +210,13 @@ function level_manager.boss_title(name)
     local txt, fx, fy, x, y, font, limit
 
     font = GUI_BOSS_TITLE
-    limit = ORIGINAL_WINDOW_WIDTH
+    limit = WINDOW_WIDTH
 
     --Get position so that the text is centralized on screen
     fx = math.min(font:getWidth(name),limit) --Width of text
     fy = font:getHeight(name)*  math.ceil(font:getWidth(name)/fx) --Height of text
-    x = ORIGINAL_WINDOW_WIDTH/2 - fx/2
-    y = ORIGINAL_WINDOW_HEIGHT/5 - fy/2
+    x = WINDOW_WIDTH/2 - fx/2
+    y = WINDOW_HEIGHT/5 - fy/2
 
     --Create level title
     txt = Txt.create_gui(x, y, name, font, nil, "format", nil, "boss_title", "center", fx)
@@ -276,21 +276,21 @@ function level_manager.outsidePosition(dist)
     local x, y
 
     --For debugguing, but shouldn't happen
-    x = ORIGINAL_WINDOW_WIDTH/2
-    y = ORIGINAL_WINDOW_HEIGHT/2
+    x = WINDOW_WIDTH/2
+    y = WINDOW_HEIGHT/2
 
-    if dist >= 0 and dist <= ORIGINAL_WINDOW_WIDTH then
+    if dist >= 0 and dist <= WINDOW_WIDTH then
         x = dist
         y = -25
-    elseif dist <= ORIGINAL_WINDOW_WIDTH + ORIGINAL_WINDOW_HEIGHT then
-        x = ORIGINAL_WINDOW_WIDTH + 25
-        y = dist - ORIGINAL_WINDOW_WIDTH
-    elseif dist <= ORIGINAL_WINDOW_WIDTH + ORIGINAL_WINDOW_HEIGHT + ORIGINAL_WINDOW_WIDTH then
-        x = 2*ORIGINAL_WINDOW_WIDTH - dist + ORIGINAL_WINDOW_HEIGHT
-        y = ORIGINAL_WINDOW_HEIGHT + 25
-    elseif dist <= 2*ORIGINAL_WINDOW_WIDTH + 2*ORIGINAL_WINDOW_HEIGHT then
+    elseif dist <= WINDOW_WIDTH + WINDOW_HEIGHT then
+        x = WINDOW_WIDTH + 25
+        y = dist - WINDOW_WIDTH
+    elseif dist <= WINDOW_WIDTH + WINDOW_HEIGHT + WINDOW_WIDTH then
+        x = 2*WINDOW_WIDTH - dist + WINDOW_HEIGHT
+        y = WINDOW_HEIGHT + 25
+    elseif dist <= 2*WINDOW_WIDTH + 2*WINDOW_HEIGHT then
         x = -25
-        y = 2*ORIGINAL_WINDOW_HEIGHT - dist + 2*ORIGINAL_WINDOW_WIDTH
+        y = 2*WINDOW_HEIGHT - dist + 2*WINDOW_WIDTH
     end
 
     return x, y

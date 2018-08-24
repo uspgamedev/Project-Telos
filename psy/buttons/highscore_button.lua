@@ -11,7 +11,7 @@ return function()
     if table_ then
         for ob in pairs(table_) do
             table.insert(objects_positions, ob.pos)
-            table.insert(target_x_values, ob.pos.x - ORIGINAL_WINDOW_WIDTH) --Move objects to the left
+            table.insert(target_x_values, ob.pos.x - WINDOW_WIDTH) --Move objects to the left
             table.insert(handles_table, ob.handles)
             ob.lock = true
         end
@@ -22,7 +22,7 @@ return function()
     if table_ then
         for ob in pairs(table_) do
             table.insert(objects_positions, ob.pos)
-            table.insert(target_x_values, ob.pos.x - ORIGINAL_WINDOW_WIDTH) --Move objects to the left
+            table.insert(target_x_values, ob.pos.x - WINDOW_WIDTH) --Move objects to the left
             table.insert(handles_table, ob.handles)
             ob.lock = true
         end
@@ -33,7 +33,7 @@ return function()
     if table_ then
         for ob in pairs(table_) do
             table.insert(objects_positions, ob.pos)
-            table.insert(target_x_values, ob.pos.x - ORIGINAL_WINDOW_WIDTH) --Move objects to the left
+            table.insert(target_x_values, ob.pos.x - WINDOW_WIDTH) --Move objects to the left
             table.insert(handles_table, ob.handles)
             ob.lock = true
         end
@@ -44,7 +44,7 @@ return function()
     if table_ then
         for ob in pairs(table_) do
             table.insert(objects_positions, ob.pos)
-            table.insert(target_x_values, ob.pos.x - ORIGINAL_WINDOW_WIDTH) --Move objects to the left
+            table.insert(target_x_values, ob.pos.x - WINDOW_WIDTH) --Move objects to the left
             table.insert(handles_table, ob.handles)
         end
     end
@@ -53,7 +53,7 @@ return function()
     if table_ then
         for ob in pairs(table_) do
             table.insert(objects_positions, ob.pos)
-            table.insert(target_x_values, ob.pos.x - ORIGINAL_WINDOW_WIDTH) --Move objects to the left
+            table.insert(target_x_values, ob.pos.x - WINDOW_WIDTH) --Move objects to the left
             table.insert(handles_table, ob.handles)
         end
     end
@@ -62,7 +62,7 @@ return function()
     if table_ then
         for ob in pairs(table_) do
             table.insert(objects_positions, ob.pos)
-            table.insert(target_x_values, ob.pos.x - ORIGINAL_WINDOW_WIDTH) --Move objects to the left
+            table.insert(target_x_values, ob.pos.x - WINDOW_WIDTH) --Move objects to the left
             table.insert(handles_table, ob.handles)
         end
     end
@@ -72,7 +72,7 @@ return function()
     local logo = Util.findId("logo")
     if logo then
       table.insert(objects_positions, logo.pos)
-      table.insert(target_x_values, logo.pos.x - ORIGINAL_WINDOW_WIDTH) --Move objects to the left
+      table.insert(target_x_values, logo.pos.x - WINDOW_WIDTH) --Move objects to the left
       table.insert(handles_table, logo.handles)
     end
 

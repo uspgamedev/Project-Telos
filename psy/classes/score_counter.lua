@@ -107,7 +107,7 @@ function ScoreCounter:createPopup(score, text)
   local extra_text = text and (text .. "  ") or ""
   local score_font = GUI_MED
   local extra_font = GUI_MEDLESS
-  local x = ORIGINAL_WINDOW_WIDTH - self.gap_width - extra_font:getWidth(extra_text) - score_font:getWidth(score_text)
+  local x = WINDOW_WIDTH - self.gap_width - extra_font:getWidth(extra_text) - score_font:getWidth(score_text)
   local y = self:getStartYPosition() + self:getHeight()
 
   --Create popup
@@ -194,7 +194,7 @@ function ScoreCounter:update(dt)
     end
 
     --Update score x position
-    self.pos.x = ORIGINAL_WINDOW_WIDTH - self.gap_width - self.score_font:getWidth(self.score_cont)
+    self.pos.x = WINDOW_WIDTH - self.gap_width - self.score_font:getWidth(self.score_cont)
 
 end
 

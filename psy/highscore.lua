@@ -36,8 +36,8 @@ function hs.create_table(position, x_offset, y_offset)
     local texts = {} --Table for texts, used for highlighting a given position received by the function, if it exists
 
     --Draw header
-    Txt.create_gui(180 + x_offset, 100 + y_offset, "HIGHSCORES", GUI_HIGHSCORE, nil, "format", nil, "highscore_title", "center", ORIGINAL_WINDOW_WIDTH/1.5, nil, "highscore_screen_texts")
-    Txt.create_gui(180 + x_offset, 110 + y_offset, "__________", GUI_HIGHSCORE, nil, "format", nil, "highscore_title_underscore", "center", ORIGINAL_WINDOW_WIDTH/1.5, nil, "highscore_screen_texts")
+    Txt.create_gui(180 + x_offset, 100 + y_offset, "HIGHSCORES", GUI_HIGHSCORE, nil, "format", nil, "highscore_title", "center", WINDOW_WIDTH/1.5, nil, "highscore_screen_texts")
+    Txt.create_gui(180 + x_offset, 110 + y_offset, "__________", GUI_HIGHSCORE, nil, "format", nil, "highscore_title_underscore", "center", WINDOW_WIDTH/1.5, nil, "highscore_screen_texts")
 
     local invert --Will invert colors of given player stats, if function receives a 'position' argument
     --Draw highscores

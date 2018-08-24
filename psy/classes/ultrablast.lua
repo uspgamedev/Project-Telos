@@ -72,9 +72,9 @@ function Ultrablast:update(dt)
 
     --If all the four corners are inside the circle, it can be removed
     if (0 - ultra.pos.x)^2 + (0 - ultra.pos.y)^2 < (ultra.r-ultra.line_width)^2 and
-       (ORIGINAL_WINDOW_WIDTH - ultra.pos.x)^2 + (0 - ultra.pos.y)^2 < (ultra.r-ultra.line_width)^2 and
-       (0 - ultra.pos.x)^2 + (ORIGINAL_WINDOW_HEIGHT - ultra.pos.y)^2 < (ultra.r-ultra.line_width)^2 and
-       (ORIGINAL_WINDOW_WIDTH - ultra.pos.x)^2 + (ORIGINAL_WINDOW_HEIGHT - ultra.pos.y)^2 < (ultra.r-ultra.line_width)^2 then
+       (WINDOW_WIDTH - ultra.pos.x)^2 + (0 - ultra.pos.y)^2 < (ultra.r-ultra.line_width)^2 and
+       (0 - ultra.pos.x)^2 + (WINDOW_HEIGHT - ultra.pos.y)^2 < (ultra.r-ultra.line_width)^2 and
+       (WINDOW_WIDTH - ultra.pos.x)^2 + (WINDOW_HEIGHT - ultra.pos.y)^2 < (ultra.r-ultra.line_width)^2 then
            ultra.death = true
     end
 

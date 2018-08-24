@@ -20,7 +20,7 @@ Background = Class{
             HSL(Hsl.stdv(223,60,5)) --Dark blue
         }
 
-        RECT.init(self, 0, 0, ORIGINAL_WINDOW_WIDTH, ORIGINAL_WINDOW_HEIGHT, color_table[love.math.random(#color_table)], color_table) --Set atributes
+        RECT.init(self, 0, 0, WINDOW_WIDTH, WINDOW_HEIGHT, color_table[love.math.random(#color_table)], color_table) --Set atributes
 
         self.color_duration = 10 --Duration between color transitions
 

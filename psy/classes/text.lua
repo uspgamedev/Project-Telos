@@ -22,7 +22,7 @@ Text = Class{
         self.tp = "text" --Type of this class
         self.format = _format or false
         self.align = _align or "center"
-        self.limit = _limit or ORIGINAL_WINDOW_WIDTH/2
+        self.limit = _limit or WINDOW_WIDTH/2
         self.invert = _invert or false
 
         self.alpha = 255 --This object alpha
