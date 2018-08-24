@@ -524,7 +524,7 @@ function util.toggleFullscreen()
         love.window.setFullscreen(false)
         love.window.setMode(PREVIOUS_WINDOW_WIDTH, PREVIOUS_WINDOW_HEIGHT, {resizable = true, minwidth = 800, minheight = 600})
         --This isn't called automatically
-        ResManager.adjustWindow(PREVIOUS_WINDOW_WIDTH, PREVIOUS_WINDOW_HEIGHT)
+        love.resize(PREVIOUS_WINDOW_WIDTH, PREVIOUS_WINDOW_HEIGHT)
 
     else
         --Go to fullscreen mode, saving last configuration for eventual return

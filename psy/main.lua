@@ -97,6 +97,10 @@ end
 --Called when user resizes the screen
 function love.resize(w, h)
     ResManager.adjustWindow(w, h)
+
+    --These values may be invalidated on a resize
+    Horizontal_Blur_Shader:send("win_width", 1/WINDOW_WIDTH)
+    Vertical_Blur_Shader:send("win_height", 1/WINDOW_HEIGHT)
 end
 
 --Called when screen loses or receives focus
