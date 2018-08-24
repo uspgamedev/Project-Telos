@@ -60,9 +60,6 @@ function setup.config()
     TOP_LEFT_CORNER = Vector(0,0)
     BOTTOM_RIGHT_CORNER = Vector(WINDOW_WIDTH, WINDOW_HEIGHT)
 
-    SCREEN_CANVAS = nil --Screen canvas that can be draw or apllied effects
-    USE_CANVAS = false --If game should draw the SCREEN_CANVAS
-
     USE_BLUR_CANVAS = false --If game should draw the BLUR_CANVAS
 
     Draw.config()

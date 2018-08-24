@@ -252,10 +252,6 @@ function state:update(dt)
     Util.killAll()
 
     if SWITCH == "GAME" then
-        --Make use of canvas so screen won't blink
-        USE_CANVAS = true
-        Draw.allTables()
-
         SWITCH = nil
         if TUTORIAL then
           Gamestate.switch(GS.GAME, "tutorial")
@@ -266,16 +262,7 @@ function state:update(dt)
 end
 
 function state:draw()
-
-    --Stop using canvas
-    if USE_CANVAS then
-        USE_CANVAS = false
-        SCREEN_CANVAS = nil
-        love.graphics.clear()
-    end
-
     Draw.allTables()
-
 end
 
 function state:keypressed(key)
