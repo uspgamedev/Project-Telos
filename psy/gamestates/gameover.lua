@@ -76,8 +76,6 @@ function state:leave()
 
     --Stop using blur
     USE_BLUR_CANVAS = false
-    BLUR_CANVAS_1 = nil
-    BLUR_CANVAS_2 = nil
 
     --Stop using black and white effect
     BLACK_WHITE_SHADER_FACTOR = 0

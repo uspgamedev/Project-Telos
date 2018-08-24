@@ -6,7 +6,6 @@ local Color = require "classes.color.color"
 local Hsl = require "classes.color.hsl"
 local Util = require "util"
 local Ultra = require "classes.ultrablast"
-local FreeRes = require "FreeRes"
 local C_FX = require "classes.circle_effect"
 --PSYCHO CLASS--
 --[[Our hero... or is it VILLAIN??!!]]
@@ -221,12 +220,6 @@ function Psy:update(dt)
             p.shoot_tick = p.shoot_tick + p.shoot_fps
             local x, y = love.mouse.getPosition()
             --Fix mouse position click to respective distance
-            w, h = FreeRes.windowDistance()
-            scale = FreeRes.scale()
-            x = x - w
-            x = x*(1/scale)
-            y = y - h
-            y = y*(1/scale)
             p:shoot(x, y)
         end
       end

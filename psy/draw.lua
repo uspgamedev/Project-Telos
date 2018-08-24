@@ -1,46 +1,38 @@
 --MODULE FOR DRAWING STUFF--
 
+local ResManager = require "res_manager"
+
 local draw = {}
+
+local mainCanvas, blurCanvas, blackAndWhiteCanvas
+
+function draw.config()
+    mainCanvas = love.graphics.newCanvas(WINDOW_WIDTH, WINDOW_HEIGHT)
+    blurCanvas1 = love.graphics.newCanvas(WINDOW_WIDTH, WINDOW_HEIGHT)
+    blurCanvas2 = love.graphics.newCanvas(WINDOW_WIDTH, WINDOW_HEIGHT)
+    blackAndWhiteCanvas = love.graphics.newCanvas(WINDOW_WIDTH, WINDOW_HEIGHT)
+
+end
 
 ----------------------
 --BASIC DRAW FUNCTIONS
 ----------------------
 
---Draws every drawable object from all tables
-function draw.allTables()
+--We need to take some extra care when drawing Canvas
+local function drawCanvas(canvas)
+    love.graphics.setColor(255, 255, 255, 255)
+    love.graphics.setBlendMode("alpha", "premultiplied")
+    love.graphics.draw(canvas)
+    love.graphics.setBlendMode("alpha")
 
-    --Makes transformations regarding screen current size
-    FreeRes.transform()
+end
 
-    --Start using canvas
-    if not SCREEN_CANVAS and USE_CANVAS then
-        SCREEN_CANVAS = love.graphics.newCanvas(ORIGINAL_WINDOW_WIDTH, ORIGINAL_WINDOW_HEIGHT) --Create canvas
-        love.graphics.setCanvas(SCREEN_CANVAS)
-        love.graphics.clear() --Clear previous stuff so Canvas won't draw
-        love.graphics.setBlendMode("alpha") --Set alpha mode properly
-    end
 
-    if USE_BLUR_CANVAS then
-        love.graphics.pop() --Stop tracking effects on screen transformations for the canvas
-
-        if not BLUR_CANVAS_1 then
-            BLUR_CANVAS_1 = love.graphics.newCanvas(WINDOW_WIDTH, WINDOW_HEIGHT)
-        end
-        love.graphics.setCanvas(BLUR_CANVAS_1)
-        love.graphics.setBlendMode("alpha") --Set alpha mode properly
-
-        FreeRes.transform() --Return transformations onscreen
-    end
-
-    DrawTable(DRAW_TABLE.BG) --Background
-
-    MENU_CAM:attach() --Start tracking main menu camera
+--Draws everything that may need to be in black and white
+local function blackAndWhiteDraw()
+    love.graphics.clear()
 
     CAM:attach() --Start tracking camera
-
-    local old_canvas = love.graphics.getCanvas()
-    love.graphics.setCanvas(BLACK_WHITE_CANVAS)
-    love.graphics.clear()
 
     DrawTable(DRAW_TABLE.L1)  --Circle effect
 
@@ -70,40 +62,44 @@ function draw.allTables()
 
     MENU_CAM:detach() --Start tracking main menu camera
 
-    love.graphics.setCanvas(old_canvas)
+end
 
-    --Draw stuff (in black and white if needed)
-    love.graphics.setColor(255, 255, 255)
-    love.graphics.setBlendMode("alpha", 'premultiplied') --Set alpha mode properly
+--Draws everything that may need to be blurred
+local function blurDraw()
+    love.graphics.clear()
+
+    DrawTable(DRAW_TABLE.BG) --Background
+
+    MENU_CAM:attach() --Start tracking main menu camera
+
+    blackAndWhiteCanvas:renderTo(blackAndWhiteDraw)
+
     Black_White_Shader:send("factor", BLACK_WHITE_SHADER_FACTOR)
     love.graphics.setShader(Black_White_Shader)
-    love.graphics.draw(BLACK_WHITE_CANVAS)
+    drawCanvas(blackAndWhiteCanvas)
     love.graphics.setShader()
-    love.graphics.setBlendMode("alpha") --Set alpha mode properly
+
+end
+
+--Draws every drawable object from all tables
+local function mainDraw()
+    love.graphics.clear()
 
     if USE_BLUR_CANVAS then
-        love.graphics.pop() --Stop tracking effects on screen transformations for the canvas
+        --We need to use 2 Canvas because we need to apply 2 different shaders
+        blurCanvas1:renderTo(blurDraw)
 
-        --Draws the first canvas into the second, using horizontal blur shader
-        if not BLUR_CANVAS_2 then
-            BLUR_CANVAS_2 = love.graphics.newCanvas(WINDOW_WIDTH, WINDOW_HEIGHT)
-        end
-        love.graphics.setCanvas(BLUR_CANVAS_2)
-        love.graphics.setShader(Horizontal_Blur_Shader)
-        love.graphics.setBlendMode("alpha", "premultiplied")
-        love.graphics.draw(BLUR_CANVAS_1)
+        blurCanvas2:renderTo(function()
+            love.graphics.clear()
+            love.graphics.setShader(Horizontal_Blur_Shader)
+            drawCanvas(blurCanvas1)
+        end)
 
-        --Draws the second canvas into the scren or main canvas, using vertical blur shader
-        love.graphics.setCanvas()
-        if USE_CANVAS then
-            love.graphics.setCanvas(SCREEN_CANVAS)
-        end
         love.graphics.setShader(Vertical_Blur_Shader)
-        love.graphics.draw(BLUR_CANVAS_2)
-        love.graphics.setBlendMode("alpha") --Set alpha mode properly
+        drawCanvas(blurCanvas2)
         love.graphics.setShader()
-
-        FreeRes.transform() --Return transformations onscreen
+    else
+        blurDraw()
     end
 
     MENU_CAM:attach() --Start tracking main menu camera
@@ -114,21 +110,15 @@ function draw.allTables()
 
     MENU_CAM:detach() --Start tracking main menu camera
 
+end
 
-    --Stop using canvas
-    if USE_CANVAS then
-        love.graphics.setCanvas() -- Stop tracking canvas
+function draw.allTables()
+    love.graphics.clear()
+    mainCanvas:renderTo(mainDraw)
 
-        --Draw screen one time
-        love.graphics.setColor(255, 255, 255, 255)
-        -- Use the premultiplied alpha blend mode when drawing the Canvas itself to prevent improper blending.
-        love.graphics.setBlendMode("alpha", "premultiplied")
-        love.graphics.draw(SCREEN_CANVAS)
-        love.graphics.setBlendMode("alpha")
-    end
-
-    --Creates letterbox at the sides of the screen if needed
-    FreeRes.letterbox(color)
+    ResManager.preDraw()
+    drawCanvas(mainCanvas)
+    ResManager.postDraw()
 
 end
 

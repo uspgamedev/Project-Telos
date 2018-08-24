@@ -268,14 +268,6 @@ function Highscore_Button:mousepressed(x,y)
     local mousepos
 
 
-    --Fix mouse position click to respective distance
-    w, h = FreeRes.windowDistance()
-    scale = FreeRes.scale()
-    x = x - w
-    x = x*(1/scale)
-    y = y - h
-    y = y*(1/scale)
-
     mousepos = Vector(x, y)
 
     --Check collision with arrows buttons
@@ -450,12 +442,6 @@ function Highscore_Arrow:update(dt)
 
     --Fix mouse position click to respective distance
     x, y = love.mouse.getPosition()
-    w, h = FreeRes.windowDistance()
-    scale = FreeRes.scale()
-    x = x - w
-    x = x*(1/scale)
-    y = y - h
-    y = y*(1/scale)
 
     mousepos = Vector(x, y)
 

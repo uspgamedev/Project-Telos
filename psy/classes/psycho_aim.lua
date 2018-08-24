@@ -1,7 +1,6 @@
 require "classes.primitive"
 local Color = require "classes.color.color"
 local Util = require "util"
-local FreeRes = require "FreeRes"
 --PSYCHO AIM CLASS--
 --[[Line and circle representing psycho's aim]]
 
@@ -84,12 +83,6 @@ function Aim:update(dt)
 
     --Fix mouse position click to respective distance
     x, y = love.mouse.getPosition()
-    w, h = FreeRes.windowDistance()
-    scale = FreeRes.scale()
-    x = x - w
-    x = x*(1/scale)
-    y = y - h
-    y = y*(1/scale)
 
     --Update circle position
     aim.mouse_pos.x, aim.mouse_pos.y = x, y
