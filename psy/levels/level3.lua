@@ -17,7 +17,12 @@ function level_functions.part_1()
 
     LM.wait(1)
 
-    F.cage{radius = 100}
+    local cage = F.cage{radius = 100}
+
+    LM.wait(3)
+    cage:resize(300)
+    LM.wait(3)
+    cage:resize(500, 50)
 
     LM.stop()
 

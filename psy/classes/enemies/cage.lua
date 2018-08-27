@@ -83,6 +83,13 @@ function Cage:update(dt)
 
 end
 
+function Cage:resize(desired_radius, radius_speed)
+	self.target_radius = desired_radius
+	if radius_speed then
+		self.radius_speed = radius_speed
+	end
+end
+
 --UTILITY FUNCTIONS--
 
 function enemy.create(x, y, radius, growth_speed)
