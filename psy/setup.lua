@@ -1,8 +1,9 @@
-local FreeRes = require "FreeRes"
+local ResManager = require "res_manager"
 local BG = require "classes.bg"
 local Hsl = require "classes.color.hsl"
 local UI = require "classes.ui"
 local Txt = require "classes.text"
+local Draw = require "draw"
 --MODULE FOR SETUP STUFF--
 
 local setup = {}
@@ -50,25 +51,18 @@ function setup.config()
 
     MAX_ULTRABLAST = 3 --Max number of ultrablasts psycho has
 
-    WINDOW_WIDTH = love.graphics.getWidth() --Current width of the game window
-    WINDOW_HEIGHT = love.graphics.getHeight() --Current height of the game window
-    ORIGINAL_WINDOW_WIDTH = 1000 --Default width of the game window
-    ORIGINAL_WINDOW_HEIGHT = 750 --Default height of the game window
-    PREVIOUS_WINDOW_WIDTH = love.graphics.getWidth() --Window width before fullscreen
-    PREVIOUS_WINDOW_HEIGHT = love.graphics.getHeight() --Window height before fullscreen
+    WINDOW_WIDTH = 1000 --Default width of the game window
+    WINDOW_HEIGHT = 750 --Default height of the game window
+    PREVIOUS_WINDOW_WIDTH = WINDOW_WIDTH --Window width before fullscreen
+    PREVIOUS_WINDOW_HEIGHT = WINDOW_HEIGHT --Window height before fullscreen
 
     --Game screen params
     TOP_LEFT_CORNER = Vector(0,0)
-    BOTTOM_RIGHT_CORNER = Vector(ORIGINAL_WINDOW_WIDTH, ORIGINAL_WINDOW_HEIGHT)
+    BOTTOM_RIGHT_CORNER = Vector(WINDOW_WIDTH, WINDOW_HEIGHT)
 
-    SCREEN_CANVAS = nil --Screen canvas that can be draw or apllied effects
-    USE_CANVAS = false --If game should draw the SCREEN_CANVAS
-
-    BLUR_CANVAS_1 = nil --First canvas for blur effect
-    BLUR_CANVAS_2 = nil --Second canvas for blur effect
     USE_BLUR_CANVAS = false --If game should draw the BLUR_CANVAS
 
-    BLACK_WHITE_CANVAS = love.graphics.newCanvas(ORIGINAL_WINDOW_WIDTH, ORIGINAL_WINDOW_HEIGHT)
+    Draw.config()
     BLACK_WHITE_SHADER_FACTOR = 0 --[0,1]
 
     FOCUS = true --If game screen is focused
@@ -131,7 +125,9 @@ function setup.config()
 
     --WINDOW CONFIG--
     love.window.setMode(WINDOW_WIDTH, WINDOW_HEIGHT, {resizable = true, minwidth = 800, minheight = 600})
-    FreeRes.setScreen()
+    ResManager.init()
+    ResManager.adjustWindow(WINDOW_WIDTH, WINDOW_HEIGHT)
+
 
     --IMAGES--
 
@@ -204,8 +200,8 @@ function setup.config()
 
 
     --CAMERA--
-    CAM = Camera(ORIGINAL_WINDOW_WIDTH/2, ORIGINAL_WINDOW_HEIGHT/2) --Set camera position to center of screen
-    MENU_CAM = Camera(ORIGINAL_WINDOW_WIDTH/2, ORIGINAL_WINDOW_HEIGHT/2) --Set camera position to center of screen, camera used for menu transitions
+    CAM = Camera(WINDOW_WIDTH/2, WINDOW_HEIGHT/2) --Set camera position to center of screen
+    MENU_CAM = Camera(WINDOW_WIDTH/2, WINDOW_HEIGHT/2) --Set camera position to center of screen, camera used for menu transitions
 
     --DEATH MESSAGE
     DEATH_TEXTS = {
@@ -407,7 +403,7 @@ function setup.config()
   BG.create()
 
   --FPS Counter
-  Txt.create_gui(5, ORIGINAL_WINDOW_HEIGHT - 20, "FPS: ", GUI_MEDLESS, love.timer.getFPS(), "right", GUI_MEDLESS, "fps_counter")
+  Txt.create_gui(5, WINDOW_HEIGHT - 20, "FPS: ", GUI_MEDLESS, love.timer.getFPS(), "right", GUI_MEDLESS, "fps_counter")
 
   print("---------------------------")
 

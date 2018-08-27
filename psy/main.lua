@@ -64,7 +64,7 @@ HS = require "highscore"
 local Setup = require "setup"
 
 --IMPORTED MODULES
-local FreeRes = require "FreeRes"
+local ResManager = require "res_manager"
 require "Tserial"
 
 --GAMESTATES
@@ -82,49 +82,31 @@ function love.load()
 
     Setup.config() --Configure your game
 
-    Gamestate.registerEvents() --Overwrites love callbacks to call Gamestate as well
+    local callbacks = {'draw', 'errhand', 'update'}
+    for c in pairs(love.handlers) do
+        if c ~= 'mousepressed' and c ~= 'mousereleased' and c ~= 'mousemoved' then
+            table.insert(callbacks, c)
+        end
+    end
+    -- mousereleased, mousemoved and mousepressed are called manually
+    Gamestate.registerEvents(callbacks) --Overwrites love callbacks to call Gamestate as well
+
     Gamestate.switch(GS.MENU) --Jump to the inicial state
 
 end
 
 --Called when user resizes the screen
 function love.resize(w, h)
+    ResManager.adjustWindow(w, h)
 
-    WINDOW_WIDTH = w
-    WINDOW_HEIGHT = h
-
-    FreeRes.setScreen(1)
-
-    --Fix shaders
+    --These values may be invalidated on a resize
     Horizontal_Blur_Shader:send("win_width", 1/WINDOW_WIDTH)
     Vertical_Blur_Shader:send("win_height", 1/WINDOW_HEIGHT)
-
-    if BLUR_CANVAS_1 then BLUR_CANVAS_1 = nil end
-    if BLUR_CANVAS_2 then BLUR_CANVAS_2 = nil end
-
-
-    --Fix camera position to look at the center
-    CAM:lookAt(WINDOW_WIDTH/2, WINDOW_HEIGHT/2)
-    --Fix menu camera position to look at the center
-    MENU_CAM:lookAt(WINDOW_WIDTH/2, WINDOW_HEIGHT/2)
 end
 
 --Called when screen loses or receives focus
 function love.focus(f)
     FOCUS = f
-end
-
---Used to draw canvas (fixes screen blinking when changing gamestates)
-function love.draw()
-
-    if USE_CANVAS and SCREEN_CANVAS then
-        love.graphics.setColor(255, 255, 255, 255)
-        -- Use the premultiplied alpha blend mode when drawing the Canvas itself to prevent improper blending.
-        love.graphics.setBlendMode("alpha", "premultiplied")
-        love.graphics.draw(SCREEN_CANVAS)
-        love.graphics.setBlendMode("alpha")
-    end
-
 end
 
 --Function called when love is quitting
@@ -149,8 +131,21 @@ end
 ------------------------------------
 
 --Update status of player using joystick or not
-function love.mousemoved(...)
+function love.mousemoved(x, y, dx, dy, ...)
   USING_JOYSTICK = false
+  x, y = love.mouse.getPosition() --fixed (ResManager)
+  dx, dy = dx * ResManager.scale(), dy * ResManager.scale()
+  Gamestate.mousemoved(x, y, dx, dy, ...)
+end
+
+function love.mousepressed(x, y, ...)
+  x, y = love.mouse.getPosition() --fixed (ResManager)
+  Gamestate.mousepressed(x, y, ...)
+end
+
+function love.mousereleased(x, y, ...)
+  x, y = love.mouse.getPosition() --fixed (ResManager)
+  Gamestate.mousereleased(x, y, ...)
 end
 
 function love.keypressed(...)

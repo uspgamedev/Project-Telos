@@ -54,9 +54,9 @@ function Circle_FX:update(dt)
 
     --If all the four corners are inside the circle, it can be removed
     if (0 - c.pos.x)^2 + (0 - c.pos.y)^2 < (c.r-c.line_width)^2 and
-       (ORIGINAL_WINDOW_WIDTH - c.pos.x)^2 + (0 - c.pos.y)^2 < (c.r-c.line_width)^2 and
-       (0 - c.pos.x)^2 + (ORIGINAL_WINDOW_HEIGHT - c.pos.y)^2 < (c.r-c.line_width)^2 and
-       (ORIGINAL_WINDOW_WIDTH - c.pos.x)^2 + (ORIGINAL_WINDOW_HEIGHT - c.pos.y)^2 < (c.r-c.line_width)^2 then
+       (WINDOW_WIDTH - c.pos.x)^2 + (0 - c.pos.y)^2 < (c.r-c.line_width)^2 and
+       (0 - c.pos.x)^2 + (WINDOW_HEIGHT - c.pos.y)^2 < (c.r-c.line_width)^2 and
+       (WINDOW_WIDTH - c.pos.x)^2 + (WINDOW_HEIGHT - c.pos.y)^2 < (c.r-c.line_width)^2 then
            c.death = true
     end
 

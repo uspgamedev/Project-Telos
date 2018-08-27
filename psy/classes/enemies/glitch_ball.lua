@@ -96,9 +96,9 @@ end
 function isInside(o)
 
     if    o.pos.x + o.r >= 0
-      and o.pos.x - o.r <= ORIGINAL_WINDOW_WIDTH
+      and o.pos.x - o.r <= WINDOW_WIDTH
       and o.pos.y + o.r >= 0
-      and o.pos.y - o.r <= ORIGINAL_WINDOW_HEIGHT
+      and o.pos.y - o.r <= WINDOW_HEIGHT
       then
           return true
       end

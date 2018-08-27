@@ -219,8 +219,8 @@ function fx.shake(d, s)
                     SHAKE_HANDLES[handle] = nil
                     if Util.tableLen(SHAKE_HANDLES) <= 0 then
                       -- reset camera position to center screen if this is the last active shake effect
-                      CAM.x = ORIGINAL_WINDOW_WIDTH/2
-                      CAM.y = ORIGINAL_WINDOW_HEIGHT/2
+                      CAM.x = WINDOW_WIDTH/2
+                      CAM.y = WINDOW_HEIGHT/2
                     end
                 end
     )

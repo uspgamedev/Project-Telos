@@ -1,6 +1,5 @@
 require "classes.primitive"
 local Color = require "classes.color.color"
-local FreeRes = require "FreeRes"
 local Particle = require "classes.particle"
 local Util = require "util"
 --BUTTON CLASS --
@@ -95,12 +94,6 @@ function Circle_Button:update(dt)
 
     --Fix mouse position click to respective distance
     x, y = love.mouse.getPosition()
-    w, h = FreeRes.windowDistance()
-    scale = FreeRes.scale()
-    x = x - w
-    x = x*(1/scale)
-    y = y - h
-    y = y*(1/scale)
 
     mousepos = Vector(x, y)
 
@@ -209,12 +202,6 @@ function Inv_Button:update(dt)
 
     --Fix mouse position click to respective distance
     x, y = love.mouse.getPosition()
-    w, h = FreeRes.windowDistance()
-    scale = FreeRes.scale()
-    x = x - w
-    x = x*(1/scale)
-    y = y - h
-    y = y*(1/scale)
 
     --If mouse is colliding with button, then show message below
     if not USING_JOYSTICK and
@@ -335,12 +322,6 @@ function KeyBinding_Button:update(dt)
 
     --Fix mouse position click to respective distance
     x, y = love.mouse.getPosition()
-    w, h = FreeRes.windowDistance()
-    scale = FreeRes.scale()
-    x = x - w
-    x = x*(1/scale)
-    y = y - h
-    y = y*(1/scale)
 
     --If mouse is colliding with button, then create over_effect
     if not USING_JOYSTICK and
@@ -575,15 +556,6 @@ end
 
 --Check if a mouse click collides with any button
 function button.checkCollision(x,y)
-    local w, h, scale
-
-    --Fix mouse position click to respective distance
-    w, h = FreeRes.windowDistance()
-    scale = FreeRes.scale()
-    x = x - w
-    x = x*(1/scale)
-    y = y - h
-    y = y*(1/scale)
 
     checkCircleButtonCollision(x,y)
 

@@ -38,7 +38,7 @@ function level_functions.part_1()
     DONT_ENABLE_MOVING_AFTER_DEATH = true
     DONT_ENABLE_CHARGE_AFTER_DEATH = true
 
-    F.single{enemy = SB, x = ORIGINAL_WINDOW_WIDTH + 20, y = p.pos.y, dx = -11, dy = 0, speed_m = 1.8, e_radius = 20, score_mul = 0, ind_duration = 3, ind_side = 50}
+    F.single{enemy = SB, x = WINDOW_WIDTH + 20, y = p.pos.y, dx = -11, dy = 0, speed_m = 1.8, e_radius = 20, score_mul = 0, ind_duration = 3, ind_side = 50}
 
     LM.wait(2)
 
@@ -50,7 +50,7 @@ function level_functions.part_1()
     LM.wait("noenemies")
     LM.wait(1.5)
 
-    F.single{enemy = SB, x = ORIGINAL_WINDOW_WIDTH + 20, y = p.pos.y, dx = -11, dy = 0, speed_m = 1.8, e_radius = 20, score_mul = 0, ind_duration = 4, ind_side = 50}
+    F.single{enemy = SB, x = WINDOW_WIDTH + 20, y = p.pos.y, dx = -11, dy = 0, speed_m = 1.8, e_radius = 20, score_mul = 0, ind_duration = 4, ind_side = 50}
 
     LM.wait(1.5)
 
@@ -92,7 +92,7 @@ function level_functions.part_1()
     local w, h, x, y
     if not USING_JOYSTICK then
         w, h = TutIcon.dimensions("space")
-        x, y = ORIGINAL_WINDOW_WIDTH/2 - w/2, ORIGINAL_WINDOW_HEIGHT/3 - 20
+        x, y = WINDOW_WIDTH/2 - w/2, WINDOW_HEIGHT/3 - 20
         TutIcon.create(x, y, 'space', 6)
         x, y = x + w/2 - 10, y + h + 20
         LM.text(x, y, "or", 6, 180)
@@ -101,7 +101,7 @@ function level_functions.part_1()
         TutIcon.create(x, y, 'right_mouse_button', 6)
     else
         w, h = TutIcon.dimensions("left_trigger")
-        x, y = ORIGINAL_WINDOW_WIDTH/2 - w/2, ORIGINAL_WINDOW_HEIGHT/5 - 20
+        x, y = WINDOW_WIDTH/2 - w/2, WINDOW_HEIGHT/5 - 20
         TutIcon.create(x, y, 'left_trigger', 6)
         x, y = x + w/2 - 10, y + h + 20
         LM.text(x, y, "or", 6, 180)
@@ -111,12 +111,12 @@ function level_functions.part_1()
     end
     local font = GUI_MED
     local text = "for"
-    x = ORIGINAL_WINDOW_WIDTH/2 - font:getWidth(text)/2
+    x = WINDOW_WIDTH/2 - font:getWidth(text)/2
     y = y + h + 15
     LM.text(x, y, text, 6, 180, font)
     font = GUI_MEDPLUS
     text = "ULTRABLAST"
-    x = ORIGINAL_WINDOW_WIDTH/2 - font:getWidth(text)/2
+    x = WINDOW_WIDTH/2 - font:getWidth(text)/2
     y = y + 30
     LM.text(x, y, text, 6, 180, font)
 
@@ -130,8 +130,8 @@ function level_functions.part_1()
     --Explain ultrablast makes you invincible
     font = GUI_MEDPLUS
     text = "using ULTRABLAST makes you briefly invunerable"
-    x = ORIGINAL_WINDOW_WIDTH/2 - font:getWidth(text)/2
-    y = ORIGINAL_WINDOW_HEIGHT/2 - font:getHeight(text)/2
+    x = WINDOW_WIDTH/2 - font:getWidth(text)/2
+    y = WINDOW_HEIGHT/2 - font:getHeight(text)/2
     LM.text(x, y, text, 4, 230, font)
 
     LM.wait(6)
@@ -143,11 +143,11 @@ function level_functions.part_1()
     local w, h, x, y
     if not USING_JOYSTICK then
         w, h = TutIcon.dimensions("left_mouse_button")
-        x, y = ORIGINAL_WINDOW_WIDTH/2 - w/2, ORIGINAL_WINDOW_HEIGHT/2 - h/2
+        x, y = WINDOW_WIDTH/2 - w/2, WINDOW_HEIGHT/2 - h/2
         TutIcon.create(x, y, 'left_mouse_button', 6.5)
     else
         w, h = TutIcon.dimensions("right_stick")
-        x, y = ORIGINAL_WINDOW_WIDTH/2 - w, ORIGINAL_WINDOW_HEIGHT/2 - h/2
+        x, y = WINDOW_WIDTH/2 - w, WINDOW_HEIGHT/2 - h/2
         TutIcon.create(x, y, 'right_stick', 6.5)
         x, y = x + w + 20, y + h/2 - 10
         LM.text(x, y, "+", 6, 180)
@@ -170,8 +170,8 @@ function level_functions.part_1()
     --Explain ultrablast makes you invincible
     font = GUI_MEDPLUS
     text = "shooting depletes your ULTRABLAST charge bar"
-    x = ORIGINAL_WINDOW_WIDTH/2 - font:getWidth(text)/2
-    y = ORIGINAL_WINDOW_HEIGHT/2 - font:getHeight(text)/2
+    x = WINDOW_WIDTH/2 - font:getWidth(text)/2
+    y = WINDOW_HEIGHT/2 - font:getHeight(text)/2
     LM.text(x, y, text, 4, 230, font)
 
     LM.wait(6)
@@ -193,7 +193,7 @@ function level_functions.part_1()
 
     LM.wait(1.5)
 
-    LM.text(ORIGINAL_WINDOW_WIDTH/2 - 50, ORIGINAL_WINDOW_HEIGHT/2, "good luck", 3, 170)
+    LM.text(WINDOW_WIDTH/2 - 50, WINDOW_HEIGHT/2, "good luck", 3, 170)
 
     LM.wait(4)
 

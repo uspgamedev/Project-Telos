@@ -70,8 +70,6 @@ function state:leave()
 
     --Stop using blur
     USE_BLUR_CANVAS = false
-    BLUR_CANVAS_1 = nil
-    BLUR_CANVAS_2 = nil
 
     Psycho.updateSpeed(Psycho.get())
 
@@ -119,19 +117,11 @@ function state:update(dt)
 
 
     if SWITCH == "GAME" then
-        --Make use of canvas so screen won't blink
-        USE_CANVAS = true
-        Draw.allTables()
-
         SWITCH = nil
         Util.gameElementException()
         Gamestate.pop()
 
     elseif SWITCH == "MENU" then
-        --Make use of canvas so screen won't blink
-        USE_CANVAS = true
-        Draw.allTables()
-
         SWITCH = nil
         Util.clearTimerTable(DEATH_HANDLES, FX_TIMER)
         CAM.rot = 0 --Reset camera rotation
@@ -182,16 +172,7 @@ function state:update(dt)
 end
 
 function state:draw()
-
-    --Stop using canvas
-    if USE_CANVAS then
-        USE_CANVAS = false
-        SCREEN_CANVAS = nil
-        love.graphics.clear()
-    end
-
     Draw.allTables()
-
 end
 
 function state:keypressed(key)

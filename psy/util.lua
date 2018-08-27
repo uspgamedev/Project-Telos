@@ -1,5 +1,4 @@
-local FreeRes = require "FreeRes"
-
+local ResManager = require "res_manager"
 --MODULE WITH LOGICAL, MATHEMATICAL AND USEFUL STUFF--
 
 local util = {}
@@ -527,45 +526,17 @@ function util.toggleFullscreen()
     if love.window.getFullscreen() then
         --Go back to previous window configuration
         love.window.setFullscreen(false)
-        WINDOW_WIDTH = PREVIOUS_WINDOW_WIDTH
-        WINDOW_HEIGHT = PREVIOUS_WINDOW_HEIGHT
-        love.window.setMode(WINDOW_WIDTH, WINDOW_HEIGHT, {resizable = true, minwidth = 800, minheight = 600})
-
-        FreeRes.setScreen()
-
-        --Fix shaders
-        Horizontal_Blur_Shader:send("win_width", 1/WINDOW_WIDTH)
-        Vertical_Blur_Shader:send("win_height", 1/WINDOW_HEIGHT)
-
-        --Fix camera position to look at the center
-        CAM:lookAt(WINDOW_WIDTH/2, WINDOW_HEIGHT/2)
-        --Fix menu camera position to look at the center
-        MENU_CAM:lookAt(WINDOW_WIDTH/2, WINDOW_HEIGHT/2)
+        love.window.setMode(PREVIOUS_WINDOW_WIDTH, PREVIOUS_WINDOW_HEIGHT, {resizable = true, minwidth = 800, minheight = 600})
+        --This isn't called automatically
+        love.resize(PREVIOUS_WINDOW_WIDTH, PREVIOUS_WINDOW_HEIGHT)
 
     else
         --Go to fullscreen mode, saving last configuration for eventual return
-        PREVIOUS_WINDOW_WIDTH = WINDOW_WIDTH
-        PREVIOUS_WINDOW_HEIGHT = WINDOW_HEIGHT
+        PREVIOUS_WINDOW_WIDTH = ResManager.getRealWidth()
+        PREVIOUS_WINDOW_HEIGHT = ResManager.getRealHeight()
         love.window.setFullscreen(true)
-        WINDOW_WIDTH = love.graphics.getWidth()
-        WINDOW_HEIGHT = love.graphics.getHeight()
-
-        FreeRes.setScreen()
-
-        --Fix shaders
-        Horizontal_Blur_Shader:send("win_width", 1/WINDOW_WIDTH)
-        Vertical_Blur_Shader:send("win_height", 1/WINDOW_HEIGHT)
-
-        if BLUR_CANVAS_1 then BLUR_CANVAS_1 = nil end
-        if BLUR_CANVAS_2 then BLUR_CANVAS_2 = nil end
-
-        --Fix camera position to look at the center
-        CAM:lookAt(WINDOW_WIDTH/2, WINDOW_HEIGHT/2)
-        --Fix menu camera position to look at the center
-        MENU_CAM:lookAt(WINDOW_WIDTH/2, WINDOW_HEIGHT/2)
 
     end
-
 
 end
 

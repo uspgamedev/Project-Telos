@@ -84,7 +84,7 @@ Boss_2_Main = Class{
 
         self.color_pulse_duration = 1 --Duration between color saturation transitions
 
-        CIRC.init(self, ORIGINAL_WINDOW_WIDTH/2, - 500, r, Color.transp(), nil, "fill") --Set atributes
+        CIRC.init(self, WINDOW_WIDTH/2, - 500, r, Color.transp(), nil, "fill") --Set atributes
 
         self.number_parts = 4 --Number of parts the main boss has
 
@@ -364,13 +364,13 @@ function Boss_2_Main:changeStage()
                         turret.target = Vector(70, 70)
                     elseif i == 2 then
                         --From top to top right
-                        turret.target = Vector(ORIGINAL_WINDOW_WIDTH - 70, 70)
+                        turret.target = Vector(WINDOW_WIDTH - 70, 70)
                     elseif i == 3 then
                         --From right to bottom right
-                        turret.target = Vector(ORIGINAL_WINDOW_WIDTH - 70, ORIGINAL_WINDOW_HEIGHT - 70)
+                        turret.target = Vector(WINDOW_WIDTH - 70, WINDOW_HEIGHT - 70)
                     else
                         --From bottom to bottom left
-                        turret.target = Vector(70, ORIGINAL_WINDOW_HEIGHT - 70)
+                        turret.target = Vector(70, WINDOW_HEIGHT - 70)
                     end
 
                     --Move turret to target position
@@ -437,19 +437,19 @@ function Boss_2_Main:changeStage()
 
 
             --Move turret to the middle
-            turret.target = Vector(ORIGINAL_WINDOW_WIDTH/2, ORIGINAL_WINDOW_HEIGHT/2)
+            turret.target = Vector(WINDOW_WIDTH/2, WINDOW_HEIGHT/2)
             turret.level_handles["moving_to_target"] = LEVEL_TIMER:tween(2, turret.pos, {x = turret.target.x, y = turret.target.y}, 'in-linear',
                 function()
                     FX.shake(.3,3)
                     --Get turret target position
                     if turret.identification == 1 then
-                        turret.target = Vector(70, ORIGINAL_WINDOW_HEIGHT/2) --Left
+                        turret.target = Vector(70, WINDOW_HEIGHT/2) --Left
                     elseif turret.identification == 2 then
-                        turret.target = Vector(ORIGINAL_WINDOW_WIDTH/2, 70)  --Up
+                        turret.target = Vector(WINDOW_WIDTH/2, 70)  --Up
                     elseif turret.identification == 3 then
-                        turret.target = Vector(ORIGINAL_WINDOW_WIDTH - 70, ORIGINAL_WINDOW_HEIGHT/2) --Right
+                        turret.target = Vector(WINDOW_WIDTH - 70, WINDOW_HEIGHT/2) --Right
                     else
-                        turret.target = Vector(ORIGINAL_WINDOW_WIDTH/2, ORIGINAL_WINDOW_HEIGHT - 70) --Bottom
+                        turret.target = Vector(WINDOW_WIDTH/2, WINDOW_HEIGHT - 70) --Bottom
                     end
 
                     --Move turret to target position
@@ -520,18 +520,18 @@ function Boss_2_Main:changeStage()
             end
 
             --Move turret to the middle
-            turret.target = Vector(ORIGINAL_WINDOW_WIDTH/2, ORIGINAL_WINDOW_HEIGHT/2)
+            turret.target = Vector(WINDOW_WIDTH/2, WINDOW_HEIGHT/2)
             turret.level_handles["moving_to_target"] = LEVEL_TIMER:tween(2, turret.pos, {x = turret.target.x, y = turret.target.y}, 'in-linear',
                 function()
                     --Get turret inicial position
                     if turret.identification == 1 then
-                        turret.target = Vector(ORIGINAL_WINDOW_WIDTH/2 - 115, ORIGINAL_WINDOW_HEIGHT/2) --Left
+                        turret.target = Vector(WINDOW_WIDTH/2 - 115, WINDOW_HEIGHT/2) --Left
                     elseif turret.identification == 2 then
-                        turret.target = Vector(ORIGINAL_WINDOW_WIDTH/2, ORIGINAL_WINDOW_HEIGHT/2 - 115)  --Up
+                        turret.target = Vector(WINDOW_WIDTH/2, WINDOW_HEIGHT/2 - 115)  --Up
                     elseif turret.identification == 3 then
-                        turret.target = Vector(ORIGINAL_WINDOW_WIDTH/2 + 115, ORIGINAL_WINDOW_HEIGHT/2) --Right
+                        turret.target = Vector(WINDOW_WIDTH/2 + 115, WINDOW_HEIGHT/2) --Right
                     else
-                        turret.target = Vector(ORIGINAL_WINDOW_WIDTH/2, ORIGINAL_WINDOW_HEIGHT/2 + 115) --Bottom
+                        turret.target = Vector(WINDOW_WIDTH/2, WINDOW_HEIGHT/2 + 115) --Bottom
                     end
 
                     --Restart turret movement
@@ -637,13 +637,13 @@ function Boss_2_Main:changeStage()
                 turret.target = Vector(70, 70)
             elseif i == 2 then
                 --From top to top right
-                turret.target = Vector(ORIGINAL_WINDOW_WIDTH - 70, 70)
+                turret.target = Vector(WINDOW_WIDTH - 70, 70)
             elseif i == 3 then
                 --From right to bottom right
-                turret.target = Vector(ORIGINAL_WINDOW_WIDTH - 70, ORIGINAL_WINDOW_HEIGHT - 70)
+                turret.target = Vector(WINDOW_WIDTH - 70, WINDOW_HEIGHT - 70)
             else
                 --From bottom to bottom left
-                turret.target = Vector(70, ORIGINAL_WINDOW_HEIGHT - 70)
+                turret.target = Vector(70, WINDOW_HEIGHT - 70)
             end
 
             --Move turret to respective position
@@ -666,7 +666,7 @@ function Boss_2_Main:changeStage()
         LM.giveScore(4000, "boss defeated")
         b.static = true
 
-        b.level_handles["text_appear"] = LEVEL_TIMER:after(.5, function() LM.text(ORIGINAL_WINDOW_WIDTH/2 - 93, ORIGINAL_WINDOW_HEIGHT/2 - 90, "please don't kill me", 4.5, 110) end)
+        b.level_handles["text_appear"] = LEVEL_TIMER:after(.5, function() LM.text(WINDOW_WIDTH/2 - 93, WINDOW_HEIGHT/2 - 90, "please don't kill me", 4.5, 110) end)
         b.level_handles["wait"] = LEVEL_TIMER:after(2,
             function()
                 b.level_handles["no_more_saturation"] = LEVEL_TIMER:tween(1.5, b.part_colors[1], {s = 255}, 'in-linear',
@@ -1006,7 +1006,7 @@ function boss.create()
 
 
 
-    b.target = Vector(ORIGINAL_WINDOW_WIDTH/2, ORIGINAL_WINDOW_HEIGHT/2)
+    b.target = Vector(WINDOW_WIDTH/2, WINDOW_HEIGHT/2)
 
     --Make boss move to the center
     b.level_handles["moving"] = LEVEL_TIMER:tween(b.pos:dist(b.target)/b.speedv, b.pos, {x = b.target.x, y = b.target.y}, 'in-linear',
@@ -1053,7 +1053,7 @@ function boss.create()
 
     --Make turrets move to the center
     for i = 1, 4 do
-        b.turrets[i].target = Vector(b.turrets[i].pos.x, b.turrets[i].pos.y + 500 + ORIGINAL_WINDOW_HEIGHT/2)
+        b.turrets[i].target = Vector(b.turrets[i].pos.x, b.turrets[i].pos.y + 500 + WINDOW_HEIGHT/2)
         b.turrets[i].level_handles["moving"] = LEVEL_TIMER:tween(b.turrets[i].pos:dist(b.turrets[i].target)/b.speedv, b.turrets[i].pos, {x = b.turrets[i].target.x, y = b.turrets[i].target.y}, 'in-linear',
             function()
 
@@ -1068,9 +1068,9 @@ function boss.create()
                         elseif i == 2 then --Top
                             _y = 70
                         elseif i == 3 then --Right
-                            _x = ORIGINAL_WINDOW_WIDTH - 70
+                            _x = WINDOW_WIDTH - 70
                         elseif i == 4 then --Bottom
-                            _y = ORIGINAL_WINDOW_HEIGHT - 70
+                            _y = WINDOW_HEIGHT - 70
                         end
 
                         --Move turret to side
@@ -1159,21 +1159,21 @@ Stage_2_t = function(b, dt)
 
     if b.target == nil then
         --Get target position
-        if b.pos.x <= ORIGINAL_WINDOW_WIDTH/2 then
-            if b.pos.y < ORIGINAL_WINDOW_HEIGHT/2 then
+        if b.pos.x <= WINDOW_WIDTH/2 then
+            if b.pos.y < WINDOW_HEIGHT/2 then
                 --From top left to top right
-                b.target = Vector(ORIGINAL_WINDOW_WIDTH - 70, 70)
+                b.target = Vector(WINDOW_WIDTH - 70, 70)
             else
                 --From bottom left to top left
                 b.target = Vector(70, 70)
             end
         else
-            if b.pos.y < ORIGINAL_WINDOW_HEIGHT/2 then
+            if b.pos.y < WINDOW_HEIGHT/2 then
                 --From top right to bottom right
-                b.target = Vector(ORIGINAL_WINDOW_WIDTH - 70, ORIGINAL_WINDOW_HEIGHT - 70)
+                b.target = Vector(WINDOW_WIDTH - 70, WINDOW_HEIGHT - 70)
             else
                 --From bottom right to bottom left
-                b.target = Vector(70, ORIGINAL_WINDOW_HEIGHT - 70)
+                b.target = Vector(70, WINDOW_HEIGHT - 70)
             end
         end
 
@@ -1225,18 +1225,18 @@ Stage_3_t = function(b, dt)
 
     if b.target == nil then
         --Get target position
-        if b.pos.x <= ORIGINAL_WINDOW_WIDTH/2 - 80  then
+        if b.pos.x <= WINDOW_WIDTH/2 - 80  then
             --From left to top
-            b.target = Vector(ORIGINAL_WINDOW_WIDTH/2, 70)
-        elseif b.pos.y <= ORIGINAL_WINDOW_HEIGHT/2 - 80 then
+            b.target = Vector(WINDOW_WIDTH/2, 70)
+        elseif b.pos.y <= WINDOW_HEIGHT/2 - 80 then
             --From top to right
-            b.target = Vector(ORIGINAL_WINDOW_WIDTH - 70, ORIGINAL_WINDOW_HEIGHT/2)
-        elseif b.pos.x >= ORIGINAL_WINDOW_WIDTH/2 + 80 then
+            b.target = Vector(WINDOW_WIDTH - 70, WINDOW_HEIGHT/2)
+        elseif b.pos.x >= WINDOW_WIDTH/2 + 80 then
             --From right to bottom
-            b.target = Vector(ORIGINAL_WINDOW_WIDTH/2, ORIGINAL_WINDOW_HEIGHT - 70)
+            b.target = Vector(WINDOW_WIDTH/2, WINDOW_HEIGHT - 70)
         else
             --From bottom to left
-            b.target = Vector(70, ORIGINAL_WINDOW_HEIGHT/2)
+            b.target = Vector(70, WINDOW_HEIGHT/2)
         end
 
         --Move turret to target position 4 times, the goes to the center and back
@@ -1248,7 +1248,7 @@ Stage_3_t = function(b, dt)
                 else
                     b.static = true
                     --Move turret to the middle
-                    b.target = Vector(ORIGINAL_WINDOW_WIDTH/2, ORIGINAL_WINDOW_HEIGHT/2)
+                    b.target = Vector(WINDOW_WIDTH/2, WINDOW_HEIGHT/2)
                     b.level_handles["moving_to_target"] = LEVEL_TIMER:tween(2, b.pos, {x = b.target.x, y = b.target.y}, 'in-linear',
                         function()
                             FX.shake(3,1)
@@ -1258,13 +1258,13 @@ Stage_3_t = function(b, dt)
 
                                     --Get turret inicial position
                                     if b.identification == 1 then
-                                        b.target = Vector(70, ORIGINAL_WINDOW_HEIGHT/2) --Left
+                                        b.target = Vector(70, WINDOW_HEIGHT/2) --Left
                                     elseif b.identification == 2 then
-                                        b.target = Vector(ORIGINAL_WINDOW_WIDTH/2, 70)  --Up
+                                        b.target = Vector(WINDOW_WIDTH/2, 70)  --Up
                                     elseif b.identification == 3 then
-                                        b.target = Vector(ORIGINAL_WINDOW_WIDTH - 70, ORIGINAL_WINDOW_HEIGHT/2) --Right
+                                        b.target = Vector(WINDOW_WIDTH - 70, WINDOW_HEIGHT/2) --Right
                                     else
-                                        b.target = Vector(ORIGINAL_WINDOW_WIDTH/2, ORIGINAL_WINDOW_HEIGHT - 70) --Bottom
+                                        b.target = Vector(WINDOW_WIDTH/2, WINDOW_HEIGHT - 70) --Bottom
                                     end
 
                                     --Restart turret movement
@@ -1360,7 +1360,7 @@ Stage_4_t = function(b, dt)
         if love.math.random() < .15 then
             local _x, _y
 
-            _x, _y = LM.outsidePosition(love.math.random(2*ORIGINAL_WINDOW_WIDTH+2*ORIGINAL_WINDOW_HEIGHT+1)-1)
+            _x, _y = LM.outsidePosition(love.math.random(2*WINDOW_WIDTH+2*WINDOW_HEIGHT+1)-1)
 
             F.single{enemy = SB, x = _x, y = _y, dir_follow = true, speed_m = 5, ind_side = 50, ind_duration = 2.5, score_mul = 0}
 
@@ -1410,11 +1410,11 @@ Stage_5_t = function(b, dt)
 
         --Fix horizontal direction if leave screen
         if b.pos.x < b.r + b.outer_ring then b.dir.x = math.abs(b.dir.x)
-        elseif b.pos.x > ORIGINAL_WINDOW_WIDTH - (b.r + b.outer_ring)  then b.dir.x = -math.abs(b.dir.x) end
+        elseif b.pos.x > WINDOW_WIDTH - (b.r + b.outer_ring)  then b.dir.x = -math.abs(b.dir.x) end
 
         --Fix vertical direction if leave screen
         if b.pos.y < b.r + b.outer_ring then b.dir.y = math.abs(b.dir.y)
-        elseif b.pos.y > ORIGINAL_WINDOW_HEIGHT - (b.r + b.outer_ring)  then b.dir.y = -math.abs(b.dir.y) end
+        elseif b.pos.y > WINDOW_HEIGHT - (b.r + b.outer_ring)  then b.dir.y = -math.abs(b.dir.y) end
 
 
     end
@@ -1437,7 +1437,7 @@ Stage_5_t = function(b, dt)
         if p then
             b.dir = Vector(p.pos.x - b.pos.x, p.pos.y - b.pos.y)
         else
-            b.dir = Vector(ORIGINAL_WINDOW_WIDTH/2 - b.pos.x, ORIGINAL_WINDOW_HEIGHT/2 - b.pos.y)
+            b.dir = Vector(WINDOW_WIDTH/2 - b.pos.x, WINDOW_HEIGHT/2 - b.pos.y)
         end
 
         b.dir = b.dir:normalized()
@@ -1452,9 +1452,9 @@ Stage_5_t = function(b, dt)
 
         --Stop turret if it reaches the edge of the screen
         if b.pos.x < b.r  or
-           b.pos.x > ORIGINAL_WINDOW_WIDTH - b.r or
+           b.pos.x > WINDOW_WIDTH - b.r or
            b.pos.y < b.r  or
-           b.pos.y > ORIGINAL_WINDOW_HEIGHT - b.r then
+           b.pos.y > WINDOW_HEIGHT - b.r then
 
                FX.shake(.5,4)
 
@@ -1465,9 +1465,9 @@ Stage_5_t = function(b, dt)
 
                --Fix position of turret to be slightly away from the wall
                if b.pos.x <= b.r + 1 then b.pos.x = b.r + 1 --Fix on left side of screen
-               elseif  b.pos.x >= ORIGINAL_WINDOW_WIDTH - b.r - 1 then b.pos.x = ORIGINAL_WINDOW_WIDTH - b.r - 1 end --Fix on right side of screen
+               elseif  b.pos.x >= WINDOW_WIDTH - b.r - 1 then b.pos.x = WINDOW_WIDTH - b.r - 1 end --Fix on right side of screen
                if b.pos.y <= b.r + 1 then b.pos.y = b.r + 1 --Fix on top side of screen
-               elseif  b.pos.y >= ORIGINAL_WINDOW_HEIGHT - b.r - 1 then b.pos.y = ORIGINAL_WINDOW_HEIGHT - b.r - 1 end --Fix on bottom side of screen
+               elseif  b.pos.y >= WINDOW_HEIGHT - b.r - 1 then b.pos.y = WINDOW_HEIGHT - b.r - 1 end --Fix on bottom side of screen
 
         end
 

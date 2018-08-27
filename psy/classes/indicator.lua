@@ -77,7 +77,7 @@ function Enemy_Indicator_Batch:destroy()
                         if p then
                             ind.enemy.create(ind.enemy_pos.x, ind.enemy_pos.y, Vector(p.pos.x - ind.enemy_pos.x, p.pos.y - ind.enemy_pos.y), ind.enemy_speed_m, ind.enemy_radius, ind.enemy_score_mul)
                         else
-                            ind.enemy.create(ind.enemy_pos.x, ind.enemy_pos.y, Vector(ORIGINAL_WINDOW_WIDTH/2 - ind.enemy_pos.x, ORIGINAL_WINDOW_HEIGHT/2 - ind.enemy_pos.y), ind.enemy_speed_m, ind.enemy_radius, ind.enemy_score_mul)
+                            ind.enemy.create(ind.enemy_pos.x, ind.enemy_pos.y, Vector(WINDOW_WIDTH/2 - ind.enemy_pos.x, WINDOW_HEIGHT/2 - ind.enemy_pos.y), ind.enemy_speed_m, ind.enemy_radius, ind.enemy_score_mul)
                         end
                     end
                 end
@@ -175,13 +175,13 @@ function indicator.create_enemy(enemy, pos, dir, following, side, speed_m, radiu
     --Put indicator center inside the screen
     if pos.x < margin then
         center.x = margin
-    elseif pos.x > ORIGINAL_WINDOW_WIDTH - margin then
-        center.x = ORIGINAL_WINDOW_WIDTH - margin
+    elseif pos.x > WINDOW_WIDTH - margin then
+        center.x = WINDOW_WIDTH - margin
     end
     if pos.y < margin then
         center.y = margin
-    elseif pos.y > ORIGINAL_WINDOW_HEIGHT - margin then
-        center.y = ORIGINAL_WINDOW_HEIGHT - margin
+    elseif pos.y > WINDOW_HEIGHT - margin then
+        center.y = WINDOW_HEIGHT - margin
     end
 
     st = st or "enemy_indicator" --subtype
@@ -217,13 +217,13 @@ function indicator.create_enemy_turret(turret, pos, speed_m, e_speed_m, radius, 
     --Put indicator center inside the screen
     if pos.x < margin then
         center.x = margin
-    elseif pos.x > ORIGINAL_WINDOW_WIDTH - margin then
-        center.x = ORIGINAL_WINDOW_WIDTH - margin
+    elseif pos.x > WINDOW_WIDTH - margin then
+        center.x = WINDOW_WIDTH - margin
     end
     if pos.y < margin then
         center.y = margin
-    elseif pos.y > ORIGINAL_WINDOW_HEIGHT - margin then
-        center.y = ORIGINAL_WINDOW_HEIGHT - margin
+    elseif pos.y > WINDOW_HEIGHT - margin then
+        center.y = WINDOW_HEIGHT - margin
     end
 
     st = st or "enemy_indicator" --subtype
@@ -266,7 +266,7 @@ Rotating_Indicator = Class{
         if p then
             self.dir = Vector(p.pos.x - self.circle_center.x, p.pos.y - self.circle_center.y)
         else
-            self.dir = Vector(ORIGINAL_WINDOW_WIDTH/2 - self.circle_center.x, ORIGINAL_WINDOW_HEIGHT/2 - self.circle_center.y)
+            self.dir = Vector(WINDOW_WIDTH/2 - self.circle_center.x, WINDOW_HEIGHT/2 - self.circle_center.y)
         end
         self.center = Vector(self.circle_center.x + self.radius*self.dir:normalized().x, self.circle_center.y + self.radius*self.dir:normalized().y)--Center of triangle
         self.side = _side
@@ -305,7 +305,7 @@ function Rotating_Indicator:update(dt)
     if p then
         i.dir = Vector(p.pos.x - i.circle_center.x, p.pos.y - i.circle_center.y)
     else
-        i.dir = Vector(ORIGINAL_WINDOW_WIDTH/2 - i.circle_center.x, ORIGINAL_WINDOW_HEIGHT/2 - i.circle_center.y)
+        i.dir = Vector(WINDOW_WIDTH/2 - i.circle_center.x, WINDOW_HEIGHT/2 - i.circle_center.y)
     end
     i.center = Vector(i.circle_center.x + i.radius*i.dir:normalized().x, i.circle_center.y + i.radius*i.dir:normalized().y)--Center of triangle
 

@@ -65,7 +65,7 @@ function formation.fromHorizontal(a)
         x = -5 -max_r
     elseif a.side == "right" or a.side == "r" then
         dir = Vector(-1,0)
-        x = ORIGINAL_WINDOW_WIDTH + 5 + max_r
+        x = WINDOW_WIDTH + 5 + max_r
     end
 
     batch = Indicator.create_enemy_batch(a.ind_duration)
@@ -76,7 +76,7 @@ function formation.fromHorizontal(a)
     --Center mode
     if     a.mode == "center" then
         half = math.floor(a.number/2)
-        y = ORIGINAL_WINDOW_HEIGHT/2 - (a.number-1)/2*a.enemy_y_margin + a.screen_margin
+        y = WINDOW_HEIGHT/2 - (a.number-1)/2*a.enemy_y_margin + a.screen_margin
         --Placing from the center
         for i=1, a.number do
             local l_pos, l_dir, current_enemy, l_speed, l_follow, l_side --Local values so that enemies are properly created
@@ -94,7 +94,7 @@ function formation.fromHorizontal(a)
             if p and a.dir_follow then
                 l_dir = Vector(p.pos.x - x, p.pos.y - y)
             elseif not p and a.dir_follow then
-                l_dir = Vector(ORIGINAL_WINDOW_WIDTH/2 - x, ORIGINAL_WINDOW_HEIGHT/2 - y):normalized()
+                l_dir = Vector(WINDOW_WIDTH/2 - x, WINDOW_HEIGHT/2 - y):normalized()
             else
                 l_dir = Vector(dir.x, dir.y)
             end
@@ -132,13 +132,13 @@ function formation.fromHorizontal(a)
             current_enemy = a.enemy[(i-1)%enemy_table_size + 1]
 
             --"Distribute" the enemies
-            y = i* (ORIGINAL_WINDOW_HEIGHT/(a.number+1))
+            y = i* (WINDOW_HEIGHT/(a.number+1))
 
             --Make direction equal to current position of psycho, if desired
             if p and a.dir_follow then
                 l_dir = Vector(p.pos.x - x, p.pos.y - y)
             elseif not p and a.dir_follow then
-                l_dir = Vector(ORIGINAL_WINDOW_WIDTH/2 - x, ORIGINAL_WINDOW_HEIGHT/2 - y):normalized()
+                l_dir = Vector(WINDOW_WIDTH/2 - x, WINDOW_HEIGHT/2 - y):normalized()
             else
                 l_dir = Vector(dir.x, dir.y)
             end
@@ -186,7 +186,7 @@ function formation.fromHorizontal(a)
             if p and a.dir_follow then
                 l_dir = Vector(p.pos.x - x, p.pos.y - y)
             elseif not p and a.dir_follow then
-                l_dir = Vector(ORIGINAL_WINDOW_WIDTH/2 - x, ORIGINAL_WINDOW_HEIGHT/2 - y):normalized()
+                l_dir = Vector(WINDOW_WIDTH/2 - x, WINDOW_HEIGHT/2 - y):normalized()
             else
                 l_dir = Vector(dir.x, dir.y)
             end
@@ -226,7 +226,7 @@ function formation.fromHorizontal(a)
     --Bottom mode
     elseif a.mode == "bottom" then
 
-        y = ORIGINAL_WINDOW_HEIGHT - a.screen_margin - max_r
+        y = WINDOW_HEIGHT - a.screen_margin - max_r
         for i=1, a.number do
             local l_pos, l_dir, current_enemy, l_speed, l_follow, l_side --Local values so that enemies are properly created
 
@@ -237,7 +237,7 @@ function formation.fromHorizontal(a)
             if p and a.dir_follow then
                 l_dir = Vector(p.pos.x - x, p.pos.y - y)
             elseif not p and a.dir_follow then
-                l_dir = Vector(ORIGINAL_WINDOW_WIDTH/2 - x, ORIGINAL_WINDOW_HEIGHT/2 - y):normalized()
+                l_dir = Vector(WINDOW_WIDTH/2 - x, WINDOW_HEIGHT/2 - y):normalized()
             else
                 l_dir = Vector(dir.x, dir.y)
             end
@@ -334,7 +334,7 @@ function formation.fromVertical(a)
         y = -5 -max_r
     elseif a.side == "bottom" or a.side == "b" then
         dir = Vector(0,-1)
-        y = ORIGINAL_WINDOW_HEIGHT + 5 + max_r
+        y = WINDOW_HEIGHT + 5 + max_r
     end
 
     batch = Indicator.create_enemy_batch(a.ind_duration)
@@ -346,7 +346,7 @@ function formation.fromVertical(a)
     --Center mode
     if     a.mode == "center" then
         half = math.floor(a.number/2)
-        x = ORIGINAL_WINDOW_WIDTH/2 - (a.number-1)/2*a.enemy_x_margin + a.screen_margin
+        x = WINDOW_WIDTH/2 - (a.number-1)/2*a.enemy_x_margin + a.screen_margin
         --Placing from the center
         for i=1, a.number do
             local l_pos, l_dir, current_enemy, l_speed, l_follow, l_side --Local values so that enemies are properly created
@@ -358,7 +358,7 @@ function formation.fromVertical(a)
             if p and a.dir_follow then
                 l_dir = Vector(p.pos.x - x, p.pos.y - y)
             elseif not p and a.dir_follow then
-                l_dir = Vector(ORIGINAL_WINDOW_WIDTH/2 - x, ORIGINAL_WINDOW_HEIGHT/2 - y):normalized()
+                l_dir = Vector(WINDOW_WIDTH/2 - x, WINDOW_HEIGHT/2 - y):normalized()
             else
                 l_dir = Vector(dir.x, dir.y)
             end
@@ -402,13 +402,13 @@ function formation.fromVertical(a)
             current_enemy = a.enemy[(i-1)%enemy_table_size + 1]
 
             --"Distribute" enemies
-            x = i* (ORIGINAL_WINDOW_WIDTH/(a.number+1))
+            x = i* (WINDOW_WIDTH/(a.number+1))
 
             --Make direction equal to current position of psycho, if desired
             if p and a.dir_follow then
                 l_dir = Vector(p.pos.x - x, p.pos.y - y)
             elseif not p and a.dir_follow then
-                l_dir = Vector(ORIGINAL_WINDOW_WIDTH/2 - x, ORIGINAL_WINDOW_HEIGHT/2 - y):normalized()
+                l_dir = Vector(WINDOW_WIDTH/2 - x, WINDOW_HEIGHT/2 - y):normalized()
             else
                 l_dir = Vector(dir.x, dir.y)
             end
@@ -456,7 +456,7 @@ function formation.fromVertical(a)
             if p and a.dir_follow then
                 l_dir = Vector(p.pos.x - x, p.pos.y - y)
             elseif not p and a.dir_follow then
-                l_dir = Vector(ORIGINAL_WINDOW_WIDTH/2 - x, ORIGINAL_WINDOW_HEIGHT/2 - y):normalized()
+                l_dir = Vector(WINDOW_WIDTH/2 - x, WINDOW_HEIGHT/2 - y):normalized()
             else
                 l_dir = Vector(dir.x, dir.y)
             end
@@ -495,7 +495,7 @@ function formation.fromVertical(a)
 
     --Right mode
     elseif a.mode == "right" then
-        x = ORIGINAL_WINDOW_WIDTH - a.screen_margin - max_r
+        x = WINDOW_WIDTH - a.screen_margin - max_r
         for i=1, a.number do
             local l_pos, l_dir, current_enemy, l_speed, l_follow, l_side --Local values so that enemies are properly created
 
@@ -506,7 +506,7 @@ function formation.fromVertical(a)
             if p and a.dir_follow then
                 l_dir = Vector(p.pos.x - x, p.pos.y - y)
             elseif not p and a.dir_follow then
-                l_dir = Vector(ORIGINAL_WINDOW_WIDTH/2 - x, ORIGINAL_WINDOW_HEIGHT/2 - y):normalized()
+                l_dir = Vector(WINDOW_WIDTH/2 - x, WINDOW_HEIGHT/2 - y):normalized()
             else
                 l_dir = Vector(dir.x, dir.y)
             end
@@ -574,8 +574,8 @@ function formation.circle(a)
     p = Psycho.get()
     a.radius = a.radius or 640
     a.enemy_margin = a.enemy_margin or 0
-    a.x_center = a.x_center or ORIGINAL_WINDOW_WIDTH/2 --Center x of the circle
-    a.y_center = a.y_center or ORIGINAL_WINDOW_HEIGHT/2 --Center y of the circle
+    a.x_center = a.x_center or WINDOW_WIDTH/2 --Center x of the circle
+    a.y_center = a.y_center or WINDOW_HEIGHT/2 --Center y of the circle
     a.speed_m = a.speed_m or 1
     a.score_mul = a.score_mul or 1
     a.dir_follow = a.dir_follow or false
@@ -612,7 +612,7 @@ function formation.circle(a)
         if p and a.dir_follow then
             l_dir = Vector(p.pos.x - x, p.pos.y - y)
         elseif not p and a.dir_follow then
-            l_dir = Vector(ORIGINAL_WINDOW_WIDTH/2 - x, ORIGINAL_WINDOW_HEIGHT/2 - y):normalized()
+            l_dir = Vector(WINDOW_WIDTH/2 - x, WINDOW_HEIGHT/2 - y):normalized()
         else
             l_dir = Vector(dir.x, dir.y)
         end
@@ -683,7 +683,7 @@ function formation.single(a)
     if p and a.dir_follow then
         l_dir = Vector(p.pos.x - a.x, p.pos.y - a.y)
     elseif not p and a.dir_follow then
-        l_dir = Vector(ORIGINAL_WINDOW_WIDTH/2 - x, ORIGINAL_WINDOW_HEIGHT/2 - y):normalized()
+        l_dir = Vector(WINDOW_WIDTH/2 - x, WINDOW_HEIGHT/2 - y):normalized()
     else
         l_dir = Vector(a.dx, a.dy)
     end
@@ -759,7 +759,7 @@ function formation.line(a)
         if p and a.dir_follow then
             l_dir = Vector(p.pos.x - a.x, p.pos.y - a.y)
         elseif not p and a.dir_follow then
-            l_dir = Vector(ORIGINAL_WINDOW_WIDTH/2 - x, ORIGINAL_WINDOW_HEIGHT/2 - y):normalized()
+            l_dir = Vector(WINDOW_WIDTH/2 - x, WINDOW_HEIGHT/2 - y):normalized()
         else
             l_dir = Vector(a.dx, a.dy)
         end
