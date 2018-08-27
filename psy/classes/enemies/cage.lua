@@ -73,6 +73,14 @@ function Cage:update(dt)
         self.r = self.target_radius
         self.target_radius = nil
     end
+	--Update position
+	if self.target_pos and self.pos:dist(self.target_pos) >= 3 then
+		self.pos.x = self.pos.x + self.pos_speed*dt*sign(self.target_pos.x-self.pos.x)
+		self.pos.y = self.pos.y + self.pos_speed*dt*sign(self.target_pos.y-self.pos.y)
+	elseif self.target_pos then
+		self.pos = self.target_pos
+		self.target_pos = nil
+	end
 
     --Push psycho position if its beyond the ring
     local p = Util.findId("psycho")
@@ -89,6 +97,23 @@ function Cage:resize(desired_radius, radius_speed)
 		self.radius_speed = radius_speed
 	end
 end
+
+--Move directly to target position
+function Cage:goTo(x, y, pos_speed)
+	self.target_pos = Vector(x, y)
+	if pos_speed then
+		self.pos_speed = pos_speed
+	end
+end
+
+--Move a certain quantity from current position
+function Cage:move(dx, dy, pos_speed)
+	self.target_pos = Vector(self.pos.x+dx, self.pos.y+dy)
+	if pos_speed then
+		self.pos_speed = pos_speed
+	end
+end
+
 
 --UTILITY FUNCTIONS--
 
