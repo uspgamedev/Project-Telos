@@ -33,8 +33,8 @@ end
 function level_functions.setup()
 
     --Start Level
-    LM.level_title("TO BE CONTINUED", "Chapter III")
-    Audio.playBGM(BGM.level_2)
+    LM.level_title("FREEDOM LOST", "Chapter III")
+    Audio.playBGM(BGM.level_3)
 
 end
 

@@ -219,13 +219,14 @@ function setup.config()
     --AUDIO--
     print("Setting up audio...")
 
-    BGM_VOLUME_LEVEL = 0 --Volume of BGM
+    BGM_VOLUME_LEVEL = 1 --Volume of BGM
     SFX_VOLUME_MULT = 1 --Volume multiplier for SFX
     --Tracks
     BGM = {
         menu = love.audio.newSource("assets/bgm/mus_psychoball_menu_unknown_universe_loop.mp3"),
-        level_1 = love.audio.newSource("assets/bgm/Limitless Remix.mp3"),
-        level_2 = love.audio.newSource("assets/bgm/Through Hiperboles.ogg"),
+        level_1 = love.audio.newSource("assets/bgm/Limitless.mp3"),
+        level_2 = love.audio.newSource("assets/bgm/Flying Carrots Remix.mp3"),
+        level_3 = love.audio.newSource("assets/bgm/Through Hiperboles.ogg"),
         boss_1 = love.audio.newSource("assets/bgm/Boss Theme 1.mp3"),
         tutorial = love.audio.newSource("assets/bgm/mus_psychoball_tutorial_into_the_void_loop.mp3"),
     }

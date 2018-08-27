@@ -25,7 +25,7 @@ Cage = Class{
         self.pos_speed = 100 --Speed to change position
 
         POS.init(self,_x, _y)
-        self.r = math.sqrt(ORIGINAL_WINDOW_WIDTH*ORIGINAL_WINDOW_WIDTH/4 + ORIGINAL_WINDOW_HEIGHT*ORIGINAL_WINDOW_HEIGHT/4) + 10
+        self.r = math.sqrt(WINDOW_WIDTH*WINDOW_WIDTH/4 + WINDOW_HEIGHT*WINDOW_HEIGHT/4) + 10
 
         self.cage_width = 10
 

@@ -874,8 +874,8 @@ function formation.cage(a)
 
     --Default values
     p = Psycho.get()
-    a.x = a.x or ORIGINAL_WINDOW_WIDTH/2
-    a.y = a.y or ORIGINAL_WINDOW_HEIGHT/2
+    a.x = a.x or WINDOW_WIDTH/2
+    a.y = a.y or WINDOW_HEIGHT/2
     a.radius = a.radius or 200
     a.speed_radius = a.speed_radius or 200
 
