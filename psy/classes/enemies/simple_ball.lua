@@ -49,7 +49,7 @@ function Simple_Ball:kill(gives_score, dont_explode)
 
         FX.shake(.1,.09)
 
-        SFX.hit_simple:play()
+        Audio.enemyHit()
     end
 
 end

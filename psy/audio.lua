@@ -10,6 +10,13 @@ local _current_bgm_pitch_handle
 --SFX AUDIO FUNCTIONS--
 -----------------------
 
+--Update all current sfxs volume
+function audio.updateSFX()
+    for _,sfx in pairs(SFX) do
+        sfx:setVolume(SFX_VOLUME_MULT)
+    end
+end
+
 --Play all current sfxs
 function audio.resumeSFX()
     for _,sfx in pairs(SFX) do
@@ -29,6 +36,14 @@ function audio.stopSFX()
     for _,sfx in pairs(SFX) do
         sfx:stop()
     end
+end
+
+local enemy_hit_index = 1
+local enemy_hit_max = 7
+--Play sfx for enemy hit
+function audio.enemyHit()
+    SFX["hit_simple"..enemy_hit_index]:play()
+    enemy_hit_index = math.min(enemy_hit_index+1, enemy_hit_max)
 end
 -----------------------
 --BGM AUDIO FUNCTIONS--

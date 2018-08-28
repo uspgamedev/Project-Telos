@@ -234,7 +234,13 @@ function setup.config()
     SFX = { --Table with all sound effects playing
         --Game Generic SFXs
         psychoball_shot = love.audio.newSource("assets/sfx/general_sfxs/sfx_psychoball_shot.mp3"),
-        hit_simple = love.audio.newSource("assets/sfx/general_sfxs/sfx_hit_simple_ball.mp3"),
+        hit_simple1 = love.audio.newSource("assets/sfx/sb_death/1.wav"),
+        hit_simple2 = love.audio.newSource("assets/sfx/sb_death/2.wav"),
+        hit_simple3 = love.audio.newSource("assets/sfx/sb_death/3.wav"),
+        hit_simple4 = love.audio.newSource("assets/sfx/sb_death/4.wav"),
+        hit_simple5 = love.audio.newSource("assets/sfx/sb_death/5.wav"),
+        hit_simple6 = love.audio.newSource("assets/sfx/sb_death/6.wav"),
+        hit_simple7 = love.audio.newSource("assets/sfx/sb_death/7.wav"),
         hit_double = love.audio.newSource("assets/sfx/general_sfxs/sfx_hit_double_ball.mp3"),
         psychoball_dies = love.audio.newSource("assets/sfx/general_sfxs/sfx_psychoball_dies.mp3"),
         generic_button = love.audio.newSource ("assets/sfx/general_sfxs/sfx_generic_button.mp3"),
@@ -250,13 +256,7 @@ function setup.config()
         b1_angry_hurt_roar =  love.audio.newSource("assets/sfx/boss1/angry_hurt_roar.wav"),
         b1_angry_af_roar =  love.audio.newSource("assets/sfx/boss1/crying.wav"),
     }
-    SFX.hit_simple:setVolume(1*SFX_VOLUME_MULT)
-    SFX.hit_double:setVolume(1*SFX_VOLUME_MULT)
-    SFX.generic_button:setVolume(1*SFX_VOLUME_MULT)
-    SFX.psychoball_shot:setVolume(1*SFX_VOLUME_MULT)
-    SFX.back_button:setVolume(1*SFX_VOLUME_MULT)
-    SFX.play_button:setVolume(1*SFX_VOLUME_MULT)
-    SFX.ultrablast_bar_complete:setVolume(1*SFX_VOLUME_MULT)
+    Audio.updateSFX()
 
     print("Finished setting up audio")
 
