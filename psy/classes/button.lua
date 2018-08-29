@@ -479,12 +479,6 @@ function Toggle_Button:update(dt)
 
     --Fix mouse position click to respective distance
     x, y = love.mouse.getPosition()
-    w, h = FreeRes.windowDistance()
-    scale = FreeRes.scale()
-    x = x - w
-    x = x*(1/scale)
-    y = y - h
-    y = y*(1/scale)
 
     --If mouse is colliding with button, then create over_effect
     if not USING_JOYSTICK and
