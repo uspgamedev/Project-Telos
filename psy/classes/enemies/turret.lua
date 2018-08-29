@@ -122,10 +122,10 @@ function Turret:kill(gives_score, dont_explode)
             SFX.hit_simple:play()
         end
 
-        if dont_explode then
-          FX.explosion(self.pos.x, self.pos.y, self.r, self.color)
+        if not dont_explode then
+          FX.explosion(self.pos.x, self.pos.y, self.r, self.color, 30)
         end
-        
+
     end
 
 

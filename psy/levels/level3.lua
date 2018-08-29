@@ -14,20 +14,20 @@ function level_functions.part_1()
     CONTINUE = 3 --Setup continue variable to later continue from where you started
 
     LM.level_part("Part 1 - Freedom Lost")
-    --[[
+
     LM.wait(5.5)
 
-    F.fromHorizontal{enemy = {GrB}, side = "left", mode = "center" , number = 8, ind_duration = 3, ind_side = 40, speed_m = 2.2, e_radius = 25, enemy_x_margin = 50, enemy_y_margin = 50}
-    F.fromHorizontal{enemy = {GrB}, side = "right", mode = "center" , number = 8, ind_duration = 3, ind_side = 40, speed_m = 2.2, e_radius = 25, enemy_x_margin = 50, enemy_y_margin = 50}
-    F.fromVertical{enemy = {GrB}, side = "top", mode = "center" , number = 8, ind_duration = 3, ind_side = 40, speed_m = 2.2, e_radius = 25, enemy_x_margin = 50, enemy_y_margin = 50}
-    F.fromVertical{enemy = {GrB}, side = "bottom", mode = "center" , number = 8, ind_duration = 3, ind_side = 40, speed_m = 2.2, e_radius = 25, enemy_x_margin = 50, enemy_y_margin = 50}
+    F.fromHorizontal{enemy = {GrB}, side = "left", mode = "center" , number = 7, ind_duration = 3, ind_side = 40, speed_m = 2.2, e_radius = 25, enemy_x_margin = 50, enemy_y_margin = 50}
+    F.fromHorizontal{enemy = {GrB}, side = "right", mode = "center" , number = 7, ind_duration = 3, ind_side = 40, speed_m = 2.2, e_radius = 25, enemy_x_margin = 50, enemy_y_margin = 50}
+    F.fromVertical{enemy = {GrB}, side = "top", mode = "center" , number = 7, ind_duration = 3, ind_side = 40, speed_m = 2.2, e_radius = 25, enemy_x_margin = 50, enemy_y_margin = 50}
+    F.fromVertical{enemy = {GrB}, side = "bottom", mode = "center" , number = 7, ind_duration = 3, ind_side = 40, speed_m = 2.2, e_radius = 25, enemy_x_margin = 50, enemy_y_margin = 50}
     LM.wait(5)
-    ]]--
+
 
     local cage = F.cage{radius = 180, speed_radius = 400}
 
     LM.wait(3)
-    --[[
+
     F.fromHorizontal{enemy = {SB}, side = "right", mode = "center" , number = 7, ind_duration = 3.2, ind_side = 40, speed_m = 1.5}
     LM.wait("noenemies")
     F.fromVertical{enemy = {DB}, side = "bottom", mode = "center" , number = 7, ind_duration = 1.8, ind_side = 40, speed_m = 1.5}
@@ -60,26 +60,36 @@ function level_functions.part_1()
     F.fromHorizontal{enemy = {GrB}, side = "left", mode = "center" , number = 7, ind_duration = 2, ind_side = 40, speed_m = .75, e_radius = 25, enemy_x_margin = 100, enemy_y_margin = 65}
     F.fromHorizontal{enemy = {GrB}, side = "right", mode = "center" , number = 7, ind_duration = 2, ind_side = 40, speed_m = .75, e_radius = 25, enemy_x_margin = 100, enemy_y_margin = 65}
     LM.wait(6)
-    ]]--
     F.turret{x = WINDOW_WIDTH/2, y = -60, t_x = WINDOW_WIDTH/2, t_y = WINDOW_HEIGHT/2, enemy = DB, number = 8, life = 20, duration = 15, rot_angle = math.pi/4, speed_m = 2, ind_duration = 2, e_speed_m = .8, ind_side = 35}
     LM.wait("noenemies")
     F.turret{x = WINDOW_WIDTH + 60, y = WINDOW_HEIGHT/2 - 100, t_x = WINDOW_WIDTH/2, t_y = WINDOW_HEIGHT/2 - 100, enemy = SB, number = 10, life = 15, duration = 15, rot_angle = math.pi/5, speed_m = 2, ind_duration = 1.5, fps = 1.2, e_speed_m = .7}
     F.turret{x = WINDOW_WIDTH + 60, y = WINDOW_HEIGHT/2 + 100, t_x = WINDOW_WIDTH/2, t_y = WINDOW_HEIGHT/2 + 100, enemy = SB, number = 10, life = 15, duration = 15, rot_angle = math.pi/5, speed_m = 2, ind_duration = 1.5, fps = 1.2, e_speed_m = .7}
     LM.wait("noenemies")
-    F.turret{x = -60, y = 300, t_x = 100, t_y = 300, enemy = SB, number = 10, life = 10, duration = 30, rot_angle = math.pi/5, speed_m = 2, ind_duration = 1.5}
-    F.turret{x = WINDOW_WIDTH + 60, y = 300, t_x = WINDOW_WIDTH - 100, t_y = 300, enemy = SB, number = 10, life = 10, duration = 30, rot_angle = math.pi/5, speed_m = 2, ind_duration = 1.5}
-    F.turret{x = WINDOW_WIDTH/2, y = -60, t_x = WINDOW_WIDTH/2, t_y = 100, enemy = DB, number = 10, life = 20, duration = 30, rot_angle = math.pi/5, speed_m = 2, ind_duration = 1.5}
+
+    INDICATOR_DEFAULT = 1
+
+    F.turret{x = -60, y = 300, t_x = 100, t_y = 300, enemy = SB, number = 10, life = 10, duration = 28, rot_angle = math.pi/6, speed_m = 1.6}
+    F.turret{x = WINDOW_WIDTH + 60, y = 300, t_x = WINDOW_WIDTH - 100, t_y = 300, enemy = SB, number = 12, life = 10, duration = 28, rot_angle = math.pi/6, speed_m = 1.6}
+    F.turret{x = WINDOW_WIDTH/2, y = -60, t_x = WINDOW_WIDTH/2, t_y = 100, enemy = DB, number = 10, life = 20, duration = 28, rot_angle = math.pi/5, speed_m = 2}
     LM.wait(8)
     cage:goTo(WINDOW_WIDTH/2, 100, 50)
     LM.wait(5)
-    F.turret{x = -60, y = WINDOW_HEIGHT - 200, t_x = 100, t_y = WINDOW_HEIGHT - 200, enemy = GlB, number = 1, life = 10, duration = 14, start_angle = math.pi/2, speed_m = 2, ind_duration = 1.5, fps = .4, e_speed = 1}
-    F.turret{x = WINDOW_WIDTH+60, y = WINDOW_HEIGHT - 200, t_x = WINDOW_WIDTH - 100, t_y = WINDOW_HEIGHT - 200, enemy = GlB, number = 1, life = 10, duration = 14, start_angle = -math.pi/2, speed_m = 2, ind_duration = 1.5, fps = .4, e_speed = 1}
+    F.turret{x = -60, y = WINDOW_HEIGHT - 200, t_x = 100, t_y = WINDOW_HEIGHT - 200, enemy = GlB, number = 1, life = 8, duration = 15, start_angle = math.pi/2, speed_m = 2, fps = .5, e_speed = 1}
+    F.turret{x = WINDOW_WIDTH+60, y = WINDOW_HEIGHT - 200, t_x = WINDOW_WIDTH - 100, t_y = WINDOW_HEIGHT - 200, enemy = GlB, number = 1, life = 8, duration = 15, start_angle = -math.pi/2, speed_m = 2, fps = .5, e_speed = 1}
     LM.wait(3)
     cage:goTo(WINDOW_WIDTH/2, WINDOW_HEIGHT)
+    F.turret{x = -60, y = WINDOW_HEIGHT - 50, t_x = 100, t_y = WINDOW_HEIGHT - 50, enemy = SB, number = 10, life = 12, duration = 12, rot_angle = math.pi/5, speed_m = 1.2}
+    F.turret{x = WINDOW_WIDTH + 60, y = WINDOW_HEIGHT - 50, t_x = WINDOW_WIDTH - 100, t_y = WINDOW_HEIGHT - 50, enemy = SB, number = 12, life = 10, duration = 12, rot_angle = math.pi/5, speed_m = 1.2}
+    LM.wait(14)
+    F.turret{x = 300, y = -60, t_x = 300, t_y = 200, enemy = GlB, number = 10, life = 20, duration = 18, rot_angle = math.pi/5, speed_m = 1.5, fps = .7}
+    F.turret{x = WINDOW_WIDTH - 300, y = -60, t_x = WINDOW_WIDTH - 300, t_y = 200, enemy = GlB, number = 10, life = 20, duration = 18, rot_angle = math.pi/5, speed_m = 1.5, fps = .7}
+    F.turret{x = WINDOW_WIDTH/2, y = -60, t_x = WINDOW_WIDTH/2, t_y = 100, enemy = GlB, number = 12, life = 25, duration = 18, rot_angle = math.pi/6, speed_m = 1.5, fps = .7}
     LM.wait(2)
-    --Stuff happens
-    LM.wait(2)
-    cage:goTo(WINDOW_WIDTH/2, WINDOW_HEIGHT/2)
+    cage:goTo(WINDOW_WIDTH/2, WINDOW_HEIGHT/2, 24)
+    LM.wait("noenemies")
+    F.fromVertical{enemy = {GrB}, side = "bottom", mode = "center" , number = 7, ind_duration = 2, ind_side = 40, speed_m = .3}
+    LM.wait(6)
+    cage:resize(260, 50)
     LM.wait("noenemies")
     LM.stop()
 
