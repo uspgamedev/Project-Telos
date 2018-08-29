@@ -72,7 +72,11 @@ function Cage:update(dt)
 
     --Update radius
     if self.target_radius and math.abs(self.r - self.target_radius) > 2 then
-        self.r = self.r + self.radius_speed*dt*sign(self.target_radius-self.r)
+		if (self.target_radius-self.r) > 0 then
+        	self.r = math.min(self.r + self.radius_speed*dt,self.target_radius)
+		else
+			self.r = math.max(self.r - self.radius_speed*dt,self.target_radius)
+		end
     elseif self.target_radius then
         self.r = self.target_radius
         self.target_radius = nil
