@@ -48,9 +48,13 @@ Cage = Class{
 
 --CLASS FUNCTIONS--
 
-function Cage:kill()
-    if self.death then return end
-    self.death = true
+function Cage:kill(speed)
+	speed = speed or 400
+	if self.death or self.leaving then return end
+    self.leaving = true
+	self.target_radius = math.max(WINDOW_WIDTH,WINDOW_HEIGHT) + 100
+	self.radius_speed = speed
+	self.target_pos = nil
 end
 
 function Cage:draw()
@@ -72,6 +76,7 @@ function Cage:update(dt)
     elseif self.target_radius then
         self.r = self.target_radius
         self.target_radius = nil
+		if self.leaving then self.death = true end
     end
 	--Update position
 	if self.target_pos and self.pos:dist(self.target_pos) >= 3 then
@@ -92,6 +97,7 @@ function Cage:update(dt)
 end
 
 function Cage:resize(desired_radius, radius_speed)
+	if self.leaving or self.death then return end
 	self.target_radius = desired_radius
 	if radius_speed then
 		self.radius_speed = radius_speed
@@ -100,6 +106,7 @@ end
 
 --Move directly to target position
 function Cage:goTo(x, y, pos_speed)
+	if self.leaving or self.death then return end
 	self.target_pos = Vector(x, y)
 	if pos_speed then
 		self.pos_speed = pos_speed
@@ -108,6 +115,7 @@ end
 
 --Move a certain quantity from current position
 function Cage:move(dx, dy, pos_speed)
+	if self.leaving or self.death then return end
 	self.target_pos = Vector(self.pos.x+dx, self.pos.y+dy)
 	if pos_speed then
 		self.pos_speed = pos_speed

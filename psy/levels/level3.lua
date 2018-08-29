@@ -25,7 +25,8 @@ function level_functions.part_1()
     cage:move(50, 50, 100)
     LM.wait(3)
     cage:move(-200, -250, 100)
-    LM.wait(3)
+    LM.wait(4)
+    cage:kill()
 
     LM.stop()
 
