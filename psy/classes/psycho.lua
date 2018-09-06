@@ -55,6 +55,10 @@ Psy = Class{
 
         self.circle_fx_tick = 0 --Circle Effect "cooldown" timer
         self.circle_fx_fps = .2 --How fast to create the circle effect
+        self.circle_fx_alpha_min = 50 --Min value for fx alpha
+        self.circle_fx_alpha_max = 100 --Max value for fx alpha
+        self.circle_fx_alpha_speed = 10 --Spped to increase circle fx alpha
+        self.circle_fx_alpha = self.circle_fx_alpha_min --CUrrent alpha value for circle fx
 
         self.score = 0 --Score psycho has
         self.life_score = 0 --How much score psycho has accumulated to win a life
@@ -171,7 +175,7 @@ function Psy:update(dt)
     local p
 
     p = self
-
+    
     --Check for joystick input
     if USING_JOYSTICK and CURRENT_JOYSTICK then
         --Enter or leave focus mode (left shoulder button by default)
@@ -246,7 +250,9 @@ function Psy:update(dt)
     p.circle_fx_tick = p.circle_fx_tick - dt
     if p.circle_fx_tick <= 0 then
         p.circle_fx_tick = p.circle_fx_tick + p.circle_fx_fps
-        C_FX.create(p.pos)
+        C_FX.create(p.pos, p.circle_fx_alpha)
+        --Update alpha for next circle
+        p.circle_fx_alpha = math.min(p.circle_fx_alpha + dt*p.circle_fx_alpha_speed, p.circle_fx_alpha_max)
     end
 
     --Psycho is moving, then accelerate
@@ -291,6 +297,7 @@ function Psy:kill()
     SFX.psychoball_dies:play()
 
     LM.giveLives(-1) --Update life
+    p.circle_fx_alpha = p.circle_fx_alpha_min --Reset alpha for effects
 
     if not p.death and p.lives <= 0 then
         FX.explosion(p.pos.x, p.pos.y, p.r, p.color, 100, 450, 250, 4)

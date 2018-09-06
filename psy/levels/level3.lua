@@ -184,7 +184,7 @@ function level_functions.part_2()
 
     p = Util.findId("psycho")
 
-    LM.level_part("Part 3 - //")
+    LM.level_part("Part 2 - //")
 
     LM.stop()
 end
