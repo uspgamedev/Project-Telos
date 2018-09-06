@@ -7,14 +7,14 @@ local level_functions = {}
 
 --LEVEL 2--
 
---2-1: A Cross the Planes
+--3-1: Freedom Lost
 function level_functions.part_1()
     local p
 
     CONTINUE = 3 --Setup continue variable to later continue from where you started
 
     LM.level_part("Part 1 - Freedom Lost")
-    --[[
+
     LM.wait(5.5)
 
     F.fromHorizontal{enemy = {GrB}, side = "left", mode = "center" , number = 7, ind_duration = 3, ind_side = 40, speed_m = 2.2, e_radius = 25, enemy_x_margin = 50, enemy_y_margin = 50}
@@ -23,9 +23,9 @@ function level_functions.part_1()
     F.fromVertical{enemy = {GrB}, side = "bottom", mode = "center" , number = 7, ind_duration = 3, ind_side = 40, speed_m = 2.2, e_radius = 25, enemy_x_margin = 50, enemy_y_margin = 50}
     LM.wait(5)
 
-    ]]--
+
     local cage = F.cage{radius = 180, speed_radius = 400}
-    --[[
+
     LM.wait(3)
 
     F.fromHorizontal{enemy = {SB}, side = "right", mode = "center" , number = 7, ind_duration = 3.2, ind_side = 40, speed_m = 1.5}
@@ -88,8 +88,8 @@ function level_functions.part_1()
     cage:goTo(WINDOW_WIDTH/2, WINDOW_HEIGHT/2, 24)
     LM.wait("noenemies")
     F.fromVertical{enemy = {GrB}, side = "bottom", mode = "center" , number = 7, ind_duration = 2, ind_side = 40, speed_m = .3}
-    ]]--
-    LM.wait(3)--6
+
+    LM.wait(6)
     cage:resize(260, 50)
 
     LM.wait(3)
@@ -131,10 +131,10 @@ function level_functions.part_1()
     LM.wait(4)
     cage:resize(260)
     cage:goTo(WINDOW_WIDTH - 100, WINDOW_HEIGHT/2, 140)
-    F.circle{radius = 640, number = 21, enemy = {SB, SB, GlB}, ind_duration = 2, ind_side = 35, e_speed_m = .8}
+    F.circle{radius = 640, number = 18, enemy = {SB, SB, GlB}, ind_duration = 2, ind_side = 35, e_speed_m = .8}
     LM.wait(4)
     cage:resize(100)
-    F.circle{radius = 640, number = 20, enemy = {DB, DB, GlB}, ind_duration = 2, ind_side = 35, e_speed_m = .8}
+    F.circle{radius = 640, number = 21, enemy = {DB, DB, GlB}, ind_duration = 2, ind_side = 35, e_speed_m = .8}
     LM.wait(4)
     cage:resize(260)
     cage:goTo(WINDOW_WIDTH/2, WINDOW_HEIGHT/2, 140)
@@ -144,37 +144,50 @@ function level_functions.part_1()
     cage:resize(115,50)
     F.line{x = WINDOW_WIDTH/2, y = -25, dy = 1, number = 150, enemy = {GlB}, ind_duration = 1, ind_side = 40}
     LM.wait(2)
-    F.line{x = -25, y = WINDOW_HEIGHT/2, dx = 1, number = 150, enemy = {GlB}, ind_mode = false, ind_side = 40}
+    F.line{x = -25, y = WINDOW_HEIGHT/2, dx = 1, number = 145, enemy = {GlB}, ind_mode = false, ind_side = 40}
 
     LM.wait(3)
     F.circle{radius = 640, number = 20, enemy = {SB}, ind_duration = 2, ind_side = 35, e_speed_m = .6}
     LM.wait(3)
     cage:resize(260,100)
     LM.wait(1)
-    cage:move(-100, 0, 35)
-    F.circle{radius = 640, number = 20, enemy = {SB,DB}, ind_duration = 2, ind_side = 35, e_speed_m = .4}
+    cage:move(-80, 0, 35)
+    F.circle{radius = 640, number = 20, enemy = {SB,DB}, ind_duration = 2, ind_side = 35, e_speed_m = .3}
     LM.wait(4)
-    F.circle{radius = 640, number = 20, enemy = {DB}, ind_duration = 2, ind_side = 35, e_speed_m = .4}
+    F.circle{radius = 640, number = 20, enemy = {DB, DB, SB}, ind_duration = 2, ind_side = 35, e_speed_m = .3}
     LM.wait(4)
-    cage:move(200, 0, 35)
-    F.circle{radius = 640, number = 21, enemy = {SB, SB, GlB}, ind_duration = 2, ind_side = 35, e_speed_m = .4}
+    cage:move(160, 0, 35)
+    F.circle{radius = 640, number = 21, enemy = {SB, SB, GlB}, ind_duration = 2, ind_side = 35, e_speed_m = .3}
     LM.wait(4)
-    F.circle{radius = 640, number = 20, enemy = {SB, DB, GlB}, ind_duration = 2, ind_side = 35, e_speed_m = .4}
+    F.circle{radius = 640, number = 20, enemy = {SB, DB, GlB}, ind_duration = 2, ind_side = 35, e_speed_m = .3}
     LM.wait(4)
-    cage:move(-100, 0, 35)
-    F.circle{radius = 640, number = 20, enemy = {DB, GlB}, ind_duration = 2, ind_side = 35, e_speed_m = .4}
+    cage:move(-80, 0, 35)
+    F.circle{radius = 640, number = 20, enemy = {SB, GlB}, ind_duration = 2, ind_side = 35, e_speed_m = .3}
     LM.wait(5)
 
     cage:resize(93, 38)
-    LM.wait(3.8)
+    LM.wait(4.3)
     cage:kill()
-    LM.wait(5)
+
     LM.wait("noenemies")
+    LM.giveScore(1000, "finished part")
+
     LM.stop()
-
-
+    LM.start(level_functions.part_2)
 end
 
+--3-2: //
+function level_functions.part_2()
+    local p
+
+    CONTINUE = 3 --Setup continue variable to later continue from where you started
+
+    p = Util.findId("psycho")
+
+    LM.level_part("Part 3 - //")
+
+    LM.stop()
+end
 
 ---------------------
 --UTILITY FUNCTIONS--
