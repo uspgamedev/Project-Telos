@@ -108,7 +108,7 @@ Boss_2_Main = Class{
         self.life = {} --How many hits this boss can take before changing state (this value is for stage 1)
         self.damage_taken = {} --How many hits this boss has taken
         for i = 1, 4 do
-            self.life[i] = 25 --25 --Inicial life for stage 1
+            self.life[i] = 25 --Inicial life for stage 1
             self.damage_taken[i] = 0
         end
 
@@ -316,7 +316,7 @@ function Boss_2_Main:changeStage()
             b.part_colors[i] = HSL(b.color_stage_hue[3], 0, b.bottom_lightness[i])
             b.level_handles["no_more_saturation"..i] = LEVEL_TIMER:tween(1, b.part_colors[i], {s = 255}, 'in-linear')
             b.damage_taken[i] = 0
-            b.life[i] = 30 --30
+            b.life[i] = 30
             b.parts_alive = 4
 
             --Remove previous transitions
@@ -666,12 +666,14 @@ function Boss_2_Main:changeStage()
         LM.giveScore(4000, "boss defeated")
         b.static = true
 
-        b.level_handles["text_appear"] = LEVEL_TIMER:after(.5, function() LM.text(WINDOW_WIDTH/2 - 93, WINDOW_HEIGHT/2 - 90, "please don't kill me", 4.5, 110) end)
-        b.level_handles["wait"] = LEVEL_TIMER:after(2,
+        b.level_handles["text_appear"] = LEVEL_TIMER:after(2, function() LM.text(WINDOW_WIDTH/2 - 93, WINDOW_HEIGHT/2 - 90, "please don't kill me", 4.5, 110) end)
+        b.level_handles["wait"] = LEVEL_TIMER:after(3,
             function()
                 b.level_handles["no_more_saturation"] = LEVEL_TIMER:tween(1.5, b.part_colors[1], {s = 255}, 'in-linear',
                     function()
+                        b.static = false
                         b.invincible = false
+                        b.behaviour = Stage_6
                     end
                 )
             end
@@ -1499,6 +1501,22 @@ Increase_Radius = function(i)
 
     end
 
+end
+
+--Slowly runs away from player
+Stage_6 = function(b, dt)
+    local p = Util.findId("psycho")
+    local speed = 30
+    if p then
+        --Move boss
+        local dir = b.pos - p.pos
+        b.pos = b.pos + dir:normalized()*speed*dt
+        --Don't make it leave the screen
+        b.pos.x = math.min(b.pos.x+b.r,WINDOW_WIDTH)
+        b.pos.x = math.max(0,b.pos.x-b.r)
+        b.pos.y = math.min(b.pos.y+b.r,WINDOW_HEIGHT)
+        b.pos.y = math.max(0,b.pos.y-b.r)
+    end
 end
 
 --return function

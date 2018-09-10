@@ -752,7 +752,7 @@ function level_functions.part_4()
     p = Util.findId("psycho")
 
     LM.level_part("Part 4 - Violent Love with Friends")
-    LM.wait(3)
+    LM.wait(4)
 
     LM.text(300, 260, "he's running away!!", 1, 150)
     LM.wait(2)
@@ -769,7 +769,13 @@ function level_functions.part_4()
         F.single{enemy = en[p], x = _x, y = _y, dir_follow = true, speed_m = 3, ind_side = 25, score_mul = 2}
         _x, _y = LM.outsidePosition(all * (60 - i) / 60)
         F.single{enemy = en[3 - p], x = _x, y = _y, dir_follow = true, speed_m = 3, ind_side = 25, score_mul = 2}
-        LM.wait(.8)
+        if i <= 20 then
+            LM.wait(.85)
+        elseif i <= 40 then
+            LM.wait(.8)
+        else
+            LM.wait(.75)
+        end
     end
 
     LM.wait("noenemies")
