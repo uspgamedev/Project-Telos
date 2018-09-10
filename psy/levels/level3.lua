@@ -185,11 +185,13 @@ function level_functions.part_2()
     p = Util.findId("psycho")
 
     LM.level_part("Part 2 - //")
+    LM.wait(3)
 
-    F.snake{segments = 3, positions = {{200,200},{500,200},{100,100},{100,-200}}, ind_mode = false}
-    LM.wait(5)
+    F.snake{segments = 3, positions = {{200,200},{500,200},{100,100},{100,-200}}, ind_mode = false, speed_m = .5, e_radius = 35}
 
     LM.wait("noenemies")
+
+    print("all dead")
     LM.stop()
 end
 

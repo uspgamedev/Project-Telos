@@ -4,6 +4,9 @@ local Hsl   = require "classes.color.hsl"
 local Util = require "util"
 local LM = require "level_manager"
 
+--Local functions
+local isInside
+
 --TURRET CLASS--
 --[[Turret enemy that goes to a target, and stays for a while shooting enemies]]
 
@@ -106,6 +109,7 @@ function Turret:kill(gives_score, dont_explode)
     if self.death then return end
 
     self.damage_taken = self.damage_taken + 1
+
     --Find the quarter of life the turret has, and get the correspondent color
     self.current_color = self.color_stages[math.min(math.floor((self.damage_taken/self.life)/.25) + 1, 4)]
     self:getHitAnimation()
