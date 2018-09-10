@@ -20,6 +20,7 @@ DB = require "classes.enemies.double_ball"
 GrB = require "classes.enemies.grey_ball"
 GlB = require "classes.enemies.glitch_ball"
 Trt = require "classes.enemies.turret"
+Snk = require "classes.enemies.snake"
 Cge = require "classes.enemies.cage"
 
 --bosses

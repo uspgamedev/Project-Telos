@@ -248,6 +248,48 @@ function indicator.create_enemy_turret(turret, pos, speed_m, e_speed_m, radius, 
     return i
 end
 
+--Create an enemy indicator from a margin in the screen, and after duration, create a snake enemy
+function indicator.create_enemy_snake(snake, segments, pos, speed_m, radius, score_mul, side, ind_duration)
+    local i, center, margin, handle, color
+
+    center = Vector(pos[1][1], pos[1][2])
+    side = side or 20
+    margin = side/2 + 1
+    color = snake.indColor()
+
+    --Put indicator center inside the screen
+    if pos.x < margin then
+        center.x = margin
+    elseif pos.x > WINDOW_WIDTH - margin then
+        center.x = WINDOW_WIDTH - margin
+    end
+    if pos.y < margin then
+        center.y = margin
+    elseif pos.y > WINDOW_HEIGHT - margin then
+        center.y = WINDOW_HEIGHT - margin
+    end
+
+    st = st or "enemy_indicator" --subtype
+
+    i = Enemy_Indicator(center, Vector(pos[2][1] - pos[1][1], pos[2][2] - pos[1][2]), side, color, false)
+
+    i:addElement(DRAW_TABLE.L5, st)
+
+    i.color.a = 0
+    --Fade in the indicator
+    i.level_handles["fadein"] = LEVEL_TIMER:tween(.3, i.color, {a = 255}, 'in-linear')
+
+    i.level_handles["create_enemy"] = LEVEL_TIMER:after(ind_duration,
+        function()
+            i.death = true --Remove the indicator
+            snake.create(segments, pos, speed_m, radius, score_mul) --Create the turret
+        end
+    )
+
+    return i
+end
+
+
 ----------------------
 --Rotating Indicator--
 ----------------------

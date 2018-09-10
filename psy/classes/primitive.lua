@@ -302,7 +302,11 @@ ENEMY = Class{
         --Normalize direction and set speed
         self.speedv = _speedv or 270 --Speed value
         self.speed_m = _speed_m or 1 --Speed multiplier
-        self.speed = Vector(_dir.x, _dir.y) --Speed vector
+        if _dir then
+            self.speed = Vector(_dir.x, _dir.y) --Speed vector
+        else
+            self.speed = Vector(0,0)
+        end
         self.speed = self.speed:normalized()*self.speedv
 
         self.score_value = _score_value or 25 --Score this enemy gives when killed without multiplier
@@ -310,6 +314,7 @@ ENEMY = Class{
 
         self.enter = false --If this enemy has already entered the game screen
         self.tp = "simple_enemy" --Type of this class
+
     end
 }
 

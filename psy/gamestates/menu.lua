@@ -272,7 +272,7 @@ function state:keypressed(key)
         SWITCH = "GAME"
         CONTINUE = false
     elseif key == '2' then
-        _go_to_level = "level1"
+        _go_to_level = "level3"
         _go_to_part = "part_2"
         SWITCH = "GAME"
         CONTINUE = false

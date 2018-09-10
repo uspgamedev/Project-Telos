@@ -888,6 +888,44 @@ function formation.cage(a)
     return Cge.create(l_pos.x, l_pos.y, l_r, l_speed_r)
 end
 
+--[[
+Create a snake enemy given a table of positions to walk through and number of segments
+
+Arguments
+
+enemy: enemy (or enemies) to be created
+segments: number of segments snake has
+positions: table containing all positions snake will pass through (must have at least 2)
+speed_m: speed multiplier applied to the enemies created
+ind_mode: if true, create an indicator for the enemy being created
+ind_duration: duration to display indicator before creating the enemy
+e_radius: Radius of enemy being created
+score_mul: multiplier of score for enemies created
+ind_side: side of indicator
+]]
+function formation.snake(a)
+    --Default values
+    a.segments = a.segments or 3
+    a.positions = a.positions or {{-100,WINDOW_HEIGHT/2},{WINDOW_WIDTH+100, WINDOW_HEIGHT/2}}
+    a.speed_m = a.speed_m or 1
+    a.score_mul = a.score_mul or 1
+    a.ind_duration = a.ind_duration or INDICATOR_DEFAULT
+    a.ind_side = a.ind_side or 35
+    a.e_radius = a.e_radius or Snk.radius()
+    if a.ind_mode == nil then a.ind_mode = true end
+
+    if a.ind_mode then
+        print "not yet"
+        --Create the indicator, that will later create the enemy
+        Indicator.create_enemy_snake(Snk, a.segments, a.positions, a.speed_m, a.e_radius, a.score_mul, a.ind_side, a.ind_duration)
+    else
+        --Just create the enemy
+        Snk.create(a.segments, a.positions, a.speed_m, a.e_radius, a.score_mul)
+    end
+
+end
+
+
 
 --Return functions
 return formation

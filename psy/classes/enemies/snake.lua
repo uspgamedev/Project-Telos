@@ -26,8 +26,9 @@ Snake = Class{
 
         self.positions = _positions --Target positions snake will travel to
 
-        local dir = (Vector(unpack(_position[1])) - Vector(unpack(_position[2]))):normalized()
+        local dir = (Vector(unpack(_positions[1])) - Vector(unpack(_positions[2]))):normalized()
         local x, y = unpack(_positions[1])
+
         self.segments = {}
         for i = 1, _segments do
             self.segments[i] = {
@@ -100,8 +101,18 @@ function Snake:update(dt)
                 o:kill(false, true) end --Don't give score if enemy is killed by leaving screen
         end
     end
+end
 
+function Snake:draw()
+    local o = self
 
+    --Draws each segment
+    for i, seg in ipairs(o.segments) do
+        if seg.enter then
+            Color.set(o.color)
+            Draw_Smooth_Circle(seg.pos.x, seg.pos.y, o.r)
+        end
+    end
 end
 
 --UTILITY FUNCTIONS--
@@ -116,7 +127,7 @@ function enemy.create(segments, positions, speed_m, radius, score_mul)
     return e
 end
 
---Return this enemy radius
+--Return this enemy default radius
 function enemy.radius()
     return 20
 end
