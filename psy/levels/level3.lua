@@ -190,8 +190,6 @@ function level_functions.part_2()
     F.snake{segments = 7, positions = {{-100,200},{700,200},{100,100},{100,-200}}, ind_duration = 2, speed_m = .5, e_radius = 30, ind_side = 30}
 
     LM.wait("noenemies")
-
-    print("all dead")
     LM.stop()
 end
 

@@ -14,7 +14,7 @@ local enemy = {}
 
 Snake = Class{
     __includes = {ELEMENT, ENEMY},
-    init = function(self, _segments, _positions, _speed_m, _radius, _score_mul)
+    init = function(self, _segments, _positions, _life, _speed_m, _radius, _score_mul)
         local color_table = {
             HSL(Hsl.stdv(103, 83, 47)),
             HSL(Hsl.stdv(103,64,42)),
@@ -33,9 +33,13 @@ Snake = Class{
             self.positions[i] = Vector(pos[1], pos[2])
         end
 
+        self.segments_life = _life --How much hits it takes to kill an active segment
+
+        self.on_hit = false --If ball got hit and should play use on_hit_color
+        self.on_hit_color = Color.black()
+
         local dir = (Vector(unpack(_positions[1])) - Vector(unpack(_positions[2]))):normalized()
         local x, y = unpack(_positions[1])
-
         self.segments = {}
         for i = 1, _segments do
             self.segments[i] = {
@@ -43,7 +47,8 @@ Snake = Class{
                 enter = false, --If enemy has entered the screen
                 target_pos_idx = 2, --Start going to second position
                 dead = false,
-                active = false --If this is the active segment
+                active = false, --If this is the active segment,
+                damage_taken = 0
             }
             x = x + dir.x*2*self.r
             y = y + dir.y*2*self.r
@@ -88,10 +93,9 @@ function Snake:kill(gives_score, dont_explode)
         self.enter = false
         self.death = true
         if gives_score and self.full_snake_score_bonus*self.score_mul > 0 then
-            LM.giveScore(math.ceil(self.full_snake_score_bonus*self.score_mul))
+            LM.giveScore(math.ceil(self.full_snake_score_bonus*self.score_mul), "snake killed")
             FX.shake(.4,1.5)
         end
-        print("killed")
     end
 
 end
@@ -141,7 +145,11 @@ function Snake:draw()
     for i, seg in ipairs(o.segments) do
         if seg.enter and seg.dead ~= "dead" then
             if seg.active then
-                Color.set(o.color)
+                if o.use_on_hit_color then
+                    Color.set(o.on_hit_color)
+                else
+                    Color.set(o.color)
+                end
             else
                 local c = Color.black()
                 Color.copy(c, o.color)
@@ -173,7 +181,12 @@ function Snake:collides(o)
             if (dx*dx + dy*dy) < dr*dr then
                 collided_with_something = true
                 if o.tp == "bullet" and seg.active then
-                    seg.dead = "marked for death"
+                    seg.damage_taken = seg.damage_taken + 1
+                    if seg.damage_taken >= self.segments_life then
+                        seg.dead = "marked for death"
+                    else
+                        e:getHitAnimation()
+                    end
                 end
             end
         end
@@ -182,12 +195,62 @@ function Snake:collides(o)
     return collided_with_something
 end
 
+function Snake:getHitAnimation()
+    local t
+
+    t = self
+
+    --Remove previous transition
+    if t.level_handles["gethithue"] then
+        LEVEL_TIMER:cancel(t.level_handles["gethithue"])
+    end
+    if t.level_handles["gethitsaturation"] then
+        LEVEL_TIMER:cancel(t.level_handles["gethitsaturation"])
+    end
+    if t.level_handles["gethittimer"] then
+        LEVEL_TIMER:cancel(t.level_handles["gethittimer"])
+    end
+    if t.level_handles["gethitlightness"] then
+        LEVEL_TIMER:cancel(t.level_handles["gethitlightness"])
+    end
+
+    t.use_on_hit_color = true
+
+    --Make boss red when hit
+    t.on_hit_color.h = 255
+    t.on_hit_color.s = 226.95
+    t.on_hit_color.l = 125
+
+    --Stay red for .05 seconds
+    t.level_handles["gethittimer"] = LEVEL_TIMER:after(.05,
+        function()
+            --Go back to original lightness
+            t.level_handles["gethitlightness"] = LEVEL_TIMER:tween(.5, t.on_hit_color, {l = t.color.l}, 'in-linear')
+
+            --Transition current onhit hue to snake current hue when saturation is 0
+            t.level_handles["gethithue"] = LEVEL_TIMER:after(.25,
+                function()
+                    t.on_hit_color.h = t.color.h
+                end)
+            --Drops saturation, then go to original saturation
+            t.level_handles["gethitsaturation"] = LEVEL_TIMER:tween(.25, t.on_hit_color, {s = 0}, 'in-linear',
+               function()
+                   t.level_handles["gethitsaturation"] = LEVEL_TIMER:tween(.25, t.on_hit_color, {s = t.color.s}, 'in-linear',
+                    function()
+                        t.use_on_hit_color = false
+                    end)
+                end
+            )
+        end
+    )
+end
+
 --UTILITY FUNCTIONS--
 
-function enemy.create(segments, positions, speed_m, radius, score_mul)
+function enemy.create(segments, positions, life, speed_m, radius, score_mul)
     local e
 
-    e = Snake(segments, positions, speed_m, radius, score_mul)
+    e = Snake(segments, positions, life, speed_m, radius, score_mul)
     e:addElement(DRAW_TABLE.L4)
     e:startColorLoop()
 

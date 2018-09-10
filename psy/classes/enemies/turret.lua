@@ -89,7 +89,7 @@ function Turret:getHitAnimation()
             --Go back to original lightness (99.45)
             t.level_handles["gethitlightness"] = LEVEL_TIMER:tween(.5, t.color, {l = 99.45}, 'in-linear')
 
-            --Transition current onhit hue to boss stage current hue when saturation is 0
+            --Transition current onhit hue to turret current hue when saturation is 0
             t.level_handles["gethithue"] = LEVEL_TIMER:after(.25,
                 function()
                     t.color.h = t.current_color.h
