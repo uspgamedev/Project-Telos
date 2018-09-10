@@ -31,13 +31,11 @@ Cage = Class{
 
         self.leaving = false --If cage is leaving the screen
 
-        self.color = HSL(Hsl.stdv(201,100,50))
+        self.color = HSL(Hsl.stdv(344,100,46))
 
         local color_table = {
-            HSL(Hsl.stdv(201,100,50)),
-            HSL(Hsl.stdv(239,100,26)),
-            HSL(Hsl.stdv(220,78,30)),
-            HSL(Hsl.stdv(213,100,54))
+            HSL(Hsl.stdv(344,100,46)),
+            HSL(Hsl.stdv(9, 92, 47)),
         }
         CLR.init(self, self.color, color_table)
         CLR.startColorLoop(self)

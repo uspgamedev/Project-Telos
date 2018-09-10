@@ -34,7 +34,7 @@ function level_functions.part_1()
     LM.wait("noenemies")
     F.circle{radius = 640, number = 20, enemy = {SB}, ind_duration = 2.5, ind_side = 35}
     LM.wait("noenemies")
-    F.circle{radius = 640, number = 20, enemy = {SB, DB}, ind_duration = 2.5, ind_side = 35, dir_follow = true}
+    F.circle{radius = 640, number = 20, enemy = {SB, DB}, ind_duration = 2.5, ind_side = 56, dir_follow = true}
     LM.wait("noenemies")
 
     F.line{x = -25, y = WINDOW_HEIGHT/2, dx = 1, number = 107, enemy = {DB,SB}, ind_duration = 2.5, dir_follow = true, ind_side = 40}
