@@ -24,7 +24,11 @@ Snake = Class{
         self.segment_score =  10 --Score each segment gives when killed
         self.full_snake_score_bonus = _segments*5 --Bonus score added when full snake is dead
 
-        self.positions = _positions --Target positions snake will travel to
+        self.positions = {} --Target positions snake will travel to
+        for i, pos in ipairs(_positions) do
+            --Transform array into vector
+            self.positions[i] = Vector(pos[1], pos[2])
+        end
 
         local dir = (Vector(unpack(_positions[1])) - Vector(unpack(_positions[2]))):normalized()
         local x, y = unpack(_positions[1])
@@ -90,15 +94,31 @@ function Snake:update(dt)
 
     for i, seg in ipairs(o.segments) do
         --Update movement, going to next target
-        --o.pos = o.pos + dt*o.speed*o.speed_m
+        local distance = dt*o.speedv*o.speed_m --Maximum distance it can travel
+        while distance > 0 and seg.target_pos_idx > 0 do
+            local vec = o.positions[seg.target_pos_idx] - seg.pos
+            local dir, len = vec:normalized(), vec:len()
+            if len > distance then
+                --Cant reach next target position, move all it can
+                seg.pos = seg.pos + dir*distance
+                distance = 0
+            else
+                --Arrived at next target position, go to target position
+                seg.pos = seg.pos + dir*len
+                seg.target_pos_idx = (seg.target_pos_idx+1)%(#o.positions+1)
+                distance = distance - len
+            end
+        end
 
         --Check if segment entered then leaved the game screen
         if not seg.enter then
             if isInside(o, i) then seg.enter = true end
         else
             if not isInside(o, i) then
+                --Don't give score if enemy is killed by leaving screen
                 seg.dead = "marked for death"
-                o:kill(false, true) end --Don't give score if enemy is killed by leaving screen
+                o:kill(false, true)
+            end
         end
     end
 end

@@ -186,8 +186,7 @@ function level_functions.part_2()
 
     LM.level_part("Part 2 - //")
 
-    F.snake{segments = 3, positions = {{200,200},{300,200}}, ind_mode = false}
-    print("got here")
+    F.snake{segments = 3, positions = {{200,200},{500,200},{100,100},{100,-200}}, ind_mode = false}
     LM.wait(5)
 
     LM.wait("noenemies")
