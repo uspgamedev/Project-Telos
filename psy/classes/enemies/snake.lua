@@ -43,10 +43,12 @@ Snake = Class{
                 enter = false, --If enemy has entered the screen
                 target_pos_idx = 2, --Start going to second position
                 dead = false,
+                active = false --If this is the active segment
             }
             x = x + dir.x*2*self.r
             y = y + dir.y*2*self.r
         end
+        self.segments[1].active = true --Make first active
 
         self.tp = "snake" --Type of this class
     end
@@ -73,6 +75,8 @@ function Snake:kill(gives_score, dont_explode)
                 SFX.hit_simple:play()
             end
             seg.dead = "dead"
+            --Make next head active
+            if i < #self.segments then self.segments[i+1].active = true end
         end
         if seg.dead == "dead" then
             number_of_dead = number_of_dead + 1
@@ -133,11 +137,17 @@ end
 
 function Snake:draw()
     local o = self
-
     --Draws each segment
     for i, seg in ipairs(o.segments) do
         if seg.enter and seg.dead ~= "dead" then
-            Color.set(o.color)
+            if seg.active then
+                Color.set(o.color)
+            else
+                local c = Color.black()
+                Color.copy(c, o.color)
+                c.s = c.s/12
+                Color.set(c)
+            end
             Draw_Smooth_Circle(seg.pos.x, seg.pos.y, o.r)
         end
     end
@@ -162,7 +172,7 @@ function Snake:collides(o)
 
             if (dx*dx + dy*dy) < dr*dr then
                 collided_with_something = true
-                if o.tp == "bullet" then
+                if o.tp == "bullet" and seg.active then
                     seg.dead = "marked for death"
                 end
             end
