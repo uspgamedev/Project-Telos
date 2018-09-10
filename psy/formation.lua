@@ -915,9 +915,9 @@ function formation.snake(a)
     if a.ind_mode == nil then a.ind_mode = true end
 
     if a.ind_mode then
-        print "not yet"
         --Create the indicator, that will later create the enemy
         Indicator.create_enemy_snake(Snk, a.segments, a.positions, a.speed_m, a.e_radius, a.score_mul, a.ind_side, a.ind_duration)
+        print("created")
     else
         --Just create the enemy
         Snk.create(a.segments, a.positions, a.speed_m, a.e_radius, a.score_mul)

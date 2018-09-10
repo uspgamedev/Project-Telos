@@ -16,10 +16,10 @@ Snake = Class{
     __includes = {ELEMENT, ENEMY},
     init = function(self, _segments, _positions, _speed_m, _radius, _score_mul)
         local color_table = {
-            HSL(Hsl.stdv(201,100,50)),
-            HSL(Hsl.stdv(239,100,26)),
-            HSL(Hsl.stdv(220,78,30)),
-            HSL(Hsl.stdv(213,100,54))
+            HSL(Hsl.stdv(103, 83, 47)),
+            HSL(Hsl.stdv(103,64,42)),
+            HSL(Hsl.stdv(103,71,56)),
+            HSL(Hsl.stdv(123,100,42))
         }
 
         ENEMY.init(self,  nil, nil, nil, _speed_m, _radius, _score_mul, color_table, 270, nil)
@@ -191,7 +191,7 @@ end
 
 --Return the color for this enemy indicator
 function enemy.indColor()
-    return HSL(Hsl.stdv(227,88.8,49.2))
+    return HSL(Hsl.stdv(123,100,42))
 end
 
 --Return the default score this enemy gives when killed

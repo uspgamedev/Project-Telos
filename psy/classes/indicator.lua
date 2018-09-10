@@ -258,14 +258,14 @@ function indicator.create_enemy_snake(snake, segments, pos, speed_m, radius, sco
     color = snake.indColor()
 
     --Put indicator center inside the screen
-    if pos.x < margin then
+    if pos[1][1] < margin then
         center.x = margin
-    elseif pos.x > WINDOW_WIDTH - margin then
+    elseif pos[1][1] > WINDOW_WIDTH - margin then
         center.x = WINDOW_WIDTH - margin
     end
-    if pos.y < margin then
+    if pos[1][2] < margin then
         center.y = margin
-    elseif pos.y > WINDOW_HEIGHT - margin then
+    elseif pos[1][2] > WINDOW_HEIGHT - margin then
         center.y = WINDOW_HEIGHT - margin
     end
 
