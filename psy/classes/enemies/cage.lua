@@ -31,7 +31,7 @@ Cage = Class{
 
         self.leaving = false --If cage is leaving the screen
 
-        self.color = HSL(Hsl.stdv(278,89,39))
+        self.color = HSL(Hsl.stdv(201,100,50))
 
         local color_table = {
             HSL(Hsl.stdv(201,100,50)),
