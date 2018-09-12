@@ -167,7 +167,7 @@ function Psy:ultrablast(power)
 
     --Signal ultrablast counter that psycho used ultrablast
     local counter = Util.findId("ultrablast_counter")
-    if counter then counter:psychoShot() end
+    if counter then counter:psychoShot(true) end
 
 end
 
@@ -175,7 +175,7 @@ function Psy:update(dt)
     local p
 
     p = self
-    
+
     --Check for joystick input
     if USING_JOYSTICK and CURRENT_JOYSTICK then
         --Enter or leave focus mode (left shoulder button by default)

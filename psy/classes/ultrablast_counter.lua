@@ -234,7 +234,7 @@ function UltrablastCounter:update(dt)
       self.ultra_cont = p.ultrablast_counter
 
       if not p.can_charge then return end
-
+      print(self.charge_cooldown)
       --Update charge bar
       if self.ultra_cont >= MAX_ULTRABLAST then
         self.charge_bar_value = 0
