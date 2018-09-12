@@ -33,9 +33,9 @@ UltrablastCounter = Class{
 
         self.charge_bar_value = 0  --Current value of bar
         self.charge_bar_max = 120  --Max value a bar can have before giving a utlrablast to player
-        self.charge_bar_min_speed = 25 --Starting speed of charge bar
+        self.charge_bar_min_speed = 15 --Starting speed of charge bar
         self.charge_bar_max_speed = 80 --Max speed of charge bar
-        self.charge_bar_accel_speed = 15 --How fast the speed increases per second
+        self.charge_bar_accel_speed = 7 --How fast the speed increases per second
         self.charge_bar_speed = self.charge_bar_min_speed --Speed to increase bar per second
 
         self.charge_bar_w = 10 --Charge bar width
@@ -47,7 +47,7 @@ UltrablastCounter = Class{
 
         --Variables for penalty when psycho is shooting
         self.charge_cooldown_max = .6 --Time added when player is shooting
-        self.charge_cooldown_max_ultra = 3.5 --Time added when player uses utlrablast
+        self.charge_cooldown_max_ultra = 3 --Time added when player uses utlrablast
         self.charge_cooldown = 0
         self.charge_penalty = 1 --Penalty deducted from charge value when psycho is shooting repeatedly
 
@@ -177,9 +177,10 @@ end
 --Function called when psycho is shooting (or used ultrablast)
 function UltrablastCounter:psychoShot(used_ultra)
   if self.charge_cooldown > 0 then
-    self.charge_bar_value = math.max(0, self.charge_bar_value - self.charge_penalty)
+      self.charge_bar_value = math.max(0, self.charge_bar_value - self.charge_penalty)
   end
   if used_ultra then
+      self.charge_bar_value = math.max(0, self.charge_bar_value - 19*self.charge_penalty)
       self.charge_cooldown = self.charge_cooldown_max_ultra
   else
       self.charge_cooldown = self.charge_cooldown_max
@@ -234,7 +235,7 @@ function UltrablastCounter:update(dt)
       self.ultra_cont = p.ultrablast_counter
 
       if not p.can_charge then return end
-      print(self.charge_cooldown)
+
       --Update charge bar
       if self.ultra_cont >= MAX_ULTRABLAST then
         self.charge_bar_value = 0
