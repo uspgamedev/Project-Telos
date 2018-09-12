@@ -47,6 +47,7 @@ UltrablastCounter = Class{
 
         --Variables for penalty when psycho is shooting
         self.charge_cooldown_max = .6 --Time added when player is shooting
+        self.charge_cooldown_max_ultra = 1.8 --Time added when player is shooting
         self.charge_cooldown = 0
         self.charge_penalty = 5 --Penalty deducted from charge value when psycho is shooting repeatedly
 
@@ -173,12 +174,16 @@ function UltrablastCounter:ultraGained()
 
 end
 
---Function called when psycho is shooting
-function UltrablastCounter:psychoShot()
+--Function called when psycho is shooting (or used ultrablast)
+function UltrablastCounter:psychoShot(used_ultra)
   if self.charge_cooldown > 0 then
     self.charge_bar_value = math.max(0, self.charge_bar_value - self.charge_penalty)
   end
-  self.charge_cooldown = self.charge_cooldown_max
+  if used_ultra then
+      self.charge_cooldown = self.charge_cooldown_max_ultra
+  else
+      self.charge_cooldown = self.charge_cooldown_max
+  end
   self.charge_bar_speed = self.charge_bar_min_speed
 
   --Remove previous animation, if any
