@@ -367,9 +367,9 @@ end
 
 --Receives the center x and y values of a ring, its radius and inner_radius, and draw it on the screen
 --OBS: Have the color already setted
-function Draw_Smooth_Ring(x, y, r, i_r)
+function Draw_Smooth_Ring(x, y, r, i_r, dont_use_shader)
 
-    if USE_ANTI_ALIASING then
+    if USE_ANTI_ALIASING and not dont_use_shader then
         x = x - r
         y = y - r
 

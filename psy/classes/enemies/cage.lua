@@ -59,7 +59,8 @@ function Cage:draw()
     local p = self
 
     Color.set(p.color)
-    Draw_Smooth_Ring(p.pos.x, p.pos.y, p.r, p.r - p.cage_width)
+	
+    Draw_Smooth_Ring(p.pos.x, p.pos.y, p.r, p.r - p.cage_width, self.target_radius)
 
 end
 
