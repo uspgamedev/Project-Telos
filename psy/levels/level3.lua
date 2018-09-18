@@ -17,7 +17,7 @@ function level_functions.part_1()
 
     LM.wait(5.5)
 
-    F.fromHorizontal{enemy = {GrB}, side = "left", mode = "center" , number = 7, ind_duration = 3, ind_side = 40, speed_m = 2.2, e_radius = 25, enemy_x_margin = 50, enemy_y_margin = 50}
+    F.ntal{enemy = {GrB}, side = "left", mode = "center" , number = 7, ind_duration = 3, ind_side = 40, speed_m = 2.2, e_radius = 25, enemy_x_margin = 50, enemy_y_margin = 50}
     F.fromHorizontal{enemy = {GrB}, side = "right", mode = "center" , number = 7, ind_duration = 3, ind_side = 40, speed_m = 2.2, e_radius = 25, enemy_x_margin = 50, enemy_y_margin = 50}
     F.fromVertical{enemy = {GrB}, side = "top", mode = "center" , number = 7, ind_duration = 3, ind_side = 40, speed_m = 2.2, e_radius = 25, enemy_x_margin = 50, enemy_y_margin = 50}
     F.fromVertical{enemy = {GrB}, side = "bottom", mode = "center" , number = 7, ind_duration = 3, ind_side = 40, speed_m = 2.2, e_radius = 25, enemy_x_margin = 50, enemy_y_margin = 50}
@@ -81,9 +81,9 @@ function level_functions.part_1()
     F.turret{x = -60, y = WINDOW_HEIGHT - 50, t_x = 100, t_y = WINDOW_HEIGHT - 50, enemy = SB, number = 10, life = 12, duration = 12, rot_angle = math.pi/5, speed_m = 1.2}
     F.turret{x = WINDOW_WIDTH + 60, y = WINDOW_HEIGHT - 50, t_x = WINDOW_WIDTH - 100, t_y = WINDOW_HEIGHT - 50, enemy = SB, number = 12, life = 10, duration = 12, rot_angle = math.pi/5, speed_m = 1.2}
     LM.wait(14)
-    F.turret{x = 300, y = -60, t_x = 300, t_y = 200, enemy = GlB, number = 10, life = 20, duration = 18, rot_angle = math.pi/5, speed_m = 1.5, fps = .7}
-    F.turret{x = WINDOW_WIDTH - 300, y = -60, t_x = WINDOW_WIDTH - 300, t_y = 200, enemy = GlB, number = 10, life = 20, duration = 18, rot_angle = math.pi/5, speed_m = 1.5, fps = .7}
-    F.turret{x = WINDOW_WIDTH/2, y = -60, t_x = WINDOW_WIDTH/2, t_y = 100, enemy = GlB, number = 12, life = 25, duration = 18, rot_angle = math.pi/6, speed_m = 1.5, fps = .7}
+    F.turret{x = 300, y = -60, t_x = 300, t_y = 200, enemy = GlB, number = 10, life = 20, duration = 18, rot_angle = math.pi/5, speed_m = 1.5, fps = .7, score_mul = .5}
+    F.turret{x = WINDOW_WIDTH - 300, y = -60, t_x = WINDOW_WIDTH - 300, t_y = 200, enemy = GlB, number = 10, life = 20, duration = 18, rot_angle = math.pi/5, speed_m = 1.5, fps = .7, score_mul = .5}
+    F.turret{x = WINDOW_WIDTH/2, y = -60, t_x = WINDOW_WIDTH/2, t_y = 100, enemy = GlB, number = 12, life = 25, duration = 18, rot_angle = math.pi/6, speed_m = 1.5, fps = .7, score_mul = .5}
     LM.wait(2)
     cage:goTo(WINDOW_WIDTH/2, WINDOW_HEIGHT/2, 24)
     LM.wait("noenemies")
@@ -178,18 +178,94 @@ end
 
 --3-2: //
 function level_functions.part_2()
-    local p
+    local w, h = WINDOW_WIDTH, WINDOW_HEIGHT
 
     CONTINUE = 3 --Setup continue variable to later continue from where you started
 
-    p = Util.findId("psycho")
+    local p = Util.findId("psycho")
 
-    LM.level_part("Part 2 - //")
-    LM.wait(1)
+    LM.level_part("Part 2 - They came and then they left")
 
-    F.snake{segments = 7, positions = {{-100,200},{700,200},{100,100},{100,-200}}, ind_duration = 2, speed_m = .5, e_radius = 30, ind_side = 50, e_life = 1}
+    LM.wait(5.5)
+
+    F.snake{segments = 7, positions = {{w + 100,h/2},{-100,h/2}}, ind_duration = 3, speed_m = .6, e_radius = 25, ind_side = 50, e_life = 3}
 
     LM.wait("noenemies")
+    INDICATOR_DEFAULT = 1.5
+    F.snake{segments = 40, positions = {{w-50,-100},{w-50,h/2-50},{-100, h/2-50}}, speed_m = 1.1, ind_side = 50, e_life = 2,e_radius = 30}
+    LM.wait(1)
+    F.snake{segments = 40, positions = {{50,h+100},{50,h/2+50},{w+100, h/2+50}}, speed_m = 1.1, ind_side = 50, e_life = 2,e_radius = 30}
+    LM.wait(1)
+    F.snake{segments = 30, positions = {{-100,50},{w/2-50,50},{w/2-50, h+100}}, speed_m = 1.1, ind_side = 50, e_life = 2,e_radius = 30}
+    LM.wait(1)
+    F.snake{segments = 30, positions = {{w+100,h-50},{w/2+50,h-50},{w/2+50, -100}}, speed_m = 1.1, ind_side = 50, e_life = 2,e_radius = 30}
+    LM.wait(1)
+    F.snake{segments = 20, positions = {{50,-100},{50,h-50},{w+100,h-50}}, speed_m = 1.1, ind_side = 50, e_life = 2,e_radius = 30}
+    LM.wait(1)
+    F.snake{segments = 20, positions = {{w-50,h+100},{w-50,50},{-100,50}}, speed_m = 1.1, ind_side = 50, e_life = 2,e_radius = 30}
+    LM.wait(1)
+    F.snake{segments = 10, positions = {{w+100,200},{200,200},{200,h+100}}, speed_m = 1.1, ind_side = 50, e_life = 2,e_radius = 30}
+    LM.wait(1)
+    F.snake{segments = 10, positions = {{-100,h-200},{w-200,h-200},{w-200,-100}}, speed_m = 1.1, ind_side = 50, e_life = 2,e_radius = 30}
+    LM.wait(6.5)
+    F.snake{segments = 9, positions = {{w/2,-100},{w/2,70},{w-70, 70},{w-70,h/2},{-100,h/2}}, speed_m = .8, ind_side = 70, e_life = 2,e_radius = 40, score_mul = 2}
+    F.snake{segments = 18, positions = {{w+100,h/2},{w-70,h/2},{w-70, h-70},{70,h-70},{70,70},{w/2,70},{w/2,h+100}}, speed_m = .8, ind_side = 70, e_life = 2,e_radius = 40, score_mul = 2}
+    F.snake{segments = 9, positions = {{w/2,h+100},{w/2,h-70},{70,h-70},{70,70},{w-70,70},{w-70,h-70},{70,h-70},{70,h/2},{w+100,h/2}}, speed_m = .8, ind_side = 70, e_life = 2,e_radius = 40, score_mul = 2}
+    F.snake{segments = 9, positions = {{-100,h/2},{70,h/2},{70,70},{w-70,70},{w-70,h-70},{70,h-70},{70,70},{w-70,70},{w-70,h-70},{w/2,h-70},{w/2,-100}}, speed_m = .8, ind_side = 50, e_life = 2,e_radius = 40, score_mul = 2}
+
+    LM.wait(4)
+    F.circle{radius = 640, number = 20, enemy = {SB}, ind_duration = 2, ind_side = 35,speed_m = .9}
+    LM.wait(3.5)
+    F.circle{radius = 640, number = 20, enemy = {SB,DB}, ind_duration = 1.5, ind_side = 35,speed_m = .9}
+    LM.wait(3.5)
+    F.circle{radius = 640, number = 20, enemy = {DB}, ind_duration = 1.5, ind_side = 35,speed_m = .9}
+    LM.wait(3.5)
+    F.circle{radius = 640, number = 21, enemy = {SB,DB,GlB}, ind_duration = 1.5, ind_side = 35,speed_m = .9}
+    LM.wait(3.5)
+    F.circle{radius = 640, number = 20, enemy = {DB,GlB}, ind_duration = 1.5, ind_side = 35,speed_m = .9}
+    LM.wait(3.5)
+    F.circle{radius = 640, number = 21, enemy = {DB,GlB,DB}, ind_duration = 1.5, ind_side = 35,speed_m = .9}
+    LM.wait(3.5)
+    F.circle{radius = 640, number = 15, enemy = {GlB}, ind_duration = 1, ind_side = 35,speed_m = .9}
+    LM.wait("noenemies")
+
+    INDICATOR_DEFAULT = 1.5
+    local pos = {{w-60,h+100}}
+    local x = w-50
+    local gap = 70
+    for i = 1, 7 do
+        table.insert(pos,{x,50})
+        table.insert(pos,{x-gap,50})
+        table.insert(pos,{x-gap,h-50})
+        table.insert(pos,{x-2*gap,h-50})
+        x = x-2*gap
+    end
+    F.snake{segments = 75, positions = pos, speed_m = .9, ind_side = 50, e_life = 3,e_radius = 35, ind_duration = 1.5, score_mul = 2}
+
+    LM.wait(7)
+    F.fromHorizontal{enemy = {SB}, side = "left", mode = "center" , number = 11, ind_duration = 2, ind_side = 40, speed_m = .9, e_radius = 25, enemy_y_margin = 72}
+    LM.wait(7)
+    F.fromHorizontal{enemy = {SB,DB}, side = "left", mode = "center" , number = 10, ind_duration = 2, ind_side = 40, speed_m = .9, e_radius = 25, enemy_y_margin = 72}
+    LM.wait(7)
+    F.fromHorizontal{enemy = {DB}, side = "left", mode = "center" , number = 10, ind_duration = 2, ind_side = 40, speed_m = .9, e_radius = 25, enemy_y_margin = 72}
+    LM.wait(7)
+    F.fromHorizontal{enemy = {SB,GlB}, side = "left", mode = "center" , number = 10, ind_duration = 3, ind_side = 40, speed_m = .9, e_radius = 25, enemy_y_margin = 72}
+    LM.wait(7)
+    F.fromHorizontal{enemy = {DB,GlB,GlB,SB,GlB,GlB}, side = "left", mode = "center" , number = 10, ind_duration = 3, ind_side = 40, speed_m = .9, e_radius = 25, enemy_y_margin = 72}
+    LM.wait(7)
+    F.fromHorizontal{enemy = {GlB}, side = "left", mode = "center" , number = 11, ind_duration = 3, ind_side = 40, speed_m = .6, e_radius = 25, enemy_x_margin = 115, enemy_y_margin = 67}
+    LM.wait(7)
+    F.fromHorizontal{enemy = {GlB}, side = "right", mode = "center" , number = 11, ind_duration = 3, ind_side = 40, speed_m = .9, e_radius = 25, enemy_x_margin = 115, enemy_y_margin = 67}
+    LM.wait("noenemies")
+
+    local y = 50
+    local gap = 60
+    for i = 1, 7 do
+        F.snake{segments = 20, positions = {{w+100,y},{w/2,y},{w/2,y+gap},{-100,y+gap}}, speed_m = 1.6, ind_side = 50, e_life = 1, e_radius = 25, ind_duration = 1.5}
+        y = y + 100
+    end
+    LM.wait("noenemies")
+
     LM.stop()
 end
 

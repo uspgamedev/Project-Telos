@@ -259,7 +259,7 @@ end
 
 --Return this enemy default radius
 function enemy.radius()
-    return 20
+    return 25
 end
 
 --Return the color for this enemy indicator
