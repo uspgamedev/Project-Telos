@@ -134,6 +134,7 @@ function level_manager.level_title(chapter_name, chapter_upper_text)
     --Create level title
     local name_txt = Txt.create_game_gui(x, y, chapter_name, chapter_name_font, nil, "format", nil, "game_title", "center", fx)
     name_txt.alpha = 0
+    name_txt.use_stencil = true
 
 
     --Create separator between upper text and chapter name

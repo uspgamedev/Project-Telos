@@ -250,7 +250,7 @@ function Psy:update(dt)
     p.circle_fx_tick = p.circle_fx_tick - dt
     if p.circle_fx_tick <= 0 then
         p.circle_fx_tick = p.circle_fx_tick + p.circle_fx_fps
-        C_FX.create(p.pos, p.circle_fx_alpha)
+        C_FX.create(p.pos, p.circle_fx_alpha*p.alpha/255)
         --Update alpha for next circle
         p.circle_fx_alpha = math.min(p.circle_fx_alpha + dt*p.circle_fx_alpha_speed, p.circle_fx_alpha_max)
     end

@@ -1,5 +1,6 @@
 require "classes.primitive"
 local Color = require "classes.color.color"
+local Util = require "util"
 --TEXT CLASS --
 
 local text = {}
@@ -25,6 +26,8 @@ Text = Class{
         self.limit = _limit or WINDOW_WIDTH/2
         self.invert = _invert or false
 
+        self.use_stencil = false --If should use psycho stencil
+
         self.alpha = 255 --This object alpha
 
         ELEMENT.init(self)
@@ -43,8 +46,15 @@ Text = Class{
 --Obs: Variable will be drawn centered to text if mode is "right" or "left"
 function Text:draw()
     local t, text, color
-
     t = self
+
+    local p = Util.findId("psycho")
+    if p and t.use_stencil then
+        local lg = love.graphics
+        lg.stencil(function()lg.circle("fill",p.pos.x, p.pos.y, p.r-1)end, "replace", 1)
+        lg.setStencilTest("less", 1)
+    end
+
     color = Color.black()
     Color.copy(color, UI_COLOR.color)
     color.a = math.max(t.alpha,0)
@@ -85,6 +95,10 @@ function Text:draw()
     --Not having a variable, simple text
     else
         love.graphics.print(t.text, t.pos.x, t.pos.y)
+    end
+
+    if p and t.use_stencil then
+        love.graphics.setStencilTest()
     end
 end
 
