@@ -336,6 +336,11 @@ function ENEMY:draw()
 
 end
 
+--Updates enemy speed multiplier
+function ENEMY:setSpeedMult(new_speed_mult)
+    self.speed_m = new_speed_mult
+end
+
 --------------------
 --GLOBAL FUNCTIONS--
 --------------------

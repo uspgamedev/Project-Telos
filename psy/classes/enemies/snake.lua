@@ -195,6 +195,22 @@ function Snake:collides(o)
     return collided_with_something
 end
 
+--Return first segment active
+function Snake:getHead()
+    for i, seg in ipairs(self.segments) do
+        if seg.enter and not seg.dead and seg.active then
+            return seg
+        end
+    end
+end
+
+--Add given position {x,y} to be next snake position
+function Snake:putPosAsNext(x,y)
+    local head = self:getHead()
+    local idx = head.target_pos_idx
+    table.insert(self.positions,idx+1,Vector(x,y))
+end
+
 function Snake:getHitAnimation()
     local t
 

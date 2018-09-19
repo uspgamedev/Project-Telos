@@ -853,7 +853,7 @@ function formation.turret(a)
         Indicator.create_enemy_turret(Trt, l_pos, l_speed, l_e_speed, l_radius, l_score, l_enemy, l_target, l_duration, l_life, l_number, l_start_angle, l_rot_angle, l_fps, l_side, l_ind_duration)
     else
         --Just create the enemy
-        Trt.create(l_pos.x, l_pos.y, l_speed, l_e_speed, l_radius, l_score, l_enemy, l_target, l_duration, l_life, l_number, l_start_angle, l_rot_angle, l_fps)
+        return Trt.create(l_pos.x, l_pos.y, l_speed, l_e_speed, l_radius, l_score, l_enemy, l_target, l_duration, l_life, l_number, l_start_angle, l_rot_angle, l_fps)
     end
 
 end
@@ -921,7 +921,7 @@ function formation.snake(a)
         Indicator.create_enemy_snake(Snk, a.segments, a.positions, a.e_life, a.speed_m, a.e_radius, a.score_mul, a.ind_side, a.ind_duration)
     else
         --Just create the enemy
-        Snk.create(a.segments, a.positions, a.e_life, a.speed_m, a.e_radius, a.score_mul)
+        return Snk.create(a.segments, a.positions, a.e_life, a.speed_m, a.e_radius, a.score_mul)
     end
 
 end
