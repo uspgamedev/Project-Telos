@@ -17,7 +17,7 @@ function level_functions.part_1()
 
     LM.wait(5.5)
 
-    F.ntal{enemy = {GrB}, side = "left", mode = "center" , number = 7, ind_duration = 3, ind_side = 40, speed_m = 2.2, e_radius = 25, enemy_x_margin = 50, enemy_y_margin = 50}
+    F.fromHorizontal{enemy = {GrB}, side = "left", mode = "center" , number = 7, ind_duration = 3, ind_side = 40, speed_m = 2.2, e_radius = 25, enemy_x_margin = 50, enemy_y_margin = 50}
     F.fromHorizontal{enemy = {GrB}, side = "right", mode = "center" , number = 7, ind_duration = 3, ind_side = 40, speed_m = 2.2, e_radius = 25, enemy_x_margin = 50, enemy_y_margin = 50}
     F.fromVertical{enemy = {GrB}, side = "top", mode = "center" , number = 7, ind_duration = 3, ind_side = 40, speed_m = 2.2, e_radius = 25, enemy_x_margin = 50, enemy_y_margin = 50}
     F.fromVertical{enemy = {GrB}, side = "bottom", mode = "center" , number = 7, ind_duration = 3, ind_side = 40, speed_m = 2.2, e_radius = 25, enemy_x_margin = 50, enemy_y_margin = 50}
@@ -186,8 +186,8 @@ function level_functions.part_2()
 
     LM.level_part("Part 2 - They came and then they left")
 
-    LM.wait(5.5)
-
+    LM.wait(3.5)
+    --[[
     F.snake{segments = 7, positions = {{w + 100,h/2},{-100,h/2}}, ind_duration = 3, speed_m = .6, e_radius = 25, ind_side = 50, e_life = 3}
 
     LM.wait("noenemies")
@@ -228,18 +228,19 @@ function level_functions.part_2()
     LM.wait(3.5)
     F.circle{radius = 640, number = 15, enemy = {GlB}, ind_duration = 1, ind_side = 35,speed_m = .9}
     LM.wait("noenemies")
-
+    ]]--
     INDICATOR_DEFAULT = 1.5
     local pos = {{w-60,h+100}}
     local x = w-50
-    local gap = 70
-    for i = 1, 7 do
+    local gap = 71
+    for i = 1, 8 do
         table.insert(pos,{x,50})
         table.insert(pos,{x-gap,50})
         table.insert(pos,{x-gap,h-50})
         table.insert(pos,{x-2*gap,h-50})
         x = x-2*gap
     end
+
     F.snake{segments = 75, positions = pos, speed_m = .9, ind_side = 50, e_life = 3,e_radius = 35, ind_duration = 1.5, score_mul = 2}
 
     LM.wait(7)
@@ -265,6 +266,8 @@ function level_functions.part_2()
         y = y + 100
     end
     LM.wait("noenemies")
+
+
 
     LM.stop()
 end

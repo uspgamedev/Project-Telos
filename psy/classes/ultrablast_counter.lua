@@ -49,7 +49,7 @@ UltrablastCounter = Class{
         self.charge_cooldown_max = .6 --Time added when player is shooting
         self.charge_cooldown_max_ultra = 3 --Time added when player uses utlrablast
         self.charge_cooldown = 0
-        self.charge_penalty = 1 --Penalty deducted from charge value when psycho is shooting repeatedly
+        self.charge_penalty = 0 --Penalty deducted from charge value when psycho is shooting repeatedly
 
         self.overall_scale = 1 --Scale applied in everything being drawn
 
