@@ -208,7 +208,7 @@ end
 function Snake:putPosAsNext(x,y)
     local head = self:getHead()
     local idx = head.target_pos_idx
-    table.insert(self.positions,idx+1,Vector(x,y))
+    table.insert(self.positions,idx,Vector(x,y))
 end
 
 function Snake:getHitAnimation()

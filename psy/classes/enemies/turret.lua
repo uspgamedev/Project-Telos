@@ -36,7 +36,7 @@ Turret = Class{
         self.life = _life --How many hits this enemy can take before dying
         self.damage_taken = 0 --How many hits this enemy has taken
 
-        self.shoot_tick = _shoot_fps/3 --Enemy spawn "cooldown" timer
+        self.shoot_tick = 3*_shoot_fps/4 --Enemy spawn "cooldown" timer
         self.shoot_fps = _shoot_fps --How fast to shoot enemies
 
         self.duration = _duration --How many seconds this enemy will stay in target before leaving (-1 if it will never leave)
@@ -121,7 +121,7 @@ function Turret:kill(gives_score, dont_explode)
         if gives_score == nil then gives_score = true end --If this enemy should give score
 
         if gives_score then
-            LM.giveScore(math.ceil(self.score_value*self.score_mul))
+            LM.giveScore(math.ceil(self.score_value*self.score_mul),"turret killed")
             FX.shake(.4,1.5)
             SFX.hit_simple:play()
         end

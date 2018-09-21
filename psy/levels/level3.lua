@@ -287,7 +287,7 @@ function level_functions.part_2()
         table.insert(pos,{200,200})
     end
     table.insert(pos,{200,-100})
-    local sn = F.snake{segments = 62, positions = pos, speed_m = .7, ind_mode = false, e_life = 5, e_radius = 25}
+    local sn = F.snake{segments = 62, positions = pos, speed_m = .7, ind_mode = false, e_life = 4, e_radius = 25}
 
     LM.wait(3)
     local _y = -50
@@ -301,32 +301,44 @@ function level_functions.part_2()
         LM.wait(1)
     end
     local alive_turrets = {true,true,true,true}
-    local t1 = F.turret{x = -100, y = 100, t_x = 100, t_y = 100, enemy = GlB, number = 24, life = 18, duration = 81, start_angle = 0, rot_angle = math.pi/10, speed_m = 2, ind_mode = false, e_speed_m = .3, fps = 6, score_mul = .3}
-    local t2 = F.turret{x = w+100, y = 100, t_x = w-100, t_y = 100, enemy = GlB, number = 24, life = 18, duration = 81, start_angle = -math.pi/2, rot_angle = math.pi/10, speed_m = 2, ind_mode = false, e_speed_m = .3, fps = 6, score_mul = .3}
-    local t3 = F.turret{x = -100, y = h-100, t_x = 100, t_y = h-100, enemy = GlB, number = 24, life = 18, duration = 81, start_angle = math.pi, rot_angle = -math.pi/10, speed_m = 2, ind_mode = false, e_speed_m = .3, fps = 6, score_mul = .3}
-    local t4 = F.turret{x = w+100, y = h-100, t_x = w-100, t_y = h-100, enemy = GlB, number = 24, life = 18, duration = 81, start_angle = -math.pi, rot_angle = math.pi/10, speed_m = 2, ind_mode = false, e_speed_m = .3, fps = 6, score_mul = .3}
+    local t1 = F.turret{x = -100, y = 100, t_x = 100, t_y = 100, enemy = GlB, number = 16, life = 20, duration = 81, start_angle = 0, rot_angle = math.pi/8, speed_m = 2, ind_mode = false, e_speed_m = .2, fps = 6, score_mul = .3}
+    local t2 = F.turret{x = w+100, y = 100, t_x = w-100, t_y = 100, enemy = GlB, number = 16, life = 20, duration = 81, start_angle = -math.pi/2, rot_angle = math.pi/8, speed_m = 2, ind_mode = false, e_speed_m = .2, fps = 6, score_mul = .3}
+    local t3 = F.turret{x = -100, y = h-100, t_x = 100, t_y = h-100, enemy = GlB, number = 16, life = 20, duration = 81, start_angle = math.pi, rot_angle = -math.pi/8, speed_m = 2, ind_mode = false, e_speed_m = .2, fps = 6, score_mul = .3}
+    local t4 = F.turret{x = w+100, y = h-100, t_x = w-100, t_y = h-100, enemy = GlB, number = 16, life = 20, duration = 81, start_angle = -math.pi, rot_angle = math.pi/8, speed_m = 2, ind_mode = false, e_speed_m = .2, fps = 6, score_mul = .3}
 
     local _y = -50
+    local cont = 0
     while true do
-        --Update turrets fps
-        t1.shoot_fps = math.max(t1.shoot_fps - .15,.5)
-        t2.shoot_fps = math.max(t2.shoot_fps - .15,.5)
-        t3.shoot_fps = math.max(t3.shoot_fps - .15,.5)
-        t4.shoot_fps = math.max(t4.shoot_fps - .15,.5)
+        --Increase turrets enemy spawning by 2
+        if cont >= 12 then
+            t1.rotation_angle = (math.pi*t1.rotation_angle)/(math.pi + t1.rotation_angle)
+            t1.number = t1.number+2
+            t2.rotation_angle = (math.pi*t2.rotation_angle)/(math.pi + t2.rotation_angle)
+            t2.number = t2.number+2
+            t3.rotation_angle = (math.pi*t3.rotation_angle)/(math.pi + t1.rotation_angle)
+            t3.number = t3.number+2
+            t4.rotation_angle = (math.pi*t4.rotation_angle)/(math.pi + t1.rotation_angle)
+            t4.number = t4.number+2
+            cont = 0
+        end
 
         --If all turrets are dead, remove snake
         if t1.death == true and t2.death == true and t3.death == true and t4.death == true then
-            local head = sn:getHead()
-            if head.pos.y <= 250 then
-                sn:putPosAsNext(w/2,-100)
-            elseif head.pos.y >= h-250 then
-                sn:putPosAsNext(w/2,h+100)
-            elseif head.pos.x <= 250 then
-                sn:putPosAsNext(-100,h/2)
-            else
-                sn:putPosAsNext(w+100,h/2)
+            if sn and not sn.death then
+                local head = sn:getHead()
+                if head then
+                    if head.pos.y <= 250 then
+                        sn:putPosAsNext(w/2,-100)
+                    elseif head.pos.y >= h-250 then
+                        sn:putPosAsNext(w/2,h+100)
+                    elseif head.pos.x <= 250 then
+                        sn:putPosAsNext(-100,h/2)
+                    else
+                        sn:putPosAsNext(w+100,h/2)
+                    end
+                end
+                sn:setSpeedMult(2)
             end
-            sn:setSpeedMult(2)
             break
         end
 
@@ -336,12 +348,33 @@ function level_functions.part_2()
         else
             _y = -50
         end
-        F.single{enemy = SB, x = w/2, y = _y, dir_follow = true, speed_m = 2.7, ind_side = 40, score_mul = 1.5, ind_duration = 1.2}
+        F.single{enemy = SB, x = w/2, y = _y, dir_follow = true, speed_m = 2, ind_side = 40, score_mul = 1.5, ind_duration = 1.2}
 
         LM.wait(1)
+        cont = cont + 1
     end
+    LM.wait(4)
+    F.fromHorizontal{enemy = {SB}, side = "right", mode = "center" , number = 9, ind_duration = 2, ind_side = 40, speed_m = 1.4, e_radius = 25, enemy_y_margin = 80}
+    LM.wait(1)
+    F.fromHorizontal{enemy = {SB,DB,DB}, side = "right", mode = "center" , number = 9, ind_duration = 2, ind_side = 40, speed_m = 1.4, e_radius = 25, enemy_y_margin = 80}
+    LM.wait(1)
+    F.fromHorizontal{enemy = {GrB,SB,GrB,SB}, side = "right", mode = "center" , number = 9, ind_duration = 2, ind_side = 40, speed_m = 1.4, e_radius = 25, enemy_y_margin = 80}
+    LM.wait(1)
+    F.fromHorizontal{enemy = {SB,GrB,DB,GrB,SB}, side = "right", mode = "center" , number = 9, ind_duration = 2, ind_side = 40, speed_m = 1.4, e_radius = 25, enemy_y_margin = 80}
+    LM.wait(1)
+    F.fromHorizontal{enemy = {GrB,GrB,SB,SB}, side = "right", mode = "center" , number = 9, ind_duration = 2, ind_side = 40, speed_m = 1.4, e_radius = 25, enemy_y_margin = 80}
+    LM.wait(1)
+    F.fromHorizontal{enemy = {SB,SB,GrB,GrB}, side = "right", mode = "center" , number = 9, ind_duration = 2, ind_side = 40, speed_m = 1.4, e_radius = 25, enemy_y_margin = 80}
+    LM.wait(1)
+    F.fromHorizontal{enemy = {GrB}, side = "right", mode = "center" , number = 6, ind_duration = 2, ind_side = 40, speed_m = 1.4, e_radius = 25, enemy_y_margin = 130}
+    LM.wait(1)
+    F.fromHorizontal{enemy = {SB,GrB,GrB,GrB,SB}, side = "right", mode = "center" , number = 9, ind_duration = 2, ind_side = 40, speed_m = 1.4, e_radius = 25, enemy_y_margin = 80}
+    LM.wait(1)
+    F.fromHorizontal{enemy = {DB,GrB,DB,GrB,DB}, side = "right", mode = "center" , number = 9, ind_duration = 2, ind_side = 40, speed_m = 1.4, e_radius = 25, enemy_y_margin = 80}
     LM.wait("noenemies")
+    print("adiosasd")
     LM.stop()
+    print("adios")
 end
 
 ---------------------
@@ -361,7 +394,7 @@ end
 function level_functions.startPositions()
     local x, y
 
-    x, y = 460, 425
+    x, y = 460, 424.5
 
     return x,y
 end
