@@ -46,14 +46,12 @@ UltrablastCounter = Class{
         self.charge_bar_movement_x_offset = 0 --Offset for when an ultrablast is spent
 
         --Variables for penalty when psycho is shooting
-        self.charge_cooldown_max = .6 --Time added when player is shooting
+        self.charge_cooldown_max_shoot = .6 --Time added when player is shooting
         self.charge_cooldown_max_ultra = 3 --Time added when player uses utlrablast
         self.charge_cooldown = 0
-        self.charge_penalty = 0 --Penalty deducted from charge value when psycho is shooting repeatedly
 
-        self.overall_scale = 1 --Scale applied in everything being drawn
-
-
+        --Alpha for text that appears when ultrablast counter had to reset to default value
+        self.reset_text_alpha = 0
     end
 }
 
@@ -66,10 +64,6 @@ function UltrablastCounter:draw()
   Color.copy(color, UI_COLOR.color)
   color.a = s.alpha
   Color.set(color)
-
-  --Apply overall offset
-  love.graphics.push()
-  love.graphics.scale(s.overall_scale)
 
   for i = 0, s.ultra_cont-1 do
     local x = s.pos.x + i*(2*s.ultra_first_radius + 2*s.ultra_gap_width + 2*s.ultra_ring_width + s.gap_between_ultras)
@@ -106,8 +100,13 @@ function UltrablastCounter:draw()
 
   end
 
-  --Remove overall offset
-  love.graphics.pop()
+  --Draws reset text when players gains ultrablast when dying
+  local color = Color.black()
+  Color.copy(color, UI_COLOR.color)
+  color.a = s.alpha * s.reset_text_alpha
+  Color.set(color)
+  love.graphics.setFont(GUI_MEDMEDLESS)
+  love.graphics.print("reset ultrablast", s.pos.x - 10, s.pos.y + 30)
 
 end
 
@@ -176,14 +175,10 @@ end
 
 --Function called when psycho is shooting (or used ultrablast)
 function UltrablastCounter:psychoShot(used_ultra)
-  if self.charge_cooldown > 0 then
-      self.charge_bar_value = math.max(0, self.charge_bar_value - self.charge_penalty)
-  end
   if used_ultra then
-      self.charge_bar_value = math.max(0, self.charge_bar_value - 19*self.charge_penalty)
       self.charge_cooldown = self.charge_cooldown_max_ultra
   else
-      self.charge_cooldown = self.charge_cooldown_max
+      self.charge_cooldown = math.max(self.charge_cooldown_max_shoot,self.charge_cooldown)
   end
   self.charge_bar_speed = self.charge_bar_min_speed
 
@@ -209,20 +204,22 @@ function UltrablastCounter:psychoShot(used_ultra)
   )
 end
 
-function UltrablastCounter:reset()
+function UltrablastCounter:reset(ultra_was_reseted_to_default)
 
   self:update(0)
-
-  self.charge_bar_value = 0
-  self.charge_bar_speed = self.charge_bar_min_speed
-  self.charge_cooldown = self.charge_cooldown_max
-
-  --Create reset effect
-  self.overall_scale = 1.05
-  if self.level_handles["reset_effect"] then
-    LEVEL_TIMER:cancel(self.level_handles["reset_effect"])
+  if ultra_was_reseted_to_default then
+      --Remove previous animation, if any
+      if self.level_handles["reset_text"] then
+        LEVEL_TIMER:cancel(self.level_handles["reset_text"])
+      end
+      self.reset_text_alpha = 0
+      self.level_handles["reset_text"] = LEVEL_TIMER:tween(.1, self, {reset_text_alpha = 1}, 'out-linear',
+            function()
+                self.level_handles["reset_text"] = LEVEL_TIMER:tween(2, self, {reset_text_alpha = 0}, 'in-quad')
+            end)
   end
-  self.level_handles["reset_effect"] = LEVEL_TIMER:tween(.03, self, {overall_scale = 1}, 'in-linear')
+  self.charge_bar_speed = self.charge_bar_min_speed
+  self.charge_cooldown = self.charge_cooldown_max_shoot
 
 end
 

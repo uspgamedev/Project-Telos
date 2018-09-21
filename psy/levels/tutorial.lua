@@ -167,9 +167,9 @@ function level_functions.part_1()
     LM.wait("noenemies")
     LM.wait(1.5)
 
-    --Explain ultrablast makes you invincible
+    --Explain charge bar cooldown
     font = GUI_MEDPLUS
-    text = "shooting depletes your ULTRABLAST charge bar"
+    text = "shooting or using ULTRABLAST stops charge bar temporarily"
     x = WINDOW_WIDTH/2 - font:getWidth(text)/2
     y = WINDOW_HEIGHT/2 - font:getHeight(text)/2
     LM.text(x, y, text, 4, 230, font)

@@ -307,10 +307,16 @@ function Psy:kill()
         SWITCH =  "GAMEOVER"
         PSYCHO_SCORE = p.score
     else
-        --Reset ultrablast counter if its not the default
-        p.ultrablast_counter = p.default_ultrablast_number
+        --Reset ultrablast counter, and give ultrablasts if psycho has fewer than default
         local counter = Util.findId("ultrablast_counter")
-        if counter then counter:reset() end
+        if counter then
+            if p.ultrablast_counter < p.default_ultrablast_number then
+                p.ultrablast_counter = p.default_ultrablast_number
+                counter:reset(true)
+            else
+                counter:reset(false)
+            end
+        end
         FX.shake(.25,1.5)
         FX.psychoExplosion(p)
     end
