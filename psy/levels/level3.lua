@@ -271,6 +271,95 @@ function level_functions.part_2()
     LM.wait("noenemies")
 
     ]]--
+    LM.wait(2)
+    --In-between snakes
+
+    --Make psycho go to snake height
+    F.fromHorizontal{enemy = {GlB}, side = "right", mode = "top" , number = 2, ind_duration = 2, ind_side = 50, speed_m = 2.2, e_radius = 30, enemy_y_margin = 80, screen_margin = 35}
+    F.fromHorizontal{enemy = {GlB}, side = "right", mode = "bottom" , number = 5, ind_duration = 2, ind_side = 50, speed_m = 2.2, e_radius = 30, enemy_y_margin = 80, screen_margin = 40}
+    LM.wait(2.5)
+    for i = 1, 3 do
+        F.fromHorizontal{enemy = {GlB}, side = "right", mode = "top" , number = 2, ind_mode = false, speed_m = 2.2, e_radius = 30, enemy_y_margin = 80, screen_margin = 35}
+        F.fromHorizontal{enemy = {GlB}, side = "right", mode = "bottom" , number = 5, ind_mode = false, speed_m = 2.2, e_radius = 30, enemy_y_margin = 80, screen_margin = 40}
+        LM.wait(.5)
+    end
+    --Make psycho go to the left
+    F.fromVertical{enemy = {GlB}, side = "bottom", mode = "right" , number = 11, ind_duration = 2, ind_side = 60, speed_m = 2.2, e_radius = 30, enemy_x_margin = 80, screen_margin = 20}
+    for i = 1, 5 do
+        F.fromHorizontal{enemy = {GlB}, side = "right", mode = "top" , number = 2, ind_mode = false, speed_m = 2.2, e_radius = 30, enemy_y_margin = 80, screen_margin = 35}
+        F.fromHorizontal{enemy = {GlB}, side = "right", mode = "bottom" , number = 5, ind_mode = false, speed_m = 2.2, e_radius = 30, enemy_y_margin = 80, screen_margin = 40}
+        LM.wait(.5)
+    end
+    --Start spamming both waves for a while before snakes enter
+    for i = 1, 4 do
+        F.fromHorizontal{enemy = {GlB}, side = "right", mode = "top" , number = 2, ind_mode = false, speed_m = 2.2, e_radius = 30, enemy_y_margin = 80, screen_margin = 35}
+        F.fromHorizontal{enemy = {GlB}, side = "right", mode = "bottom" , number = 5, ind_mode = false, speed_m = 2.2, e_radius = 30, enemy_y_margin = 80, screen_margin = 40}
+        F.fromVertical{enemy = {GlB}, side = "bottom", mode = "right" , number = 11, ind_mode = false, speed_m = 2.2, e_radius = 30, enemy_x_margin = 80, screen_margin = 20}
+        LM.wait(.5)
+    end
+    --Create both snakes
+    F.snake{ind_mode = false, ind_duration = 3, segments = 160, speed_m = .5, e_life = 20, e_radius = 15,
+        positions = {
+            {-100,200},
+            {w-50,200},
+            {w-50,h-50},
+            {50,h-50},
+            {50,50},
+            {w+100,50}
+        }
+    }
+    F.snake{ind_mode = false, ind_duration = 3, segments = 160, speed_m = .5, e_life = 20, e_radius = 15,
+        positions = {
+            {-100,300},
+            {w-150,300},
+            {w-150,h-150},
+            {150,h-150},
+            {150,150},
+            {w+100,150}
+        }
+    }
+    --Continue spamming
+    for i = 1, 7 do
+        F.fromHorizontal{enemy = {GlB}, side = "right", mode = "top" , number = 2, ind_mode = false, speed_m = 2.2, e_radius = 30, enemy_y_margin = 80, screen_margin = 35}
+        F.fromHorizontal{enemy = {GlB}, side = "right", mode = "bottom" , number = 5, ind_mode = false, speed_m = 2.2, e_radius = 30, enemy_y_margin = 80, screen_margin = 40}
+        F.fromVertical{enemy = {GlB}, side = "bottom", mode = "right" , number = 11, ind_mode = false, speed_m = 2.2, e_radius = 30, enemy_x_margin = 80, screen_margin = 20}
+        LM.wait(.5)
+    end
+    --Create center snake
+    F.snake{id = "center_snake", ind_size = 40, ind_duration = 3, segments = 40, speed_m = .28, e_life = 6, e_radius = 20,
+        positions = {
+            {-100,250},
+            {w-100,250},
+            {w-100,h-100},
+            {200,h-100},
+            {200,200},
+            {w+100,200}
+        }
+    }
+    --Slowly reduces vertical wave
+    local n = 11
+    for i = 1, 35 do
+        if i >= 9 and i%3 == 0 then
+            n = n - 1
+        end
+        F.fromHorizontal{enemy = {GlB}, side = "right", mode = "top" , number = 2, ind_mode = false, speed_m = 2.2, e_radius = 30, enemy_y_margin = 80, screen_margin = 35}
+        F.fromHorizontal{enemy = {GlB}, side = "right", mode = "bottom" , number = 5, ind_mode = false, speed_m = 2.2, e_radius = 30, enemy_y_margin = 80, screen_margin = 40}
+        F.fromVertical{enemy = {GlB}, side = "bottom", mode = "right" , number = n, ind_mode = false, speed_m = 2.2, e_radius = 30, enemy_x_margin = 80, screen_margin = 20}
+        LM.wait(.5)
+    end
+    --Only horizontal
+    for i = 1, 20 do
+        F.fromHorizontal{enemy = {GlB}, side = "right", mode = "top" , number = 2, ind_mode = false, speed_m = 2.2, e_radius = 30, enemy_y_margin = 80, screen_margin = 35}
+        F.fromHorizontal{enemy = {GlB}, side = "right", mode = "bottom" , number = 5, ind_mode = false, speed_m = 2.2, e_radius = 30, enemy_y_margin = 80, screen_margin = 40}
+        LM.wait(.5)
+    end
+    local center_snake = Util.findId("center_snake")
+
+
+
+    LM.wait("noenemies")
+    --Turrets protected by snake
+
     local pos = {{200,-100}}
     for i = 1, 5 do
         table.insert(pos,{200,50})
@@ -368,13 +457,12 @@ function level_functions.part_2()
     LM.wait(1)
     F.fromHorizontal{enemy = {GrB}, side = "right", mode = "center" , number = 6, ind_duration = 2, ind_side = 40, speed_m = 1.4, e_radius = 25, enemy_y_margin = 130}
     LM.wait(1)
-    F.fromHorizontal{enemy = {SB,GrB,GrB,GrB,SB}, side = "right", mode = "center" , number = 9, ind_duration = 2, ind_side = 40, speed_m = 1.4, e_radius = 25, enemy_y_margin = 80}
+    F.fromHorizontal{enemy = {SB,GrB,GrB,GrB,SB}, side = "right", mode = "center" , number = 6, ind_duration = 2, ind_side = 40, speed_m = 1.4, e_radius = 25, enemy_y_margin = 80}
     LM.wait(1)
-    F.fromHorizontal{enemy = {DB,GrB,DB,GrB,DB}, side = "right", mode = "center" , number = 9, ind_duration = 2, ind_side = 40, speed_m = 1.4, e_radius = 25, enemy_y_margin = 80}
+    F.fromHorizontal{enemy = {DB,GrB,DB,GrB,DB}, side = "right", mode = "center" , number = 6, ind_duration = 2, ind_side = 40, speed_m = 1.4, e_radius = 25, enemy_y_margin = 80}
     LM.wait("noenemies")
-    print("adiosasd")
+
     LM.stop()
-    print("adios")
 end
 
 ---------------------

@@ -903,6 +903,7 @@ e_radius: Radius of each segment being created
 e_life: How much lif each segment has
 score_mul: multiplier of score for enemies created
 ind_side: side of indicator
+id: an optional id to give to the snake
 ]]
 function formation.snake(a)
     --Default values
@@ -918,10 +919,10 @@ function formation.snake(a)
 
     if a.ind_mode then
         --Create the indicator, that will later create the enemy
-        Indicator.create_enemy_snake(Snk, a.segments, a.positions, a.e_life, a.speed_m, a.e_radius, a.score_mul, a.ind_side, a.ind_duration)
+        Indicator.create_enemy_snake(Snk, a.segments, a.positions, a.e_life, a.speed_m, a.e_radius, a.score_mul, a.ind_side, a.ind_duration, a.id)
     else
         --Just create the enemy
-        return Snk.create(a.segments, a.positions, a.e_life, a.speed_m, a.e_radius, a.score_mul)
+        return Snk.create(a.segments, a.positions, a.e_life, a.speed_m, a.e_radius, a.score_mul, a.id)
     end
 
 end

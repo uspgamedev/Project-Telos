@@ -263,11 +263,12 @@ end
 
 --UTILITY FUNCTIONS--
 
-function enemy.create(segments, positions, life, speed_m, radius, score_mul)
+function enemy.create(segments, positions, life, speed_m, radius, score_mul, id)
     local e
 
     e = Snake(segments, positions, life, speed_m, radius, score_mul)
     e:addElement(DRAW_TABLE.L4)
+    if id then e:setId(id) end
     e:startColorLoop()
 
     return e

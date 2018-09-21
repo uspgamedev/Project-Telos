@@ -249,7 +249,7 @@ function indicator.create_enemy_turret(turret, pos, speed_m, e_speed_m, radius, 
 end
 
 --Create an enemy indicator from a margin in the screen, and after duration, create a snake enemy
-function indicator.create_enemy_snake(snake, segments, pos, life, speed_m, radius, score_mul, side, ind_duration)
+function indicator.create_enemy_snake(snake, segments, pos, life, speed_m, radius, score_mul, side, ind_duration, id)
     local i, center, margin, handle, color
 
     center = Vector(pos[1][1], pos[1][2])
@@ -282,7 +282,7 @@ function indicator.create_enemy_snake(snake, segments, pos, life, speed_m, radiu
     i.level_handles["create_enemy"] = LEVEL_TIMER:after(ind_duration,
         function()
             i.death = true --Remove the indicator
-            snake.create(segments, pos, life, speed_m, radius, score_mul) --Create the turret
+            snake.create(segments, pos, life, speed_m, radius, score_mul, id) --Create the turret
         end
     )
 
