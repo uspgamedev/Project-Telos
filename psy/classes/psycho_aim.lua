@@ -51,13 +51,24 @@ function Aim:draw()
     color.a = (not p.invisible) and aim.alpha or 0 --Make aim line invisible when psycho is blinking
 
 
-    --Draw the line
+    --Draw the aim
 
-    --Draw line only if psycho can shoot
+    --Draw line only if psycho can shoot, for each game window
     if p.can_shoot and self.show then
         Color.set(color)
         love.graphics.setLineWidth(aim.line_width)
-        love.graphics.line(aim.pos.x, aim.pos.y, aim.pos.x + aim.distance*aim.dir.x, aim.pos.y + aim.distance*aim.dir.y)
+        for i, win in ipairs(GAME_WINDOWS) do
+            --Use stencil to not draw line outside respective game window
+            local func = function()
+                love.graphics.rectangle("fill", win.x, win.y, win.w, win.h)
+            end
+            love.graphics.stencil(func, "replace", 1)
+            love.graphics.setStencilTest("equal", 1)
+            if win.active then
+                love.graphics.line(aim.pos.x+win.x, aim.pos.y+win.y, aim.pos.x+win.x + aim.distance*aim.dir.x, aim.pos.y+win.y + aim.distance*aim.dir.y)
+            end
+            love.graphics.setStencilTest()
+        end
     end
 
     --Draw the circle
@@ -82,17 +93,25 @@ function Aim:update(dt)
     if not p then return end
 
     --Fix mouse position click to respective distance
-    x, y = love.mouse.getPosition()
 
     --Update circle position
-    aim.mouse_pos.x, aim.mouse_pos.y = x, y
+    aim.mouse_pos.x, aim.mouse_pos.y = love.mouse.getPosition()
+
+    local mouse_pos
 
     --Update line position
     aim.pos.x, aim.pos.y = p.pos.x, p.pos.y
     aim.show = true
     if not USING_JOYSTICK then
-      aim.dir.x, aim.dir.y = aim.mouse_pos.x - aim.pos.x, aim.mouse_pos.y - aim.pos.y
-  elseif CURRENT_JOYSTICK and (Controls.isActive(CURRENT_JOYSTICK, "raxis_horizontal") or Controls.isActive(CURRENT_JOYSTICK, "raxis_vertical")) then
+      --Find out which window the position is, to get correct direction
+      local game_win = WINM.winAtPoint(aim.mouse_pos.x,aim.mouse_pos.y)
+      if game_win then
+          aim.dir.x = aim.mouse_pos.x - (aim.pos.x+game_win.x)
+          aim.dir.y = aim.mouse_pos.y - (aim.pos.y+game_win.y)
+      else
+          aim.dir.x, aim.dir.y = aim.mouse_pos.x - aim.pos.x, aim.mouse_pos.y - aim.pos.y
+      end
+    elseif CURRENT_JOYSTICK and (Controls.isActive(CURRENT_JOYSTICK, "raxis_horizontal") or Controls.isActive(CURRENT_JOYSTICK, "raxis_vertical")) then
       local v = Vector(Controls.getJoystickAxisValues(CURRENT_JOYSTICK, "raxis_horizontal", "raxis_vertical"))
       v = v:normalized()
       aim.dir.x, aim.dir.y = (aim.pos.x + v.x)-aim.pos.x, (aim.pos.y + v.y)-aim.pos.y

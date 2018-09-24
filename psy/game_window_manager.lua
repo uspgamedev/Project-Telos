@@ -14,11 +14,10 @@ end
 --Return which game window given point (x,y) is.
 --Returns false if point isn't in any game window
 --Ps: only considers active windows
-
 function funcs.winAtPoint(x,y)
     for i, win in ipairs(GAME_WINDOWS) do
         if win.active and funcs.isPointInWin(i,x,y) then
-            return i
+            return win
         end
     end
     return false

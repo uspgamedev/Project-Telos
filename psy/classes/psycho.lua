@@ -137,9 +137,8 @@ function Psy:shoot(x,y)
         HSL(Hsl.stdv(271,75,52))
     }
     --Find out which window the position is, to get correct direction
-    local win_idx = WINM.winAtPoint(x,y)
-    if win_idx then
-        local game_win = GAME_WINDOWS[win_idx]
+    local game_win = WINM.winAtPoint(x,y)
+    if game_win then
         dir = Vector(x-(p.pos.x+game_win.x), y-(p.pos.y+game_win.y))
     else
         dir = Vector(x-p.pos.x, y-p.pos.y)
