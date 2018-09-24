@@ -62,6 +62,7 @@ Controls = require "controls"
 FX = require "fx"
 FM = require "file_manager"
 HS = require "highscore"
+WINM = require "game_window_manager"
 local Setup = require "setup"
 
 --IMPORTED MODULES
