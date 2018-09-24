@@ -187,10 +187,11 @@ function level_functions.part_2()
     LM.level_part("Part 2 - They came and then they left")
 
     LM.wait(3.5)
-    --[[
+
     F.snake{segments = 7, positions = {{w + 100,h/2},{-100,h/2}}, ind_duration = 3, speed_m = .6, e_radius = 25, ind_side = 50, e_life = 3}
 
     LM.wait("noenemies")
+
     INDICATOR_DEFAULT = 1.5
     F.snake{segments = 40, positions = {{w-50,-100},{w-50,h/2-50},{-100, h/2-50}}, speed_m = 1.1, ind_side = 50, e_life = 2,e_radius = 30}
     LM.wait(1)
@@ -270,9 +271,7 @@ function level_functions.part_2()
     end
     LM.wait("noenemies")
 
-    ]]--
-    LM.wait(2)
-    --In-between snakes
+    --In-between snakes--
 
     --Make psycho go to snake height
     F.fromHorizontal{enemy = {GlB}, side = "right", mode = "top" , number = 2, ind_duration = 2, ind_side = 50, speed_m = 2.2, e_radius = 30, enemy_y_margin = 80, screen_margin = 35}
@@ -298,7 +297,7 @@ function level_functions.part_2()
         LM.wait(.5)
     end
     --Create both snakes
-    F.snake{ind_mode = false, ind_duration = 3, segments = 160, speed_m = .5, e_life = 20, e_radius = 15,
+    local snake1 = F.snake{ind_mode = false, ind_duration = 3, segments = 225, speed_m = .4, e_life = 20, e_radius = 15,
         positions = {
             {-100,200},
             {w-50,200},
@@ -308,7 +307,7 @@ function level_functions.part_2()
             {w+100,50}
         }
     }
-    F.snake{ind_mode = false, ind_duration = 3, segments = 160, speed_m = .5, e_life = 20, e_radius = 15,
+    local snake2 = F.snake{ind_mode = false, ind_duration = 3, segments = 225, speed_m = .4, e_life = 20, e_radius = 15,
         positions = {
             {-100,300},
             {w-150,300},
@@ -326,39 +325,121 @@ function level_functions.part_2()
         LM.wait(.5)
     end
     --Create center snake
-    F.snake{id = "center_snake", ind_size = 40, ind_duration = 3, segments = 40, speed_m = .28, e_life = 6, e_radius = 20,
+    F.snake{id = "center_snake", ind_size = 40, ind_duration = 3, segments = 35, speed_m = .28, e_life = 6, e_radius = 20, score_mul = 3,
         positions = {
             {-100,250},
             {w-100,250},
             {w-100,h-100},
-            {200,h-100},
-            {200,200},
-            {w+100,200}
+            {100,h-100},
+            {100,100},
+            {w+100,100}
         }
     }
     --Slowly reduces vertical wave
+    local turret
     local n = 11
     for i = 1, 35 do
         if i >= 9 and i%3 == 0 then
             n = n - 1
+        end
+        if i == 35 then
+            turret = F.turret{x = w+100, y = h-100, t_x = w-100, t_y = h-100, enemy = GlB, number = 2, life = 20, duration = 20, start_angle = -math.pi/2, rot_angle = -math.pi/2, speed_m = 3, ind_mode = false, e_speed_m = 2, fps = 1.5, score_mul = 2}
         end
         F.fromHorizontal{enemy = {GlB}, side = "right", mode = "top" , number = 2, ind_mode = false, speed_m = 2.2, e_radius = 30, enemy_y_margin = 80, screen_margin = 35}
         F.fromHorizontal{enemy = {GlB}, side = "right", mode = "bottom" , number = 5, ind_mode = false, speed_m = 2.2, e_radius = 30, enemy_y_margin = 80, screen_margin = 40}
         F.fromVertical{enemy = {GlB}, side = "bottom", mode = "right" , number = n, ind_mode = false, speed_m = 2.2, e_radius = 30, enemy_x_margin = 80, screen_margin = 20}
         LM.wait(.5)
     end
-    --Only horizontal
-    for i = 1, 20 do
-        F.fromHorizontal{enemy = {GlB}, side = "right", mode = "top" , number = 2, ind_mode = false, speed_m = 2.2, e_radius = 30, enemy_y_margin = 80, screen_margin = 35}
-        F.fromHorizontal{enemy = {GlB}, side = "right", mode = "bottom" , number = 5, ind_mode = false, speed_m = 2.2, e_radius = 30, enemy_y_margin = 80, screen_margin = 40}
-        LM.wait(.5)
-    end
+
+    --Only  horizontal, slow-down center snake and create turret
     local center_snake = Util.findId("center_snake")
+    center_snake:setSpeedMult(.13)
+    while not turret.death do
+        F.fromHorizontal{enemy = {GlB}, side = "right", mode = "top" , number = 2, ind_mode = false, speed_m = 2.2, e_radius = 30, enemy_y_margin = 80, screen_margin = 35}
+        F.fromHorizontal{enemy = {GlB}, side = "right", mode = "bottom" , number = 4, ind_mode = false, speed_m = 2.2, e_radius = 30, enemy_y_margin = 76, screen_margin = 150}
+        LM.wait(.8)
+    end
 
+    --Speed up snake, create line of simple balls on the path and instanciate turrets to block down path
+    local t0,t1,t2,t3,t4,t5,t6,t7,t8
+    center_snake:setSpeedMult(.28)
+    F.line{x = w-100, y = h+50, dy = -1, number = 35, enemy = {SB}, ind_mode = false, e_speed_m = 1.3}
+    local cont = 2
+    for i = 1, 28 do
+        if i >= 6 and i%3 == 0 and cont < 7 then
+            cont = cont + 1
+        end
+        F.fromHorizontal{enemy = {GlB}, side = "right", mode = "top" , number = cont, ind_mode = false, speed_m = 2.2, e_radius = 30, enemy_y_margin = 80, screen_margin = 35}
 
+        if i == 3 then
+            t0 = F.turret{x = -100, y = h/2, t_x = w-210, t_y = h/2, enemy = GlB, number = 1, life = 40, duration = 20, start_angle = 0, rot_angle = 0, speed_m = 4, ind_mode = false, e_speed_m = 3, fps = 2, score_mul = 1}
+            t1 = F.turret{x = -100, y = h/2, t_x = w-280, t_y = h/2, enemy = GlB, number = 1, life = 40, duration = 20, start_angle = 0, rot_angle = 0, speed_m = 4, ind_mode = false, e_speed_m = 3, fps = 2, score_mul = 1}
+            t2 = F.turret{x = -100, y = h/2, t_x = w-350, t_y = h/2, enemy = GlB, number = 1, life = 40, duration = 20, start_angle = 0, rot_angle = 0, speed_m = 4, ind_mode = false, e_speed_m = 3, fps = 2, score_mul = 1}
+            t3 = F.turret{x = -100, y = h/2, t_x = w-420, t_y = h/2, enemy = GlB, number = 1, life = 40, duration = 20, start_angle = 0, rot_angle = 0, speed_m = 4, ind_mode = false, e_speed_m = 3, fps = 2, score_mul = 1}
+            t4 = F.turret{x = -100, y = h/2, t_x = w-490, t_y = h/2, enemy = GlB, number = 1, life = 40, duration = 20, start_angle = 0, rot_angle = 0, speed_m = 4, ind_mode = false, e_speed_m = 3, fps = 2, score_mul = 1}
+            t5 = F.turret{x = -100, y = h/2, t_x = w-560, t_y = h/2, enemy = GlB, number = 1, life = 40, duration = 20, start_angle = 0, rot_angle = 0, speed_m = 4, ind_mode = false, e_speed_m = 3, fps = 2, score_mul = 1}
+            t6 = F.turret{x = -100, y = h/2, t_x = w-630, t_y = h/2, enemy = GlB, number = 1, life = 40, duration = 20, start_angle = 0, rot_angle = 0, speed_m = 4, ind_mode = false, e_speed_m = 3, fps = 2, score_mul = 1}
+            t7 = F.turret{x = -100, y = h/2, t_x = w-700, t_y = h/2, enemy = GlB, number = 1, life = 40, duration = 20, start_angle = 0, rot_angle = 0, speed_m = 4, ind_mode = false, e_speed_m = 3, fps = 2, score_mul = 1}
+            t8 = F.turret{x = -100, y = h/2, t_x = w-770, t_y = h/2, enemy = GlB, number = 1, life = 40, duration = 20, start_angle = 0, rot_angle = 0, speed_m = 2, ind_mode = false, e_speed_m = 3, fps = 2, score_mul = 1}
+            --Static turrets
+            F.turret{x = w-490, y = h+100, t_x = w-490, t_y = h-100, enemy = GlB, number = 1, life = 30, duration = 20, start_angle = -math.pi/2, rot_angle = 0, speed_m = 2, ind_mode = false, e_speed_m = 3, fps = 1, score_mul = 10}
+            F.turret{x = -100, y = h+100, t_x = w-770, t_y = h-100, enemy = GlB, number = 1, life = 32, duration = 20, start_angle = -math.pi/2, rot_angle = 0, speed_m = 2, ind_mode = false, e_speed_m = 3, fps = 1, score_mul = 10}
+        elseif i == 4 then
+            t1.shoot_tick = 0
+            t3.shoot_tick = 0
+            t5.shoot_tick = 0
+            t7.shoot_tick = 0
+            t0.shoot_tick = 1
+            t2.shoot_tick = 1
+            t4.shoot_tick = 1
+            t6.shoot_tick = 1
+            t8.shoot_tick = 1
+        elseif i == 6 then
+            center_snake:setSpeedMult(.2)
+        elseif i == 27 then
+            --Put turrets blocking left path
+            t0 = F.turret{x = 100, y = -100, t_x = 100, t_y = 100, enemy = GlB, number = 1, life = 10, duration = 30, start_angle = -math.pi/2, rot_angle = 0, speed_m = 2, ind_mode = false, e_speed_m = 3, fps = 2, score_mul = 10}
+            F.turret{x = 100, y = -100, t_x = 100, t_y = 350, enemy = GlB, number = 1, life = 9, duration = 30, start_angle = math.pi, rot_angle = 0, speed_m = 2, ind_mode = false, e_speed_m = 3, fps = 2, score_mul = 10}
+            F.turret{x = 100, y = -100, t_x = 100, t_y = 420, enemy = GlB, number = 1, life = 9, duration = 30, start_angle = math.pi, rot_angle = 0, speed_m = 2, ind_mode = false, e_speed_m = 3, fps = 2, score_mul = 10}
+            F.turret{x = 100, y = -100, t_x = 100, t_y = 490, enemy = GlB, number = 1, life = 9, duration = 30, start_angle = math.pi, rot_angle = 0, speed_m = 2, ind_mode = false, e_speed_m = 3, fps = 2, score_mul = 10}
+            F.turret{x = 100, y = -100, t_x = 100, t_y = 560, enemy = GlB, number = 1, life = 7, duration = 30, start_angle = math.pi, rot_angle = 0, speed_m = 2, ind_mode = false, e_speed_m = 3, fps = 2, score_mul = 10}
+        end
+        LM.wait(.8)
+    end
 
+    --Slightly speeds up snake and continue start spamming top horizontal and center/right vertical
+    center_snake:setSpeedMult(.22)
+    local i = 1
+    while not t0.death do
+        F.fromHorizontal{enemy = {GlB}, side = "right", mode = "top" , number = 2, ind_mode = false, speed_m = 2.2, e_radius = 30, enemy_y_margin = 80, screen_margin = 35}
+        F.fromVertical{enemy = {GlB}, side = "bottom", mode = "right" , number = 10, ind_mode = false, speed_m = 2.2, e_radius = 30, enemy_x_margin = 80, screen_margin = 35}
+        if i == 10 then
+            center_snake:setSpeedMult(.17)
+        end
+        LM.wait(.8)
+        i = i + 1
+    end
+    --Spams simple at the very top, glitch at the rest, speeds up snake
+    center_snake:setSpeedMult(.19)
+    snake1:setSpeedMult(.2)
+    snake2:setSpeedMult(.2)
+    local i = 1
+    while not center_snake.death do
+        if i%3 == 0 then
+            F.single{enemy = SB, x = w/2, y = -50, dir_follow = true, speed_m = 3, ind_side = 50, score_mul = 2, ind_duration = 1}
+        end
+        F.fromHorizontal{enemy = {SB}, side = "right", mode = "top" , number = 1, ind_mode = false, speed_m = 2.2, e_radius = 30, enemy_y_margin = 80, screen_margin = 75}
+        if i >= 6 then
+            F.fromHorizontal{enemy = {GlB}, side = "right", mode = "bottom" , number = 7, ind_mode = false, speed_m = 2.2, e_radius = 30, enemy_y_margin = 80, screen_margin = 35}
+        end
+        i = i + 1
+        LM.wait(.8)
+    end
+    snake1:setSpeedMult(3)
+    snake2:setSpeedMult(3)
     LM.wait("noenemies")
-    --Turrets protected by snake
+
+    --Turrets protected by snake--
 
     local pos = {{200,-100}}
     for i = 1, 5 do
