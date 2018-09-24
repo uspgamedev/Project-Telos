@@ -148,12 +148,12 @@ function Psy:shoot(x,y)
     --Create bullets for all psychos from all windows
     for idx, win in ipairs(GAME_WINDOWS) do
         if win.active then
-            Bullet.create(p.pos.x+win.x, p.pos.y+win.y, dir, c, color_table, "player_bullet")
+            Bullet.create(p.pos.x+win.x, p.pos.y+win.y, dir, c, color_table, "player_bullet", idx)
         end
         --On godmode, shoot 10 bullets instead of 1
         if GODMODE then
             for j = 1,9 do
-                Bullet.create(p.pos.x+win.x, p.pos.y+win.y, dir, c, color_table, "player_bullet")
+                Bullet.create(p.pos.x+win.x, p.pos.y+win.y, dir, c, color_table, "player_bullet", idx)
             end
         end
     end

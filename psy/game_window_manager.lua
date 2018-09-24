@@ -4,9 +4,14 @@ local funcs = {}
 --GAME WINDOW FUNCTIONS--
 -------------------------
 
+--Get a game window given its index
+function funcs.getWin(win_idx)
+    return GAME_WINDOWS[win_idx]
+end
+
 --Checks if a given point (x,y) is inside given window
 function funcs.isPointInWin(win_idx, x, y)
-    local win = GAME_WINDOWS[win_idx]
+    local win = funcs.getWin(win_idx)
     return (x >= win.x and x <= win.x + win.w and
             y >= win.y and y <= win.y + win.h)
 end
