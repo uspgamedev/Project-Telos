@@ -49,7 +49,7 @@ Turret = Class{
         dir = Vector(_x - _target_pos.x, _y - _target_pos.y) --Direction to leave the screen
         ENEMY.init(self, _x, _y, dir, _speed_m, _radius, _score_mul, nil, 270, score_value)
 
-        self.outer_color = _enemy_spawn.indColor() --Color of outer circle (20% of radius)
+        self.inner_color = _enemy_spawn.indColor() --Color of outer circle (20% of radius)
         self.current_color = HSL(Hsl.stdv(278,89,39))
         self.color = HSL(Hsl.stdv(278,89,39))
 
@@ -143,13 +143,14 @@ function Turret:draw()
 
     if not p.enter then return end
 
-    --Draws the outer circle
-    Color.set(p.outer_color)
-    Draw_Smooth_Circle(p.pos.x, p.pos.y, p.r)
 
-    --Draws the inner circle (80% of radius)
+    --Draws the outer ring (from 100% to 50% of radius)
     Color.set(p.color)
-    Draw_Smooth_Circle(p.pos.x, p.pos.y, p.r*.8)
+    Draw_Smooth_Ring(p.pos.x, p.pos.y, p.r, p.r*.50)
+
+    --Draws the inner circle (40% of radius)
+    Color.set(p.inner_color)
+    Draw_Smooth_Circle(p.pos.x, p.pos.y, p.r*.4)
 
 end
 
