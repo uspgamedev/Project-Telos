@@ -5,16 +5,19 @@ local Util = require "util"
 local LM = require "level_manager"
 
 --Local functions
+
 local isInside
+
+-- Enemy functions
+
+local enemy = {}
 
 --SNAKE CLASS--
 --[[Snake made of circles that follows a path]]
 
-local enemy = {}
-
 Snake = Class{
     __includes = {ELEMENT, ENEMY},
-    init = function(self, _segments, _positions, _life, _speed_m, _radius, _score_mul)
+    init = function(self, _segments, _positions, _life, _speed_m, _radius, _score_mul, _game_win_idx)
         local color_table = {
             HSL(Hsl.stdv(103, 83, 47)),
             HSL(Hsl.stdv(103,64,42)),
@@ -22,7 +25,7 @@ Snake = Class{
             HSL(Hsl.stdv(123,100,42))
         }
 
-        ENEMY.init(self,  nil, nil, nil, _speed_m, _radius, _score_mul, color_table, 270, nil)
+        ENEMY.init(self,  nil, nil, nil, _speed_m, _radius, _score_mul, color_table, 270, nil, _game_win_idx)
 
         self.segment_score =  10 --Score each segment gives when killed
         self.full_snake_score_bonus = _segments*5 --Bonus score added when full snake is dead
@@ -141,6 +144,15 @@ end
 
 function Snake:draw()
     local o = self
+
+    --Stencils snake to its game window
+    local win = WINM.getWin(o.game_win_idx)
+    local func = function()
+        love.graphics.rectangle("fill", win.x, win.y, win.w, win.h)
+    end
+    love.graphics.stencil(func, "replace", 1)
+    love.graphics.setStencilTest("equal", 1)
+
     --Draws each segment
     for i, seg in ipairs(o.segments) do
         if seg.enter and seg.dead ~= "dead" then
@@ -159,6 +171,8 @@ function Snake:draw()
             Draw_Smooth_Circle(seg.pos.x, seg.pos.y, o.r)
         end
     end
+
+    love.graphics.setStencilTest()
 end
 
 --Check collision with circular object that has a radius
@@ -263,10 +277,10 @@ end
 
 --UTILITY FUNCTIONS--
 
-function enemy.create(segments, positions, life, speed_m, radius, score_mul, id)
+function enemy.create(segments, positions, life, speed_m, radius, score_mul, game_win_idx, id)
     local e
 
-    e = Snake(segments, positions, life, speed_m, radius, score_mul)
+    e = Snake(segments, positions, life, speed_m, radius, score_mul, game_win_idx)
     e:addElement(DRAW_TABLE.L4)
     if id then e:setId(id) end
     e:startColorLoop()
@@ -294,10 +308,11 @@ end
 --Checks if a snake segment has entered (even if partially) inside the game screen
 function isInside(snake, segment_index)
     local o = snake.segments[segment_index]
-    if    o.pos.x + snake.r >= 0
-      and o.pos.x - snake.r <= WINDOW_WIDTH
-      and o.pos.y + snake.r >= 0
-      and o.pos.y - snake.r <= WINDOW_HEIGHT
+    local win = WINM.getWin(snake.game_win_idx)
+    if    o.pos.x + snake.r >= win.x
+      and o.pos.x - snake.r <= win.x + win.w
+      and o.pos.y + snake.r >= win.y
+      and o.pos.y - snake.r <= win.y + win.h
       then
           return true
       end

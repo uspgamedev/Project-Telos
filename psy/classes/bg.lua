@@ -35,7 +35,12 @@ function Background:draw()
 
     bg = self
 
-    if Gamestate.current() == GS.GAME then
+    local current = Gamestate.current()
+    if current == GS.MENU  then
+        --Draws normal bg
+        Color.set(bg.color)
+        love.graphics.rectangle("fill", bg.pos.x, bg.pos.y, bg.w, bg.h)
+    else
         --Draw in-game bg for each game window
         Color.set(bg.color)
         for i, win in ipairs(GAME_WINDOWS) do
@@ -43,10 +48,6 @@ function Background:draw()
                 love.graphics.rectangle("fill", win.x, win.y, win.w, win.h)
             end
         end
-    else
-        --Draws normal bg
-        Color.set(bg.color)
-        love.graphics.rectangle("fill", bg.pos.x, bg.pos.y, bg.w, bg.h)
     end
 end
 

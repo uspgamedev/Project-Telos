@@ -278,7 +278,7 @@ end
 
 ENEMY = Class{
     __includes = {CIRC},
-    init = function(self, _x, _y, _dir, _speed_m, _radius, _score_mul, _color_table, _speedv, _score_value)
+    init = function(self, _x, _y, _dir, _speed_m, _radius, _score_mul, _color_table, _speedv, _score_value, _game_win_idx)
         local dx, dy, r, color, color_table
 
         r = _radius or 20 --Radius of enemy
@@ -312,6 +312,8 @@ ENEMY = Class{
         self.score_value = _score_value or 25 --Score this enemy gives when killed without multiplier
         self.score_mul = _score_mul or 1 --Score multiplier
 
+        self.game_win_idx = _game_win_idx or 1 --What window this enemy belongs to
+
         self.enter = false --If this enemy has already entered the game screen
         self.tp = "simple_enemy" --Type of this class
 
@@ -319,12 +321,20 @@ ENEMY = Class{
 }
 
 --Draws the enemy
-function ENEMY:draw()
+function ENEMY:draw(text)
     local p
 
     p = self
 
     if not p.enter then return end
+
+    --Stencils enemy to its game window
+    local win = WINM.getWin(p.game_win_idx)
+    local func = function()
+        love.graphics.rectangle("fill", win.x, win.y, win.w, win.h)
+    end
+    love.graphics.stencil(func, "replace", 1)
+    love.graphics.setStencilTest("equal", 1)
 
     --Draws the circle
     Color.set(p.color)
@@ -333,6 +343,8 @@ function ENEMY:draw()
     else
         Draw_Smooth_Circle(p.pos.x, p.pos.y, p.r)
     end
+
+    love.graphics.setStencilTest()
 
 end
 

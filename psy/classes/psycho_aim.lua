@@ -149,7 +149,7 @@ end
 --Line that aims in a direction
 Indicator_Aim = Class{
     __includes = {ELEMENT, CLR},
-    init = function(self, _x, _y, _c)
+    init = function(self, _x, _y, _c, _game_win_idx)
 
         ELEMENT.init(self) --Set atributes
         CLR.init(self, _c)
@@ -157,6 +157,7 @@ Indicator_Aim = Class{
         self.pos = Vector(_x, _y) --Center of aim
         self.line_width = 3 --Thickness of aim line
         self.alpha = 0 --Alpha of aim
+        self.game_win_idx = _game_win_idx or 1 --Which game window this indicator is from
 
         self.tp = "indicator_aim" --Type of this class
     end
@@ -174,20 +175,21 @@ function Indicator_Aim:draw()
 
     --Draw the line
     Color.set(color)
+    local win = WINM.getWin(self.game_win_idx)
     love.graphics.setLineWidth(aim.line_width)
-    love.graphics.line(aim.pos.x, aim.pos.y, p.pos.x, p.pos.y)
+    love.graphics.line(aim.pos.x + win.x, aim.pos.y + win.y, p.pos.x + win.x, p.pos.y + win.y)
 
 end
 
 --UTILITY FUNCTIONS--
 
 --Create a regular aim with and st
-function aim_functions.create_indicator(x, y, c, st)
+function aim_functions.create_indicator(x, y, c, game_win_idx, st)
     local aim, h1, h2
 
     st = st or "indicator_aim" --subtype
 
-    aim = Indicator_Aim(x, y, c)
+    aim = Indicator_Aim(x, y, c, game_win_idx)
 
     aim:addElement(DRAW_TABLE.L2, st)
 

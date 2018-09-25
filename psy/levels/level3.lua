@@ -176,7 +176,7 @@ function level_functions.part_1()
     LM.start(level_functions.part_2)
 end
 
---3-2: //
+--3-2: They came and then they left
 function level_functions.part_2()
     local w, h = WINDOW_WIDTH, WINDOW_HEIGHT
 
@@ -542,7 +542,31 @@ function level_functions.part_2()
     LM.wait(1)
     F.fromHorizontal{enemy = {DB,GrB,DB,GrB,DB}, side = "right", mode = "center" , number = 6, ind_duration = 2, ind_side = 40, speed_m = 1.4, e_radius = 25, enemy_y_margin = 80}
     LM.wait("noenemies")
+    LM.giveScore(2000, "finished part")
 
+    LM.stop()
+    LM.start(level_functions.part_3)
+end
+
+--3-3: Test
+function level_functions.part_3()
+    local p
+
+    CONTINUE = 3 --Setup continue variable to later continue from where you started
+
+    LM.wait(1.5) --5.5
+
+    LM.level_part("Part 3 - Best level ever")
+
+    local win1 = WINM.getWin(1)
+    F.snake{segments = 7, positions = {{win1.x + win1.w + 100,win1.y + win1.h/2},{win1.x-100,win1.y+win1.h/2}}, ind_duration = 3, speed_m = .6, e_radius = 25, ind_side = 50, e_life = 3, game_win = 1}
+
+    LM.wait("noenemies")
+
+    local win2 = WINM.getWin(2)
+    F.snake{segments = 7, positions = {{win2.x + win2.w + 100,win2.y + win2.h/2},{win2.x-100,win2.y+win2.h/2}}, ind_duration = 3, speed_m = .6, e_radius = 25, ind_side = 50, e_life = 3, game_win = 2}
+
+    LM.wait("noenemies")
     LM.stop()
 end
 

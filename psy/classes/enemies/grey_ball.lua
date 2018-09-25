@@ -7,11 +7,17 @@ local LM = require "level_manager"
 --GREY BALL CLASS--
 --[[circle grey enemy that just moves around]]
 
+--Local functions
+
+local isInside
+
+-- Enemy functions
+
 local enemy = {}
 
 Grey_Ball = Class{
     __includes = {ENEMY},
-    init = function(self, _x, _y, _dir, _speed_m, _radius)
+    init = function(self, _x, _y, _dir, _speed_m, _radius, _score_mul, _game_win_idx)
         local color_table
 
         color_table = {
@@ -21,7 +27,7 @@ Grey_Ball = Class{
             HSL(Hsl.stdv(0,0,55))
         }
 
-        ENEMY.init(self,  _x, _y, _dir, _speed_m, _radius, _score_mul, color_table, 270, 25)
+        ENEMY.init(self,  _x, _y, _dir, _speed_m, _radius, _score_mul, color_table, 270, 25, _game_win_idx)
 
         self.color_duration = 1 --Time to loop colors
 
@@ -63,10 +69,10 @@ end
 
 --UTILITY FUNCTIONS--
 
-function enemy.create(x, y, dir, speed_m, radius)
+function enemy.create(x, y, dir, speed_m, radius, score_mul, game_win_idx)
     local e
 
-    e = Grey_Ball(x, y, dir, speed_m, radius)
+    e = Grey_Ball(x, y, dir, speed_m, radius, score_mul, game_win_idx)
     e:addElement(DRAW_TABLE.L4)
     e:startColorLoop()
 
@@ -93,10 +99,11 @@ end
 --Checks if a circular enemy has entered (even if partially) inside the game screen
 function isInside(o)
 
-    if    o.pos.x + o.r >= 0
-      and o.pos.x - o.r <= WINDOW_WIDTH
-      and o.pos.y + o.r >= 0
-      and o.pos.y - o.r <= WINDOW_HEIGHT
+    local win = WINM.getWin(o.game_win_idx)
+    if    o.pos.x + o.r >= win.x
+      and o.pos.x - o.r <= win.x + win.w
+      and o.pos.y + o.r >= win.y
+      and o.pos.y - o.r <= win.y + win.h
       then
           return true
       end
