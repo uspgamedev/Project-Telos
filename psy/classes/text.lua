@@ -51,7 +51,15 @@ function Text:draw()
     local p = Util.findId("psycho")
     if p and t.use_stencil then
         local lg = love.graphics
-        lg.stencil(function()lg.circle("fill",p.pos.x, p.pos.y, p.r-1)end, "replace", 1)
+        --Take into consideration all game windows
+        local func = function()
+            for i, win in ipairs(GAME_WINDOWS) do
+                if win.active then
+                    lg.circle("fill",p.pos.x+win.x, p.pos.y+win.y, p.r-1)
+                end
+            end
+        end
+        lg.stencil(func, "replace", 1)
         lg.setStencilTest("less", 1)
     end
 
