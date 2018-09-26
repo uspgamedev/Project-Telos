@@ -69,12 +69,14 @@ end
 --Particle that has an alpha decaying over-time
 Regular_Particle = Class{
     __includes = {CIRC},
-    init = function(self, _x, _y, _dx, _dy, _c, _speed, _radius)
+    init = function(self, _x, _y, _dx, _dy, _c, _speed, _radius, _game_win_idx)
         CIRC.init(self, _x, _y, _radius, _c, nil, "fill") --Set atributes
 
         self.speedv = _speed --Speed value
         self.speed = Vector(_dx, _dy) --Speed vector
         self.speed = self.speed:normalized()*self.speedv
+
+        self.game_win_idx = _game_win_idx or 1
 
         self.tp = "regular_particle" --Type of this class
     end
@@ -87,9 +89,13 @@ function Regular_Particle:draw()
 
     p = self
 
-    --Draws the particle
-    Color.set(p.color)
-    love.graphics.circle("fill", p.pos.x, p.pos.y, p.r)
+    --Draws the particle, bounded by its game window
+    local win = WINM.getWin(self.game_win_idx)
+    if p.pos.x - p.r > win.x and p.pos.x + p.r < win.x + win.w and
+       p.pos.y - p.r > win.y and p.pos.y + p.r < win.y + win.h then
+        Color.set(p.color)
+        love.graphics.circle("fill", p.pos.x, p.pos.y, p.r)
+    end
 end
 
 function Regular_Particle:update(dt)
@@ -104,12 +110,12 @@ end
 --UTILITY FUNCTIONS--
 
 --Create a particle in the (x,y) position, direction dir, color c, radius r and subtype st
-function particle.create_regular(pos, dir, color, speed, r, st)
+function particle.create_regular(pos, dir, color, speed, r, game_win_idx, st)
     local part
 
     st = st or "regular_particle" --subtype
 
-    part = Regular_Particle(pos.x, pos.y, dir.x, dir.y, color, speed, r)
+    part = Regular_Particle(pos.x, pos.y, dir.x, dir.y, color, speed, r, game_win_idx)
 
     part:addElement(DRAW_TABLE.L2, st)
 
