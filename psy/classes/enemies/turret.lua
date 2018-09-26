@@ -130,7 +130,7 @@ function Turret:kill(gives_score, dont_explode)
         end
 
         if not dont_explode then
-          FX.explosion(self.pos.x, self.pos.y, self.r, self.color, 30)
+          FX.explosion(self.pos.x, self.pos.y, self.r, self.color, 30, nil, nil, nil, nil, self.game_win_idx)
         end
 
     end

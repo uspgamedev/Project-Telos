@@ -328,7 +328,7 @@ function Psy:kill()
         --Creates explosion for each game window
         for i, win in ipairs(GAME_WINDOWS) do
             if win.active then
-                FX.explosion(p.pos.x + win.x, p.pos.y + win.y, p.r, p.color, 100, 450, 250, 4)
+                FX.explosion(p.pos.x + win.x, p.pos.y + win.y, p.r, p.color, 100, 450, 250, 4, nil, i)
             end
         end
         p.death = true

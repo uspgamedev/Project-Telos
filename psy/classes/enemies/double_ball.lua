@@ -46,7 +46,7 @@ function Double_Ball:kill(gives_score, mode, dont_explode)
     if gives_score == nil then gives_score = true end --If this enemy should give score
 
     if not dont_explode then
-      FX.explosion(self.pos.x, self.pos.y, self.r, self.color)
+      FX.explosion(self.pos.x, self.pos.y, self.r, self.color, nil, nil, nil, nil, nil, self.game_win_idx)
     end
 
     if gives_score then

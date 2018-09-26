@@ -75,7 +75,7 @@ function Snake:kill(gives_score, dont_explode)
         if seg.dead == "marked for death" then
 
             if not dont_explode then
-              FX.explosion(seg.pos.x, seg.pos.y, self.r, self.color)
+              FX.explosion(seg.pos.x, seg.pos.y, self.r, self.color, nil, nil, nil, nil, nil, self.game_win_idx)
             end
             if gives_score and self.segment_score*self.score_mul > 0 then
                 LM.giveScore(math.ceil(self.segment_score*self.score_mul))

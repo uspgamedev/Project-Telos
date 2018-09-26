@@ -44,7 +44,7 @@ function Grey_Ball:kill(dont_explode)
     self.death = true
 
     if not dont_explode then
-      FX.explosion(self.pos.x, self.pos.y, self.r, self.color)
+      FX.explosion(self.pos.x, self.pos.y, self.r, self.color, nil, nil, nil, nil, nil, self.game_win_idx)
     end
 
 end

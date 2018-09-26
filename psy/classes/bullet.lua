@@ -37,7 +37,7 @@ function Bullet:kill(dont_explode)
     if self.death then return end
     self.death = true
     if not dont_explode then
-      FX.explosion(self.pos.x, self.pos.y, self.r, self.color, 8, nil, nil, 2, important)
+      FX.explosion(self.pos.x, self.pos.y, self.r, self.color, 8, nil, nil, 2, important, self.game_win_idx)
     end
 
 end

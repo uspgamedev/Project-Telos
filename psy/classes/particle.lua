@@ -137,6 +137,8 @@ Decaying_Particle = Class{
         self.speed = self.speed:normalized()*self.speedv
         self.decaying_speed = _decaying_speed --Decaying alpha speed (object is deleted when alpha reaches it reaches 0)
 
+        self.game_win_idx = false
+
         self.tp = "decaying_particle" --Type of this class
     end
 }
@@ -148,9 +150,14 @@ function Decaying_Particle:draw()
 
     p = self
 
-    --Draws the particle
-    Color.set(p.color)
-    love.graphics.circle("fill", p.pos.x, p.pos.y, p.r)
+    --Draws the particle, bounded by game window
+    local win = self.game_win_idx and WINM.getWin(self.game_win_idx) or nil
+    if not self.game_win_idx or
+       (p.pos.x - p.r > win.x and p.pos.x + p.r < win.x + win.w  and
+        p.pos.y - p.r > win.y and p.pos.y + p.r < win.y + win.h) then
+        Color.set(p.color)
+        love.graphics.circle("fill", p.pos.x, p.pos.y, p.r)
+    end
 end
 
 function Decaying_Particle:update(dt)

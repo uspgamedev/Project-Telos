@@ -10,8 +10,10 @@ local fx = {}
 --------------------
 
 --Creates a colored article explosion starting at a circle with center (x,y) and radius r
-function fx.explosion(x, y, r, color, number, speed, decaying, size, important)
+function fx.explosion(x, y, r, color, number, speed, decaying, size, important, game_win_idx)
     local dir, angle, radius, batch, particle, number_of_particles
+
+    game_win_idx = game_win_idx or 1
 
     --Default Values
     number = number or 25  --Number of particles created in a explosion
@@ -56,6 +58,9 @@ function fx.explosion(x, y, r, color, number, speed, decaying, size, important)
         pos.y = y + radius*math.sin(angle)
 
         particle = Particle.create_decaying(pos, dir, color, speed * (1 - love.math.random()*.5), decaying, size)
+        if game_win_idx > 0 then
+            particle.game_win_idx = game_win_idx
+        end
         batch:put(particle)
 
     end
