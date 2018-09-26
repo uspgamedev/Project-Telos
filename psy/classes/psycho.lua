@@ -177,7 +177,12 @@ function Psy:ultrablast(power)
     --Update ultrablast counter
     LM.giveUltrablast(-1)
 
-    Ultra.create(p.pos.x, p.pos.y, p.color, power)
+    --Create ultrablasts for every game window
+    for idx, win in ipairs(GAME_WINDOWS) do
+        if win.active then
+            Ultra.create(p.pos.x+win.x, p.pos.y+win.y, p.color, power, idx)
+        end
+    end
 
     FX.shake(.3,2)
 
