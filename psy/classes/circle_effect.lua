@@ -13,7 +13,7 @@ local fx = {}
 --Particle that has an alpha decaying over-time
 Circle_FX = Class{
     __includes = {CIRC},
-    init = function(self, _x, _y, _alpha)
+    init = function(self, _x, _y, _alpha, _game_win_idx)
         local radius, color
 
         radius = 5
@@ -24,6 +24,8 @@ Circle_FX = Class{
         self.line_width = 3
         self.alpha = _alpha or 50
         self.alpha_decaying_speed = 7
+
+        self.game_win_idx = _game_win_idx or 1
 
         self.tp = "circle_fx" --Type of this class
     end
@@ -41,10 +43,17 @@ function Circle_FX:draw()
     color.a = circle.alpha
 
 
-    --Draw the circle effect
+    --Draw the circle effect, bounded by game window
+    local win = WINM.getWin(self.game_win_idx)
+    local func = function()
+        love.graphics.rectangle("fill", win.x, win.y, win.w, win.h)
+    end
+    love.graphics.stencil(func, "replace", 1)
+    love.graphics.setStencilTest("equal", 1)
     Color.set(color)
     love.graphics.setLineWidth(circle.line_width)
     love.graphics.circle("line", circle.pos.x, circle.pos.y, circle.r)
+    love.graphics.setStencilTest()
 end
 
 function Circle_FX:update(dt)
@@ -70,12 +79,12 @@ end
 --UTILITY FUNCTIONS--
 
 --Create a particle in the (x,y) position, direction dir, color c, radius r and subtype st
-function fx.create(pos, alpha, st)
+function fx.create(pos, alpha, game_win_idx, st)
     local circle
 
     st = st or "growing_circle" --subtype
 
-    circle = Circle_FX(pos.x, pos.y, alpha)
+    circle = Circle_FX(pos.x, pos.y, alpha, game_win_idx)
 
     circle:addElement(DRAW_TABLE.L1, st)
 
