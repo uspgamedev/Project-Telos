@@ -448,9 +448,11 @@ function util.checkCollision()
                     end
                 end
 
-                --Colliding with psycho
-                if p and not p.death and not p.invincible and e:collides(p) then
-                    p:kill()
+                --Colliding with psycho, in every game window
+                for idx, win in ipairs(GAME_WINDOWS) do
+                    if win.active and idx == e.game_win_idx and p and not p.death and not p.invincible and e:collides(p, win.x, win.y) then
+                        p:kill()
+                    end
                 end
 
             end

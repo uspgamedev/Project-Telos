@@ -176,14 +176,19 @@ function Snake:draw()
 end
 
 --Check collision with circular object that has a radius
-function Snake:collides(o)
+--Can receive optionals offsets ox and oy to take into consideration game windows
+function Snake:collides(o, ox, oy)
     local e = self
+
+    ox = ox or 0
+    oy = oy or 0
+
     --Check collision with all segments
     local collided_with_something = false
     for i, seg in ipairs(e.segments) do
         if not seg.dead then
-            local dx = seg.pos.x - o.pos.x
-            local dy = seg.pos.y - o.pos.y
+            local dx = seg.pos.x - (o.pos.x + ox)
+            local dy = seg.pos.y - (o.pos.y + oy)
             local dr
             --In case of psycho, check collision with his collision radius
             if o.tp == "psycho" then

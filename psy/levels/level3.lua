@@ -559,12 +559,12 @@ function level_functions.part_3()
     LM.level_part("Part 3 - Best level ever")
 
     local win1 = WINM.getWin(1)
-    F.snake{segments = 7, positions = {{win1.x + win1.w + 100,win1.y + win1.h/2},{win1.x-100,win1.y+win1.h/2}}, ind_duration = 3, speed_m = .6, e_radius = 25, ind_side = 50, e_life = 3, game_win = 1}
+    F.fromHorizontal{enemy = {GrB}, side = "right", mode = "center" , number = 6, ind_duration = 2, ind_side = 40, speed_m = 1.4, e_radius = 25, enemy_y_margin = 130, game_win = 1}
 
     LM.wait("noenemies")
 
     local win2 = WINM.getWin(2)
-    F.snake{segments = 7, positions = {{win2.x + win2.w + 100,win2.y + win2.h/2},{win2.x-100,win2.y+win2.h/2}}, ind_duration = 3, speed_m = .6, e_radius = 25, ind_side = 50, e_life = 3, game_win = 2}
+    F.fromHorizontal{enemy = {GrB}, side = "right", mode = "center" , number = 6, ind_duration = 2, ind_side = 40, speed_m = 1.4, e_radius = 25, enemy_y_margin = 130, game_win = 2}
 
     LM.wait("noenemies")
     LM.stop()

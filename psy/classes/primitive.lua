@@ -85,12 +85,16 @@ ELEMENT = Class{
     end,
 
     --Checks if an circular object o collides with this enemy
-    collides = function (self, o)
+    --Applys offset ox and oy if givenSS
+    collides = function (self, o, ox, oy)
         local e , dx, dy, dr
 
+        ox = ox or 0
+        oy = oy or 0
+
         e = self
-        dx = e.pos.x - o.pos.x
-        dy = e.pos.y - o.pos.y
+        dx = e.pos.x - (o.pos.x + ox)
+        dy = e.pos.y - (o.pos.y + oy)
 
         --In case of psycho, check collision with his collision radius
         if o.tp == "psycho" then
