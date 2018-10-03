@@ -1,8 +1,24 @@
 local funcs = {}
 
+local timers = {}
+
 -------------------------
 --GAME WINDOW FUNCTIONS--
 -------------------------
+
+--Creates a new game window and returns its index
+function funcs.new(x,y,w,h,active)
+    local win = {
+        x = x,
+        y = y,
+        w = w,
+        h = h,
+        active = active
+    }
+    table.insert(GAME_WINDOWS,win)
+    return #GAME_WINDOWS
+end
+
 
 --Return how many game windows there are
 function funcs.getNumWin()
@@ -36,6 +52,24 @@ function funcs.winAtPoint(x,y)
         end
     end
     return false
+end
+
+-----------------------------
+--Manipulating Game Windows--
+-----------------------------
+
+function funcs.setWinPos(idx, x, y)
+    local win = GAME_WINDOWS[idx]
+    assert(win ~= nil)
+    win.x = x
+    win.y = y
+end
+
+--Tween all attributes of a given window to given values
+function funcs.tweenWin(idx, x, y, w, h, tween_func, d)
+    local win = GAME_WINDOWS[idx]
+    assert(win ~= nil)
+    return LEVEL_TIMER:tween(d, win, {x = x, y = y, w = w, h = h}, tween_func)
 end
 
 return funcs

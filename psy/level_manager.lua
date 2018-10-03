@@ -444,6 +444,7 @@ end
 -------------------------
 --GAME WINDOW FUNCTIONS--
 -------------------------
+
 --[[Utility functions that manipulate in-game windows]]--
 
 --Disable all game windows except first, and make it occupy the whole screen
@@ -462,8 +463,44 @@ function level_manager.resetGameWindow()
     end
 end
 
-function level_manager.disableGameWindow(idx)
-    WINM.setWinStatus(idx,false)
+--[[
+    Creates a new window, given a window to base the effect on,
+    what attributes the old window {x,y,w,h} and attributes the new
+    window {x,y,w,h} will have after the effects
+    Function will return the new window index
+]]--
+function level_manager.createNewWindow(from_win_idx, from_win_attributes, new_win_attributes, dur)
+    local new_att = new_win_attributes --Reduce variable name
+    local from_att = from_win_attributes --Reduce variable name
+
+    local old_win = WINM.getWin(from_win_idx)
+
+    --Create new window above given window
+    local new_idx = WINM.new(old_win.x,old_win.y,old_win.w,old_win.h,true)
+
+    --Start shaking this new window
+    local str = .1
+    local str_speed = 3
+    local d = dur or 4
+    local orig_x = old_win.x
+    local orig_y = old_win.y
+    LEVEL_TIMER:during(d,
+        function()
+            WINM.setWinPos(new_idx,
+                           orig_x + love.math.random(-str,str),
+                           orig_y + love.math.random(-str,str))
+            str = str + love.timer.getDelta()*str_speed
+        end,
+        --Start moving each window to its final position
+        function()
+            WINM.tweenWin(new_idx, new_att[1], new_att[2], new_att[3], new_att[4],
+                          "out-elastic", 1.5)
+            WINM.tweenWin(from_win_idx, from_att[1], from_att[2], from_att[3], from_att[4],
+                          "out-elastic", 1.5)
+        end
+    )
+
+    return new_idx
 end
 
 
