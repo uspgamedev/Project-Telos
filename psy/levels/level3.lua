@@ -581,6 +581,8 @@ function level_functions.setup()
     LM.level_title("MADNESS ALL AROUND", "Chapter III")
     Audio.playBGM(BGM.level_3)
 
+    LM.resetGameWindow()
+
 end
 
 

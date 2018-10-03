@@ -400,9 +400,9 @@ function setup.config()
 
   --Game windows properties
   GAME_WINDOWS = {
-      --{x = 0, y = 0, w = WINDOW_WIDTH, h = WINDOW_HEIGHT, active = true},
-      {x = 20, y = 20, w = WINDOW_WIDTH/2 - 40, h = WINDOW_HEIGHT - 40, active = true},
-      {x = WINDOW_WIDTH/2, y = 20, w = WINDOW_WIDTH/2 - 40, h = WINDOW_HEIGHT - 40, active = true},
+      {x = 0, y = 0, w = WINDOW_WIDTH, h = WINDOW_HEIGHT, active = true},
+      {x = 20, y = 20, w = WINDOW_WIDTH/2 - 40, h = WINDOW_HEIGHT - 40, active = false},
+      {x = WINDOW_WIDTH/2, y = 20, w = WINDOW_WIDTH/2 - 40, h = WINDOW_HEIGHT - 40, active = false},
   }
 
   --Start UI color transition

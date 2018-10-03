@@ -4,9 +4,19 @@ local funcs = {}
 --GAME WINDOW FUNCTIONS--
 -------------------------
 
+--Return how many game windows there are
+function funcs.getNumWin()
+    return #GAME_WINDOWS
+end
+
 --Get a game window given its index
 function funcs.getWin(win_idx)
     return GAME_WINDOWS[win_idx]
+end
+
+--Enable or disable given game window
+function funcs.setWinStatus(win, status)
+    GAME_WINDOWS[win_idx].active = status
 end
 
 --Checks if a given point (x,y) is inside given window

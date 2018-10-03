@@ -222,6 +222,8 @@ function level_functions.setup()
     else
         Audio.playBGM(BGM.tutorial, 0, .5)
     end
+
+    LM.resetGameWindow()
 end
 
 function level_functions.startPositions()
