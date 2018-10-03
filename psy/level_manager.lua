@@ -441,5 +441,31 @@ function level_manager.giveUltrablast(number)
     end
 end
 
+-------------------------
+--GAME WINDOW FUNCTIONS--
+-------------------------
+--[[Utility functions that manipulate in-game windows]]--
+
+--Disable all game windows except first, and make it occupy the whole screen
+function level_manager.resetGameWindow()
+    for i = 1, WINM.getNumWin() do
+        local win = WINM.getWin(i)
+        if i == 1 then
+            win.active = true
+            win.x = 0
+            win.y = 0
+            win.w = WINDOW_WIDTH
+            win.h = WINDOW_HEIGHT
+        else
+            win.active = false
+        end
+    end
+end
+
+function level_manager.disableGameWindow(idx)
+    WINM.setWinStatus(idx,false)
+end
+
+
 --Return functions
 return level_manager

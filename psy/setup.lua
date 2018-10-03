@@ -395,7 +395,15 @@ function setup.config()
 
   print("Finished setting up shaders")
 
+
   --LAST GAME SETUPS
+
+  --Game windows properties
+  GAME_WINDOWS = {
+      {x = 0, y = 0, w = WINDOW_WIDTH, h = WINDOW_HEIGHT, active = true},
+      {x = 20, y = 20, w = WINDOW_WIDTH/2 - 40, h = WINDOW_HEIGHT - 40, active = false},
+      {x = WINDOW_WIDTH/2, y = 20, w = WINDOW_WIDTH/2 - 40, h = WINDOW_HEIGHT - 40, active = false},
+  }
 
   --Start UI color transition
   UI_COLOR = UI.create_color()
@@ -406,6 +414,7 @@ function setup.config()
   --FPS Counter
   Txt.create_gui(5, WINDOW_HEIGHT - 20, "FPS: ", GUI_MEDLESS, love.timer.getFPS(), "right", GUI_MEDLESS, "fps_counter")
 
+  print("Finished setting up the game")
   print("---------------------------")
 
 end

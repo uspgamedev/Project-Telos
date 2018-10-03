@@ -5,17 +5,20 @@ local Util = require "util"
 local LM = require "level_manager"
 
 --Local functions
+
 local isInside
+
+-- Enemy functions
+
+local enemy = {}
 
 --TURRET CLASS--
 --[[Turret enemy that goes to a target, and stays for a while shooting enemies]]
 
-local enemy = {}
-
 --Turret will got to a given target, stay for duration, then leave in the direction it came from
 Turret = Class{
     __includes = {ENEMY},
-    init = function(self, _x, _y, _speed_m, _e_speed_m, _radius, _score_mul, _enemy_spawn, _target_pos, _duration, _life, _number, _starting_angle, _rotation_angle, _shoot_fps)
+    init = function(self, _x, _y, _speed_m, _e_speed_m, _radius, _score_mul, _enemy_spawn, _target_pos, _duration, _life, _number, _starting_angle, _rotation_angle, _shoot_fps, _game_win_idx)
         local color_table, score_value, dir
 
         self.color_stages = {
@@ -47,7 +50,7 @@ Turret = Class{
         self.leaving = false --If enemy should leave the screen
 
         dir = Vector(_x - _target_pos.x, _y - _target_pos.y) --Direction to leave the screen
-        ENEMY.init(self, _x, _y, dir, _speed_m, _radius, _score_mul, nil, 270, score_value)
+        ENEMY.init(self, _x, _y, dir, _speed_m, _radius, _score_mul, nil, 270, score_value, _game_win_idx)
 
         self.inner_color = _enemy_spawn.indColor() --Color of outer circle (20% of radius)
         self.current_color = HSL(Hsl.stdv(278,89,39))
@@ -127,7 +130,7 @@ function Turret:kill(gives_score, dont_explode)
         end
 
         if not dont_explode then
-          FX.explosion(self.pos.x, self.pos.y, self.r, self.color, 30)
+          FX.explosion(self.pos.x, self.pos.y, self.r, self.color, 30, nil, nil, nil, nil, self.game_win_idx)
         end
 
     end
@@ -143,6 +146,13 @@ function Turret:draw()
 
     if not p.enter then return end
 
+    --Stencils turret to its game window
+    local win = WINM.getWin(p.game_win_idx)
+    local func = function()
+        love.graphics.rectangle("fill", win.x, win.y, win.w, win.h)
+    end
+    love.graphics.stencil(func, "replace", 1)
+    love.graphics.setStencilTest("equal", 1)
 
     --Draws the outer ring (from 100% to 50% of radius)
     Color.set(p.color)
@@ -152,6 +162,7 @@ function Turret:draw()
     Color.set(p.inner_color)
     Draw_Smooth_Circle(p.pos.x, p.pos.y, p.r*.4)
 
+    love.graphics.setStencilTest()
 end
 
 --Update this enemy
@@ -169,7 +180,7 @@ function Turret:update(dt)
     if not o.enter then
         if isInside(o) then o.enter = true end
     else
-        if not isInside(o) then o:kill(false) end --Don't give score if enemy is killed by leaving screen
+        if not isInside(o) then o:kill(false, true) end --Don't give score if enemy is killed by leaving screen
     end
 
     if o.reach_target then
@@ -182,7 +193,7 @@ function Turret:update(dt)
             angle = o.starting_angle
             for i = 1, o.number do
                 --Spawn the enemy with normal radius and same score multiplier as turret
-                enemy = o.enemy_spawn.create(o.pos.x, o.pos.y, Vector(math.sin(angle), math.cos(angle)), o.e_speed_m, o.enemy_spawn.radius(), o.score_mul)
+                enemy = o.enemy_spawn.create(o.pos.x, o.pos.y, Vector(math.sin(angle), math.cos(angle)), o.e_speed_m, o.enemy_spawn.radius(), o.score_mul, o.game_win_idx)
                 enemy.enter = true
                 angle = angle + o.rotation_angle --Rotate angle
             end
@@ -201,10 +212,10 @@ end
 
 --UTILITY FUNCTIONS--
 
-function enemy.create(x, y, speed_m, e_speed_m,radius, score_mul, enemy_spawn, target_pos, duration, life, number, starting_angle, rotation_angle, shoot_fps)
+function enemy.create(x, y, speed_m, e_speed_m,radius, score_mul, enemy_spawn, target_pos, duration, life, number, starting_angle, rotation_angle, shoot_fps, game_win_idx)
     local e
 
-    e = Turret(x, y, speed_m, e_speed_m, radius, score_mul, enemy_spawn, target_pos, duration, life, number, starting_angle, rotation_angle, shoot_fps)
+    e = Turret(x, y, speed_m, e_speed_m, radius, score_mul, enemy_spawn, target_pos, duration, life, number, starting_angle, rotation_angle, shoot_fps, game_win_idx)
     e:addElement(DRAW_TABLE.L4u)
 
     --Move turret to target position
@@ -228,10 +239,11 @@ end
 --Checks if a circular enemy has entered (even if partially) inside the game screen
 function isInside(o)
 
-    if    o.pos.x + o.r >= 0
-      and o.pos.x - o.r <= WINDOW_WIDTH
-      and o.pos.y + o.r >= 0
-      and o.pos.y - o.r <= WINDOW_HEIGHT
+    local win = WINM.getWin(o.game_win_idx)
+    if    o.pos.x + o.r >= win.x
+      and o.pos.x - o.r <= win.x + win.w
+      and o.pos.y + o.r >= win.y
+      and o.pos.y - o.r <= win.y + win.h
       then
           return true
       end

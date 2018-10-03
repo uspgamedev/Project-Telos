@@ -14,7 +14,7 @@ local ultrablast = {}
 --Line that aims in a direction
 Ultrablast = Class{
     __includes = {CIRC},
-    init = function(self, _x, _y, _c, _power)
+    init = function(self, _x, _y, _c, _power, _game_win)
 
         CIRC.init(self, _x, _y, 12, _c, nil, "line")
 
@@ -22,6 +22,8 @@ Ultrablast = Class{
 
         self.power = _power --How many enemies this blast can destroy
         self.speedv = 700 --How fast to grow
+
+        self.game_win = _game_win or 1
 
         self.alpha = 200
 
@@ -41,10 +43,17 @@ function Ultrablast:draw()
     Color.copy(color, ultra.color)
     color.a = ultra.alpha
 
-    --Draw the circle
+    --Draw the circle, bounded by its game window
+    local win = WINM.getWin(self.game_win)
+    local func = function()
+        love.graphics.rectangle("fill", win.x, win.y, win.w, win.h)
+    end
+    love.graphics.stencil(func, "replace", 1)
+    love.graphics.setStencilTest("equal", 1)
     Color.set(color)
     love.graphics.setLineWidth(ultra.line_width)
     love.graphics.circle(ultra.mode, ultra.pos.x, ultra.pos.y, ultra.r)
+    love.graphics.setStencilTest()
 end
 
 function Ultrablast:takeHit()
@@ -70,11 +79,13 @@ function Ultrablast:update(dt)
 
     ultra.r = ultra.r + ultra.speedv*dt
 
+    local win = WINM.getWin(self.game_win)
+
     --If all the four corners are inside the circle, it can be removed
-    if (0 - ultra.pos.x)^2 + (0 - ultra.pos.y)^2 < (ultra.r-ultra.line_width)^2 and
-       (WINDOW_WIDTH - ultra.pos.x)^2 + (0 - ultra.pos.y)^2 < (ultra.r-ultra.line_width)^2 and
-       (0 - ultra.pos.x)^2 + (WINDOW_HEIGHT - ultra.pos.y)^2 < (ultra.r-ultra.line_width)^2 and
-       (WINDOW_WIDTH - ultra.pos.x)^2 + (WINDOW_HEIGHT - ultra.pos.y)^2 < (ultra.r-ultra.line_width)^2 then
+    if (win.x - ultra.pos.x)^2 + (win.y - ultra.pos.y)^2 < (ultra.r-ultra.line_width)^2 and
+       (win.x + win.w - ultra.pos.x)^2 + (win.y - ultra.pos.y)^2 < (ultra.r-ultra.line_width)^2 and
+       (win.x - ultra.pos.x)^2 + (win.y + win.h - ultra.pos.y)^2 < (ultra.r-ultra.line_width)^2 and
+       (win.x + win.w - ultra.pos.x)^2 + (win.y + win.h - ultra.pos.y)^2 < (ultra.r-ultra.line_width)^2 then
            ultra.death = true
     end
 
@@ -98,12 +109,12 @@ end
 --UTILITY FUNCTIONS--
 
 --Create a regular aim with and id
-function ultrablast.create(x, y, c, power)
+function ultrablast.create(x, y, c, power, game_win)
     local ultra
 
     st = "ultrablast" --subtype
 
-    ultra = Ultrablast(x, y, c, power)
+    ultra = Ultrablast(x, y, c, power, game_win)
 
     ultra:addElement(DRAW_TABLE.L4, st)
     SFX.ultrablast:play()
