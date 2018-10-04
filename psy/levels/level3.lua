@@ -23,7 +23,6 @@ function level_functions.part_1()
     F.fromVertical{enemy = {GrB}, side = "bottom", mode = "center" , number = 7, ind_duration = 3, ind_side = 40, speed_m = 2.2, e_radius = 25, enemy_x_margin = 50, enemy_y_margin = 50}
     LM.wait(5)
 
-
     local cage = F.cage{radius = 180, speed_radius = 400}
 
     LM.wait(3)
@@ -556,7 +555,7 @@ function level_functions.part_3()
     LM.level_part("Part 3 - Best level ever")
 
     LM.wait(3.5) --5.5
-
+  
     LM.createNewWindow(1, {20,40,WINDOW_WIDTH/2 - 40,WINDOW_HEIGHT - 80},
                           {WINDOW_WIDTH/2, 40, WINDOW_WIDTH/2 - 40,WINDOW_HEIGHT - 80},
                           4)

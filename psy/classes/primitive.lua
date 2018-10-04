@@ -388,7 +388,7 @@ end
 
 --Receives the center x and y values of a ring, its radius and inner_radius, and draw it on the screen
 --OBS: Have the color already setted
-function Draw_Smooth_Ring(x, y, r, i_r, dont_use_shader)
+function Draw_Smooth_Ring(x, y, r, i_r, dont_use_shader, stencil_func)
 
     if USE_ANTI_ALIASING and not dont_use_shader then
         x = x - r
@@ -403,12 +403,26 @@ function Draw_Smooth_Ring(x, y, r, i_r, dont_use_shader)
         end
 
         --Draw the circle
+
+        if stencil_func then
+            love.graphics.stencil(function() stencil_func() end, "replace", 1)
+            love.graphics.setStencilTest("equal", 1)
+        end
         love.graphics.setShader(SMOOTH_RING_TABLE[size..'-'..i_r])
         love.graphics.draw(PIXEL, x, y, 0, 2*r)
         love.graphics.setShader()
+        if stencil_func then
+            love.graphics.setStencilTest()
+        end
     else
-        love.graphics.stencil(function()love.graphics.circle("fill",x,y,i_r) end, "replace", 1)
-        love.graphics.setStencilTest("notequal", 1)
+        if stencil_func then
+            love.graphics.stencil(function() stencil_func() end, "replace", 1)
+            love.graphics.stencil(function() love.graphics.circle("fill",x,y,i_r) end, "replace", 2, true)
+            love.graphics.setStencilTest("equal", 1)
+        else
+            love.graphics.stencil(function() love.graphics.circle("fill",x,y,i_r) end, "replace", 1)
+            love.graphics.setStencilTest("notequal", 1)
+        end
         love.graphics.circle("fill", x, y, r)
         love.graphics.setStencilTest()
     end
