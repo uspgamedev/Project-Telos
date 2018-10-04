@@ -558,15 +558,32 @@ function level_functions.part_3()
 
     LM.createNewWindow(1, {20,40,WINDOW_WIDTH/2 - 40,WINDOW_HEIGHT - 40},
                           {WINDOW_WIDTH/2, 40, WINDOW_WIDTH/2 - 40,WINDOW_HEIGHT - 40},
-                          4)
+                          3)
 
-    LM.wait(7)
+    LM.wait(4)
 
     LM.createNewWindow(2, {WINDOW_WIDTH/2, 40, WINDOW_WIDTH/2 - 40,WINDOW_HEIGHT/2 - 50},
                           {WINDOW_WIDTH/2, WINDOW_HEIGHT/2 + 30, WINDOW_WIDTH/2 - 40,WINDOW_HEIGHT/2 - 50},
-                        4)
+                        3)
 
-    LM.wait(10)
+    LM.wait(4)
+
+    local cage1 = F.cage{radius = 280, speed_radius = 80, game_win = 1}
+
+    LM.wait(6)
+
+    local cage2 = F.cage{radius = 180, speed_radius = 400, game_win = 2}
+
+    LM.wait(6)
+
+    cage1:kill()
+
+    LM.wait(3)
+
+    cage2:kill()
+
+    LM.wait(6)
+
     LM.wait("noenemies")
     LM.stop()
 end

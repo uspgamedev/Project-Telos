@@ -69,12 +69,7 @@ function Cage:draw()
     local func = function()
         love.graphics.rectangle("fill", win.x, win.y, win.w, win.h)
     end
-    love.graphics.stencil(func, "replace", 1)
-    love.graphics.setStencilTest("equal", 1)
-
-    Draw_Smooth_Ring(p.pos.x, p.pos.y, p.r, p.r - p.cage_width, self.target_radius)
-
-    love.graphics.setStencilTest()
+    Draw_Smooth_Ring(p.pos.x, p.pos.y, p.r, p.r - p.cage_width, self.target_radius, func)
 
 end
 
@@ -110,7 +105,7 @@ function Cage:update(dt)
     local win = WINM.getWin(self.game_win_idx)
     if p and (p.pos+Vector(win.x,win.y)):dist(c.pos) > c.r - c.cage_width - p.r then
         local diff = (p.pos+Vector(win.x,win.y)):dist(c.pos) - (c.r - c.cage_width - p.r)
-        p.pos = p.pos - (p.pos - c.pos):normalized()*diff
+        p.pos = p.pos - ((p.pos+Vector(win.x,win.y)) - c.pos):normalized()*diff
     end
 
 end
