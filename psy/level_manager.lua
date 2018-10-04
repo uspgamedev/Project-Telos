@@ -448,26 +448,32 @@ end
 --[[Utility functions that manipulate in-game windows]]--
 
 --Disable all game windows except first, and make it occupy the whole screen
+--This assumes the game has at least one game window
 function level_manager.resetGameWindow()
-    for i = 1, WINM.getNumWin() do
-        local win = WINM.getWin(i)
-        if i == 1 then
-            win.active = true
-            win.x = 0
-            win.y = 0
-            win.w = WINDOW_WIDTH
-            win.h = WINDOW_HEIGHT
-        else
-            win.active = false
-        end
+    --Sets up first game window to appropriate parameters
+    if WINM.getNumWin() >= 1 then
+        local win = WINM.getWin(1)
+        win.x = 0
+        win.y = 0
+        win.w = WINDOW_WIDTH
+        win.h = WINDOW_HEIGHT
+        win.active = true
+    else
+        WINM.new(0,0,WINDOW_WIDTH,WINDOW_HEIGHT,true)
+    end
+
+    --Deletes all other windows
+    for i = WINM.getNumWin(),2,-1 do
+        WINM.delete(i)
     end
 end
 
 --[[
     Creates a new window, given a window to base the effect on,
     what attributes the old window {x,y,w,h} and attributes the new
-    window {x,y,w,h} will have after the effects
-    Function will return the new window index
+    window {x,y,w,h} will have after the effects. You also provide the time the first
+    part of the effect will take.
+    Function will return the new window index.
 ]]--
 function level_manager.createNewWindow(from_win_idx, from_win_attributes, new_win_attributes, dur)
     local new_att = new_win_attributes --Reduce variable name
@@ -503,6 +509,31 @@ function level_manager.createNewWindow(from_win_idx, from_win_attributes, new_wi
     return new_idx
 end
 
+--[[
+    Destroys a given window, given its index and index of target window to make it
+    "combine" with. You also provide what will be the new attribute of the combined window,
+    and the duration for the first part of the effect.
+    Function will return the id of combined window
+]]--
+function level_manager.destroyWindow(destroyed_win_idx, combined_win_idx, new_att, dur)
+    local des_win = WINM.getWin(destroyed_win_idx)
+    local com_win = WINM.getWin(combined_win_idx)
+    --Get the halfway position between the two windows
+    local halfway_pos = Vector((des_win.x + com_win.x)/2, (des_win.y + com_win.y)/2)
+
+    --Make both windows go to the halway position and then adjusting to the desired size
+    WINM.tweenWin(destroyed_win_idx, halfway_pos.x, halfway_pos.y,
+                  des_win.w, des_win.h, "in-back", dur,
+                  function()
+                      WINM.setWinStatus(destroyed_win_idx, false)
+                  end)
+    WINM.tweenWin(combined_win_idx, halfway_pos.x, halfway_pos.y,
+                com_win.w, com_win.h, "in-back", dur,
+                function()
+                    WINM.tweenWin(combined_win_idx, new_att[1], new_att[2], new_att[3], new_att[4],
+                                  "out-elastic", 1.5)
+                end)
+end
 
 --Return functions
 return level_manager

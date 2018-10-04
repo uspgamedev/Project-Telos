@@ -555,34 +555,22 @@ function level_functions.part_3()
     LM.level_part("Part 3 - Best level ever")
 
     LM.wait(3.5) --5.5
-
-    LM.createNewWindow(1, {20,40,WINDOW_WIDTH/2 - 40,WINDOW_HEIGHT - 40},
-                          {WINDOW_WIDTH/2, 40, WINDOW_WIDTH/2 - 40,WINDOW_HEIGHT - 40},
-                          3)
-
-    LM.wait(4)
+  
+    LM.createNewWindow(1, {20,40,WINDOW_WIDTH/2 - 40,WINDOW_HEIGHT - 80},
+                          {WINDOW_WIDTH/2, 40, WINDOW_WIDTH/2 - 40,WINDOW_HEIGHT - 80},
+                          4)
+    LM.wait(5)
 
     LM.createNewWindow(2, {WINDOW_WIDTH/2, 40, WINDOW_WIDTH/2 - 40,WINDOW_HEIGHT/2 - 50},
-                          {WINDOW_WIDTH/2, WINDOW_HEIGHT/2 + 30, WINDOW_WIDTH/2 - 40,WINDOW_HEIGHT/2 - 50},
-                        3)
+                          {WINDOW_WIDTH/2, WINDOW_HEIGHT/2 + 10, WINDOW_WIDTH/2 - 40,WINDOW_HEIGHT/2 - 50},
+                        4)
+    LM.wait(5)
 
-    LM.wait(4)
+    LM.destroyWindow(3, 2, {WINDOW_WIDTH/2, 40, WINDOW_WIDTH/2 - 40,WINDOW_HEIGHT - 80}, 2)
 
-    local cage1 = F.cage{radius = 280, speed_radius = 80, game_win = 1}
+    LM.wait(5)
 
-    LM.wait(6)
-
-    local cage2 = F.cage{radius = 180, speed_radius = 400, game_win = 2}
-
-    LM.wait(6)
-
-    cage1:kill()
-
-    LM.wait(3)
-
-    cage2:kill()
-
-    LM.wait(6)
+    LM.destroyWindow(2, 1, {0, 0, WINDOW_WIDTH, WINDOW_HEIGHT}, 2)
 
     LM.wait("noenemies")
     LM.stop()
