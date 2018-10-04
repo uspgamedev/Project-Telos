@@ -98,7 +98,7 @@ function Ultrablast:collides(o)
 
     ultra = self
 
-    object_dist = ultra.pos:dist(o.pos) --Obejct distance from ultrablast center
+    object_dist = ultra.pos:dist(o.pos) --Object distance from ultrablast center
 
     min_dist = ultra.r - ultra.line_width - o.r --Minimum distance the object can be to collide
     max_dist = ultra.r + o.r --Maximum distance the object can be to collide

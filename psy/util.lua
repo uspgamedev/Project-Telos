@@ -429,7 +429,7 @@ function util.checkCollision()
                 --Checking ultrablast collision
                 if SUBTP_TABLE["ultrablast"] then
                     for ultra in pairs(SUBTP_TABLE["ultrablast"]) do
-                        if not ultra.death and e.tp ~= "grey_ball" and e.tp ~= "glitch_ball" and e.tp ~= "turret" and e.tp ~= "snake" and not e.death and e.game_win == ultra.game_win and ultra:collides(e) then
+                        if not ultra.death and e.tp ~= "grey_ball" and e.tp ~= "glitch_ball" and e.tp ~= "turret" and e.tp ~= "snake" and not e.death and e.game_win_idx == ultra.game_win and ultra:collides(e) then
                             e:kill(false) --Don't give score if enemy is killed by ultrablast
                             ultra:takeHit()
                         end
