@@ -399,9 +399,7 @@ function setup.config()
   --LAST GAME SETUPS
 
   --Game windows properties
-  GAME_WINDOWS = {
-      {x = 0, y = 0, w = WINDOW_WIDTH, h = WINDOW_HEIGHT, active = true},
-  }
+  GAME_WINDOWS = {}
 
   --Start UI color transition
   UI_COLOR = UI.create_color()
