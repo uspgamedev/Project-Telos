@@ -19,10 +19,26 @@ function funcs.new(x,y,w,h,active)
     return #GAME_WINDOWS
 end
 
+--Deletes a game window, given its idx
+--Note that this can messup other windows idx
+--Can't delete if there is 1 or less game windows
+function funcs.delete(idx)
+    assert(#GAME_WINDOWS > 1)
+    table.remove(GAME_WINDOWS,idx)
+end
 
 --Return how many game windows there are
 function funcs.getNumWin()
     return #GAME_WINDOWS
+end
+
+--Return how many active game windows there are
+function funcs.getNumActiveWin()
+    local cont = 0
+    for i, win in ipairs(GAME_WINDOWS) do
+        if win.active then cont = cont + 1 end
+    end
+    return cont
 end
 
 --Get a game window given its index
@@ -31,7 +47,8 @@ function funcs.getWin(win_idx)
 end
 
 --Enable or disable given game window
-function funcs.setWinStatus(win, status)
+function funcs.setWinStatus(win_idx, status)
+    assert(GAME_WINDOWS[win_idx] ~= nil)
     GAME_WINDOWS[win_idx].active = status
 end
 
@@ -66,10 +83,11 @@ function funcs.setWinPos(idx, x, y)
 end
 
 --Tween all attributes of a given window to given values
-function funcs.tweenWin(idx, x, y, w, h, tween_func, d)
+function funcs.tweenWin(idx, x, y, w, h, tween_func, d, func)
     local win = GAME_WINDOWS[idx]
     assert(win ~= nil)
-    return LEVEL_TIMER:tween(d, win, {x = x, y = y, w = w, h = h}, tween_func)
+    func = func or function() return end
+    return LEVEL_TIMER:tween(d, win, {x = x, y = y, w = w, h = h}, tween_func, func)
 end
 
 return funcs
