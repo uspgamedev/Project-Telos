@@ -1,6 +1,7 @@
 local Color = require "classes.color.color"
 local Particle = require "classes.particle"
 local Util = require "util"
+local Blink = require "classes.blink_screen"
 --EFFECTS CLASS --
 
 local fx = {}
@@ -399,6 +400,32 @@ function fx.change_value_objects(objects, value_name, target_values, speed, labe
     if after_function then
       FX_TIMER:after(longest_duration, after_function)
     end
+
+end
+
+------------------
+--MISC FUNCTIONS--
+------------------
+
+function fx.blink_screen(blank_dur, fade_out_dur)
+    --Blink screen setup
+    local blink = Blink()
+
+    blink:addElement(DRAW_TABLE.L5u, nil, "blink_screen")
+
+    blink.alpha = 150
+
+    --Make it all white for a period of time
+    LEVEL_TIMER:after(blank_dur,
+        function()
+            --Make it disappear
+            LEVEL_TIMER:tween(fade_out_dur, blink, {alpha = 0}, "in-linear",
+                function()
+                    blink.death = true
+                end
+            )
+        end
+    )
 
 end
 

@@ -554,23 +554,23 @@ function level_functions.part_3()
     CONTINUE = 3 --Setup continue variable to later continue from where you started
     LM.level_part("Part 3 - Best level ever")
 
-    LM.wait(3.5) --5.5
-  
+    LM.wait(5.5) --5.5
+
     LM.createNewWindow(1, {20,40,WINDOW_WIDTH/2 - 40,WINDOW_HEIGHT - 80},
                           {WINDOW_WIDTH/2, 40, WINDOW_WIDTH/2 - 40,WINDOW_HEIGHT - 80},
                           4)
-    LM.wait(5)
+    LM.wait(6)
 
     LM.createNewWindow(2, {WINDOW_WIDTH/2, 40, WINDOW_WIDTH/2 - 40,WINDOW_HEIGHT/2 - 50},
                           {WINDOW_WIDTH/2, WINDOW_HEIGHT/2 + 10, WINDOW_WIDTH/2 - 40,WINDOW_HEIGHT/2 - 50},
                         4)
+    LM.wait(7)
+
+    LM.destroyWindow(3, 2, {WINDOW_WIDTH/2, 40, WINDOW_WIDTH/2 - 40,WINDOW_HEIGHT - 80}, 3)
+
     LM.wait(5)
 
-    LM.destroyWindow(3, 2, {WINDOW_WIDTH/2, 40, WINDOW_WIDTH/2 - 40,WINDOW_HEIGHT - 80}, 2)
-
-    LM.wait(5)
-
-    LM.destroyWindow(2, 1, {0, 0, WINDOW_WIDTH, WINDOW_HEIGHT}, 2)
+    LM.destroyWindow(2, 1, {0, 0, WINDOW_WIDTH, WINDOW_HEIGHT}, 3)
 
     LM.wait("noenemies")
     LM.stop()
