@@ -36,13 +36,14 @@ game_win: which game window this enemy is from
 function formation.fromHorizontal(a)
     local x, y, dir, half, p, enemy_table_size, max_r, batch
 
-
     enemy_table_size = Util.tableLen(a.enemy)
+    assert(enemy_table_size >= 1)
 
     --Find the biggest radius between enemies
     if a.e_radius then
         max_r = a.e_radius
     else
+        max_r = a.enemy[1].radius()
         for i=2,enemy_table_size do
             if a.enemy[i].radius() > max_r then
                 max_r = a.enemy[i].radius()
@@ -56,7 +57,7 @@ function formation.fromHorizontal(a)
     local win = WINM.getWin(a.game_win)
     a.screen_margin = a.screen_margin or 0
     a.enemy_x_margin = a.enemy_x_margin or 0
-    a.enemy_y_margin = a.enemy_y_margin or 10 + 2*max_r
+    a.enemy_y_margin = a.enemy_y_margin or (10 + 2*max_r)
     a.number = a.number or 3
     a.speed_m = a.speed_m or 1
     a.score_mul = a.score_mul or 1
@@ -65,7 +66,6 @@ function formation.fromHorizontal(a)
     if a.ind_mode ~= false then
         a.ind_mode = a.ind_mode or "all"
     end
-
     if a.side == "left" or a.side == "l" then
         dir = Vector(1,0)
         x = win.x - 5 - max_r
@@ -312,11 +312,13 @@ function formation.fromVertical(a)
     local x, y, dir, half, max_r, enemy_table_size, p, batch
 
     enemy_table_size = Util.tableLen(a.enemy)
+    assert(enemy_table_size >= 1)
 
     --Find the biggest radius between enemies
     if a.e_radius then
         max_r = a.e_radius
     else
+        max_r = a.enemy[1].radius()
         for i=2,enemy_table_size do
             if a.enemy[i].radius() > max_r then
                 max_r = a.enemy[i].radius()
@@ -911,7 +913,7 @@ function formation.cage(a)
     l_speed_r = a.speed_radius
 
     --Just create the enemy
-    return Cge.create(l_pos.x, l_pos.y, l_r, l_speed_r)
+    return Cge.create(l_pos.x, l_pos.y, l_r, l_speed_r, a.game_win)
 end
 
 --[[
