@@ -587,6 +587,35 @@ function level_functions.part_3()
     F.fromVertical{enemy = {SB}, side = "bottom", mode = "distribute" , number = 5, ind_duration = 1.8, ind_side = 40, speed_m = 1, e_radius = 25, game_win = gm_idx}
     LM.wait("noenemies")
     ]]--
+
+    F.circle{radius = 640, number = 30, enemy = {SB}, ind_duration = 3, ind_side = 35, enemy_margin = 50, game_win = gm_idx, e_speed_m = .8}
+    LM.wait(5)
+    for i = 1, 10 do
+        F.fromVertical{enemy = {GrB}, side = "bottom", mode = "right" , number = 5, ind_duration = 2.7, ind_side = 50, speed_m = 1, e_radius = 23, game_win = 1}
+        if i == 10 then
+            F.circle{radius = 640, number = 50, enemy = {SB}, ind_mode = false, enemy_margin = 40, game_win = gm_idx}
+        end
+        LM.wait(.4)
+    end
+    LM.wait(3)
+    for i = 1, 10 do
+        F.fromVertical{enemy = {GrB}, side = "bottom", mode = "left" , number = 5, ind_duration = 2.7, ind_side = 50, speed_m = 1, e_radius = 23, game_win = 1}
+        if i == 10 then
+            F.circle{radius = 640, number = 50, enemy = {SB}, ind_mode = false, enemy_margin = 40, game_win = gm_idx}
+        end
+        LM.wait(.4)
+    end
+    LM.wait(3)
+    for i = 1, 10 do
+        F.fromHorizontal{enemy = {GrB}, side = "right", mode = "center" , number = 5, ind_duration = 2.7, ind_side = 50, speed_m = 1, e_radius = 23, game_win = 1}
+        if i == 10 then
+            F.circle{radius = 640, number = 50, enemy = {SB}, ind_mode = false, enemy_margin = 40, game_win = gm_idx}
+        end
+        LM.wait(.4)
+    end
+
+
+
     local mod = 0
     for i = 1, 48 do
         --Spawn grey at right window
