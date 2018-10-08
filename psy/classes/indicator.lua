@@ -173,20 +173,65 @@ function indicator.create_enemy(enemy, pos, dir, following, side, speed_m, radiu
 
     center = Vector(pos.x, pos.y)
     side = side or 20
-    margin = side/2 + 1
+    margin = side/2 + 4
     color = enemy.indColor()
 
     local win = WINM.getWin(game_win_idx)
+
     --Put indicator center inside the screen
-    if pos.x < win.x + margin then
-        center.x = win.x + margin
-    elseif pos.x > win.x + win.w - margin then
-        center.x = win.x + win.w - margin
+    local on_left = pos.x < win.x + margin
+    local on_right = pos.x > win.x + win.w - margin
+    local on_top = pos.y < win.y + margin
+    local on_bottom = pos.y > win.y + win.h - margin
+    local left_border = win.x + margin
+    local right_border =  win.x + win.w - margin
+    local top_border = win.y + margin
+    local bottom_border = win.y + win.h - margin
+    local target_border = nil --Determine which border the enemy will hit
+    local abs_dx = math.abs(dir.x)
+    local abs_dy = math.abs(dir.y)
+    local lamb
+    if on_left and on_top then
+        if abs_dy >= abs_dx then
+            lamb = (left_border - pos.x)/dir.x
+        else
+            lamb = (top_border - pos.y)/dir.y
+        end
+    elseif on_left and on_bottom then
+        if abs_dy >= abs_dx then
+            lamb = (left_border - pos.x)/dir.x
+        else
+            lamb = (bottom_border - pos.y)/dir.y
+        end
+    elseif on_right and on_top then
+        if abs_dy >= abs_dx then
+            lamb = (right_border - pos.x)/dir.x
+        else
+            lamb = (top_border - pos.y)/dir.y
+        end
+    elseif on_right and on_bottom then
+        if abs_dy >= abs_dx then
+            lamb = (right_border - pos.x)/dir.x
+        else
+            lamb = (bottom_border - pos.y)/dir.y
+        end
+    elseif on_left then
+        lamb = (left_border - pos.x)/dir.x
+    elseif on_right then
+        lamb = (right_border - pos.x)/dir.x
+    elseif on_top then
+        lamb = (top_border - pos.y)/dir.y
+    elseif on_bottom then
+        lamb = (bottom_border - pos.y)/dir.y
     end
-    if pos.y < win.y + margin then
-        center.y = win.y + margin
-    elseif pos.y > win.y + win.h - margin then
-        center.y = win.y + win.h - margin
+
+    if lamb then
+        print(on_left, on_right, on_top, on_bottom)
+        center.x = center.x + lamb*dir.x
+        center.y = center.y + lamb*dir.y
+    else
+        return
+        error("Enemy was spawned inside the game area")
     end
 
     st = st or "enemy_indicator" --subtype
