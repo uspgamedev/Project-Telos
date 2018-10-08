@@ -558,21 +558,21 @@ function level_functions.part_2()
     LM.start(level_functions.part_3)
 end
 
---3-3: Test
+--3-3: Multitasking
 function level_functions.part_3()
     local p
 
     CONTINUE = 3 --Setup continue variable to later continue from where you started
-    LM.level_part("Part 3 - Best level ever")
+    LM.level_part("Part 3 - Multitasking")
 
-    LM.wait(5.5)
+    --LM.wait(5.5)
 
     local x1, y1, w1, h1 = 20, 40, WINDOW_WIDTH/2 - 40, WINDOW_HEIGHT - 80
     local x2, y2, w2, h2 = WINDOW_WIDTH/2, 40, WINDOW_WIDTH/2 - 40,WINDOW_HEIGHT - 80
     local gm_idx = LM.createNewWindow(1, {x1, y1, w1, h1}, {x2, y2, w2, h2}, 4)
 
-    LM.wait(7)
-
+    LM.wait(5)--7
+    --[[
     F.single{enemy = SB, x = x1+w1/2, y = y1+h1+50, speed_m = .8, ind_side = 50, score_mul = 2, ind_duration = 3.5, game_win = 1, dy = -1}
     F.single{enemy = SB, x = x2+w2/2, y = y2+h2+50, speed_m = .8, ind_side = 50, score_mul = 2, ind_duration = 3.5, dy = -1, game_win = gm_idx}
 
@@ -586,7 +586,71 @@ function level_functions.part_3()
     F.fromVertical{enemy = {SB}, side = "top", mode = "distribute" , number = 5, ind_duration = 1.8, ind_side = 40, speed_m = 1, e_radius = 25, game_win = 1}
     F.fromVertical{enemy = {SB}, side = "bottom", mode = "distribute" , number = 5, ind_duration = 1.8, ind_side = 40, speed_m = 1, e_radius = 25, game_win = gm_idx}
     LM.wait("noenemies")
+    ]]--
+    local mod = 0
+    for i = 1, 48 do
+        --Spawn grey at right window
+        if i%4 == 0 then
+            F.fromVertical{enemy = {GrB}, side = "top", mode = "left" , number = 4, ind_duration = 1, ind_side = 40, speed_m = .2, e_radius = 20, game_win = gm_idx, enemy_x_margin = 110, screen_margin = 10}
+        elseif i%4 == 2 then
+            F.fromVertical{enemy = {GrB}, side = "top", mode = "left" , number = 4, ind_duration = 1, ind_side = 40, speed_m = .2, e_radius = 20, game_win = gm_idx, enemy_x_margin = 110, screen_margin = 50}
+        end
 
+        --Spawn formation on the left window
+        if i == 4 then
+            F.fromVertical{enemy = {SB}, side = "top", mode = "center" , number = 7, ind_duration = 1.8, ind_side = 40, speed_m = .8, e_radius = 25, game_win = 1}
+        elseif i == 6 then
+            F.fromVertical{enemy = {SB}, side = "bottom", mode = "center" , number = 7, ind_duration = 1.8, ind_side = 40, speed_m = .8, e_radius = 25, game_win = 1}
+        elseif i == 8 then
+            F.fromVertical{enemy = {SB}, side = "top", mode = "center" , number = 7, ind_duration = 1.8, ind_side = 40, speed_m = .8, e_radius = 25, game_win = 1}
+        elseif i == 10 then
+            F.fromVertical{enemy = {SB,DB}, side = "bottom", mode = "center" , number = 7, ind_duration = 1.8, ind_side = 40, speed_m = .8, e_radius = 25, game_win = 1}
+        elseif i == 12 then
+            F.fromVertical{enemy = {DB,SB}, side = "top", mode = "center" , number = 7, ind_duration = 1.8, ind_side = 40, speed_m = .8, e_radius = 25, game_win = 1}
+        elseif i == 14 then
+            F.fromVertical{enemy = {SB,SB}, side = "top", mode = "center" , number = 7, ind_duration = 1.8, ind_side = 40, speed_m = .7, e_radius = 25, game_win = 1}
+            F.fromVertical{enemy = {SB,SB}, side = "bottom", mode = "center" , number = 7, ind_duration = 1.8, ind_side = 40, speed_m = .7, e_radius = 25, game_win = 1}
+        elseif i == 16 then
+            F.fromVertical{enemy = {SB,SB}, side = "top", mode = "center" , number = 7, ind_duration = 1.8, ind_side = 40, speed_m = .7, e_radius = 25, game_win = 1}
+            F.fromVertical{enemy = {SB,SB}, side = "bottom", mode = "center" , number = 7, ind_duration = 1.8, ind_side = 40, speed_m = .7, e_radius = 25, game_win = 1}
+        elseif i == 18 then
+            F.fromVertical{enemy = {SB,SB}, side = "top", mode = "center" , number = 7, ind_duration = 1.8, ind_side = 40, speed_m = .7, e_radius = 25, game_win = 1}
+            F.fromVertical{enemy = {SB,SB}, side = "bottom", mode = "center" , number = 7, ind_duration = 1.8, ind_side = 40, speed_m = .7, e_radius = 25, game_win = 1}
+        elseif i == 20 then
+            mod = .2
+            F.fromHorizontal{enemy = {SB,GlB,SB}, side = "left", mode = "center" , number = 10, ind_duration = 2, ind_side = 40, speed_m = .5, e_radius = 25, game_win = 1}
+        elseif i == 23 then
+            F.fromHorizontal{enemy = {GlB,SB,SB}, side = "right", mode = "center" , number = 10, ind_duration = 2, ind_side = 40, speed_m = .5, e_radius = 25, game_win = 1}
+        elseif i == 26 then
+            F.fromHorizontal{enemy = {SB,SB,GlB}, side = "left", mode = "center" , number = 10, ind_duration = 2, ind_side = 40, speed_m = .5, e_radius = 25, game_win = 1}
+        elseif i == 29 then
+            F.fromHorizontal{enemy = {SB,GlB,SB}, side = "left", mode = "center" , number = 10, ind_duration = 2.5, ind_side = 40, speed_m = .4, e_radius = 25, game_win = 1}
+            F.fromHorizontal{enemy = {SB,GlB,SB}, side = "right", mode = "center" , number = 10, ind_duration = 2.5, ind_side = 40, speed_m = .4, e_radius = 25, game_win = 1}
+        elseif i == 32 then
+            F.fromHorizontal{enemy = {GlB,SB,SB}, side = "left", mode = "center" , number = 10, ind_duration = 2.5, ind_side = 40, speed_m = .4, e_radius = 25, game_win = 1}
+            F.fromHorizontal{enemy = {GlB,SB,SB}, side = "right", mode = "center" , number = 10, ind_duration = 2.5, ind_side = 40, speed_m = .4, e_radius = 25, game_win = 1}
+        elseif i == 35 then
+            F.fromHorizontal{enemy = {SB,SB,GlB}, side = "left", mode = "center" , number = 10, ind_duration = 2.5, ind_side = 40, speed_m = .4, e_radius = 25, game_win = 1}
+            F.fromHorizontal{enemy = {SB,SB,GlB}, side = "right", mode = "center" , number = 10, ind_duration = 2.5, ind_side = 40, speed_m = .4, e_radius = 25, game_win = 1}
+        elseif i == 38 then
+            F.fromVertical{enemy = {SB,SB,GlB,GlB}, side = "top", mode = "center" , number = 6, ind_duration = 2.5, ind_side = 40, speed_m = .4, e_radius = 25, game_win = 1}
+            F.fromVertical{enemy = {GlB,GlB,SB,SB}, side = "bottom", mode = "center" , number = 6, ind_duration = 2.5, ind_side = 40, speed_m = .4, e_radius = 25, game_win = 1}
+        elseif i == 42 then
+            F.fromVertical{enemy = {GlB,GlB,SB,SB}, side = "top", mode = "center" , number = 6, ind_duration = 2.5, ind_side = 40, speed_m = .4, e_radius = 25, game_win = 1}
+            F.fromVertical{enemy = {SB,SB,GlB,GlB}, side = "bottom", mode = "center" , number = 6, ind_duration = 2.5, ind_side = 40, speed_m = .4, e_radius = 25, game_win = 1}
+        elseif i == 47 then
+            F.fromHorizontal{enemy = {SB,GlB,SB}, side = "left", mode = "center" , number = 10, ind_duration = 2.5, ind_side = 40, speed_m = .3, e_radius = 25, game_win = 1}
+            F.fromHorizontal{enemy = {GlB,SB,SB}, side = "right", mode = "center" , number = 10, ind_duration = 2.5, ind_side = 40, speed_m = .3, e_radius = 25, game_win = 1}
+        end
+
+        LM.wait(1.5-mod)
+    end
+    LM.wait(2.5)
+    --Continue creating formations on the left until all right balls are gone
+    F.fromHorizontal{enemy = {SB,SB,GlB}, side = "left", mode = "center" , number = 10, ind_duration = 2.5, ind_side = 40, speed_m = .3, e_radius = 25, game_win = 1}
+    F.fromHorizontal{enemy = {SB,GlB,SB}, side = "right", mode = "center" , number = 10, ind_duration = 2.5, ind_side = 40, speed_m = .3, e_radius = 25, game_win = 1}
+
+    LM.wait("noenemies")
 
 
 end

@@ -491,7 +491,7 @@ function level_manager.createNewWindow(from_win_idx, from_win_attributes, new_wi
     local orig_x = old_win.x
     local orig_y = old_win.y
     local elastic_dur = 1.5
-    FX.shake(d, 1)
+    FX.shake(d-.1, 1)
     LEVEL_TIMER:during(d,
         function()
             WINM.setWinPos(new_idx,
