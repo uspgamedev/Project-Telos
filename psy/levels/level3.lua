@@ -186,7 +186,7 @@ function level_functions.part_2()
     LM.level_part("Part 2 - They came and then they left")
 
     LM.wait(3.5)
-    --[[
+
     F.snake{segments = 7, positions = {{w + 100,h/2},{-100,h/2}}, ind_duration = 3, speed_m = .6, e_radius = 25, ind_side = 50, e_life = 3}
 
     LM.wait("noenemies")
@@ -209,7 +209,7 @@ function level_functions.part_2()
     F.snake{segments = 10, positions = {{-100,h-200},{w-200,h-200},{w-200,-100}}, speed_m = 1.1, ind_side = 50, e_life = 2,e_radius = 30}
 
     LM.wait(6.5)
-    ]]--
+
     F.snake{segments = 27, positions = {{w/2,-100},{w/2,70},{w-70, 70},{w-70,h/2},{-100,h/2}}, speed_m = .8, ind_side = 70, e_life = 2,e_radius = 40, score_mul = 2}
     F.snake{segments = 27, positions = {{w+100,h/2},{w-70,h/2},{w-70, h-70},{70,h-70},{70,70},{w/2,70},{w/2,h+100}}, speed_m = .8, ind_side = 70, e_life = 2,e_radius = 40, score_mul = 2}
     F.snake{segments = 27, positions = {{w/2,h+100},{w/2,h-70},{70,h-70},{70,70},{w-70,70},{w-70,h-70},{70,h-70},{70,h/2},{w+100,h/2}}, speed_m = .8, ind_side = 70, e_life = 2,e_radius = 40, score_mul = 2}
@@ -565,26 +565,30 @@ function level_functions.part_3()
     CONTINUE = 3 --Setup continue variable to later continue from where you started
     LM.level_part("Part 3 - Best level ever")
 
-    LM.wait(5.5) --5.5
+    LM.wait(5.5)
 
-    LM.createNewWindow(1, {20,40,WINDOW_WIDTH/2 - 40,WINDOW_HEIGHT - 80},
-                          {WINDOW_WIDTH/2, 40, WINDOW_WIDTH/2 - 40,WINDOW_HEIGHT - 80},
-                          4)
-    LM.wait(6)
+    local x1, y1, w1, h1 = 20, 40, WINDOW_WIDTH/2 - 40, WINDOW_HEIGHT - 80
+    local x2, y2, w2, h2 = WINDOW_WIDTH/2, 40, WINDOW_WIDTH/2 - 40,WINDOW_HEIGHT - 80
+    local gm_idx = LM.createNewWindow(1, {x1, y1, w1, h1}, {x2, y2, w2, h2}, 4)
 
-    LM.createNewWindow(2, {WINDOW_WIDTH/2, 40, WINDOW_WIDTH/2 - 40,WINDOW_HEIGHT/2 - 50},
-                          {WINDOW_WIDTH/2, WINDOW_HEIGHT/2 + 10, WINDOW_WIDTH/2 - 40,WINDOW_HEIGHT/2 - 50},
-                        4)
     LM.wait(7)
 
-    LM.destroyWindow(3, 2, {WINDOW_WIDTH/2, 40, WINDOW_WIDTH/2 - 40,WINDOW_HEIGHT - 80}, 3)
-
-    LM.wait(5)
-
-    LM.destroyWindow(2, 1, {0, 0, WINDOW_WIDTH, WINDOW_HEIGHT}, 3)
+    F.single{enemy = SB, x = x1+w1/2, y = y1+h1+50, speed_m = .8, ind_side = 50, score_mul = 2, ind_duration = 3.5, game_win = 1, dy = -1}
+    F.single{enemy = SB, x = x2+w2/2, y = y2+h2+50, speed_m = .8, ind_side = 50, score_mul = 2, ind_duration = 3.5, dy = -1, game_win = gm_idx}
 
     LM.wait("noenemies")
-    LM.stop()
+    LM.wait(.5)
+
+    F.fromHorizontal{enemy = {SB}, side = "right", mode = "distribute" , number = 7, ind_duration = 1.8, ind_side = 40, speed_m = 1, e_radius = 25, game_win = 1}
+    LM.wait("noenemies")
+    F.fromHorizontal{enemy = {SB}, side = "left", mode = "distribute" , number = 7, ind_duration = 1.8, ind_side = 40, speed_m = 1, e_radius = 25, game_win = gm_idx}
+    LM.wait("noenemies")
+    F.fromVertical{enemy = {SB}, side = "top", mode = "distribute" , number = 5, ind_duration = 1.8, ind_side = 40, speed_m = 1, e_radius = 25, game_win = 1}
+    F.fromVertical{enemy = {SB}, side = "bottom", mode = "distribute" , number = 5, ind_duration = 1.8, ind_side = 40, speed_m = 1, e_radius = 25, game_win = gm_idx}
+    LM.wait("noenemies")
+
+
+
 end
 
 ---------------------
