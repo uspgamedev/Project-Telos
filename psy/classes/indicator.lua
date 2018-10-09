@@ -14,11 +14,11 @@ local indicator = {}
 local getPositions
 local getIndicatorPosition
 
-function getIndicatorPosition(pos,dir,win,margin)
-    local on_left = pos.x < win.x + margin
-    local on_right = pos.x > win.x + win.w - margin
-    local on_top = pos.y < win.y + margin
-    local on_bottom = pos.y > win.y + win.h - margin
+function getIndicatorPosition(pos,dir,radius,win,margin)
+    local on_left = pos.x + radius < win.x + margin
+    local on_right = pos.x - radius > win.x + win.w - margin
+    local on_top = pos.y + radius < win.y + margin
+    local on_bottom = pos.y - radius > win.y + win.h - margin
     --If enemy is inside window, just place the indicator there
     if on_left and on_right and on_top and on_bottom then
         return pos.x,pos.y
@@ -39,6 +39,7 @@ function getIndicatorPosition(pos,dir,win,margin)
         lamb_x["upper_limit"] = math.max(left,right)
     else
         if on_left or on_right then
+            print(pos.x, pos.y, dir.x, dir.y, win.x, win.y)
             error("Enemy will never hit game window (1)")
         end
     end
@@ -240,11 +241,11 @@ function indicator.create_enemy(enemy, pos, dir, following, side, speed_m, radiu
     side = side or 20
     margin = side/2 + 4
     color = enemy.indColor()
-
+    radius = radius or enemy.radius()
     local win = WINM.getWin(game_win_idx)
 
     --Put indicator center inside the screen
-    center.x, center.y = getIndicatorPosition(pos,dir,win,margin)
+    center.x, center.y = getIndicatorPosition(pos,dir,radius,win,margin)
 
     st = st or "enemy_indicator" --subtype
 

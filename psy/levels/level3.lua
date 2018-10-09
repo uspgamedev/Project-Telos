@@ -590,8 +590,7 @@ function level_functions.part_3()
     ]]--
 
     F.circle{radius = 640, number = 30, enemy = {SB}, ind_duration = 3, ind_side = 35, enemy_margin = 40, game_win = gm_idx, e_speed_m = .8}
-
-    LM.wait("noenemies")
+    
     LM.wait(5)
     for i = 1, 10 do
         F.fromVertical{enemy = {GrB}, side = "bottom", mode = "right" , number = 5, ind_duration = 2.7, ind_side = 50, speed_m = 1, e_radius = 23, game_win = 1}
