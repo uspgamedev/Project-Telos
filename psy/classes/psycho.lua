@@ -120,7 +120,7 @@ function Psy:draw()
 
 end
 
-function Psy:shoot(x,y)
+function Psy:shoot(x,y,gamepad)
     local p, bullet, dir, c, color_table, w, h, scale
     p = self
     if not p.can_shoot then return end
@@ -138,7 +138,10 @@ function Psy:shoot(x,y)
     }
     --Find out which window the position is, to get correct direction
     local game_win = WINM.winAtPoint(x,y)
-    if game_win then
+    if not gamepad and game_win then
+        dir = Vector(x-(p.pos.x+game_win.x), y-(p.pos.y+game_win.y))
+    elseif gamepad then
+        game_win = WINM.getWin(1)
         dir = Vector(x-(p.pos.x+game_win.x), y-(p.pos.y+game_win.y))
     else
         dir = Vector(x-p.pos.x, y-p.pos.y)
@@ -256,8 +259,9 @@ function Psy:update(dt)
           p.shoot_tick = p.shoot_tick + p.shoot_fps
           local v = Vector(Controls.getJoystickAxisValues(CURRENT_JOYSTICK, "raxis_horizontal", "raxis_vertical")):normalized()
           if v.x ~= 0 or v.y ~= 0 then --Check for deadzone case
-            local x, y = p.pos.x + v.x, p.pos.y + v.y
-            p:shoot(x, y)
+            local game_win = WINM.getWin(1)
+            local x, y = p.pos.x + game_win.x + v.x, p.pos.y + game_win.y + v.y
+            p:shoot(x, y, true)
           end
       end
     end
