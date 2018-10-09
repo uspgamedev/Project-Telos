@@ -64,7 +64,7 @@ function state:enter(last_gs, go_to_level, go_to_part)
     if go_to_part then
       Level.start(level[go_to_part]) --Start desired part
     else
-      Level.start(level.part_1) --Start first part of level
+      Level.start(level.part_3) --Start first part of level
     end
 
 end

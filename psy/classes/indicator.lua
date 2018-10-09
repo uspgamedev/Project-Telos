@@ -1,7 +1,7 @@
 require "classes.primitive"
 local Color = require "classes.color.color"
 local Util = require "util"
-local Aim_Functions = require "classes.psycho_aim"
+local Aim_Functions = require "classes.indicator_aim"
 --INDICATOR CLASS--
 --[[Indicates when something is about to happen]]--
 
@@ -57,6 +57,10 @@ function getIndicatorPosition(pos,dir,radius,win,margin)
     if lamb_x and lamb_y then
         if lamb_x.lower_limit > lamb_y.upper_limit or
            lamb_x.upper_limit < lamb_y.lower_limit then
+               print(lamb_x.lower_limit, lamb_x.upper_limit)
+               print(lamb_y.lower_limit, lamb_y.upper_limit)
+               print(pos.x, pos.y, dir.x, dir.y)
+               print(win.w, win.h)
                error("Enemy will never hit game window (3)")
         end
         lamb = math.max(lamb_x.lower_limit,lamb_y.lower_limit)
@@ -215,8 +219,8 @@ function Enemy_Indicator:update(dt)
     if not i.follow_psycho or not p then return end
 
     local win = WINM.getWin(self.game_win_idx)
-    dir = Vector(p.pos.x + win.x - i.center.x, p.pos.y + win.y - i.center.y)
-
+    dir = Vector(p.pos.x + win.x - i.enemy_pos.x, p.pos.y + win.y - i.enemy_pos.y)
+    i.center.x, i.center.y = getIndicatorPosition(i.enemy_pos, dir, i.enemy_radius, win, i.win_margin)
     i.p1, i.p2, i.p3 = getPositions(i.center, dir, i.side)
 
 end
@@ -225,7 +229,7 @@ end
 function Enemy_Indicator:create_aim()
     local aim, h1, h2
 
-    aim, h1, h2 = Aim_Functions.create_indicator(self.center.x, self.center.y, Color.red(), self.game_win_idx)
+    aim, h1, h2 = Aim_Functions.create_indicator(self, Color.red(), self.game_win_idx)
     table.insert(self.handles, h1)
     table.insert(self.handles, h2)
 
@@ -264,6 +268,7 @@ function indicator.create_enemy(enemy, pos, dir, following, side, speed_m, radiu
     i.enemy_radius = radius
     i.enemy_score_mul = score_mul
     i.enemy_game_win_idx = game_win_idx
+    i.win_margin = margin
     i.enemy = enemy
 
     return i
