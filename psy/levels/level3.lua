@@ -565,15 +565,14 @@ function level_functions.part_3()
     CONTINUE = 3 --Setup continue variable to later continue from where you started
     LM.level_part("Part 3 - Multitasking")
 
-    --LM.wait(5.5)
+    LM.wait(5.5)
 
     local x1, y1, w1, h1 = 20, 40, WINDOW_WIDTH/2 - 40, WINDOW_HEIGHT - 80
     local x2, y2, w2, h2 = WINDOW_WIDTH/2, 40, WINDOW_WIDTH/2 - 40,WINDOW_HEIGHT - 80
     local gm_idx = LM.createNewWindow(1, {x1, y1, w1, h1}, {x2, y2, w2, h2}, 4)
 
-    LM.wait(5)--7
+    LM.wait(7)
 
-    --[[
     F.single{enemy = SB, x = x1+w1/2, y = y1+h1+50, speed_m = .8, ind_side = 50, score_mul = 2, ind_duration = 3.5, game_win = 1, dy = -1}
     F.single{enemy = SB, x = x2+w2/2, y = y2+h2+50, speed_m = .8, ind_side = 50, score_mul = 2, ind_duration = 3.5, dy = -1, game_win = gm_idx}
 
@@ -587,36 +586,80 @@ function level_functions.part_3()
     F.fromVertical{enemy = {SB}, side = "top", mode = "distribute" , number = 5, ind_duration = 1.8, ind_side = 40, speed_m = 1, e_radius = 25, game_win = 1}
     F.fromVertical{enemy = {SB}, side = "bottom", mode = "distribute" , number = 5, ind_duration = 1.8, ind_side = 40, speed_m = 1, e_radius = 25, game_win = gm_idx}
     LM.wait("noenemies")
-    ]]--
 
-    F.circle{radius = 640, number = 30, enemy = {SB}, ind_duration = 3, ind_side = 35, enemy_margin = 40, game_win = gm_idx, e_speed_m = .8}
-    
+    F.circle{radius = 640, number = 32, enemy = {SB}, ind_duration = 3, ind_side = 40, enemy_margin = 40, game_win = gm_idx, speed_m = .8}
+
     LM.wait(5)
-    for i = 1, 10 do
-        F.fromVertical{enemy = {GrB}, side = "bottom", mode = "right" , number = 5, ind_duration = 2.7, ind_side = 50, speed_m = 1, e_radius = 23, game_win = 1}
-        if i == 10 then
-            F.circle{radius = 640, number = 50, enemy = {SB}, ind_mode = false, enemy_margin = 40, game_win = gm_idx}
+    for i = 1, 11 do
+        F.fromHorizontal{enemy = {GrB}, side = "right", mode = "center" , number = 4, ind_duration = 2.7, ind_side = 50, speed_m = 1, e_radius = 23, game_win = 1}
+        if i == 11 then
+            F.circle{radius = 640, number = 40, enemy = {SB}, enemy_margin = 40, game_win = gm_idx, speed_m = .8, ind_mode = false}
         end
         LM.wait(.4)
     end
     LM.wait(3)
-    for i = 1, 10 do
-        F.fromVertical{enemy = {GrB}, side = "bottom", mode = "left" , number = 5, ind_duration = 2.7, ind_side = 50, speed_m = 1, e_radius = 23, game_win = 1}
-        if i == 10 then
-            F.circle{radius = 640, number = 50, enemy = {SB}, ind_mode = false, enemy_margin = 40, game_win = gm_idx}
+    for i = 1, 11 do
+        F.fromHorizontal{enemy = {GrB}, side = "right", mode = "top" , number = 4, ind_duration = 2.7, ind_side = 50, speed_m = 1, e_radius = 23, game_win = 1}
+        F.fromHorizontal{enemy = {GrB}, side = "right", mode = "bottom" , number = 4, ind_duration = 2.7, ind_side = 50, speed_m = 1, e_radius = 23, game_win = 1}
+        if i == 11 then
+            F.circle{radius = 640, number = 40, enemy = {SB}, enemy_margin = 40, game_win = gm_idx, speed_m = .8, ind_mode = false}
         end
         LM.wait(.4)
     end
     LM.wait(3)
-    for i = 1, 10 do
-        F.fromHorizontal{enemy = {GrB}, side = "right", mode = "center" , number = 5, ind_duration = 2.7, ind_side = 50, speed_m = 1, e_radius = 23, game_win = 1}
-        if i == 10 then
-            F.circle{radius = 640, number = 50, enemy = {SB}, ind_mode = false, enemy_margin = 40, game_win = gm_idx}
+    for i = 1, 11 do
+        F.fromVertical{enemy = {GrB}, side = "bottom", mode = "right" , number = 4, ind_duration = 2.7, ind_side = 50, speed_m = 1, e_radius = 23, game_win = 1}
+        if i == 11 then
+            F.circle{radius = 640, number = 40, enemy = {SB}, enemy_margin = 40, game_win = gm_idx, speed_m = .8, ind_mode = false}
         end
         LM.wait(.4)
     end
+    LM.wait(3)
+    for i = 1, 11 do
+        F.fromVertical{enemy = {GrB}, side = "bottom", mode = "left" , number = 4, ind_duration = 2.7, ind_side = 50, speed_m = 1, e_radius = 23, game_win = 1}
+        if i == 11 then
+            F.circle{radius = 640, number = 40, enemy = {SB}, enemy_margin = 40, game_win = gm_idx, speed_m = .8, ind_mode = false}
+        end
+        LM.wait(.4)
+    end
+    LM.wait(3)
+    for i = 1, 11 do
+        F.fromHorizontal{enemy = {GrB}, side = "right", mode = "top" , number = 5, ind_duration = 2.7, ind_side = 50, speed_m = 1, e_radius = 23, game_win = 1}
+        F.fromHorizontal{enemy = {GrB}, side = "right", mode = "bottom" , number = 5, ind_duration = 2.7, ind_side = 50, speed_m = 1, e_radius = 23, game_win = 1}
+        if i == 11 then
+            F.circle{radius = 640, number = 40, enemy = {SB}, enemy_margin = 40, game_win = gm_idx, speed_m = .8, ind_mode = false}
+        end
+        LM.wait(.4)
+    end
+    LM.wait(3)
+    for i = 1, 11 do
+        F.fromHorizontal{enemy = {GrB}, side = "right", mode = "center" , number = 7, ind_duration = 2.7, ind_side = 50, speed_m = 1, e_radius = 23, game_win = 1}
+        if i == 11 then
+            F.circle{radius = 640, number = 40, enemy = {SB}, enemy_margin = 40, game_win = gm_idx, speed_m = .8, ind_mode = false}
+        end
+        LM.wait(.4)
+    end
+    LM.wait(3)
+    for i = 1, 11 do
+        F.fromVertical{enemy = {GrB}, side = "bottom", mode = "left" , number = 6, ind_duration = 2.7, ind_side = 50, speed_m = 1, e_radius = 23, game_win = 1}
+        if i == 11 then
+            F.circle{radius = 640, number = 40, enemy = {SB}, enemy_margin = 40, game_win = gm_idx, speed_m = .8, ind_mode = false}
+        end
+        LM.wait(.4)
+    end
+    LM.wait(3)
+    for i = 1, 11 do
+        F.fromVertical{enemy = {GrB}, side = "bottom", mode = "right" , number = 6, ind_duration = 2.7, ind_side = 50, speed_m = 1, e_radius = 23, game_win = 1}
+        if i == 11 then
+            F.circle{radius = 640, number = 110, enemy = {SB}, enemy_margin = 40, game_win = gm_idx, speed_m = .8, ind_mode = false}
+        end
+        LM.wait(.4)
+    end
+    LM.wait(5)
+    F.circle{radius = 640, number = 10, enemy = {GrB}, enemy_margin = 0, game_win = 1, speed_m = .3, ind_duration = 3, ind_side = 40, e_radius = 18, y_center = y1 + h1/3}
+    F.circle{radius = 640, number = 10, enemy = {GrB}, enemy_margin = 0, game_win = 1, speed_m = .3, ind_duration = 3, ind_side = 40, e_radius = 18, y_center = y1 + 2*h1/3}
 
-
+    LM.wait("noenemies")
 
     local mod = 0
     for i = 1, 48 do
