@@ -11,6 +11,75 @@ local indicator = {}
 --Useful Functions--
 --------------------
 
+local getPositions
+local getIndicatorPosition
+
+function getIndicatorPosition(pos,dir,win,margin)
+    local on_left = pos.x < win.x + margin
+    local on_right = pos.x > win.x + win.w - margin
+    local on_top = pos.y < win.y + margin
+    local on_bottom = pos.y > win.y + win.h - margin
+    --If enemy is inside window, just place the indicator there
+    if on_left and on_right and on_top and on_bottom then
+        return pos.x,pos.y
+    end
+    local left_border = win.x + margin
+    local right_border =  win.x + win.w - margin
+    local top_border = win.y + margin
+    local bottom_border = win.y + win.h - margin
+    local lamb_x  --Range of valid lambidas for horizontal axis
+    local lamb_y  --Range of valid lambidas for vertical axis
+    local lamb --Final lambida value
+    assert(dir.x ~= 0 or dir.y ~= 0, "Enemy spawned with null direction")
+    if dir.x ~= 0 then
+        lamb_x = {}
+        local left = (left_border - pos.x)/dir.x
+        local right = (right_border - pos.x)/dir.x
+        lamb_x["lower_limit"] = math.min(left,right)
+        lamb_x["upper_limit"] = math.max(left,right)
+    else
+        if on_left or on_right then
+            error("Enemy will never hit game window (1)")
+        end
+    end
+    if dir.y ~= 0 then
+        lamb_y = {}
+        local top = (top_border - pos.y)/dir.y
+        local bot = (bottom_border - pos.y)/dir.y
+        lamb_y["lower_limit"] = math.min(top,bot)
+        lamb_y["upper_limit"] = math.max(top,bot)
+    else
+        if on_top or on_bottom then
+            error("Enemy will never hit game window (2)")
+        end
+    end
+    if lamb_x and lamb_y then
+        if lamb_x.lower_limit > lamb_y.upper_limit or
+           lamb_x.upper_limit < lamb_y.lower_limit then
+               error("Enemy will never hit game window (3)")
+        end
+        lamb = math.max(lamb_x.lower_limit,lamb_y.lower_limit)
+    --Only horizontal direction
+    elseif lamb_x then
+        if on_left then
+            lamb = lamb_x.lower_limit
+        elseif on_right then
+            lamb = lamb_x.upper_limit
+        else
+            error("shouldn't happen (1)")
+        end
+    elseif lamb_y then
+        if on_top then
+            lamb = lamb_y.lower_limit
+        elseif on_bottom then
+            lamb = lamb_y.upper_limit
+        else
+            error("shouldn't happen (2)")
+        end
+    end
+    return pos.x + lamb*dir.x, pos.y + lamb*dir.y
+end
+
 --Get the center, direction to face and side length of a triangle. Return all vertex positions
 function getPositions(center, dir, side)
     local p1, p2, p3, ndir
@@ -171,7 +240,7 @@ end
 function indicator.create_enemy(enemy, pos, dir, following, side, speed_m, radius, score_mul, game_win_idx, st)
     local i, center, margin, handle, color
 
-    center = Vector(pos.x, pos.y)
+    center = Vector(0,0)
     side = side or 20
     margin = side/2 + 4
     color = enemy.indColor()
@@ -179,60 +248,7 @@ function indicator.create_enemy(enemy, pos, dir, following, side, speed_m, radiu
     local win = WINM.getWin(game_win_idx)
 
     --Put indicator center inside the screen
-    local on_left = pos.x < win.x + margin
-    local on_right = pos.x > win.x + win.w - margin
-    local on_top = pos.y < win.y + margin
-    local on_bottom = pos.y > win.y + win.h - margin
-    local left_border = win.x + margin
-    local right_border =  win.x + win.w - margin
-    local top_border = win.y + margin
-    local bottom_border = win.y + win.h - margin
-    local target_border = nil --Determine which border the enemy will hit
-    local abs_dx = math.abs(dir.x)
-    local abs_dy = math.abs(dir.y)
-    local lamb
-    if on_left and on_top then
-        if abs_dy >= abs_dx then
-            lamb = (left_border - pos.x)/dir.x
-        else
-            lamb = (top_border - pos.y)/dir.y
-        end
-    elseif on_left and on_bottom then
-        if abs_dy >= abs_dx then
-            lamb = (left_border - pos.x)/dir.x
-        else
-            lamb = (bottom_border - pos.y)/dir.y
-        end
-    elseif on_right and on_top then
-        if abs_dy >= abs_dx then
-            lamb = (right_border - pos.x)/dir.x
-        else
-            lamb = (top_border - pos.y)/dir.y
-        end
-    elseif on_right and on_bottom then
-        if abs_dy >= abs_dx then
-            lamb = (right_border - pos.x)/dir.x
-        else
-            lamb = (bottom_border - pos.y)/dir.y
-        end
-    elseif on_left then
-        lamb = (left_border - pos.x)/dir.x
-    elseif on_right then
-        lamb = (right_border - pos.x)/dir.x
-    elseif on_top then
-        lamb = (top_border - pos.y)/dir.y
-    elseif on_bottom then
-        lamb = (bottom_border - pos.y)/dir.y
-    end
-
-    if lamb then
-        print(on_left, on_right, on_top, on_bottom)
-        center.x = center.x + lamb*dir.x
-        center.y = center.y + lamb*dir.y
-    else
-        return
-        error("Enemy was spawned inside the game area")
-    end
+    center.x, center.y = getIndicatorPosition(pos,dir,win,margin)
 
     st = st or "enemy_indicator" --subtype
 

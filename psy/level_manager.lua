@@ -48,7 +48,9 @@ function level_manager.resume()
 
     --Get yield argument
     status, arg = coroutine.resume(COROUTINE)
-
+    if not status then
+        error("Got an error in corotine: " .. arg)
+    end
     --Resumes coroutine only when there aren't any enemies on screen
     if arg == "noenemies" then
         --Checks every .02 seconds how many enemies there are
