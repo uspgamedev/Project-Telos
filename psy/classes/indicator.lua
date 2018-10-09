@@ -61,18 +61,14 @@ function getIndicatorPosition(pos,dir,win,margin)
         lamb = math.max(lamb_x.lower_limit,lamb_y.lower_limit)
     --Only horizontal direction
     elseif lamb_x then
-        if on_left then
+        if on_left or on_right then
             lamb = lamb_x.lower_limit
-        elseif on_right then
-            lamb = lamb_x.upper_limit
         else
             error("shouldn't happen (1)")
         end
     elseif lamb_y then
-        if on_top then
+        if on_top or on_bottom then
             lamb = lamb_y.lower_limit
-        elseif on_bottom then
-            lamb = lamb_y.upper_limit
         else
             error("shouldn't happen (2)")
         end
