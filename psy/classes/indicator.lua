@@ -273,27 +273,20 @@ end
 function indicator.create_enemy_turret(turret, pos, speed_m, e_speed_m, radius, score_mul, enemy, target_pos, duration, life, number, start_angle, rot_angle, fps, side, ind_duration, game_win_idx, st)
     local i, center, margin, handle, color
 
-    center = Vector(pos.x, pos.y)
+    center = Vector(0, 0)
     side = side or 20
     margin = side/2 + 1
     color = turret.indColor()
+    radius = radius or turret.radius()
+    local dir = Vector(target_pos.x - pos.x, target_pos.y - pos.y)
 
     local win = WINM.getWin(game_win_idx)
     --Put indicator center inside the screen
-    if pos.x < win.x + margin then
-        center.x = win.x + margin
-    elseif pos.x > win.x + win.w - margin then
-        center.x = win.x + win.w - margin
-    end
-    if pos.y < win.y + margin then
-        center.y = win.y + margin
-    elseif pos.y > win.y + win.h - margin then
-        center.y = win.y + win.h - margin
-    end
+    center.x, center.y = getIndicatorPosition(pos,dir,radius,win,margin)
 
     st = st or "enemy_indicator" --subtype
 
-    i = Enemy_Indicator(center, Vector(target_pos.x - pos.x, target_pos.y - pos.y), side, color, false, game_win_idx)
+    i = Enemy_Indicator(center, dir, side, color, false, game_win_idx)
 
     i:addElement(DRAW_TABLE.L5, st)
 
@@ -317,27 +310,21 @@ end
 function indicator.create_enemy_snake(snake, segments, pos, life, speed_m, radius, score_mul, side, ind_duration, game_win_idx, st, id)
     local i, center, margin, handle, color
 
-    center = Vector(pos[1][1], pos[1][2])
+    center = Vector(0, 0)
     side = side or 20
     margin = side/2 + 1
     color = snake.indColor()
+    radius = radius or snake.radius()
+    local head_pos = Vector(pos[1][1],pos[1][2])
+    local dir = Vector(pos[2][1] - pos[1][1], pos[2][2] - pos[1][2])
 
     local win = WINM.getWin(game_win_idx)
     --Put indicator center inside the screen
-    if pos[1][1] < win.x + margin then
-        center.x = win.x + margin
-    elseif pos[1][1] > win.x + win.w - margin then
-        center.x = win.x + win.w - margin
-    end
-    if pos[1][2] < win.y + margin then
-        center.y = win.y + margin
-    elseif pos[1][2] > win.y + win.h - margin then
-        center.y = win.y + win.h - margin
-    end
+    center.x, center.y = getIndicatorPosition(head_pos,dir,radius,win,margin)
 
     st = st or "enemy_indicator" --subtype
 
-    i = Enemy_Indicator(center, Vector(pos[2][1] - pos[1][1], pos[2][2] - pos[1][2]), side, color, false, game_win_idx)
+    i = Enemy_Indicator(center, dir, side, color, false, game_win_idx)
 
     i:addElement(DRAW_TABLE.L5, st)
 
