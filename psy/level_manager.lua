@@ -494,7 +494,7 @@ function level_manager.createNewWindow(from_win_idx, from_win_attributes, new_wi
     local orig_y = old_win.y
     local elastic_dur = 1.5
     FX.shake(d-.1, 1)
-    LEVEL_TIMER:during(d,
+    table.insert(WINM_HANDLES, LEVEL_TIMER:during(d,
         function()
             WINM.setWinPos(new_idx,
                            orig_x + love.math.random(-str,str),
@@ -509,7 +509,12 @@ function level_manager.createNewWindow(from_win_idx, from_win_attributes, new_wi
             --Blink screen
             FX.blink_screen(.1, .1)
 
-            LEVEL_TIMER:after(elastic_dur/5, function() FX.shake(.1, 6) end)
+            table.insert(WINM_HANDLES, LEVEL_TIMER:after(elastic_dur/5,
+                            function()
+                                FX.shake(.1, 6)
+                            end
+                        )
+            )
             WINM.tweenWin(new_idx, new_att[1], new_att[2], new_att[3], new_att[4],
                           "out-elastic", elastic_dur,
                           function()
@@ -524,7 +529,7 @@ function level_manager.createNewWindow(from_win_idx, from_win_attributes, new_wi
                               WINM.setWinSize(from_win_idx, from_att[3], from_att[4])
                           end)
         end
-    )
+    ))
 
     return new_idx
 end
@@ -552,7 +557,7 @@ function level_manager.destroyWindow(destroyed_win_idx, combined_win_idx, new_at
     local com_orig_y = com_win.y
     --Shake the screen for a while, and make both screens tweak
     FX.shake(dur, 2)
-    LEVEL_TIMER:during(dur,
+    table.insert(WINM_HANDLES, LEVEL_TIMER:during(dur,
         function()
             WINM.setWinPos(destroyed_win_idx,
                            des_orig_x + love.math.random(-str,str),
@@ -590,7 +595,7 @@ function level_manager.destroyWindow(destroyed_win_idx, combined_win_idx, new_at
                         end
             )
         end
-    )
+    ))
 end
 
 --Return functions

@@ -124,6 +124,7 @@ function state:update(dt)
     elseif SWITCH == "MENU" then
         SWITCH = nil
         Util.clearTimerTable(DEATH_HANDLES, FX_TIMER)
+        Util.clearTimerTable(WINM_HANDLES, LEVEL_TIMER)
         CAM.rot = 0 --Reset camera rotation
         CAM.scale = 1 --Reset camera zoom
 

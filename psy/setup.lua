@@ -123,6 +123,9 @@ function setup.config()
     --Contains the death timer handles
     DEATH_HANDLES = {}
 
+    --Contains the game window handles
+    WINM_HANDLES = {}
+
     --WINDOW CONFIG--
     love.window.setMode(WINDOW_WIDTH, WINDOW_HEIGHT, {resizable = true, minwidth = 800, minheight = 600})
     ResManager.init()

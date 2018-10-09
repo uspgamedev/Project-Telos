@@ -94,7 +94,9 @@ function funcs.tweenWin(idx, x, y, w, h, tween_func, d, func)
     local win = GAME_WINDOWS[idx]
     assert(win ~= nil)
     func = func or function() return end
-    return LEVEL_TIMER:tween(d, win, {x = x, y = y, w = w, h = h}, tween_func, func)
+    local h = LEVEL_TIMER:tween(d, win, {x = x, y = y, w = w, h = h}, tween_func, func)
+    table.insert(WINM_HANDLES, h)
+    return h
 end
 
 return funcs
