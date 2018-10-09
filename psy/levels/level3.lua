@@ -572,6 +572,7 @@ function level_functions.part_3()
     local gm_idx = LM.createNewWindow(1, {x1, y1, w1, h1}, {x2, y2, w2, h2}, 4)
 
     LM.wait(5)--7
+    
     --[[
     F.single{enemy = SB, x = x1+w1/2, y = y1+h1+50, speed_m = .8, ind_side = 50, score_mul = 2, ind_duration = 3.5, game_win = 1, dy = -1}
     F.single{enemy = SB, x = x2+w2/2, y = y2+h2+50, speed_m = .8, ind_side = 50, score_mul = 2, ind_duration = 3.5, dy = -1, game_win = gm_idx}

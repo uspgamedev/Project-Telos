@@ -82,6 +82,13 @@ function funcs.setWinPos(idx, x, y)
     win.y = y
 end
 
+function funcs.setWinSize(idx, w, h)
+    local win = GAME_WINDOWS[idx]
+    assert(win ~= nil)
+    win.w = w
+    win.h = h
+end
+
 --Tween all attributes of a given window to given values
 function funcs.tweenWin(idx, x, y, w, h, tween_func, d, func)
     local win = GAME_WINDOWS[idx]

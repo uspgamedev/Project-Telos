@@ -509,9 +509,18 @@ function level_manager.createNewWindow(from_win_idx, from_win_attributes, new_wi
 
             LEVEL_TIMER:after(elastic_dur/5, function() FX.shake(.1, 6) end)
             WINM.tweenWin(new_idx, new_att[1], new_att[2], new_att[3], new_att[4],
-                          "out-elastic", elastic_dur)
+                          "out-elastic", elastic_dur,
+                          function()
+                              WINM.setWinPos(new_idx, new_att[1], new_att[2])
+                              WINM.setWinSize(new_idx, new_att[3], new_att[4])
+                          end
+            )
             WINM.tweenWin(from_win_idx, from_att[1], from_att[2], from_att[3], from_att[4],
-                          "out-elastic", elastic_dur)
+                          "out-elastic", elastic_dur,
+                          function()
+                              WINM.setWinPos(from_win_idx, from_att[1], from_att[2])
+                              WINM.setWinSize(from_win_idx, from_att[3], from_att[4])
+                          end)
         end
     )
 
@@ -562,15 +571,22 @@ function level_manager.destroyWindow(destroyed_win_idx, combined_win_idx, new_at
                           des_win.w, des_win.h, "in-quad", combine_dur,
                           function()
                               WINM.setWinStatus(destroyed_win_idx, false)
-                          end)
+                          end
+            )
             WINM.tweenWin(combined_win_idx, halfway_pos.x, halfway_pos.y,
                         com_win.w, com_win.h, "in-quad", combine_dur,
                         function()
                             FX.blink_screen(.1, .2)
                             FX.shake(.15, 6)
                             WINM.tweenWin(combined_win_idx, new_att[1], new_att[2], new_att[3], new_att[4],
-                                          "out-elastic", 1)
-                        end)
+                                          "out-elastic", 1,
+                                          function()
+                                              WINM.setWinPos(combined_win_idx, new_att[1], new_att[2])
+                                              WINM.setWinSize(combined_win_idx, new_att[3], new_att[4])
+                                          end
+                            )
+                        end
+            )
         end
     )
 end
