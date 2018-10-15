@@ -583,8 +583,50 @@ function level_functions.part_3()
     LM.wait("noenemies")
     F.fromHorizontal{enemy = {SB}, side = "left", mode = "distribute" , number = 7, ind_duration = 1.8, ind_side = 40, speed_m = 1, e_radius = 25, game_win = gm_idx}
     LM.wait("noenemies")
-    F.fromVertical{enemy = {SB}, side = "top", mode = "distribute" , number = 5, ind_duration = 1.8, ind_side = 40, speed_m = 1, e_radius = 25, game_win = 1}
-    F.fromVertical{enemy = {SB}, side = "bottom", mode = "distribute" , number = 5, ind_duration = 1.8, ind_side = 40, speed_m = 1, e_radius = 25, game_win = gm_idx}
+    F.fromVertical{enemy = {SB}, side = "bottom", mode = "distribute" , number = 5, ind_duration = 1.8, ind_side = 40, speed_m = 1, e_radius = 25, game_win = 1}
+    LM.wait("noenemies")
+    F.fromVertical{enemy = {SB}, side = "top", mode = "distribute" , number = 5, ind_duration = 1.8, ind_side = 40, speed_m = 1, e_radius = 25, game_win = gm_idx}
+    LM.wait("noenemies")
+    F.fromVertical{enemy = {SB}, side = "top", mode = "distribute" , number = 5, ind_duration = 1.8, ind_side = 40, speed_m = .9, e_radius = 25, game_win = 1}
+    F.fromVertical{enemy = {SB}, side = "bottom", mode = "distribute" , number = 5, ind_duration = 1.8, ind_side = 40, speed_m = .9, e_radius = 25, game_win = gm_idx}
+    LM.wait("noenemies")
+    F.fromHorizontal{enemy = {SB}, side = "right", mode = "distribute" , number = 7, ind_duration = 1.8, ind_side = 40, speed_m = .8, e_radius = 25, game_win = 1}
+    F.fromHorizontal{enemy = {SB}, side = "left", mode = "distribute" , number = 7, ind_duration = 1.8, ind_side = 40, speed_m = .8, e_radius = 25, game_win = gm_idx}
+    LM.wait("noenemies")
+    for i = 1, 8 do
+        if i <= 4 then
+            F.fromVertical{enemy = {DB}, side = "top", mode = "distribute" , number = 5, ind_duration = .8, ind_side = 40, speed_m = .35, e_radius = 25, game_win = 1}
+        end
+        if i > 4 then
+            F.fromVertical{enemy = {DB}, side = "bottom", mode = "distribute" , number = 5, ind_duration = .8, ind_side = 40, speed_m = .35, e_radius = 25, game_win = gm_idx}
+        end
+        LM.wait(.8)
+    end
+    LM.wait("noenemies")
+    for i = 1, 4 do
+        if i <= 2 then
+            F.fromHorizontal{enemy = {DB}, side = "left", mode = "distribute" , number = 8, ind_duration = .8, ind_side = 40, speed_m = .35, e_radius = 25, game_win = 1}
+        end
+        if i > 2 then
+            F.fromHorizontal{enemy = {DB}, side = "right", mode = "distribute" , number = 8, ind_duration = .8, ind_side = 40, speed_m = .35, e_radius = 25, game_win = gm_idx}
+        end
+        LM.wait(.8)
+    end
+    LM.wait("noenemies")
+
+    --Circles at both windows, increasing variation
+    F.circle{radius = 640, number = 15, enemy = {SB}, ind_duration = 1.5, ind_side = 40, game_win = gm_idx, speed_m = .45}
+    F.circle{radius = 640, number = 15, enemy = {SB}, ind_duration = 1.5, ind_side = 40, game_win = 1, speed_m = .45}
+    LM.wait("noenemies")
+    F.circle{radius = 640, number = 15, enemy = {SB,SB,GrB}, ind_duration = 1.5, ind_side = 40, game_win = gm_idx, speed_m = .45}
+    F.circle{radius = 640, number = 15, enemy = {SB}, ind_duration = 1.5, ind_side = 40, game_win = 1, speed_m = .45}
+    LM.wait("noenemies")
+    F.circle{radius = 640, number = 15, enemy = {SB}, ind_duration = 1.5, ind_side = 40, game_win = gm_idx, speed_m = .45}
+    F.circle{radius = 640, number = 15, enemy = {SB,GrB,SB}, ind_duration = 1.5, ind_side = 40, game_win = 1, speed_m = .45}
+    LM.wait("noenemies")
+    F.circle{radius = 640, number = 15, enemy = {SB,GrB,SB}, ind_duration = 1.5, ind_side = 40, game_win = gm_idx, speed_m = .45}
+    F.circle{radius = 640, number = 15, enemy = {SB,SB,GrB}, ind_duration = 1.5, ind_side = 40, game_win = 1, speed_m = .45}
+
     LM.wait("noenemies")
 
     F.circle{radius = 640, number = 32, enemy = {SB}, ind_duration = 3, ind_side = 40, enemy_margin = 40, game_win = gm_idx, speed_m = .8}
