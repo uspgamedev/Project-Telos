@@ -187,8 +187,6 @@ function UltrablastCounter:psychoShot(used_ultra)
     LEVEL_TIMER:cancel(self.level_handles["shake_animation"])
   end
 
-  if self.charge_bar_value <= 0 then return end
-
   --Start animation
   local d = .05
   self.charge_bar_offset.x, self.charge_bar_offset.y = -love.math.random(1,2), -love.math.random(1,2)
