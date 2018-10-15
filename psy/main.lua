@@ -187,3 +187,67 @@ end
 --Used for debugging
 function love.update()
 end
+
+function love.run()
+
+	if love.math then
+		love.math.setRandomSeed(os.time())
+	end
+
+	if love.load then love.load(arg) end
+
+	-- We don't want the first frame's dt to include time taken by love.load.
+	if love.timer then love.timer.step() end
+
+	local dt = 0
+
+	-- Main loop time.
+    local clock, dt_clock
+    local _dt_limit = .02
+	while true do
+        clock = love.timer.getTime()
+		-- Process events.
+		if love.event then
+			love.event.pump()
+			for name, a,b,c,d,e,f in love.event.poll() do
+				if name == "quit" then
+					if not love.quit or not love.quit() then
+						return a
+					end
+				end
+				love.handlers[name](a,b,c,d,e,f)
+			end
+		end
+        dt_clock = love.timer.getTime() - clock
+        if dt_clock > _dt_limit then print("love.event", dt_clock) end
+
+		-- Update dt, as we'll be passing it to update
+        clock = love.timer.getTime()
+		if love.timer then
+			love.timer.step()
+			dt = love.timer.getDelta()
+		end
+        dt_clock = love.timer.getTime() - clock
+        if dt_clock > _dt_limit then print("update dt", dt_clock) end
+
+		-- Call update and draw
+        clock = love.timer.getTime()
+		if love.update then love.update(dt) end -- will pass 0 if love.timer is disabled
+        dt_clock = love.timer.getTime() - clock
+        if dt_clock > _dt_limit then print("love.update", dt_clock) end
+
+        clock = love.timer.getTime()
+		if love.graphics and love.graphics.isActive() then
+			love.graphics.clear(love.graphics.getBackgroundColor())
+			love.graphics.origin()
+			if love.draw then love.draw() end
+			love.graphics.present()
+		end
+        dt_clock = love.timer.getTime() - clock
+        if dt_clock > .04 then print("love.draw", dt_clock, " using .04 limit") end
+        clock = love.timer.getTime()
+
+		if love.timer then love.timer.sleep(0.001) end
+	end
+
+end

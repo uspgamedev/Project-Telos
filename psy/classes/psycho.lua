@@ -121,21 +121,29 @@ function Psy:draw()
 end
 
 function Psy:shoot(x,y,gamepad)
-    local p, bullet, dir, c, color_table, w, h, scale
+    local p, bullet, dir, c, w, h, scale
     p = self
     if not p.can_shoot then return end
 
-
+    local clock, dt_clock
+    local _dt_limit = .015
+    clock = love.timer.getTime()
     SFX.psychoball_shot:play()
+    dt_clock = love.timer.getTime() - clock
+    if dt_clock > _dt_limit then print("shoot playsfx", dt_clock) end
+    clock = love.timer.getTime()
 
     c = HSL(Hsl.hsl(p.color)) --Color of bullet is current psycho color
-    color_table = {
+    local color_table = {
         HSL(Hsl.stdv(51,100,50)),
         HSL(Hsl.stdv(355,89,48)),
         HSL(Hsl.stdv(95, 89,42)),
         HSL(Hsl.stdv(207,81,49)),
         HSL(Hsl.stdv(271,75,52))
     }
+    dt_clock = love.timer.getTime() - clock
+    if dt_clock > _dt_limit then print("shoot colortable", dt_clock) end
+    clock = love.timer.getTime()
     --Find out which window the position is, to get correct direction
     local game_win = WINM.winAtPoint(x,y)
     if not gamepad and game_win then
@@ -147,6 +155,9 @@ function Psy:shoot(x,y,gamepad)
         dir = Vector(x-p.pos.x, y-p.pos.y)
     end
     dir = dir:normalized()
+    dt_clock = love.timer.getTime() - clock
+    if dt_clock > _dt_limit then print("shoot get direction", dt_clock) end
+    clock = love.timer.getTime()
 
     --Create bullets for all psychos from all windows
     for idx, win in ipairs(GAME_WINDOWS) do
@@ -160,11 +171,17 @@ function Psy:shoot(x,y,gamepad)
             end
         end
     end
+    dt_clock = love.timer.getTime() - clock
+    if dt_clock > _dt_limit then print("shoot created bullets", dt_clock) end
+    clock = love.timer.getTime()
 
 
     --Signal ultrablast counter that psycho is shooting
     local counter = Util.findId("ultrablast_counter")
     if counter then counter:psychoShot() end
+    dt_clock = love.timer.getTime() - clock
+    if dt_clock > _dt_limit then print("shoot signal counter", dt_clock) end
+    clock = love.timer.getTime()
 
 end
 
@@ -197,10 +214,12 @@ end
 
 function Psy:update(dt)
     local p
-
+    local clock, dt_clock
+    local _dt_limit = .015
     p = self
 
     --Check for joystick input
+    clock = love.timer.getTime()
     if USING_JOYSTICK and CURRENT_JOYSTICK then
         --Enter or leave focus mode (left shoulder button by default)
         if Controls.isActive(CURRENT_JOYSTICK,"focus") then
@@ -228,6 +247,9 @@ function Psy:update(dt)
             p.ultra2_active = false
         end
     end
+    dt_clock = love.timer.getTime() - clock
+    if dt_clock > _dt_limit then print("psy input", dt_clock) end
+    clock = love.timer.getTime()
 
     --Update psycho radius
     if p.focused and p.r > p.collision_r + 2 then
@@ -237,6 +259,9 @@ function Psy:update(dt)
         p.r = p.r + 20*dt
         if p.r >  p.normal_radius then p.r =  p.normal_radius end --Cap radius to normal_radius
     end
+    dt_clock = love.timer.getTime() - clock
+    if dt_clock > _dt_limit then print("psy upd radius", dt_clock) end
+    clock = love.timer.getTime()
 
     --Update shooting
     p.shoot_tick = math.max(p.shoot_tick - dt, 0)
@@ -248,7 +273,10 @@ function Psy:update(dt)
             p.shoot_tick = p.shoot_tick + p.shoot_fps
             local x, y = love.mouse.getPosition()
             --Fix mouse position click to respective distance
+            local in_clock = love.timer.getTime()
             p:shoot(x, y)
+            dt_clock = love.timer.getTime() - in_clock
+            if dt_clock > _dt_limit then print("psy inside shoot", dt_clock) end
         end
       end
     elseif CURRENT_JOYSTICK and
@@ -265,11 +293,17 @@ function Psy:update(dt)
           end
       end
     end
+    dt_clock = love.timer.getTime() - clock
+    if dt_clock > _dt_limit then print("psy upd shoot", dt_clock) end
+    clock = love.timer.getTime()
 
     --Leave before moving psycho or creating circle effects
     if not p.can_move then return end
 
     psycho.updateSpeed(p)
+    dt_clock = love.timer.getTime() - clock
+    if dt_clock > _dt_limit then print("psy upd speeed", dt_clock) end
+    clock = love.timer.getTime()
 
     --Create circle effect
     p.circle_fx_tick = p.circle_fx_tick - dt
@@ -283,6 +317,9 @@ function Psy:update(dt)
         --Update alpha for next circle
         p.circle_fx_alpha = math.min(p.circle_fx_alpha + dt*p.circle_fx_alpha_speed, p.circle_fx_alpha_max)
     end
+    dt_clock = love.timer.getTime() - clock
+    if dt_clock > _dt_limit then print("psy circle effc", dt_clock) end
+    clock = love.timer.getTime()
 
     --Psycho is moving, then accelerate
     if p.speed:len() > 0 then
@@ -297,6 +334,9 @@ function Psy:update(dt)
             if p.speed_multiplier < 0 then p.speed_multiplier = 0 end
         end
     end
+    dt_clock = love.timer.getTime() - clock
+    if dt_clock > _dt_limit then print("psy acc", dt_clock) end
+    clock = love.timer.getTime()
 
     --Update movement
     if not p.focused then
@@ -304,12 +344,18 @@ function Psy:update(dt)
     else
         p.pos = p.pos + dt*p.speed*p.speedvm_focus*p.speed_multiplier
     end
+    dt_clock = love.timer.getTime() - clock
+    if dt_clock > _dt_limit then print("psy movem", dt_clock) end
+    clock = love.timer.getTime()
     --Fixes if psycho leaves screen
     for i, win in ipairs(GAME_WINDOWS) do
         if win.active then
             p.pos.x, p.pos.y = isOutside(p, win)
         end
     end
+    dt_clock = love.timer.getTime() - clock
+    if dt_clock > _dt_limit then print("psy isOutside", dt_clock) end
+    clock = love.timer.getTime()
 end
 
 function Psy:destroy()

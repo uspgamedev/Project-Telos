@@ -7,6 +7,7 @@ local Txt = require "classes.text"
 local UltraCounter = require "classes.ultrablast_counter"
 local LifeCounter = require "classes.life_counter"
 local ScoreCounter = require "classes.score_counter"
+
 --MODULE FOR THE GAMESTATE: GAME--
 
 --LEVEL FUNCTIONS--
@@ -16,6 +17,10 @@ local Levels = {
     level2 = require "levels.level2",
     level3 = require "levels.level3",
 }
+
+local garbage_collector_t = 0
+local garbage_collector_max = .5
+local _dt_limit = .02
 
 --------------------
 
@@ -87,44 +92,117 @@ end
 local lag = 0
 local frame = 1/60
 function state:update(dt)
-    local m_dt
+    if dt > .12 then
+        print("#############################")
+        print("#############################")
+        print("dt is high: "..dt)
+        print("#############################")
+        print("#############################")
+    end
 
+    local clock, dt_clock
+    clock = love.timer.getTime()
     Util.updateTimers(dt)
-
+    dt_clock = love.timer.getTime() - clock
+    if dt_clock > _dt_limit then print("update_timer", dt_clock) end
+    clock = love.timer.getTime()
     Util.updateFPS()
+    dt_clock = love.timer.getTime() - clock
+    if dt_clock > _dt_limit then print("updateFPS", dt_clock) end
 
     --Update psycho
+    clock = love.timer.getTime()
     p:update(dt)
+    dt_clock = love.timer.getTime() - clock
+    if dt_clock > _dt_limit then print("psycho", dt_clock) end
 
     --Update other objects (if slow mo, make them slow)
+    local m_dt
     if SLOWMO then
         m_dt = dt*SLOWMO_M
     else
         m_dt = dt
     end
 
+    clock = love.timer.getTime()
     Util.updateSubTp(m_dt, "player_bullet")
+    dt_clock = love.timer.getTime() - clock
+    if dt_clock > _dt_limit then print("player_bullet", dt_clock) end
+    clock = love.timer.getTime()
     Util.updateSubTp(m_dt, "enemies")
+    dt_clock = love.timer.getTime() - clock
+    if dt_clock > _dt_limit then print("enemies", dt_clock) end
+    clock = love.timer.getTime()
     Util.updateSubTp(m_dt, "cages")
+    dt_clock = love.timer.getTime() - clock
+    if dt_clock > _dt_limit then print("cages", dt_clock) end
+    clock = love.timer.getTime()
     Util.updateSubTp(m_dt, "bosses")
+    dt_clock = love.timer.getTime() - clock
+    if dt_clock > _dt_limit then print("bosses", dt_clock) end
+    clock = love.timer.getTime()
     Util.updateSubTp(m_dt, "decaying_particle")
+    dt_clock = love.timer.getTime() - clock
+    if dt_clock > _dt_limit then print("decaying_particle", dt_clock) end
+    clock = love.timer.getTime()
     Util.updateSubTp(dt, "psycho_explosion") --Are not affected by slowmo
+    dt_clock = love.timer.getTime() - clock
+    if dt_clock > _dt_limit then print("psycho_explosion", dt_clock) end
+    clock = love.timer.getTime()
     Util.updateSubTp(m_dt, "particle_batch")
+    dt_clock = love.timer.getTime() - clock
+    if dt_clock > _dt_limit then print("particle_batch", dt_clock) end
+    clock = love.timer.getTime()
     Util.updateSubTp(m_dt, "enemy_indicator_batch")
+    dt_clock = love.timer.getTime() - clock
+    if dt_clock > _dt_limit then print("enemy_indicator_batch", dt_clock) end
+    clock = love.timer.getTime()
     Util.updateSubTp(m_dt, "growing_circle")
+    dt_clock = love.timer.getTime() - clock
+    if dt_clock > _dt_limit then print("growing_circle", dt_clock) end
+    clock = love.timer.getTime()
     Util.updateSubTp(m_dt, "enemy_indicator")
+    dt_clock = love.timer.getTime() - clock
+    if dt_clock > _dt_limit then print("enemy_indicator", dt_clock) end
+    clock = love.timer.getTime()
     Util.updateSubTp(m_dt, "rotating_indicator")
+    dt_clock = love.timer.getTime() - clock
+    if dt_clock > _dt_limit then print("rotating_indicator", dt_clock) end
+    clock = love.timer.getTime()
     Util.updateSubTp(m_dt, "ultrablast")
+    dt_clock = love.timer.getTime() - clock
+    if dt_clock > _dt_limit then print("ultrablast", dt_clock) end
+    clock = love.timer.getTime()
     Util.updateSubTp(m_dt, "tutorial_icon")
+    dt_clock = love.timer.getTime() - clock
+    if dt_clock > _dt_limit then print("tutorial_icon", dt_clock) end
+    clock = love.timer.getTime()
     Util.updateId(dt, "psycho_aim") --Is not affected by slowmo
+    dt_clock = love.timer.getTime() - clock
+    if dt_clock > _dt_limit then print("psycho_aim", dt_clock) end
+    clock = love.timer.getTime()
     Util.updateId(dt, "ultrablast_counter") --Is not affected by slowmo
+    dt_clock = love.timer.getTime() - clock
+    if dt_clock > _dt_limit then print("ultra_blast_counter", dt_clock) end
+    clock = love.timer.getTime()
     Util.updateId(dt, "life_counter") --Is not affected by slowmo
+    dt_clock = love.timer.getTime() - clock
+    if dt_clock > _dt_limit then print("life_counter", dt_clock) end
+    clock = love.timer.getTime()
     Util.updateId(dt, "score_counter") --Is not affected by slowmo
-
+    dt_clock = love.timer.getTime() - clock
+    if dt_clock > _dt_limit then print("score_counter", dt_clock) end
+    clock = love.timer.getTime()
     Util.checkCollision()
+    dt_clock = love.timer.getTime() - clock
+    if dt_clock > _dt_limit then print("collision", dt_clock) end
+    clock = love.timer.getTime()
 
     --Kill dead objects
     Util.killAll()
+    dt_clock = love.timer.getTime() - clock
+    if dt_clock > _dt_limit then print("kill_all", dt_clock) end
+    clock = love.timer.getTime()
 
     --Change state if required
     if SWITCH == "PAUSE" or not FOCUS then
