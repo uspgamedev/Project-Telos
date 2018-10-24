@@ -120,6 +120,18 @@ Logo = Class{
                             end
                           )
                         end
+                        button = Util.findId("main_exit_button")
+                        if button then
+                          self.effects_handle["tutorial_alpha"] = FX_TIMER:tween(.6, button, {alpha_modifier = 1}, 'in-linear')
+                          self.effects_handle["tutorial_lock"] = FX_TIMER:after(.2,
+                            function()
+                              local b = Util.findId("main_exit_button")
+                              if b then
+                                b.lock = false
+                              end
+                            end
+                          )
+                        end
                       end
                     )
                 end

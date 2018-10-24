@@ -74,7 +74,7 @@ function state:enter()
             USED_CONTINUE = true
             SWITCH = "GAME"
         end
-        b = Button.create_circle_gui(430, 610, 75, func, "Continue", GUI_BIGLESSLESS, "main_menu_buttons", "main_continue_button")
+        b = Button.create_circle_gui(430, 610, 75, func, "continue", GUI_BIGLESSLESS, "main_menu_buttons", "main_continue_button")
         b.sfx = SFX.play_button
         b.alpha_modifier = 0
         b.lock = true
@@ -90,7 +90,7 @@ function state:enter()
             TUTORIAL = true
         end
     end
-    b = Button.create_circle_gui(528, 340, 140, func, "New Game", GUI_BIGLESS, "main_menu_buttons", "main_play_button")
+    b = Button.create_circle_gui(528, 340, 140, func, "new game", GUI_BIGLESS, "main_menu_buttons", "main_play_button")
     b.sfx = SFX.play_button
     b.ring_growth_speed = b.ring_growth_speed
     b.alpha_mod_v = 1.5
@@ -100,11 +100,19 @@ function state:enter()
     state:setCurrentSelectedButton("main_play")
     table.insert(_main_menu_screen_buttons, "main_play")
 
+    --Exit Button
+    func = function() love.event.quit( ) end
+    b = Button.create_circle_gui(920, 70, 50, func, "exit", GUI_BIGLESSLESS, "main_menu_buttons", "main_exit_button")
+    b.sfx = SFX.back_button
+    b.alpha_modifier = 0
+    b.lock = true
+    table.insert(_main_menu_screen_buttons, "main_exit")
+
     if not FIRST_TIME then
 
         --Tutorial Button
         func = function() SWITCH = "GAME"; TUTORIAL = true end
-        b = Button.create_circle_gui(525+offset, 610, 75, func, "Tutorial", GUI_BIGLESSLESS, "main_menu_buttons", "main_tutorial_button")
+        b = Button.create_circle_gui(525+offset, 610, 75, func, "tutorial", GUI_BIGLESSLESS, "main_menu_buttons", "main_tutorial_button")
         b.sfx = SFX.play_button
         b.alpha_modifier = 0
         b.lock = true
@@ -117,7 +125,7 @@ function state:enter()
              state:setCurrentSelectedButton("high_go2main")
              setCurrentMenuScreen("highscore_menu")
         end
-        b = Button.create_circle_gui(880, 650, 90, func, "Highscores", GUI_BIGLESSLESS, "main_menu_buttons", "main_go2highscore_button")
+        b = Button.create_circle_gui(880, 650, 90, func, "highscores", GUI_BIGLESSLESS, "main_menu_buttons", "main_go2highscore_button")
         b.sfx = SFX.generic_button
         b.alpha_modifier = 0
         b.lock = true
@@ -131,7 +139,7 @@ function state:enter()
          state:setCurrentSelectedButton("opt_go2main")
          setCurrentMenuScreen("options_menu")
     end
-    b = Button.create_circle_gui(WINDOW_WIDTH - 880, 650, 90, func, "Options", GUI_BIGLESSLESS, "main_menu_buttons", "main_go2options_button")
+    b = Button.create_circle_gui(WINDOW_WIDTH - 880, 650, 90, func, "options", GUI_BIGLESSLESS, "main_menu_buttons", "main_go2options_button")
     b.sfx = SFX.generic_button
     b.alpha_modifier = 0
     b.lock = true
@@ -277,7 +285,7 @@ function state:keypressed(key)
         SWITCH = "GAME"
         CONTINUE = false
     elseif key == '3' then
-        _go_to_level = "level1"
+        _go_to_level = "level3"
         _go_to_part = "part_3"
         SWITCH = "GAME"
         CONTINUE = false

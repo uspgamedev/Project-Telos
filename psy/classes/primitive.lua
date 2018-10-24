@@ -85,12 +85,16 @@ ELEMENT = Class{
     end,
 
     --Checks if an circular object o collides with this enemy
-    collides = function (self, o)
+    --Applys offset ox and oy if givenSS
+    collides = function (self, o, ox, oy)
         local e , dx, dy, dr
 
+        ox = ox or 0
+        oy = oy or 0
+
         e = self
-        dx = e.pos.x - o.pos.x
-        dy = e.pos.y - o.pos.y
+        dx = e.pos.x - (o.pos.x + ox)
+        dy = e.pos.y - (o.pos.y + oy)
 
         --In case of psycho, check collision with his collision radius
         if o.tp == "psycho" then
@@ -278,7 +282,7 @@ end
 
 ENEMY = Class{
     __includes = {CIRC},
-    init = function(self, _x, _y, _dir, _speed_m, _radius, _score_mul, _color_table, _speedv, _score_value)
+    init = function(self, _x, _y, _dir, _speed_m, _radius, _score_mul, _color_table, _speedv, _score_value, _game_win_idx)
         local dx, dy, r, color, color_table
 
         r = _radius or 20 --Radius of enemy
@@ -312,6 +316,8 @@ ENEMY = Class{
         self.score_value = _score_value or 25 --Score this enemy gives when killed without multiplier
         self.score_mul = _score_mul or 1 --Score multiplier
 
+        self.game_win_idx = _game_win_idx or 1 --What window this enemy belongs to
+
         self.enter = false --If this enemy has already entered the game screen
         self.tp = "simple_enemy" --Type of this class
 
@@ -319,12 +325,20 @@ ENEMY = Class{
 }
 
 --Draws the enemy
-function ENEMY:draw()
+function ENEMY:draw(text)
     local p
 
     p = self
 
     if not p.enter then return end
+
+    --Stencils enemy to its game window
+    local win = WINM.getWin(p.game_win_idx)
+    local func = function()
+        love.graphics.rectangle("fill", win.x, win.y, win.w, win.h)
+    end
+    love.graphics.stencil(func, "replace", 1)
+    love.graphics.setStencilTest("equal", 1)
 
     --Draws the circle
     Color.set(p.color)
@@ -334,6 +348,13 @@ function ENEMY:draw()
         Draw_Smooth_Circle(p.pos.x, p.pos.y, p.r)
     end
 
+    love.graphics.setStencilTest()
+
+end
+
+--Updates enemy speed multiplier
+function ENEMY:setSpeedMult(new_speed_mult)
+    self.speed_m = new_speed_mult
 end
 
 --------------------
@@ -367,9 +388,9 @@ end
 
 --Receives the center x and y values of a ring, its radius and inner_radius, and draw it on the screen
 --OBS: Have the color already setted
-function Draw_Smooth_Ring(x, y, r, i_r)
+function Draw_Smooth_Ring(x, y, r, i_r, dont_use_shader, stencil_func)
 
-    if USE_ANTI_ALIASING then
+    if USE_ANTI_ALIASING and not dont_use_shader then
         x = x - r
         y = y - r
 
@@ -382,12 +403,26 @@ function Draw_Smooth_Ring(x, y, r, i_r)
         end
 
         --Draw the circle
+
+        if stencil_func then
+            love.graphics.stencil(function() stencil_func() end, "replace", 1)
+            love.graphics.setStencilTest("equal", 1)
+        end
         love.graphics.setShader(SMOOTH_RING_TABLE[size..'-'..i_r])
         love.graphics.draw(PIXEL, x, y, 0, 2*r)
         love.graphics.setShader()
+        if stencil_func then
+            love.graphics.setStencilTest()
+        end
     else
-        love.graphics.stencil(function()love.graphics.circle("fill",x,y,i_r) end, "replace", 1)
-        love.graphics.setStencilTest("notequal", 1)
+        if stencil_func then
+            love.graphics.stencil(function() stencil_func() end, "replace", 1)
+            love.graphics.stencil(function() love.graphics.circle("fill",x,y,i_r) end, "replace", 2, true)
+            love.graphics.setStencilTest("equal", 1)
+        else
+            love.graphics.stencil(function() love.graphics.circle("fill",x,y,i_r) end, "replace", 1)
+            love.graphics.setStencilTest("notequal", 1)
+        end
         love.graphics.circle("fill", x, y, r)
         love.graphics.setStencilTest()
     end

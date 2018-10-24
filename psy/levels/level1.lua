@@ -312,6 +312,8 @@ function level_functions.setup()
     LM.level_title("THE FALL OF PSYCHO", "Chapter I")
     Audio.playBGM(BGM.level_1)
 
+    LM.resetGameWindow()
+
 end
 
 function level_functions.startPositions()

@@ -429,7 +429,7 @@ function util.checkCollision()
                 --Checking ultrablast collision
                 if SUBTP_TABLE["ultrablast"] then
                     for ultra in pairs(SUBTP_TABLE["ultrablast"]) do
-                        if not ultra.death and e.tp ~= "grey_ball" and e.tp ~= "glitch_ball" and e.tp ~= "turret" and e.tp ~= "snake" and not e.death and ultra:collides(e) then
+                        if not ultra.death and e.tp ~= "grey_ball" and e.tp ~= "glitch_ball" and e.tp ~= "turret" and e.tp ~= "snake" and not e.death and e.game_win_idx == ultra.game_win and ultra:collides(e) then
                             e:kill(false) --Don't give score if enemy is killed by ultrablast
                             ultra:takeHit()
                         end
@@ -448,9 +448,11 @@ function util.checkCollision()
                     end
                 end
 
-                --Colliding with psycho
-                if p and not p.death and not p.invincible and e:collides(p) then
-                    p:kill()
+                --Colliding with psycho, in every game window
+                for idx, win in ipairs(GAME_WINDOWS) do
+                    if win.active and idx == e.game_win_idx and p and not p.death and not p.invincible and e:collides(p, win.x, win.y) then
+                        p:kill()
+                    end
                 end
 
             end

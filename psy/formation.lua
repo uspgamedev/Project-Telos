@@ -31,26 +31,33 @@ ind_duration: duration to display indicator before creating the enemies
 ind_side: side of indicator
 e_radius: Radius of enemy being created
 score_mul: multiplier of score for enemies created
+game_win: which game window this enemy is from
 ]]
 function formation.fromHorizontal(a)
     local x, y, dir, half, p, enemy_table_size, max_r, batch
 
-
     enemy_table_size = Util.tableLen(a.enemy)
+    assert(enemy_table_size >= 1)
 
     --Find the biggest radius between enemies
-    max_r = a.enemy[1].radius()
-    for i=2,enemy_table_size do
-        if a.enemy[i].radius() > max_r then
-            max_r = a.enemy[i].radius()
+    if a.e_radius then
+        max_r = a.e_radius
+    else
+        max_r = a.enemy[1].radius()
+        for i=2,enemy_table_size do
+            if a.enemy[i].radius() > max_r then
+                max_r = a.enemy[i].radius()
+            end
         end
     end
 
     --Default values
     p = Psycho.get()
+    a.game_win = a.game_win or 1
+    local win = WINM.getWin(a.game_win)
     a.screen_margin = a.screen_margin or 0
     a.enemy_x_margin = a.enemy_x_margin or 0
-    a.enemy_y_margin = a.enemy_y_margin or 10 + 2*max_r
+    a.enemy_y_margin = a.enemy_y_margin or (10 + 2*max_r)
     a.number = a.number or 3
     a.speed_m = a.speed_m or 1
     a.score_mul = a.score_mul or 1
@@ -59,13 +66,12 @@ function formation.fromHorizontal(a)
     if a.ind_mode ~= false then
         a.ind_mode = a.ind_mode or "all"
     end
-
     if a.side == "left" or a.side == "l" then
         dir = Vector(1,0)
-        x = -5 -max_r
+        x = win.x - 5 - max_r
     elseif a.side == "right" or a.side == "r" then
         dir = Vector(-1,0)
-        x = WINDOW_WIDTH + 5 + max_r
+        x = win.x + win.w + 5 + max_r
     end
 
     batch = Indicator.create_enemy_batch(a.ind_duration)
@@ -76,7 +82,7 @@ function formation.fromHorizontal(a)
     --Center mode
     if     a.mode == "center" then
         half = math.floor(a.number/2)
-        y = WINDOW_HEIGHT/2 - (a.number-1)/2*a.enemy_y_margin + a.screen_margin
+        y = win.y + (win.h/2) - (a.number-1)/2*a.enemy_y_margin + a.screen_margin
         --Placing from the center
         for i=1, a.number do
             local l_pos, l_dir, current_enemy, l_speed, l_follow, l_side --Local values so that enemies are properly created
@@ -92,16 +98,16 @@ function formation.fromHorizontal(a)
 
             --Make direction equal to current position of psycho, if desired
             if p and a.dir_follow then
-                l_dir = Vector(p.pos.x - x, p.pos.y - y)
+                l_dir = Vector(p.pos.x + win.x - x, p.pos.y + win.y - y)
             elseif not p and a.dir_follow then
-                l_dir = Vector(WINDOW_WIDTH/2 - x, WINDOW_HEIGHT/2 - y):normalized()
+                l_dir = Vector(win.x + (win.w/2) - x, win.y + (win.h/2) - y):normalized()
             else
                 l_dir = Vector(dir.x, dir.y)
             end
 
             if (i == 1 and a.ind_mode == "first") or a.ind_mode == "all" then
                 --Create the indicator, and later, the enemy
-                batch:put(Indicator.create_enemy(current_enemy, l_pos, l_dir, a.dir_follow, l_side, l_speed, a.e_radius, a.score_mul))
+                batch:put(Indicator.create_enemy(current_enemy, l_pos, l_dir, a.dir_follow, l_side, l_speed, a.e_radius, a.score_mul, a.game_win))
             elseif a.ind_mode == "first" then
                 --Create the enemy after duration
                 handle = LEVEL_TIMER:after(a.ind_duration,
@@ -110,15 +116,15 @@ function formation.fromHorizontal(a)
 
                         p  = Util.findId("psycho")
                         if p and l_follow then
-                            l_dir = Vector(p.pos.x - l_pos.x, p.pos.y - l_pos.y)
+                            l_dir = Vector(p.pos.x + win.x - l_pos.x, p.pos.y + win.y - l_pos.y)
                         end
-                        current_enemy.create(l_pos.x, l_pos.y, l_dir, a.speed_m, a.e_radius, a.score_mul)
+                        current_enemy.create(l_pos.x, l_pos.y, l_dir, a.speed_m, a.e_radius, a.score_mul, a.game_win)
                     end
                 )
                 table.insert(INDICATOR_HANDLES, handle)
             else
                 --Just create the enemy
-                current_enemy.create(l_pos.x, l_pos.y, l_dir, a.speed_m, a.e_radius, a.score_mul)
+                current_enemy.create(l_pos.x, l_pos.y, l_dir, a.speed_m, a.e_radius, a.score_mul, a.game_win)
             end
 
             y = y + a.enemy_y_margin
@@ -132,13 +138,13 @@ function formation.fromHorizontal(a)
             current_enemy = a.enemy[(i-1)%enemy_table_size + 1]
 
             --"Distribute" the enemies
-            y = i* (WINDOW_HEIGHT/(a.number+1))
+            y = win.y + i * win.h/(a.number+1)
 
             --Make direction equal to current position of psycho, if desired
             if p and a.dir_follow then
-                l_dir = Vector(p.pos.x - x, p.pos.y - y)
+                l_dir = Vector(p.pos.x + win.x - x, p.pos.y + win.y - y)
             elseif not p and a.dir_follow then
-                l_dir = Vector(WINDOW_WIDTH/2 - x, WINDOW_HEIGHT/2 - y):normalized()
+                l_dir = Vector(win.x + (win.w/2) - x, win.y + (win.h/2) - y):normalized()
             else
                 l_dir = Vector(dir.x, dir.y)
             end
@@ -151,7 +157,7 @@ function formation.fromHorizontal(a)
 
             if (i == 1 and a.ind_mode == "first") or a.ind_mode == "all" then
                 --Create the indicator, and later, the enemy
-                batch:put(Indicator.create_enemy(current_enemy, l_pos, l_dir, a.dir_follow, l_side, l_speed, a.e_radius, a.score_mul))
+                batch:put(Indicator.create_enemy(current_enemy, l_pos, l_dir, a.dir_follow, l_side, l_speed, a.e_radius, a.score_mul, a.game_win))
             elseif a.ind_mode == "first" then
                 --Create the enemy after duration
                 handle = LEVEL_TIMER:after(a.ind_duration,
@@ -160,22 +166,22 @@ function formation.fromHorizontal(a)
 
                         p  = Util.findId("psycho")
                         if p and l_follow then
-                            l_dir = Vector(p.pos.x - l_pos.x, p.pos.y - l_pos.y)
+                            l_dir = Vector(p.pos.x + win.x - l_pos.x, p.pos.y + win.y - l_pos.y)
                         end
-                        current_enemy.create(l_pos.x, l_pos.y, l_dir, a.speed_m, a.e_radius, a.score_mul)
+                        current_enemy.create(l_pos.x, l_pos.y, l_dir, a.speed_m, a.e_radius, a.score_mul, a.game_win)
                     end
                 )
                 table.insert(INDICATOR_HANDLES, handle)
             else
                 --Just create the enemy
-                current_enemy.create(l_pos.x, l_pos.y, l_dir, a.speed_m, a.e_radius, a.score_mul)
+                current_enemy.create(l_pos.x, l_pos.y, l_dir, a.speed_m, a.e_radius, a.score_mul, a.game_win)
             end
 
         end
 
     --Top mode
     elseif a.mode == "top" then
-        y = a.screen_margin + max_r
+        y = win.y + a.screen_margin + max_r
         for i=1, a.number do
             local l_pos, l_dir, current_enemy, l_speed, l_follow, l_side --Local values so that enemies are properly created
 
@@ -184,9 +190,9 @@ function formation.fromHorizontal(a)
 
             --Make direction equal to current position of psycho, if desired
             if p and a.dir_follow then
-                l_dir = Vector(p.pos.x - x, p.pos.y - y)
+                l_dir = Vector(p.pos.x + win.x - x, p.pos.y + win.y - y)
             elseif not p and a.dir_follow then
-                l_dir = Vector(WINDOW_WIDTH/2 - x, WINDOW_HEIGHT/2 - y):normalized()
+                l_dir = Vector(win.x + (win.w/2) - x, win.y + (win.h/2) - y):normalized()
             else
                 l_dir = Vector(dir.x, dir.y)
             end
@@ -199,7 +205,7 @@ function formation.fromHorizontal(a)
 
             if (i == 1 and a.ind_mode == "first") or a.ind_mode == "all" then
                 --Create the indicator, and later, the enemy
-                batch:put(Indicator.create_enemy(current_enemy, l_pos, l_dir, a.dir_follow, l_side, l_speed, a.e_radius, a.score_mul))
+                batch:put(Indicator.create_enemy(current_enemy, l_pos, l_dir, a.dir_follow, l_side, l_speed, a.e_radius, a.score_mul, a.game_win))
             elseif a.ind_mode == "first" then
                 --Create the enemy after duration
                 handle = LEVEL_TIMER:after(a.ind_duration,
@@ -208,15 +214,15 @@ function formation.fromHorizontal(a)
 
                         p  = Util.findId("psycho")
                         if p and l_follow then
-                            l_dir = Vector(p.pos.x - l_pos.x, p.pos.y - l_pos.y)
+                            l_dir = Vector(p.pos.x + win.x - l_pos.x, p.pos.y + win.y - l_pos.y)
                         end
-                        current_enemy.create(l_pos.x, l_pos.y, l_dir, a.speed_m, a.e_radius, a.score_mul)
+                        current_enemy.create(l_pos.x, l_pos.y, l_dir, a.speed_m, a.e_radius, a.score_mul, a.game_win)
                     end
                 )
                 table.insert(INDICATOR_HANDLES, handle)
             else
                 --Just create the enemy
-                current_enemy.create(l_pos.x, l_pos.y, l_dir, a.speed_m, a.e_radius, a.score_mul)
+                current_enemy.create(l_pos.x, l_pos.y, l_dir, a.speed_m, a.e_radius, a.score_mul, a.game_win)
             end
 
             y = y + a.enemy_y_margin
@@ -225,8 +231,7 @@ function formation.fromHorizontal(a)
 
     --Bottom mode
     elseif a.mode == "bottom" then
-
-        y = WINDOW_HEIGHT - a.screen_margin - max_r
+        y = (win.y + win.h) - a.screen_margin - max_r
         for i=1, a.number do
             local l_pos, l_dir, current_enemy, l_speed, l_follow, l_side --Local values so that enemies are properly created
 
@@ -235,9 +240,9 @@ function formation.fromHorizontal(a)
 
             --Make direction equal to current position of psycho, if desired
             if p and a.dir_follow then
-                l_dir = Vector(p.pos.x - x, p.pos.y - y)
+                l_dir = Vector(p.pos.x + win.x - x, p.pos.y + win.y - y)
             elseif not p and a.dir_follow then
-                l_dir = Vector(WINDOW_WIDTH/2 - x, WINDOW_HEIGHT/2 - y):normalized()
+                l_dir = Vector(win.x + (win.w/2) - x, win.y + (win.h/2) - y):normalized()
             else
                 l_dir = Vector(dir.x, dir.y)
             end
@@ -250,7 +255,7 @@ function formation.fromHorizontal(a)
 
             if (i == 1 and a.ind_mode == "first") or a.ind_mode == "all" then
                 --Create the indicator, and later, the enemy
-                batch:put(Indicator.create_enemy(current_enemy, l_pos, l_dir, a.dir_follow, l_side, l_speed, a.e_radius, a.score_mul))
+                batch:put(Indicator.create_enemy(current_enemy, l_pos, l_dir, a.dir_follow, l_side, l_speed, a.e_radius, a.score_mul, a.game_win))
             elseif a.ind_mode == "first" then
                 --Create the enemy after duration
                 handle = LEVEL_TIMER:after(a.ind_duration,
@@ -259,15 +264,15 @@ function formation.fromHorizontal(a)
 
                         p  = Util.findId("psycho")
                         if p and l_follow then
-                            l_dir = Vector(p.pos.x - l_pos.x, p.pos.y - l_pos.y)
+                            l_dir = Vector(p.pos.x + win.x - l_pos.x, p.pos.y + win.y - l_pos.y)
                         end
-                        current_enemy.create(l_pos.x, l_pos.y, l_dir, a.speed_m, a.e_radius, a.score_mul)
+                        current_enemy.create(l_pos.x, l_pos.y, l_dir, a.speed_m, a.e_radius, a.score_mul, a.game_win)
                     end
                 )
                 table.insert(INDICATOR_HANDLES, handle)
             else
                 --Just create the enemy
-                current_enemy.create(l_pos.x, l_pos.y, l_dir, a.speed_m, a.e_radius, a.score_mul)
+                current_enemy.create(l_pos.x, l_pos.y, l_dir, a.speed_m, a.e_radius, a.score_mul, a.game_win)
             end
 
             y = y - a.enemy_y_margin
@@ -301,22 +306,30 @@ ind_duration: duration to display indicator before creating the enemies
 ind_side: side of indicator
 e_radius: Radius of enemy being created
 score_mul: multiplier of score for enemies created
+game_win: which game window this enemy is from
 ]]
 function formation.fromVertical(a)
     local x, y, dir, half, max_r, enemy_table_size, p, batch
 
     enemy_table_size = Util.tableLen(a.enemy)
+    assert(enemy_table_size >= 1)
 
     --Find the biggest radius between enemies
-    max_r = a.enemy[1].radius()
-    for i=2,enemy_table_size do
-        if a.enemy[i].radius() > max_r then
-            max_r = a.enemy[i].radius()
+    if a.e_radius then
+        max_r = a.e_radius
+    else
+        max_r = a.enemy[1].radius()
+        for i=2,enemy_table_size do
+            if a.enemy[i].radius() > max_r then
+                max_r = a.enemy[i].radius()
+            end
         end
     end
 
     --Default values
     p = Psycho.get()
+    a.game_win = a.game_win or 1
+    local win = WINM.getWin(a.game_win)
     a.screen_margin = a.screen_margin or 0
     a.enemy_x_margin = a.enemy_x_margin or 10 + 2*max_r
     a.enemy_y_margin = a.enemy_y_margin or 0
@@ -334,7 +347,7 @@ function formation.fromVertical(a)
         y = -5 -max_r
     elseif a.side == "bottom" or a.side == "b" then
         dir = Vector(0,-1)
-        y = WINDOW_HEIGHT + 5 + max_r
+        y = (win.y + win.h) + 5 + max_r
     end
 
     batch = Indicator.create_enemy_batch(a.ind_duration)
@@ -346,7 +359,7 @@ function formation.fromVertical(a)
     --Center mode
     if     a.mode == "center" then
         half = math.floor(a.number/2)
-        x = WINDOW_WIDTH/2 - (a.number-1)/2*a.enemy_x_margin + a.screen_margin
+        x = win.x + (win.w/2) - (a.number-1)/2*a.enemy_x_margin + a.screen_margin
         --Placing from the center
         for i=1, a.number do
             local l_pos, l_dir, current_enemy, l_speed, l_follow, l_side --Local values so that enemies are properly created
@@ -356,9 +369,9 @@ function formation.fromVertical(a)
 
             --Make direction equal to current position of psycho, if desired
             if p and a.dir_follow then
-                l_dir = Vector(p.pos.x - x, p.pos.y - y)
+                l_dir = Vector(p.pos.x + win.x - x, p.pos.y + win.y - y)
             elseif not p and a.dir_follow then
-                l_dir = Vector(WINDOW_WIDTH/2 - x, WINDOW_HEIGHT/2 - y):normalized()
+                l_dir = Vector(win.x + (win.w/2) - x, win.y + (win.h/2) - y):normalized()
             else
                 l_dir = Vector(dir.x, dir.y)
             end
@@ -371,7 +384,7 @@ function formation.fromVertical(a)
 
             if (i == 1 and a.ind_mode == "first") or a.ind_mode == "all" then
                 --Create the indicator, and later, the enemy
-                batch:put(Indicator.create_enemy(current_enemy, l_pos, l_dir, a.dir_follow, l_side, l_speed, a.e_radius, a.score_mul))
+                batch:put(Indicator.create_enemy(current_enemy, l_pos, l_dir, a.dir_follow, l_side, l_speed, a.e_radius, a.score_mul, a.game_win))
             elseif a.ind_mode == "first" then
                 --Create the enemy after duration
                 handle = LEVEL_TIMER:after(a.ind_duration,
@@ -380,15 +393,15 @@ function formation.fromVertical(a)
 
                         p  = Util.findId("psycho")
                         if p and l_follow then
-                            l_dir = Vector(p.pos.x - l_pos.x, p.pos.y - l_pos.y)
+                            l_dir = Vector(p.pos.x + win.x - l_pos.x, p.pos.y + win.y - l_pos.y)
                         end
-                        current_enemy.create(l_pos.x, l_pos.y, l_dir, a.speed_m, a.e_radius, a.score_mul)
+                        current_enemy.create(l_pos.x, l_pos.y, l_dir, a.speed_m, a.e_radius, a.score_mul, a.game_win)
                     end
                 )
                 table.insert(INDICATOR_HANDLES, handle)
             else
                 --Just create the enemy
-                current_enemy.create(l_pos.x, l_pos.y, l_dir, a.speed_m, a.e_radius, a.score_mul)
+                current_enemy.create(l_pos.x, l_pos.y, l_dir, a.speed_m, a.e_radius, a.score_mul, a.game_win)
             end
 
             x = x + a.enemy_x_margin
@@ -402,13 +415,13 @@ function formation.fromVertical(a)
             current_enemy = a.enemy[(i-1)%enemy_table_size + 1]
 
             --"Distribute" enemies
-            x = i* (WINDOW_WIDTH/(a.number+1))
+            x = win.x + i * win.w/(a.number+1)
 
             --Make direction equal to current position of psycho, if desired
             if p and a.dir_follow then
-                l_dir = Vector(p.pos.x - x, p.pos.y - y)
+                l_dir = Vector(p.pos.x + win.x - x, p.pos.y + win.y - y)
             elseif not p and a.dir_follow then
-                l_dir = Vector(WINDOW_WIDTH/2 - x, WINDOW_HEIGHT/2 - y):normalized()
+                l_dir = Vector(win.x + (win.w/2) - x, win.y + (win.h/2) - y):normalized()
             else
                 l_dir = Vector(dir.x, dir.y)
             end
@@ -421,7 +434,7 @@ function formation.fromVertical(a)
 
             if (i == 1 and a.ind_mode == "first") or a.ind_mode == "all" then
                 --Create the indicator, and later, the enemy
-                batch:put(Indicator.create_enemy(current_enemy, l_pos, l_dir, a.dir_follow, l_side, l_speed, a.e_radius, a.score_mul))
+                batch:put(Indicator.create_enemy(current_enemy, l_pos, l_dir, a.dir_follow, l_side, l_speed, a.e_radius, a.score_mul, a.game_win))
             elseif a.ind_mode == "first" then
                 --Create the enemy after duration
                 handle = LEVEL_TIMER:after(a.ind_duration,
@@ -430,22 +443,22 @@ function formation.fromVertical(a)
 
                         p  = Util.findId("psycho")
                         if p and l_follow then
-                            l_dir = Vector(p.pos.x - l_pos.x, p.pos.y - l_pos.y)
+                            l_dir = Vector(p.pos.x + win.x - l_pos.x, p.pos.y + win.y - l_pos.y)
                         end
-                        current_enemy.create(l_pos.x, l_pos.y, l_dir, a.speed_m, a.e_radius, a.score_mul)
+                        current_enemy.create(l_pos.x, l_pos.y, l_dir, a.speed_m, a.e_radius, a.score_mul, a.game_win)
                     end
                 )
                 table.insert(INDICATOR_HANDLES, handle)
             else
                 --Just create the enemy
-                current_enemy.create(l_pos.x, l_pos.y, l_dir, a.speed_m, a.e_radius, a.score_mul)
+                current_enemy.create(l_pos.x, l_pos.y, l_dir, a.speed_m, a.e_radius, a.score_mul, a.game_win)
             end
 
         end
 
     --Left mode
     elseif a.mode == "left" then
-        x = a.screen_margin + max_r
+        x = win.x + a.screen_margin + max_r
         for i=1, a.number do
             local l_pos, l_dir, current_enemy, l_speed, l_follow, l_side --Local values so that enemies are properly created
 
@@ -454,9 +467,9 @@ function formation.fromVertical(a)
 
             --Make direction equal to current position of psycho, if desired
             if p and a.dir_follow then
-                l_dir = Vector(p.pos.x - x, p.pos.y - y)
+                l_dir = Vector(p.pos.x + win.x - x, p.pos.y + win.y - y)
             elseif not p and a.dir_follow then
-                l_dir = Vector(WINDOW_WIDTH/2 - x, WINDOW_HEIGHT/2 - y):normalized()
+                l_dir = Vector(win.x + (win.w/2) - x, win.y + (win.h/2) - y):normalized()
             else
                 l_dir = Vector(dir.x, dir.y)
             end
@@ -469,7 +482,7 @@ function formation.fromVertical(a)
 
             if (i == 1 and a.ind_mode == "first") or a.ind_mode == "all" then
                 --Create the indicator, and later, the enemy
-                batch:put(Indicator.create_enemy(current_enemy, l_pos, l_dir, a.dir_follow, l_side, l_speed, a.e_radius, a.score_mul))
+                batch:put(Indicator.create_enemy(current_enemy, l_pos, l_dir, a.dir_follow, l_side, l_speed, a.e_radius, a.score_mul, a.game_win))
             elseif a.ind_mode == "first" then
                 --Create the enemy after duration
                 handle = LEVEL_TIMER:after(a.ind_duration,
@@ -478,15 +491,15 @@ function formation.fromVertical(a)
 
                         p  = Util.findId("psycho")
                         if p and l_follow then
-                            l_dir = Vector(p.pos.x - l_pos.x, p.pos.y - l_pos.y)
+                            l_dir = Vector(p.pos.x + win.x - l_pos.x, p.pos.y + win.y - l_pos.y)
                         end
-                        current_enemy.create(l_pos.x, l_pos.y, l_dir, a.speed_m, a.e_radius, a.score_mul)
+                        current_enemy.create(l_pos.x, l_pos.y, l_dir, a.speed_m, a.e_radius, a.score_mul, a.game_win)
                     end
                 )
                 table.insert(INDICATOR_HANDLES, handle)
             else
                 --Just create the enemy
-                current_enemy.create(l_pos.x, l_pos.y, l_dir, a.speed_m, a.e_radius, a.score_mul)
+                current_enemy.create(l_pos.x, l_pos.y, l_dir, a.speed_m, a.e_radius, a.score_mul, a.game_win)
             end
 
             x = x + a.enemy_x_margin
@@ -495,7 +508,7 @@ function formation.fromVertical(a)
 
     --Right mode
     elseif a.mode == "right" then
-        x = WINDOW_WIDTH - a.screen_margin - max_r
+        x = (win.x + win.w) - a.screen_margin - max_r
         for i=1, a.number do
             local l_pos, l_dir, current_enemy, l_speed, l_follow, l_side --Local values so that enemies are properly created
 
@@ -504,9 +517,9 @@ function formation.fromVertical(a)
 
             --Make direction equal to current position of psycho, if desired
             if p and a.dir_follow then
-                l_dir = Vector(p.pos.x - x, p.pos.y - y)
+                l_dir = Vector(p.pos.x + win.x - x, p.pos.y + win.y - y)
             elseif not p and a.dir_follow then
-                l_dir = Vector(WINDOW_WIDTH/2 - x, WINDOW_HEIGHT/2 - y):normalized()
+                l_dir = Vector(win.x + (win.w/2) - x, win.y + (win.h/2) - y):normalized()
             else
                 l_dir = Vector(dir.x, dir.y)
             end
@@ -519,7 +532,7 @@ function formation.fromVertical(a)
 
             if (i == 1 and a.ind_mode == "first") or a.ind_mode == "all" then
                 --Create the indicator, and later, the enemy
-                batch:put(Indicator.create_enemy(current_enemy, l_pos, l_dir, a.dir_follow, l_side, l_speed, a.e_radius, a.score_mul))
+                batch:put(Indicator.create_enemy(current_enemy, l_pos, l_dir, a.dir_follow, l_side, l_speed, a.e_radius, a.score_mul, a.game_win))
             elseif a.ind_mode == "first" then
                 --Create the enemy after duration
                 handle = LEVEL_TIMER:after(a.ind_duration,
@@ -528,15 +541,15 @@ function formation.fromVertical(a)
 
                         p  = Util.findId("psycho")
                         if p and l_follow then
-                            l_dir = Vector(p.pos.x - l_pos.x, p.pos.y - l_pos.y)
+                            l_dir = Vector(p.pos.x + win.x - l_pos.x, p.pos.y + win.y - l_pos.y)
                         end
-                        current_enemy.create(l_pos.x, l_pos.y, l_dir, a.speed_m, a.e_radius, a.score_mul)
+                        current_enemy.create(l_pos.x, l_pos.y, l_dir, a.speed_m, a.e_radius, a.score_mul, a.game_win)
                     end
                 )
                 table.insert(INDICATOR_HANDLES, handle)
             else
                 --Just create the enemy
-                current_enemy.create(l_pos.x, l_pos.y, l_dir, a.speed_m, a.e_radius, a.score_mul)
+                current_enemy.create(l_pos.x, l_pos.y, l_dir, a.speed_m, a.e_radius, a.score_mul, a.game_win)
             end
 
             x = x - a.enemy_x_margin
@@ -566,16 +579,19 @@ ind_side: side of indicator
 radius: Radius of circle of enemies
 e_radius: Radius of enemy being created
 score_mul: multiplier of score for enemies created
+game_win: which game window this enemy is from
 ]]
 function formation.circle(a)
     local value, x, y, dir, enemy_table_size, batch
 
     --Default values
     p = Psycho.get()
+    a.game_win = a.game_win or 1
+    local win = WINM.getWin(a.game_win)
     a.radius = a.radius or 640
     a.enemy_margin = a.enemy_margin or 0
-    a.x_center = a.x_center or WINDOW_WIDTH/2 --Center x of the circle
-    a.y_center = a.y_center or WINDOW_HEIGHT/2 --Center y of the circle
+    a.x_center = a.x_center or win.x + (win.w/2) --Center x of the circle
+    a.y_center = a.y_center or win.y + (win.h/2) --Center y of the circle
     a.speed_m = a.speed_m or 1
     a.score_mul = a.score_mul or 1
     a.dir_follow = a.dir_follow or false
@@ -610,16 +626,16 @@ function formation.circle(a)
 
         --Make direction equal to current position of psycho, if desired
         if p and a.dir_follow then
-            l_dir = Vector(p.pos.x - x, p.pos.y - y)
+            l_dir = Vector(p.pos.x + win.x - x, p.pos.y + win.y - y)
         elseif not p and a.dir_follow then
-            l_dir = Vector(WINDOW_WIDTH/2 - x, WINDOW_HEIGHT/2 - y):normalized()
+            l_dir = Vector(win.x + (win.w/2) - x, win.y + (win.h/2) - y):normalized()
         else
             l_dir = Vector(dir.x, dir.y)
         end
 
         if (i == 0 and a.ind_mode == "first") or a.ind_mode == "all" then
             --Create the indicator, and later, the enemy
-            batch:put(Indicator.create_enemy(current_enemy, l_pos, l_dir, a.dir_follow, l_side, l_speed, a.e_radius, a.score_mul))
+            batch:put(Indicator.create_enemy(current_enemy, l_pos, l_dir, a.dir_follow, l_side, l_speed, a.e_radius, a.score_mul, a.game_win))
         elseif a.ind_mode == "first" then
             --Create the enemy after duration
             handle = LEVEL_TIMER:after(a.ind_duration,
@@ -628,15 +644,15 @@ function formation.circle(a)
 
                     p  = Util.findId("psycho")
                     if p and l_follow then
-                        l_dir = Vector(p.pos.x - l_pos.x, p.pos.y - l_pos.y)
+                        l_dir = Vector(p.pos.x + win.x - l_pos.x, p.pos.y + win.y - l_pos.y)
                     end
-                    current_enemy.create(l_pos.x, l_pos.y, l_dir, a.speed_m, a.e_radius, a.score_mul)
+                    current_enemy.create(l_pos.x, l_pos.y, l_dir, a.speed_m, a.e_radius, a.score_mul, a.game_win)
                 end
             )
             table.insert(INDICATOR_HANDLES, handle)
         else
             --Just create the enemy
-            current_enemy.create(l_pos.x, l_pos.y, l_dir, a.speed_m, a.e_radius, a.score_mul)
+            current_enemy.create(l_pos.x, l_pos.y, l_dir, a.speed_m, a.e_radius, a.score_mul, a.game_win)
         end
 
     end
@@ -659,12 +675,15 @@ ind_duration: duration to display indicator before creating the enemy
 e_radius: Radius of enemy being created
 score_mul: multiplier of score for enemies created
 ind_side: side of indicator
+game_win: which game window this enemy is from
 ]]
 function formation.single(a)
     local p, l_pos, l_speed, l_dir, l_follow, l_side, batch
 
     --Default values
     p = Psycho.get()
+    a.game_win = a.game_win or 1
+    local win = WINM.getWin(a.game_win)
     a.speed_m = a.speed_m or 1
     a.score_mul = a.score_mul or 1
     a.dir_follow = a.dir_follow or false
@@ -681,9 +700,9 @@ function formation.single(a)
 
     --Make direction equal to current position of psycho, if desired
     if p and a.dir_follow then
-        l_dir = Vector(p.pos.x - a.x, p.pos.y - a.y)
+        l_dir = Vector(p.pos.x + win.x - a.x, p.pos.y + win.y - a.y)
     elseif not p and a.dir_follow then
-        l_dir = Vector(WINDOW_WIDTH/2 - x, WINDOW_HEIGHT/2 - y):normalized()
+        l_dir = Vector(win.x + (win.w/2) - x, win.y + (win.h/2) - y):normalized()
     else
         l_dir = Vector(a.dx, a.dy)
     end
@@ -692,10 +711,10 @@ function formation.single(a)
 
     if a.ind_mode then
         --Create the indicator, and later, the enemy
-        batch:put(Indicator.create_enemy(a.enemy, l_pos, l_dir, l_follow, l_side, l_speed, a.e_radius, a.score_mul))
+        batch:put(Indicator.create_enemy(a.enemy, l_pos, l_dir, l_follow, l_side, l_speed, a.e_radius, a.score_mul, a.game_win))
     else
         --Just create the enemy
-        a.enemy.create(l_pos.x, l_pos.y, l_dir, a.speed_m, a.e_radius, a.score_mul)
+        a.enemy.create(l_pos.x, l_pos.y, l_dir, a.speed_m, a.e_radius, a.score_mul, a.game_win)
     end
 
 end
@@ -720,12 +739,15 @@ ind_duration: duration to display indicator before creating the enemies
 ind_side: side of indicator
 e_radius: Radius of enemy being created
 score_mul: multiplier of score for enemies created
+game_win: which game window this enemy is from
 ]]
 function formation.line(a)
     local dir, n_dir, enemy_table_size, p, batch
 
     --Default values
     p = Psycho.get()
+    a.game_win = a.game_win or 1
+    local win = WINM.getWin(a.game_win)
     a.enemy_margin = a.enemy_margin or 60
     a.speed_m = a.speed_m or 1
     a.score_mul = a.score_mul or 1
@@ -757,16 +779,16 @@ function formation.line(a)
 
         --Make direction equal to current position of psycho, if desired
         if p and a.dir_follow then
-            l_dir = Vector(p.pos.x - a.x, p.pos.y - a.y)
+            l_dir = Vector(p.pos.x + win.x - a.x, p.pos.y + win.y - a.y)
         elseif not p and a.dir_follow then
-            l_dir = Vector(WINDOW_WIDTH/2 - x, WINDOW_HEIGHT/2 - y):normalized()
+            l_dir = Vector(win.x + (win.w/2) - x, win.y + (win.h/2) - y):normalized()
         else
             l_dir = Vector(a.dx, a.dy)
         end
 
         if (i == 0 and a.ind_mode == "first") or a.ind_mode == "all" then
             --Create the indicator, and later, the enemy
-            batch:put(Indicator.create_enemy(current_enemy, l_pos, l_dir, a.dir_follow, l_side, l_speed, a.e_radius, a.score_mul))
+            batch:put(Indicator.create_enemy(current_enemy, l_pos, l_dir, a.dir_follow, l_side, l_speed, a.e_radius, a.score_mul, a.game_win))
         elseif a.ind_mode == "first" then
             --Create the enemy after duration
             handle = LEVEL_TIMER:after(a.ind_duration,
@@ -775,16 +797,16 @@ function formation.line(a)
 
                     p = Util.findId("psycho")
                     if p and l_follow then
-                        l_dir = Vector(p.pos.x - l_pos.x, p.pos.y - l_pos.y)
+                        l_dir = Vector(p.pos.x + win.x - l_pos.x, p.pos.y + win.y - l_pos.y)
                     end
-                    current_enemy.create(l_pos.x, l_pos.y, l_dir, a.speed_m, a.e_radius, a.score_mul)
+                    current_enemy.create(l_pos.x, l_pos.y, l_dir, a.speed_m, a.e_radius, a.score_mul, a.game_win)
                 end
             )
             table.insert(INDICATOR_HANDLES, handle)
         else
 
             --Just create the enemy
-            current_enemy.create(l_pos.x, l_pos.y, l_dir, a.speed_m, a.e_radius, a.score_mul)
+            current_enemy.create(l_pos.x, l_pos.y, l_dir, a.speed_m, a.e_radius, a.score_mul, a.game_win)
         end
     end
 end
@@ -812,12 +834,15 @@ ind_duration: duration to display indicator before creating the enemy
 e_radius: Radius of turret being created
 score_mul: multiplier of score for turret and enemies created
 ind_side: side of indicator
+game_win: which game window this enemy is from
 ]]
 function formation.turret(a)
     local p, l_pos, l_speed, l_e_speed, l_duration, l_life, l_number, l_start_angle, l_rot_angle, l_fps, l_side, l_radius, l_score, l_enemy, l_target, batch, l_ind_duration
 
     --Default values
     p = Psycho.get()
+    a.game_win = a.game_win or 1
+    local win = WINM.getWin(a.game_win)
     a.duration = a.duration or 10
     a.life = a.life or 10
     a.start_angle = a.start_angle or 0
@@ -850,10 +875,10 @@ function formation.turret(a)
 
     if a.ind_mode then
         --Create the indicator, that will later create the enemy
-        Indicator.create_enemy_turret(Trt, l_pos, l_speed, l_e_speed, l_radius, l_score, l_enemy, l_target, l_duration, l_life, l_number, l_start_angle, l_rot_angle, l_fps, l_side, l_ind_duration)
+        Indicator.create_enemy_turret(Trt, l_pos, l_speed, l_e_speed, l_radius, l_score, l_enemy, l_target, l_duration, l_life, l_number, l_start_angle, l_rot_angle, l_fps, l_side, l_ind_duration, a.game_win)
     else
         --Just create the enemy
-        Trt.create(l_pos.x, l_pos.y, l_speed, l_e_speed, l_radius, l_score, l_enemy, l_target, l_duration, l_life, l_number, l_start_angle, l_rot_angle, l_fps)
+        return Trt.create(l_pos.x, l_pos.y, l_speed, l_e_speed, l_radius, l_score, l_enemy, l_target, l_duration, l_life, l_number, l_start_angle, l_rot_angle, l_fps, a.game_win)
     end
 
 end
@@ -868,14 +893,17 @@ x: central x position of cage
 y: central y position of cage
 radius: target radius to tween-to
 speed_radius: optional speed to tween radius
+game_win: which game window this cage is from
 ]]
 function formation.cage(a)
     local p, l_pos, l_r, l_speed_r
 
     --Default values
     p = Psycho.get()
-    a.x = a.x or WINDOW_WIDTH/2
-    a.y = a.y or WINDOW_HEIGHT/2
+    a.game_win = a.game_win or 1
+    local win = WINM.getWin(a.game_win)
+    a.x = a.x or win.x + (win.w/2)
+    a.y = a.y or win.y + (win.h/2)
     a.radius = a.radius or 200
     a.speed_radius = a.speed_radius or 200
 
@@ -885,7 +913,7 @@ function formation.cage(a)
     l_speed_r = a.speed_radius
 
     --Just create the enemy
-    return Cge.create(l_pos.x, l_pos.y, l_r, l_speed_r)
+    return Cge.create(l_pos.x, l_pos.y, l_r, l_speed_r, a.game_win)
 end
 
 --[[
@@ -903,11 +931,15 @@ e_radius: Radius of each segment being created
 e_life: How much lif each segment has
 score_mul: multiplier of score for enemies created
 ind_side: side of indicator
+game_win: which game window this enemy is from
+id: an optional id to give to the snake
 ]]
 function formation.snake(a)
     --Default values
+    a.game_win = a.game_win or 1
+    local win = WINM.getWin(a.game_win)
     a.segments = a.segments or 3
-    a.positions = a.positions or {{-100,WINDOW_HEIGHT/2},{WINDOW_WIDTH+100, WINDOW_HEIGHT/2}}
+    a.positions = a.positions or {{-100,win.y + (win.h/2)},{(win.x + win.w)+100, win.y + (win.h/2)}}
     a.speed_m = a.speed_m or 1
     a.score_mul = a.score_mul or 1
     a.e_life = a.e_life or 3
@@ -918,10 +950,10 @@ function formation.snake(a)
 
     if a.ind_mode then
         --Create the indicator, that will later create the enemy
-        Indicator.create_enemy_snake(Snk, a.segments, a.positions, a.e_life, a.speed_m, a.e_radius, a.score_mul, a.ind_side, a.ind_duration)
+        Indicator.create_enemy_snake(Snk, a.segments, a.positions, a.e_life, a.speed_m, a.e_radius, a.score_mul, a.ind_side, a.ind_duration, a.game_win, nil, a.id)
     else
         --Just create the enemy
-        Snk.create(a.segments, a.positions, a.e_life, a.speed_m, a.e_radius, a.score_mul)
+        return Snk.create(a.segments, a.positions, a.e_life, a.speed_m, a.e_radius, a.score_mul, a.game_win, a.id)
     end
 
 end

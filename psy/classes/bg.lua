@@ -35,9 +35,20 @@ function Background:draw()
 
     bg = self
 
-    --Draws the particle
-    Color.set(bg.color)
-    love.graphics.rectangle("fill", bg.pos.x, bg.pos.y, bg.w, bg.h)
+    local current = Gamestate.current()
+    if current == GS.MENU  then
+        --Draws normal bg
+        Color.set(bg.color)
+        love.graphics.rectangle("fill", bg.pos.x, bg.pos.y, bg.w, bg.h)
+    else
+        --Draw in-game bg for each game window
+        Color.set(bg.color)
+        for i, win in ipairs(GAME_WINDOWS) do
+            if win.active then
+                love.graphics.rectangle("fill", win.x, win.y, win.w, win.h)
+            end
+        end
+    end
 end
 
 

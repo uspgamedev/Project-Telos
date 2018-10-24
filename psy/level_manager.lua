@@ -48,7 +48,9 @@ function level_manager.resume()
 
     --Get yield argument
     status, arg = coroutine.resume(COROUTINE)
-
+    if not status then
+        error("Got an error in corotine: " .. arg)
+    end
     --Resumes coroutine only when there aren't any enemies on screen
     if arg == "noenemies" then
         --Checks every .02 seconds how many enemies there are
@@ -134,6 +136,7 @@ function level_manager.level_title(chapter_name, chapter_upper_text)
     --Create level title
     local name_txt = Txt.create_game_gui(x, y, chapter_name, chapter_name_font, nil, "format", nil, "game_title", "center", fx)
     name_txt.alpha = 0
+    name_txt.use_stencil = true
 
 
     --Create separator between upper text and chapter name
@@ -438,6 +441,161 @@ function level_manager.giveUltrablast(number)
     else
        counter:ultraUsed()
     end
+end
+
+-------------------------
+--GAME WINDOW FUNCTIONS--
+-------------------------
+
+--[[Utility functions that manipulate in-game windows]]--
+
+--Disable all game windows except first, and make it occupy the whole screen
+--This assumes the game has at least one game window
+function level_manager.resetGameWindow()
+    --Sets up first game window to appropriate parameters
+    if WINM.getNumWin() >= 1 then
+        local win = WINM.getWin(1)
+        win.x = 0
+        win.y = 0
+        win.w = WINDOW_WIDTH
+        win.h = WINDOW_HEIGHT
+        win.active = true
+    else
+        WINM.new(0,0,WINDOW_WIDTH,WINDOW_HEIGHT,true)
+    end
+
+    --Deletes all other windows
+    for i = WINM.getNumWin(),2,-1 do
+        WINM.delete(i)
+    end
+end
+
+--[[
+    Creates a new window, given a window to base the effect on,
+    what attributes the old window {x,y,w,h} and attributes the new
+    window {x,y,w,h} will have after the effects. You also provide the time the first
+    part of the effect will take.
+    Function will return the new window index.
+]]--
+function level_manager.createNewWindow(from_win_idx, from_win_attributes, new_win_attributes, dur)
+    local new_att = new_win_attributes --Reduce variable name
+    local from_att = from_win_attributes --Reduce variable name
+
+    local old_win = WINM.getWin(from_win_idx)
+
+    --Create new window above given window
+    local new_idx = WINM.new(old_win.x,old_win.y,old_win.w,old_win.h,true)
+
+    --Start shaking this new window
+    local str = .1
+    local str_speed = 3
+    local d = dur or 4
+    local orig_x = old_win.x
+    local orig_y = old_win.y
+    local elastic_dur = 1.5
+    FX.shake(d-.1, 1)
+    table.insert(WINM_HANDLES, LEVEL_TIMER:during(d,
+        function()
+            WINM.setWinPos(new_idx,
+                           orig_x + love.math.random(-str,str),
+                           orig_y + love.math.random(-str,str))
+            str = str + love.timer.getDelta()*str_speed
+        end,
+        --Start moving each window to its final position
+        function()
+            --Correct position
+            WINM.setWinPos(new_idx, orig_x, orig_y)
+
+            --Blink screen
+            FX.blink_screen(.1, .1)
+
+            table.insert(WINM_HANDLES, LEVEL_TIMER:after(elastic_dur/5,
+                            function()
+                                FX.shake(.1, 6)
+                            end
+                        )
+            )
+            WINM.tweenWin(new_idx, new_att[1], new_att[2], new_att[3], new_att[4],
+                          "out-elastic", elastic_dur,
+                          function()
+                              WINM.setWinPos(new_idx, new_att[1], new_att[2])
+                              WINM.setWinSize(new_idx, new_att[3], new_att[4])
+                          end
+            )
+            WINM.tweenWin(from_win_idx, from_att[1], from_att[2], from_att[3], from_att[4],
+                          "out-elastic", elastic_dur,
+                          function()
+                              WINM.setWinPos(from_win_idx, from_att[1], from_att[2])
+                              WINM.setWinSize(from_win_idx, from_att[3], from_att[4])
+                          end)
+        end
+    ))
+
+    return new_idx
+end
+
+--[[
+    Destroys a given window, given its index and index of target window to make it
+    "combine" with. You also provide what will be the new attribute of the combined window,
+    and the duration for the first part of the effect.
+    Function will return the id of combined window
+]]--
+function level_manager.destroyWindow(destroyed_win_idx, combined_win_idx, new_att, dur)
+    local des_win = WINM.getWin(destroyed_win_idx)
+    local com_win = WINM.getWin(combined_win_idx)
+
+    --Get the halfway position between the two windows
+    local halfway_pos = Vector((des_win.x + com_win.x)/2, (des_win.y + com_win.y)/2)
+    local combine_dur = .1 --Duration for screens merging effect
+
+    local str = .1
+    local str_speed = 10
+    local d = dur or 4
+    local des_orig_x = des_win.x
+    local des_orig_y = des_win.y
+    local com_orig_x = com_win.x
+    local com_orig_y = com_win.y
+    --Shake the screen for a while, and make both screens tweak
+    FX.shake(dur, 2)
+    table.insert(WINM_HANDLES, LEVEL_TIMER:during(dur,
+        function()
+            WINM.setWinPos(destroyed_win_idx,
+                           des_orig_x + love.math.random(-str,str),
+                           des_orig_y + love.math.random(-str,str))
+            WINM.setWinPos(combined_win_idx,
+                           com_orig_x + love.math.random(-str,str),
+                           com_orig_y + love.math.random(-str,str))
+            str = str + love.timer.getDelta()*str_speed
+        end,
+        function()
+            --Correct positions
+            WINM.setWinPos(combined_win_idx, com_orig_x, com_orig_y)
+            WINM.setWinPos(destroyed_win_idx, des_orig_x, des_orig_y)
+
+            FX.shake(combine_dur, 10)
+            --Make both windows go to the halway position and then adjusting to the desired size
+            WINM.tweenWin(destroyed_win_idx, halfway_pos.x, halfway_pos.y,
+                          des_win.w, des_win.h, "in-quad", combine_dur,
+                          function()
+                              WINM.setWinStatus(destroyed_win_idx, false)
+                          end
+            )
+            WINM.tweenWin(combined_win_idx, halfway_pos.x, halfway_pos.y,
+                        com_win.w, com_win.h, "in-quad", combine_dur,
+                        function()
+                            FX.blink_screen(.1, .2)
+                            FX.shake(.15, 6)
+                            WINM.tweenWin(combined_win_idx, new_att[1], new_att[2], new_att[3], new_att[4],
+                                          "out-elastic", 1,
+                                          function()
+                                              WINM.setWinPos(combined_win_idx, new_att[1], new_att[2])
+                                              WINM.setWinSize(combined_win_idx, new_att[3], new_att[4])
+                                          end
+                            )
+                        end
+            )
+        end
+    ))
 end
 
 --Return functions

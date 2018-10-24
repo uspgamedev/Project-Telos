@@ -67,11 +67,15 @@ function Circle_Button:draw()
     --Draws button text
     tx = b.font:getWidth(b.text)/2  --Relative x position of font on textbox
     ty = b.font:getHeight(b.text)/2 --Relative y position of font on textbox
+    --Get rounded position fo text
+    local text_x = math.floor(b.pos.x - tx + 0.5)
+    local text_y = math.floor(b.pos.y - ty + 0.5)
+
     Color.copy(color, UI_COLOR.color)
     color.a = 256*b.alpha_modifier
     Color.set(color)
     love.graphics.setFont(b.font)
-    love.graphics.print(b.text, b.pos.x - tx , b.pos.y - ty)
+    love.graphics.print(b.text, text_x , text_y)
 
     --Draws button overtext, if any
     if b.overtext then

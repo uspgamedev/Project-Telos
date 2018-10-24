@@ -106,16 +106,21 @@ function Psy:draw()
     color.a = p.alpha
     Color.set(color)
 
-    --Apply effect for invisible radius and draw the circle
-    if p.invisible_circle_radius_ratio > 0 then
-        Draw_Smooth_Ring(p.pos.x, p.pos.y, p.r, p.invisible_circle_radius_ratio*p.r)
-    else
-        Draw_Smooth_Circle(p.pos.x, p.pos.y, p.r)
+    --Draw all psychos from all windows
+    for idx, win in ipairs(GAME_WINDOWS) do
+        if win.active then
+            --Apply effect for invisible radius and draw the circle
+            if p.invisible_circle_radius_ratio > 0 then
+                Draw_Smooth_Ring(p.pos.x + win.x, p.pos.y + win.y, p.r, p.invisible_circle_radius_ratio*p.r)
+            else
+                Draw_Smooth_Circle(p.pos.x + win.x, p.pos.y + win.y, p.r)
+            end
+        end
     end
 
 end
 
-function Psy:shoot(x,y)
+function Psy:shoot(x,y,gamepad)
     local p, bullet, dir, c, color_table, w, h, scale
     p = self
     if not p.can_shoot then return end
@@ -131,17 +136,31 @@ function Psy:shoot(x,y)
         HSL(Hsl.stdv(207,81,49)),
         HSL(Hsl.stdv(271,75,52))
     }
-
-    dir = Vector(x-p.pos.x, y-p.pos.y)
+    --Find out which window the position is, to get correct direction
+    local game_win = WINM.winAtPoint(x,y)
+    if not gamepad and game_win then
+        dir = Vector(x-(p.pos.x+game_win.x), y-(p.pos.y+game_win.y))
+    elseif gamepad then
+        game_win = WINM.getWin(1)
+        dir = Vector(x-(p.pos.x+game_win.x), y-(p.pos.y+game_win.y))
+    else
+        dir = Vector(x-p.pos.x, y-p.pos.y)
+    end
     dir = dir:normalized()
-    Bullet.create(p.pos.x, p.pos.y, dir, c, color_table, "player_bullet")
 
-    --On godmode, shoot 10 bullets instead of 1
-    if GODMODE then
-        for j = 1,9 do
-            Bullet.create(p.pos.x, p.pos.y, dir, c, color_table, "player_bullet")
+    --Create bullets for all psychos from all windows
+    for idx, win in ipairs(GAME_WINDOWS) do
+        if win.active then
+            Bullet.create(p.pos.x+win.x, p.pos.y+win.y, dir, c, color_table, "player_bullet", idx)
+        end
+        --On godmode, shoot 10 bullets instead of 1
+        if GODMODE then
+            for j = 1,9 do
+                Bullet.create(p.pos.x+win.x, p.pos.y+win.y, dir, c, color_table, "player_bullet", idx)
+            end
         end
     end
+
 
     --Signal ultrablast counter that psycho is shooting
     local counter = Util.findId("ultrablast_counter")
@@ -161,13 +180,18 @@ function Psy:ultrablast(power)
     --Update ultrablast counter
     LM.giveUltrablast(-1)
 
-    Ultra.create(p.pos.x, p.pos.y, p.color, power)
+    --Create ultrablasts for every game window
+    for idx, win in ipairs(GAME_WINDOWS) do
+        if win.active then
+            Ultra.create(p.pos.x+win.x, p.pos.y+win.y, p.color, power, idx)
+        end
+    end
 
     FX.shake(.3,2)
 
     --Signal ultrablast counter that psycho used ultrablast
     local counter = Util.findId("ultrablast_counter")
-    if counter then counter:psychoShot() end
+    if counter then counter:psychoShot(true) end
 
 end
 
@@ -175,7 +199,7 @@ function Psy:update(dt)
     local p
 
     p = self
-    
+
     --Check for joystick input
     if USING_JOYSTICK and CURRENT_JOYSTICK then
         --Enter or leave focus mode (left shoulder button by default)
@@ -235,8 +259,9 @@ function Psy:update(dt)
           p.shoot_tick = p.shoot_tick + p.shoot_fps
           local v = Vector(Controls.getJoystickAxisValues(CURRENT_JOYSTICK, "raxis_horizontal", "raxis_vertical")):normalized()
           if v.x ~= 0 or v.y ~= 0 then --Check for deadzone case
-            local x, y = p.pos.x + v.x, p.pos.y + v.y
-            p:shoot(x, y)
+            local game_win = WINM.getWin(1)
+            local x, y = p.pos.x + game_win.x + v.x, p.pos.y + game_win.y + v.y
+            p:shoot(x, y, true)
           end
       end
     end
@@ -250,7 +275,11 @@ function Psy:update(dt)
     p.circle_fx_tick = p.circle_fx_tick - dt
     if p.circle_fx_tick <= 0 then
         p.circle_fx_tick = p.circle_fx_tick + p.circle_fx_fps
-        C_FX.create(p.pos, p.circle_fx_alpha)
+        for idx, win in ipairs(GAME_WINDOWS) do
+            if win.active then
+                C_FX.create(p.pos + Vector(win.x, win.y), p.circle_fx_alpha*p.alpha/255, idx)
+            end
+        end
         --Update alpha for next circle
         p.circle_fx_alpha = math.min(p.circle_fx_alpha + dt*p.circle_fx_alpha_speed, p.circle_fx_alpha_max)
     end
@@ -276,7 +305,11 @@ function Psy:update(dt)
         p.pos = p.pos + dt*p.speed*p.speedvm_focus*p.speed_multiplier
     end
     --Fixes if psycho leaves screen
-    p.pos.x, p.pos.y = isOutside(p)
+    for i, win in ipairs(GAME_WINDOWS) do
+        if win.active then
+            p.pos.x, p.pos.y = isOutside(p, win)
+        end
+    end
 end
 
 function Psy:destroy()
@@ -300,17 +333,28 @@ function Psy:kill()
     p.circle_fx_alpha = p.circle_fx_alpha_min --Reset alpha for effects
 
     if not p.death and p.lives <= 0 then
-        FX.explosion(p.pos.x, p.pos.y, p.r, p.color, 100, 450, 250, 4)
+        --Creates explosion for each game window
+        for i, win in ipairs(GAME_WINDOWS) do
+            if win.active then
+                FX.explosion(p.pos.x + win.x, p.pos.y + win.y, p.r, p.color, 100, 450, 250, 4, nil, i)
+            end
+        end
         p.death = true
         Util.findId("psycho_aim").death = true --Delete aim
         Audio.tweenCurrentBGMPitch(.6,3)
         SWITCH =  "GAMEOVER"
         PSYCHO_SCORE = p.score
     else
-        --Reset ultrablast counter if its not the default
-        p.ultrablast_counter = p.default_ultrablast_number
+        --Reset ultrablast counter, and give ultrablasts if psycho has fewer than default
         local counter = Util.findId("ultrablast_counter")
-        if counter then counter:reset() end
+        if counter then
+            if p.ultrablast_counter < p.default_ultrablast_number then
+                p.ultrablast_counter = p.default_ultrablast_number
+                counter:reset(true)
+            else
+                counter:reset(false)
+            end
+        end
         FX.shake(.25,1.5)
         FX.psychoExplosion(p)
     end
@@ -470,27 +514,27 @@ function psycho.updateSpeed(self)
 
 end
 
---Checks if psycho has leaved (even if partially) the game screen and returns correct position
-function isOutside(o)
+--Checks if psycho has leaved (even if partially) the given game screen and returns
+--needed correction for each coordinate
+function isOutside(o, win)
     local x, y
 
-
-    x, y = o.pos.x, o.pos.y
+    x, y = o.pos.x+win.x, o.pos.y+win.y
 
     --X position
-    if     o.pos.x - o.r <= TOP_LEFT_CORNER.x then
-        x = o.r
-    elseif o.pos.x + o.r >= BOTTOM_RIGHT_CORNER.x then
-        x = BOTTOM_RIGHT_CORNER.x - o.r
+    if  x - o.r <= win.x then
+        x = win.x + o.r
+    elseif x + o.r >= win.x + win.w then
+        x = win.x + win.w - o.r
     end
     --Y position
-    if o.pos.y - o.r <= TOP_LEFT_CORNER.y then
-        y = o.r
-    elseif o.pos.y + o.r >= BOTTOM_RIGHT_CORNER.y then
-        y = BOTTOM_RIGHT_CORNER.y - o.r
+    if y - o.r <= win.y then
+        y = win.y + o.r
+    elseif y + o.r >= win.y + win.h then
+        y = win.y + win.h - o.r
     end
 
-    return x,y
+    return x-win.x,y-win.y
 end
 
 --return function

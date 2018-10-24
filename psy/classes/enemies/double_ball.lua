@@ -7,11 +7,17 @@ local LM = require "level_manager"
 --DOUBLE BALL CLASS--
 --[[Simple red circle enemy that spawns simple balls when it dies]]
 
+--Local functions
+
+local isInside
+
+-- Enemy functions
+
 local enemy = {}
 
 Double_Ball = Class{
-    __includes = {CIRC},
-    init = function(self, _x, _y, _dir, _speed_m, _radius, _score_mul)
+    __includes = {ENEMY},
+    init = function(self, _x, _y, _dir, _speed_m, _radius, _score_mul, _game_win_idx)
         local dx, dy, r, color, color_table
 
         color_table = {
@@ -22,7 +28,7 @@ Double_Ball = Class{
         }
 
 
-        ENEMY.init(self,  _x, _y, _dir, _speed_m, _radius, _score_mul, color_table, 270, 35)
+        ENEMY.init(self,  _x, _y, _dir, _speed_m, _radius, _score_mul, color_table, 270, 35, _game_win_idx)
 
         self.tp = "double_ball" --Type of this class
     end
@@ -40,7 +46,7 @@ function Double_Ball:kill(gives_score, mode, dont_explode)
     if gives_score == nil then gives_score = true end --If this enemy should give score
 
     if not dont_explode then
-      FX.explosion(self.pos.x, self.pos.y, self.r, self.color)
+      FX.explosion(self.pos.x, self.pos.y, self.r, self.color, nil, nil, nil, nil, nil, self.game_win_idx)
     end
 
     if gives_score then
@@ -56,9 +62,9 @@ function Double_Ball:kill(gives_score, mode, dont_explode)
 
     if mode ~= "dontspawn" then
         --Create two Simple Balls in a V shape
-        e = SB.create(self.pos.x, self.pos.y, self.speed:rotated(math.pi/12), 1.12*self.speed_m, .75*self.r, .5*self.score_mul)
+        e = SB.create(self.pos.x, self.pos.y, self.speed:rotated(math.pi/12), 1.12*self.speed_m, .75*self.r, .5*self.score_mul, self.game_win_idx)
         e.enter = true
-        e = SB.create(self.pos.x, self.pos.y, self.speed:rotated(-math.pi/12), 1.12*self.speed_m, .75*self.r, .5*self.score_mul)
+        e = SB.create(self.pos.x, self.pos.y, self.speed:rotated(-math.pi/12), 1.12*self.speed_m, .75*self.r, .5*self.score_mul, self.game_win_idx)
         e.enter = true
     end
 
@@ -84,10 +90,10 @@ end
 
 --UTILITY FUNCTIONS--
 
-function enemy.create(x, y, dir, speed_m, radius, score_mul)
+function enemy.create(x, y, dir, speed_m, radius, score_mul, game_win_idx)
     local e
 
-    e = Double_Ball(x, y, dir, speed_m, radius, score_mul)
+    e = Double_Ball(x, y, dir, speed_m, radius, score_mul, game_win_idx)
     e:addElement(DRAW_TABLE.L4)
     e:startColorLoop()
 
@@ -114,10 +120,11 @@ end
 --Checks if a circular enemy has entered (even if partially) inside the game screen
 function isInside(o)
 
-    if    o.pos.x + o.r >= 0
-      and o.pos.x - o.r <= WINDOW_WIDTH
-      and o.pos.y + o.r >= 0
-      and o.pos.y - o.r <= WINDOW_HEIGHT
+    local win = WINM.getWin(o.game_win_idx)
+    if    o.pos.x + o.r >= win.x
+      and o.pos.x - o.r <= win.x + win.w
+      and o.pos.y + o.r >= win.y
+      and o.pos.y - o.r <= win.y + win.h
       then
           return true
       end

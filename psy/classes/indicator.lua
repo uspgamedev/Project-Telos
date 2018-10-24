@@ -1,7 +1,7 @@
 require "classes.primitive"
 local Color = require "classes.color.color"
 local Util = require "util"
-local Aim_Functions = require "classes.psycho_aim"
+local Aim_Functions = require "classes.indicator_aim"
 --INDICATOR CLASS--
 --[[Indicates when something is about to happen]]--
 
@@ -10,6 +10,76 @@ local indicator = {}
 --------------------
 --Useful Functions--
 --------------------
+
+local getPositions
+local getIndicatorPosition
+
+function getIndicatorPosition(pos,dir,radius,win,margin)
+    local on_left = pos.x + radius < win.x + margin
+    local on_right = pos.x - radius > win.x + win.w - margin
+    local on_top = pos.y + radius < win.y + margin
+    local on_bottom = pos.y - radius > win.y + win.h - margin
+    --If enemy is inside window, just place the indicator there
+    if on_left and on_right and on_top and on_bottom then
+        return pos.x,pos.y
+    end
+    local left_border = win.x + margin
+    local right_border =  win.x + win.w - margin
+    local top_border = win.y + margin
+    local bottom_border = win.y + win.h - margin
+    local lamb_x  --Range of valid lambidas for horizontal axis
+    local lamb_y  --Range of valid lambidas for vertical axis
+    local lamb --Final lambida value
+    assert(dir.x ~= 0 or dir.y ~= 0, "Enemy spawned with null direction")
+    if dir.x ~= 0 then
+        lamb_x = {}
+        local left = (left_border - pos.x)/dir.x
+        local right = (right_border - pos.x)/dir.x
+        lamb_x["lower_limit"] = math.min(left,right)
+        lamb_x["upper_limit"] = math.max(left,right)
+    else
+        if on_left or on_right then
+            print(pos.x, pos.y, dir.x, dir.y, win.x, win.y)
+            error("Enemy will never hit game window (1)")
+        end
+    end
+    if dir.y ~= 0 then
+        lamb_y = {}
+        local top = (top_border - pos.y)/dir.y
+        local bot = (bottom_border - pos.y)/dir.y
+        lamb_y["lower_limit"] = math.min(top,bot)
+        lamb_y["upper_limit"] = math.max(top,bot)
+    else
+        if on_top or on_bottom then
+            error("Enemy will never hit game window (2)")
+        end
+    end
+    if lamb_x and lamb_y then
+        if lamb_x.lower_limit > lamb_y.upper_limit or
+           lamb_x.upper_limit < lamb_y.lower_limit then
+               print(lamb_x.lower_limit, lamb_x.upper_limit)
+               print(lamb_y.lower_limit, lamb_y.upper_limit)
+               print(pos.x, pos.y, dir.x, dir.y)
+               print(win.w, win.h)
+               error("Enemy will never hit game window (3)")
+        end
+        lamb = math.max(lamb_x.lower_limit,lamb_y.lower_limit)
+    --Only horizontal direction
+    elseif lamb_x then
+        if on_left or on_right then
+            lamb = lamb_x.lower_limit
+        else
+            error("shouldn't happen (1)")
+        end
+    elseif lamb_y then
+        if on_top or on_bottom then
+            lamb = lamb_y.lower_limit
+        else
+            error("shouldn't happen (2)")
+        end
+    end
+    return pos.x + lamb*dir.x, pos.y + lamb*dir.y
+end
 
 --Get the center, direction to face and side length of a triangle. Return all vertex positions
 function getPositions(center, dir, side)
@@ -69,15 +139,16 @@ function Enemy_Indicator_Batch:destroy()
                     ind.death = true
                     if not ind.follow_psycho then
 
-                        ind.enemy.create(ind.enemy_pos.x, ind.enemy_pos.y, ind.enemy_dir, ind.enemy_speed_m, ind.enemy_radius, ind.enemy_score_mul)
+                        ind.enemy.create(ind.enemy_pos.x, ind.enemy_pos.y, ind.enemy_dir, ind.enemy_speed_m, ind.enemy_radius, ind.enemy_score_mul, ind.enemy_game_win_idx)
 
                     else
 
                         p  = Util.findId("psycho")
                         if p then
-                            ind.enemy.create(ind.enemy_pos.x, ind.enemy_pos.y, Vector(p.pos.x - ind.enemy_pos.x, p.pos.y - ind.enemy_pos.y), ind.enemy_speed_m, ind.enemy_radius, ind.enemy_score_mul)
+                            local win = WINM.getWin(ind.enemy_game_win_idx)
+                            ind.enemy.create(ind.enemy_pos.x, ind.enemy_pos.y, Vector(p.pos.x + win.x - ind.enemy_pos.x, p.pos.y + win.y - ind.enemy_pos.y), ind.enemy_speed_m, ind.enemy_radius, ind.enemy_score_mul, ind.enemy_game_win_idx)
                         else
-                            ind.enemy.create(ind.enemy_pos.x, ind.enemy_pos.y, Vector(WINDOW_WIDTH/2 - ind.enemy_pos.x, WINDOW_HEIGHT/2 - ind.enemy_pos.y), ind.enemy_speed_m, ind.enemy_radius, ind.enemy_score_mul)
+                            ind.enemy.create(ind.enemy_pos.x, ind.enemy_pos.y, Vector(WINDOW_WIDTH/2 - ind.enemy_pos.x, WINDOW_HEIGHT/2 - ind.enemy_pos.y), ind.enemy_speed_m, ind.enemy_radius, ind.enemy_score_mul, ind.enemy_game_win_idx)
                         end
                     end
                 end
@@ -111,7 +182,7 @@ end
 --Pass only the center of the triangle, the direction to face, and side length
 Enemy_Indicator = Class{
     __includes = {TRIANGLE},
-    init = function(self, _center_pos, _dir, _side, _color, _follow_psycho)
+    init = function(self, _center_pos, _dir, _side, _color, _follow_psycho, _game_win_idx)
         local p1, p2, p3
 
         p1, p2, p3 = getPositions(_center_pos, _dir, _side)
@@ -129,6 +200,8 @@ Enemy_Indicator = Class{
             self.mode = "line"
         end
 
+        self.game_win_idx = _game_win_idx
+
         self.tp = "enemy_indicator" --Type of this class
     end
 }
@@ -145,8 +218,9 @@ function Enemy_Indicator:update(dt)
 
     if not i.follow_psycho or not p then return end
 
-    dir = Vector(p.pos.x - i.center.x, p.pos.y - i.center.y)
-
+    local win = WINM.getWin(self.game_win_idx)
+    dir = Vector(p.pos.x + win.x - i.enemy_pos.x, p.pos.y + win.y - i.enemy_pos.y)
+    i.center.x, i.center.y = getIndicatorPosition(i.enemy_pos, dir, i.enemy_radius, win, i.win_margin)
     i.p1, i.p2, i.p3 = getPositions(i.center, dir, i.side)
 
 end
@@ -155,7 +229,7 @@ end
 function Enemy_Indicator:create_aim()
     local aim, h1, h2
 
-    aim, h1, h2 = Aim_Functions.create_indicator(self.center.x, self.center.y, Color.red())
+    aim, h1, h2 = Aim_Functions.create_indicator(self, Color.red(), self.game_win_idx)
     table.insert(self.handles, h1)
     table.insert(self.handles, h2)
 
@@ -164,29 +238,22 @@ end
 --UTILITY FUNCTIONS--
 
 --Create an enemy indicator from a margin in the screen, and after duration, create the enemy
-function indicator.create_enemy(enemy, pos, dir, following, side, speed_m, radius, score_mul, st)
+function indicator.create_enemy(enemy, pos, dir, following, side, speed_m, radius, score_mul, game_win_idx, st)
     local i, center, margin, handle, color
 
-    center = Vector(pos.x, pos.y)
+    center = Vector(0,0)
     side = side or 20
-    margin = side/2 + 1
+    margin = side/2 + 4
     color = enemy.indColor()
+    radius = radius or enemy.radius()
+    local win = WINM.getWin(game_win_idx)
 
     --Put indicator center inside the screen
-    if pos.x < margin then
-        center.x = margin
-    elseif pos.x > WINDOW_WIDTH - margin then
-        center.x = WINDOW_WIDTH - margin
-    end
-    if pos.y < margin then
-        center.y = margin
-    elseif pos.y > WINDOW_HEIGHT - margin then
-        center.y = WINDOW_HEIGHT - margin
-    end
+    center.x, center.y = getIndicatorPosition(pos,dir,radius,win,margin)
 
     st = st or "enemy_indicator" --subtype
 
-    i = Enemy_Indicator(center, dir, side, color, following)
+    i = Enemy_Indicator(center, dir, side, color, following, game_win_idx)
 
     i:addElement(DRAW_TABLE.L5, st)
 
@@ -200,35 +267,31 @@ function indicator.create_enemy(enemy, pos, dir, following, side, speed_m, radiu
     i.enemy_speed_m = speed_m
     i.enemy_radius = radius
     i.enemy_score_mul = score_mul
+    i.enemy_game_win_idx = game_win_idx
+    i.win_margin = margin
     i.enemy = enemy
 
     return i
 end
 
 --Create an enemy indicator from a margin in the screen, and after duration, create the turret enemy
-function indicator.create_enemy_turret(turret, pos, speed_m, e_speed_m, radius, score_mul, enemy, target_pos, duration, life, number, start_angle, rot_angle, fps, side, ind_duration, st)
+function indicator.create_enemy_turret(turret, pos, speed_m, e_speed_m, radius, score_mul, enemy, target_pos, duration, life, number, start_angle, rot_angle, fps, side, ind_duration, game_win_idx, st)
     local i, center, margin, handle, color
 
-    center = Vector(pos.x, pos.y)
+    center = Vector(0, 0)
     side = side or 20
     margin = side/2 + 1
     color = turret.indColor()
+    radius = radius or turret.radius()
+    local dir = Vector(target_pos.x - pos.x, target_pos.y - pos.y)
 
+    local win = WINM.getWin(game_win_idx)
     --Put indicator center inside the screen
-    if pos.x < margin then
-        center.x = margin
-    elseif pos.x > WINDOW_WIDTH - margin then
-        center.x = WINDOW_WIDTH - margin
-    end
-    if pos.y < margin then
-        center.y = margin
-    elseif pos.y > WINDOW_HEIGHT - margin then
-        center.y = WINDOW_HEIGHT - margin
-    end
+    center.x, center.y = getIndicatorPosition(pos,dir,radius,win,margin)
 
     st = st or "enemy_indicator" --subtype
 
-    i = Enemy_Indicator(center, Vector(target_pos.x - pos.x, target_pos.y - pos.y), side, color, false)
+    i = Enemy_Indicator(center, dir, side, color, false, game_win_idx)
 
     i:addElement(DRAW_TABLE.L5, st)
 
@@ -240,7 +303,7 @@ function indicator.create_enemy_turret(turret, pos, speed_m, e_speed_m, radius, 
         function()
             i.death = true --Remove the indicator
 
-            turret.create(pos.x, pos.y, speed_m, e_speed_m, radius, score_mul, enemy, target_pos, duration, life, number, start_angle, rot_angle, fps) --Create the turret
+            turret.create(pos.x, pos.y, speed_m, e_speed_m, radius, score_mul, enemy, target_pos, duration, life, number, start_angle, rot_angle, fps, game_win_idx) --Create the turret
 
         end
     )
@@ -249,29 +312,24 @@ function indicator.create_enemy_turret(turret, pos, speed_m, e_speed_m, radius, 
 end
 
 --Create an enemy indicator from a margin in the screen, and after duration, create a snake enemy
-function indicator.create_enemy_snake(snake, segments, pos, life, speed_m, radius, score_mul, side, ind_duration)
+function indicator.create_enemy_snake(snake, segments, pos, life, speed_m, radius, score_mul, side, ind_duration, game_win_idx, st, id)
     local i, center, margin, handle, color
 
-    center = Vector(pos[1][1], pos[1][2])
+    center = Vector(0, 0)
     side = side or 20
     margin = side/2 + 1
     color = snake.indColor()
+    radius = radius or snake.radius()
+    local head_pos = Vector(pos[1][1],pos[1][2])
+    local dir = Vector(pos[2][1] - pos[1][1], pos[2][2] - pos[1][2])
 
+    local win = WINM.getWin(game_win_idx)
     --Put indicator center inside the screen
-    if pos[1][1] < margin then
-        center.x = margin
-    elseif pos[1][1] > WINDOW_WIDTH - margin then
-        center.x = WINDOW_WIDTH - margin
-    end
-    if pos[1][2] < margin then
-        center.y = margin
-    elseif pos[1][2] > WINDOW_HEIGHT - margin then
-        center.y = WINDOW_HEIGHT - margin
-    end
+    center.x, center.y = getIndicatorPosition(head_pos,dir,radius,win,margin)
 
     st = st or "enemy_indicator" --subtype
 
-    i = Enemy_Indicator(center, Vector(pos[2][1] - pos[1][1], pos[2][2] - pos[1][2]), side, color, false)
+    i = Enemy_Indicator(center, dir, side, color, false, game_win_idx)
 
     i:addElement(DRAW_TABLE.L5, st)
 
@@ -282,7 +340,7 @@ function indicator.create_enemy_snake(snake, segments, pos, life, speed_m, radiu
     i.level_handles["create_enemy"] = LEVEL_TIMER:after(ind_duration,
         function()
             i.death = true --Remove the indicator
-            snake.create(segments, pos, life, speed_m, radius, score_mul) --Create the turret
+            snake.create(segments, pos, life, speed_m, radius, score_mul, game_win_idx, id) --Create the turret
         end
     )
 

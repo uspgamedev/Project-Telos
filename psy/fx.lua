@@ -1,6 +1,7 @@
 local Color = require "classes.color.color"
 local Particle = require "classes.particle"
 local Util = require "util"
+local Blink = require "classes.blink_screen"
 --EFFECTS CLASS --
 
 local fx = {}
@@ -10,8 +11,10 @@ local fx = {}
 --------------------
 
 --Creates a colored article explosion starting at a circle with center (x,y) and radius r
-function fx.explosion(x, y, r, color, number, speed, decaying, size, important)
+function fx.explosion(x, y, r, color, number, speed, decaying, size, important, game_win_idx)
     local dir, angle, radius, batch, particle, number_of_particles
+
+    game_win_idx = game_win_idx or 1
 
     --Default Values
     number = number or 25  --Number of particles created in a explosion
@@ -56,6 +59,9 @@ function fx.explosion(x, y, r, color, number, speed, decaying, size, important)
         pos.y = y + radius*math.sin(angle)
 
         particle = Particle.create_decaying(pos, dir, color, speed * (1 - love.math.random()*.5), decaying, size)
+        if game_win_idx > 0 then
+            particle.game_win_idx = game_win_idx
+        end
         batch:put(particle)
 
     end
@@ -108,26 +114,31 @@ function fx.psychoExplosion(p)
         Audio.fade(bgm, bgm:getVolume(), BGM_VOLUME_LEVEL/5, d, false, true)
     end
 
-    c_pos = Vector(p.pos.x, p.pos.y) --Position of psycho's center
+    --Create explosion for each game_window
+    for win_idx, win in ipairs(GAME_WINDOWS) do
+        if win.active then
+            c_pos = Vector(p.pos.x + win.x, p.pos.y + win.y) --Position of psycho's center
 
-    --Create particles in a grid divided by 'e' distances
-    --Each particle --olhar no git
-    for x = c_pos.x - p.r, c_pos.x + p.r - e, e do
-        for y = c_pos.y - p.r, c_pos.y + p.r - e, e do
-            --If inside psycho radius, and not dead center, create particle
-            if (x+e/2 - c_pos.x)*(x+e/2 - c_pos.x) + (y+e/2 - c_pos.y)*(y+e/2 - c_pos.y) <= p.r*p.r
-            and x+e/2 ~= c_pos.x and y+e/2 ~= c_pos.y then
-                --Makes the particle go outwards
-                dir = Vector(x+e/2 - c_pos.x, y+e/2 - c_pos.y)
-                dir = dir:normalized()
+            --Create particles in a grid divided by 'e' distances
+            --Each particle --olhar no git
+            for x = c_pos.x - p.r, c_pos.x + p.r - e, e do
+                for y = c_pos.y - p.r, c_pos.y + p.r - e, e do
+                    --If inside psycho radius, and not dead center, create particle
+                    if (x+e/2 - c_pos.x)*(x+e/2 - c_pos.x) + (y+e/2 - c_pos.y)*(y+e/2 - c_pos.y) <= p.r*p.r
+                    and x+e/2 ~= c_pos.x and y+e/2 ~= c_pos.y then
+                        --Makes the particle go outwards
+                        dir = Vector(x+e/2 - c_pos.x, y+e/2 - c_pos.y)
+                        dir = dir:normalized()
 
-                pos = Vector(x + e/2, y + e/2)
-                speed = death_func(pos, c_pos, p.r)
+                        pos = Vector(x + e/2, y + e/2)
+                        speed = death_func(pos, c_pos, p.r)
 
-                part = Particle.create_regular(pos, dir, p.color, speed, r, "psycho_explosion")
-                --Fade-out particles
-                part.color.a = 250
-                part.level_handles = LEVEL_TIMER:tween(d/6, part.color, {a = 0}, 'in-linear')
+                        part = Particle.create_regular(pos, dir, p.color, speed, r, win_idx, "psycho_explosion")
+                        --Fade-out particles
+                        part.color.a = 250
+                        part.level_handles = LEVEL_TIMER:tween(d/6, part.color, {a = 0}, 'in-linear')
+                    end
+                end
             end
         end
     end
@@ -389,6 +400,32 @@ function fx.change_value_objects(objects, value_name, target_values, speed, labe
     if after_function then
       FX_TIMER:after(longest_duration, after_function)
     end
+
+end
+
+------------------
+--MISC FUNCTIONS--
+------------------
+
+function fx.blink_screen(blank_dur, fade_out_dur)
+    --Blink screen setup
+    local blink = Blink()
+
+    blink:addElement(DRAW_TABLE.L5u, nil, "blink_screen")
+
+    blink.alpha = 150
+
+    --Make it all white for a period of time
+    LEVEL_TIMER:after(blank_dur,
+        function()
+            --Make it disappear
+            LEVEL_TIMER:tween(fade_out_dur, blink, {alpha = 0}, "in-linear",
+                function()
+                    blink.death = true
+                end
+            )
+        end
+    )
 
 end
 

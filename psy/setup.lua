@@ -123,6 +123,9 @@ function setup.config()
     --Contains the death timer handles
     DEATH_HANDLES = {}
 
+    --Contains the game window handles
+    WINM_HANDLES = {}
+
     --WINDOW CONFIG--
     love.window.setMode(WINDOW_WIDTH, WINDOW_HEIGHT, {resizable = true, minwidth = 800, minheight = 600})
     ResManager.init()
@@ -395,7 +398,11 @@ function setup.config()
 
   print("Finished setting up shaders")
 
+
   --LAST GAME SETUPS
+
+  --Game windows properties
+  GAME_WINDOWS = {}
 
   --Start UI color transition
   UI_COLOR = UI.create_color()
@@ -406,6 +413,7 @@ function setup.config()
   --FPS Counter
   Txt.create_gui(5, WINDOW_HEIGHT - 20, "FPS: ", GUI_MEDLESS, love.timer.getFPS(), "right", GUI_MEDLESS, "fps_counter")
 
+  print("Finished setting up the game")
   print("---------------------------")
 
 end

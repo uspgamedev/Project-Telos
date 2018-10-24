@@ -808,6 +808,8 @@ function level_functions.setup()
     LM.level_title("LOST IN DARKNESS", "Chapter II")
     Audio.playBGM(BGM.level_2)
 
+    LM.resetGameWindow()
+
 end
 
 
