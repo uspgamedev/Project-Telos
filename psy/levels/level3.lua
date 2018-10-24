@@ -572,7 +572,7 @@ function level_functions.part_3()
     local gm_idx = LM.createNewWindow(1, {x1, y1, w1, h1}, {x2, y2, w2, h2}, 4)
 
     LM.wait(7)
-
+    
     F.single{enemy = SB, x = x1+w1/2, y = y1+h1+50, speed_m = .8, ind_side = 50, score_mul = 2, ind_duration = 3.5, game_win = 1, dy = -1}
     F.single{enemy = SB, x = x2+w2/2, y = y2+h2+50, speed_m = .8, ind_side = 50, score_mul = 2, ind_duration = 3.5, dy = -1, game_win = gm_idx}
 
@@ -612,6 +612,7 @@ function level_functions.part_3()
         end
         LM.wait(.8)
     end
+
     LM.wait("noenemies")
 
     --Circles at both windows, increasing variation
@@ -702,14 +703,13 @@ function level_functions.part_3()
     F.circle{radius = 640, number = 10, enemy = {GrB}, enemy_margin = 0, game_win = 1, speed_m = .3, ind_duration = 3, ind_side = 40, e_radius = 18, y_center = y1 + 2*h1/3}
 
     LM.wait("noenemies")
-
     local mod = 0
     for i = 1, 48 do
         --Spawn grey at right window
         if i%4 == 0 then
-            F.fromVertical{enemy = {GrB}, side = "top", mode = "left" , number = 4, ind_duration = 1, ind_side = 40, speed_m = .2, e_radius = 20, game_win = gm_idx, enemy_x_margin = 110, screen_margin = 10}
+            F.fromVertical{enemy = {GrB}, side = "top", mode = "left" , number = 4, ind_duration = 1, ind_side = 40, speed_m = .2, e_radius = 18, game_win = gm_idx, enemy_x_margin = 140, screen_margin = 0}
         elseif i%4 == 2 then
-            F.fromVertical{enemy = {GrB}, side = "top", mode = "left" , number = 4, ind_duration = 1, ind_side = 40, speed_m = .2, e_radius = 20, game_win = gm_idx, enemy_x_margin = 110, screen_margin = 50}
+            F.fromVertical{enemy = {GrB}, side = "top", mode = "center" , number = 3, ind_duration = 1, ind_side = 40, speed_m = .2, e_radius = 18, game_win = gm_idx, enemy_x_margin = 140}
         end
 
         --Spawn formation on the left window
@@ -767,8 +767,6 @@ function level_functions.part_3()
     F.fromHorizontal{enemy = {SB,GlB,SB}, side = "right", mode = "center" , number = 10, ind_duration = 2.5, ind_side = 40, speed_m = .3, e_radius = 25, game_win = 1}
 
     LM.wait("noenemies")
-
-
 end
 
 ---------------------

@@ -88,7 +88,7 @@ local lag = 0
 local frame = 1/60
 function state:update(dt)
     local m_dt
-
+    
     Util.updateTimers(dt)
 
     Util.updateFPS()
