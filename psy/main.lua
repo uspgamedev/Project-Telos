@@ -5,7 +5,7 @@ Class     = require "hump.class"
 Camera    = require "hump.camera"
 Vector    = require "hump.vector"
 
- require "slam"
+require "source_wrapper"
 
 --CLASSES--
 
