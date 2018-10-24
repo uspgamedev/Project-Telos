@@ -44,6 +44,7 @@ function audio.playBGM(bgm, fade_out_d, fade_in_d, start_pos)
 
     if not _current_bgm then
         _current_bgm = bgm:play()
+        _current_bgm:setPitch(1)
         _current_bgm:setLooping(true)
         _current_bgm:seek(start_pos)
         audio.fade(bgm, 0, BGM_VOLUME_LEVEL, fade_in_d, nil, true)
@@ -52,6 +53,7 @@ function audio.playBGM(bgm, fade_out_d, fade_in_d, start_pos)
         audio.fadeOutCurrentBGM(fade_out_d)
         --Fade in new bgm
         _current_bgm = bgm:play()
+        _current_bgm:setPitch(1)
         _current_bgm:setLooping(true)
         _current_bgm:seek(start_pos)
         audio.fade(_current_bgm, 0, BGM_VOLUME_LEVEL, fade_in_d, false, true)
