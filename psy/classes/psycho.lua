@@ -327,7 +327,11 @@ function Psy:kill()
 
     if p.lives <= 0 then return end
 
-    SFX.psychoball_dies:play()
+    if p.lives > 1 then
+      SFX.psychoball_dies_respawn:play()
+    else
+      SFX.psychoball_dies:play()
+    end
 
     LM.giveLives(-1) --Update life
     p.circle_fx_alpha = p.circle_fx_alpha_min --Reset alpha for effects
