@@ -24,6 +24,7 @@ local _but_high_back = require "buttons.highscore_back_button"
 local _but_opt = require "buttons.options_button"
 local _but_opt_back = require "buttons.options_back_button"
 local _but_options_controls = require "buttons.options_controls_button"
+local _but_options_video = require "buttons.options_video_button"
 
 
 --LOCAL FUNCTIONS DECLARATIONS--
@@ -186,9 +187,19 @@ function state:enter()
          _but_options_controls(_options_menu_screen_buttons, _current_menu_screen)
         end
     end
-    b = Button.create_circle_gui(750 - WINDOW_WIDTH, 650, 70, func, "Gamepad", GUI_BIGLESSEST, "options_menu_buttons", "opt_controls_button")
+    b = Button.create_circle_gui(750 - WINDOW_WIDTH, 650, 68, func, "Gamepad", GUI_BIGLESSEST, "options_menu_buttons", "opt_controls_button")
     b.sfx = SFX.generic_button
     table.insert(_options_menu_screen_buttons, "opt_controls")
+
+    func = function()
+        if _options_mode ~= "video" then
+         _options_mode = "video"
+         _but_options_video(_options_menu_screen_buttons, _current_menu_screen)
+        end
+    end
+    b = Button.create_circle_gui(620 - WINDOW_WIDTH, 650, 62, func, "Video", GUI_BIGLESSEST, "options_menu_buttons", "opt_video_button")
+    b.sfx = SFX.generic_button
+    table.insert(_options_menu_screen_buttons, "opt_video")
 
     --"Go to Main Menu Screen" button
     func = function()

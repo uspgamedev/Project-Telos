@@ -5,7 +5,7 @@ local Util = require "util"
 local function f(options_buttons, current_menu_screen)
     --Remove all previous buttons except for important ones
     for i,b in pairs(options_buttons) do
-        if b ~= "opt_controls" and b ~= "opt_go2main" then
+        if b ~= "opt_controls" and b ~= "opt_go2main" and b ~= "opt_video" then
             local but = Util.findId(b.."_button")
             if but then
                 but:kill()
