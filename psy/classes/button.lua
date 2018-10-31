@@ -543,9 +543,111 @@ function Toggle_Button:func()
     self.status = self.status_func()
 end
 
+-----------------
+--SWITCH BUTTON--
+-----------------
+
+--[[Button that switches between options]]
+Switch_Button = Class{
+    __includes = {RECT, WTXT},
+    init = function(self, _x, _y, _name, _options, _switch_func, _status_func, _help_text)
+
+
+        self.name = _name --Name displayed next to the button
+        self.help_text = _help_text --Optional explanatory text of button
+
+        self.switch_func = _switch_func --Function to be called when button is pressed
+        self.status_func = _status_func --Function that returns current button status (string value)
+
+        self.name_font = GUI_MEDMED
+        self.status_font = GUI_MEDMED
+        self.help_text_font = GUI_MEDLESS
+
+        self.status = self.status_func() --Which state button is button is "on" or "off"
+
+        self.gap = 10 --Horizontal gap between name and switch status
+
+        local w = self.name_font:getWidth(_name)+self.gap+self.status_font:getWidth(self.status)
+        local h = math.max(self.name_font:getHeight(_name), self.status_font:getHeight(self.status))
+        RECT.init(self, _x, _y, w, h, Color.transp(), "line") --Set atributes
+
+        self.alpha_modifier = 1
+
+        self.selected_by_joystick = false
+        self.isOver = false --If mouse is over the button
+        self.lock = false --If this button can't be activated
+
+        self.tp = "switchbutton" --Type of this class
+    end
+}
+
+function Switch_Button:update(dt)
+    local b, x, y, mousepos
+
+    b = self
+
+    --Fix mouse position click to respective distance
+    x, y = love.mouse.getPosition()
+    if Gamestate.current() == GS.MENU then
+        x = x + MENU_CAM.x - WINDOW_WIDTH/2
+        y = y + MENU_CAM.y - WINDOW_HEIGHT/2
+    end
+
+    --If mouse is colliding with button, then create over_effect
+    if not USING_JOYSTICK and
+       x >= b.pos.x and
+       x <= b.pos.x + b.w and
+       y >= b.pos.y and
+       y <= b.pos.y + b.h then
+           b.isOver = true
+   else
+       b.isOver = false
+   end
+
+   if b.status then
+       b.inner_circle_r = math.min(b.inner_circle_r + dt*b.circle_speed, b.max_inner_circle_r)
+   else
+       b.inner_circle_r = math.max(b.inner_circle_r - dt*b.circle_speed, 0)
+   end
+end
+
+function Switch_Button:draw()
+    local b, x, w, y
+
+    b = self
+
+    --Choose color
+    local color = Color.black()
+    Color.copy(color, UI_COLOR.color)
+    if (not USING_JOYSTICK and b.isOver) or (USING_JOYSTICK and b.selected_by_joystick) then
+        color.h = (color.h + 127)%255
+    end
+    Color.set(color)
+
+    --Draw button name
+    love.graphics.setFont(b.name_font)
+    love.graphics.print(b.name, b.pos.x , b.pos.y)
+
+    --Draw toggle circle
+    local circle_pos = Vector(self.pos.x+self.name_font:getWidth(self.name)+self.gap+self.ring_circle_r,
+                              self.pos.y+self.name_font:getHeight(self.name)/2)
+    Draw_Smooth_Ring(circle_pos.x, circle_pos.y, b.ring_circle_r, b.ring_circle_r - b.ring_circle_width)
+    if b.inner_circle_r > 0 then
+        Draw_Smooth_Circle(circle_pos.x, circle_pos.y, b.inner_circle_r)
+    end
+
+end
+
+--Activate keybinding button
+function Switch_Button:func()
+    self.toggle_func()
+    self.status = self.status_func()
+end
+
+
 --UTILITY FUNCTIONS--
 
-function button.create_toggle_gui(x, y, name, toggle_func, status_func, help_text, st, id)
+function button.create_switch_gui(x, y, name, toggle_func, status_func, help_text, st, id)
     local b
 
     st = st or "gui"
