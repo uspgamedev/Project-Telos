@@ -90,17 +90,17 @@ function Circle_Button:draw()
 end
 
 function Circle_Button:update(dt)
-    local b, x, y, mousepos
-
     if Controls.isGettingInput() then return end
 
-    b = self
+    local b = self
 
+    local x, y = love.mouse.getPosition()
     --Fix mouse position click to respective distance
-    x, y = love.mouse.getPosition()
-
-    mousepos = Vector(x, y)
-
+    if Gamestate.current() == GS.MENU then
+        x = x + MENU_CAM.x - WINDOW_WIDTH/2
+        y = y + MENU_CAM.y - WINDOW_HEIGHT/2
+    end
+    local mousepos = Vector(x, y)
 
     --If mouse is colliding with button total radius, or joystick is selecting ths button (and button is visible), increase ring radius
     local speed_mod = math.max((b.r-b.ring_r)/b.r,.4)

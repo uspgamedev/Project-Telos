@@ -49,6 +49,7 @@ function state:enter()
     --Reset camera center pos
     CAM.x = WINDOW_WIDTH/2
     CAM.y = WINDOW_HEIGHT/2
+    MENU_CAM_POS = {WINDOW_WIDTH/2,WINDOW_HEIGHT/2}
 
     love.mouse.setGrabbed(false) --Stop mouse capture
 
@@ -224,6 +225,9 @@ end
 
 
 function state:update(dt)
+    --Update camera
+    MENU_CAM:lockPosition(MENU_CAM_POS[1],MENU_CAM_POS[2])
+
     --Move selected button based on joystick hat or axis input
     if USING_JOYSTICK and CURRENT_JOYSTICK and not Controls.isGettingInput() then
       --First try to get hat input, if there is
@@ -321,6 +325,9 @@ end
 
 function state:mousepressed(x, y, button)
     if Controls.isGettingInput() then return end
+    --Get correct position based on menu camera
+    x = x + MENU_CAM.x - WINDOW_WIDTH/2
+    y = y + MENU_CAM.y - WINDOW_HEIGHT/2
     if button == 1 then  --Left mouse button
         Button.checkCollision(x,y)
     end
