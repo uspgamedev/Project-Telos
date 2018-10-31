@@ -22,11 +22,7 @@ local function f(options_buttons, current_menu_screen)
     end
 
     --Create controls buttons
-    local offset = 0
-    if current_menu_screen == "main_menu" then
-        offset = WINDOW_WIDTH
-    end
-    local x, y, gap_y = 230, 100, 55, 370
+    local x, y, gap_y = 230 - WINDOW_WIDTH, 110, 55, 370
     local cont = 1
     local command_order = {
         "confirm", "back", "shoot", "ultrablast1", "ultrablast2",
@@ -49,13 +45,13 @@ local function f(options_buttons, current_menu_screen)
         else
             image_empty = IMG["controller_"..command_image[i].."_empty"]
         end
-        Button.create_keybinding_gui(x - offset, y, command, key, type, image, image_empty, "options_menu_buttons", command.."_command_button")
+        Button.create_keybinding_gui(x, y, command, key, type, image, image_empty, "options_menu_buttons", command.."_command_button")
         table.insert(options_buttons, command.."_command")
         y = y + gap_y
     end
 
     --Create autoshoot toggle button
-    Button.create_toggle_gui(500 - offset, 450, "Auto Shoot",
+    Button.create_toggle_gui(500 - WINDOW_WIDTH, 450, "Auto Shoot",
         function()
             JOYSTICK_AUTO_SHOOT = not JOYSTICK_AUTO_SHOOT
         end,
