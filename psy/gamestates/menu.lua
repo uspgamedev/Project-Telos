@@ -24,6 +24,7 @@ local _but_high_back = require "buttons.highscore_back_button"
 local _but_opt = require "buttons.options_button"
 local _but_opt_back = require "buttons.options_back_button"
 local _but_options_controls = require "buttons.options_controls_button"
+local _but_options_video = require "buttons.options_video_button"
 
 
 --LOCAL FUNCTIONS DECLARATIONS--
@@ -49,6 +50,7 @@ function state:enter()
     --Reset camera center pos
     CAM.x = WINDOW_WIDTH/2
     CAM.y = WINDOW_HEIGHT/2
+    MENU_CAM_POS = {WINDOW_WIDTH/2,WINDOW_HEIGHT/2}
 
     love.mouse.setGrabbed(false) --Stop mouse capture
 
@@ -185,9 +187,19 @@ function state:enter()
          _but_options_controls(_options_menu_screen_buttons, _current_menu_screen)
         end
     end
-    b = Button.create_circle_gui(750 - WINDOW_WIDTH, 650, 70, func, "Gamepad", GUI_BIGLESSEST, "options_menu_buttons", "opt_controls_button")
+    b = Button.create_circle_gui(750 - WINDOW_WIDTH, 650, 68, func, "Gamepad", GUI_BIGLESSEST, "options_menu_buttons", "opt_controls_button")
     b.sfx = SFX.generic_button
     table.insert(_options_menu_screen_buttons, "opt_controls")
+
+    func = function()
+        if _options_mode ~= "video" then
+         _options_mode = "video"
+         _but_options_video(_options_menu_screen_buttons, _current_menu_screen)
+        end
+    end
+    b = Button.create_circle_gui(620 - WINDOW_WIDTH, 650, 62, func, "Video", GUI_BIGLESSEST, "options_menu_buttons", "opt_video_button")
+    b.sfx = SFX.generic_button
+    table.insert(_options_menu_screen_buttons, "opt_video")
 
     --"Go to Main Menu Screen" button
     func = function()
@@ -224,6 +236,9 @@ end
 
 
 function state:update(dt)
+    --Update camera
+    MENU_CAM:lockPosition(MENU_CAM_POS[1],MENU_CAM_POS[2])
+
     --Move selected button based on joystick hat or axis input
     if USING_JOYSTICK and CURRENT_JOYSTICK and not Controls.isGettingInput() then
       --First try to get hat input, if there is
@@ -321,6 +336,9 @@ end
 
 function state:mousepressed(x, y, button)
     if Controls.isGettingInput() then return end
+    --Get correct position based on menu camera
+    x = x + MENU_CAM.x - WINDOW_WIDTH/2
+    y = y + MENU_CAM.y - WINDOW_HEIGHT/2
     if button == 1 then  --Left mouse button
         Button.checkCollision(x,y)
     end

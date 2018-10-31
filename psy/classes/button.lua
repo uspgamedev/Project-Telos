@@ -90,17 +90,17 @@ function Circle_Button:draw()
 end
 
 function Circle_Button:update(dt)
-    local b, x, y, mousepos
-
     if Controls.isGettingInput() then return end
 
-    b = self
+    local b = self
 
+    local x, y = love.mouse.getPosition()
     --Fix mouse position click to respective distance
-    x, y = love.mouse.getPosition()
-
-    mousepos = Vector(x, y)
-
+    if Gamestate.current() == GS.MENU then
+        x = x + MENU_CAM.x - WINDOW_WIDTH/2
+        y = y + MENU_CAM.y - WINDOW_HEIGHT/2
+    end
+    local mousepos = Vector(x, y)
 
     --If mouse is colliding with button total radius, or joystick is selecting ths button (and button is visible), increase ring radius
     local speed_mod = math.max((b.r-b.ring_r)/b.r,.4)
@@ -275,7 +275,7 @@ KeyBinding_Button = Class{
         --Recommended image for input
         self.recommended_image = _recommended_image
         self.recommended_image_empty = _recommended_image_empty
-        self.rec_x = 500
+        self.rec_x = 500 - WINDOW_WIDTH
         self.rec_y = 180
         self.rec_scale = .7
         self.rec_alpha_speed = 650 --Speed to increase alpha
@@ -286,7 +286,7 @@ KeyBinding_Button = Class{
         self.rec_max_offset = 45
 
         --Recommended text
-        self.rec_t_x = 500
+        self.rec_t_x = 500 - WINDOW_WIDTH
         self.rec_t_y = 200
         self.rec_t_font = GUI_MED
 
@@ -326,6 +326,10 @@ function KeyBinding_Button:update(dt)
 
     --Fix mouse position click to respective distance
     x, y = love.mouse.getPosition()
+    if Gamestate.current() == GS.MENU then
+        x = x + MENU_CAM.x - WINDOW_WIDTH/2
+        y = y + MENU_CAM.y - WINDOW_HEIGHT/2
+    end
 
     --If mouse is colliding with button, then create over_effect
     if not USING_JOYSTICK and
@@ -483,6 +487,10 @@ function Toggle_Button:update(dt)
 
     --Fix mouse position click to respective distance
     x, y = love.mouse.getPosition()
+    if Gamestate.current() == GS.MENU then
+        x = x + MENU_CAM.x - WINDOW_WIDTH/2
+        y = y + MENU_CAM.y - WINDOW_HEIGHT/2
+    end
 
     --If mouse is colliding with button, then create over_effect
     if not USING_JOYSTICK and
