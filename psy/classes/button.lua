@@ -543,6 +543,19 @@ function Toggle_Button:func()
     self.status = self.status_func()
 end
 
+--UTILITY FUNCTIONS--
+
+function button.create_toggle_gui(x, y, name, toggle_func, status_func, help_text, st, id)
+    local b
+
+    st = st or "gui"
+    b = Toggle_Button(x, y, name, toggle_func, status_func, help_text)
+    b:addElement(DRAW_TABLE.GUI, st, id)
+
+    return b
+end
+
+
 -----------------
 --SWITCH BUTTON--
 -----------------
@@ -556,6 +569,8 @@ Switch_Button = Class{
         self.name = _name --Name displayed next to the button
         self.help_text = _help_text --Optional explanatory text of button
 
+        self.options = _options
+
         self.switch_func = _switch_func --Function to be called when button is pressed
         self.status_func = _status_func --Function that returns current button status (string value)
 
@@ -563,7 +578,7 @@ Switch_Button = Class{
         self.status_font = GUI_MEDMED
         self.help_text_font = GUI_MEDLESS
 
-        self.status = self.status_func() --Which state button is button is "on" or "off"
+        self.status = self.status_func() --Which state button is button is
 
         self.gap = 10 --Horizontal gap between name and switch status
 
@@ -604,11 +619,6 @@ function Switch_Button:update(dt)
        b.isOver = false
    end
 
-   if b.status then
-       b.inner_circle_r = math.min(b.inner_circle_r + dt*b.circle_speed, b.max_inner_circle_r)
-   else
-       b.inner_circle_r = math.max(b.inner_circle_r - dt*b.circle_speed, 0)
-   end
 end
 
 function Switch_Button:draw()
@@ -628,30 +638,36 @@ function Switch_Button:draw()
     love.graphics.setFont(b.name_font)
     love.graphics.print(b.name, b.pos.x , b.pos.y)
 
-    --Draw toggle circle
-    local circle_pos = Vector(self.pos.x+self.name_font:getWidth(self.name)+self.gap+self.ring_circle_r,
-                              self.pos.y+self.name_font:getHeight(self.name)/2)
-    Draw_Smooth_Ring(circle_pos.x, circle_pos.y, b.ring_circle_r, b.ring_circle_r - b.ring_circle_width)
-    if b.inner_circle_r > 0 then
-        Draw_Smooth_Circle(circle_pos.x, circle_pos.y, b.inner_circle_r)
-    end
+    --Draw status
+    love.graphics.setFont(b.status_font)
+    local x = b.pos.x + b.name_font:getWidth(self.name) + self.gap
+    love.graphics.print(self.status, x, b.pos.y)
+end
 
+--Get the next status from options
+function Switch_Button:getNextStatus()
+    for i, opt in ipairs(self.options) do
+        if opt == self.status then
+            return self.options[(i%#self.options)+1]
+        end
+    end
+    error("current status "..self.status.." isn't a valid status")
 end
 
 --Activate keybinding button
 function Switch_Button:func()
-    self.toggle_func()
+    self.switch_func(self:getNextStatus())
     self.status = self.status_func()
+    self.w = self.name_font:getWidth(self.name)+self.gap+self.status_font:getWidth(self.status)
 end
-
 
 --UTILITY FUNCTIONS--
 
-function button.create_switch_gui(x, y, name, toggle_func, status_func, help_text, st, id)
+function button.create_switch_gui(x, y, name, options, switch_func, status_func, help_text, st, id)
     local b
 
     st = st or "gui"
-    b = Toggle_Button(x, y, name, toggle_func, status_func, help_text)
+    b = Switch_Button(x, y, name, options, switch_func, status_func, help_text)
     b:addElement(DRAW_TABLE.GUI, st, id)
 
     return b
@@ -664,7 +680,6 @@ end
 
 --Check if a mouse click collides with any button
 function button.checkCollision(x,y)
-
     checkCircleButtonCollision(x,y)
 
     checkInvButtonCollision(x,y)
@@ -673,6 +688,7 @@ function button.checkCollision(x,y)
 
     checkToggleButtonCollision(x,y)
 
+    checkSwitchButtonCollision(x,y)
 end
 
 --Check if a mouse click collides with any circle button
@@ -780,8 +796,34 @@ function checkToggleButtonCollision(x,y)
             end
         end
     end
-
 end
+
+--Check if a mouse click collides with any switch button
+function checkSwitchButtonCollision(x,y)
+
+    if BUTTON_LOCK then return end --If buttons are locked, does nothing
+    --Iterate on drawable buttons table
+    for _,t in pairs(DRAW_TABLE) do
+        for b in pairs(t) do
+            if  b.tp == "switchbutton"
+              and
+              not b.lock
+              and
+              x  <= b.pos.x + b.w
+              and
+              x >= b.pos.x
+              and
+              y  <= b.pos.y + b.h
+              and
+              y >= b.pos.y then
+                b:func()
+                if b.sfx then b.sfx:play() end
+                return
+            end
+        end
+    end
+end
+
 
 --Return functions
 return button

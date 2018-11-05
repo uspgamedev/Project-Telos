@@ -131,7 +131,6 @@ function setup.config()
     ResManager.init()
     ResManager.adjustWindow(WINDOW_WIDTH, WINDOW_HEIGHT)
 
-
     --IMAGES--
 
     print("Setting up images...")
@@ -205,12 +204,6 @@ function setup.config()
     --CAMERA--
     CAM = Camera(WINDOW_WIDTH/2, WINDOW_HEIGHT/2) --Set camera position to center of screen
     MENU_CAM = Camera(WINDOW_WIDTH/2, WINDOW_HEIGHT/2) --Set camera position to center of screen, camera used for menu transitions
-    MENU_CAM.smoother =
-    function(dx, dy)
-        local dt = love.timer.getDelta()*10
-        return dx*dt, dy*dt
-    end
-    MENU_CAM_POS = {WINDOW_WIDTH/2,WINDOW_HEIGHT/2}
 
     --DEATH MESSAGE
     DEATH_TEXTS = {
