@@ -580,7 +580,7 @@ Switch_Button = Class{
 
         self.status = self.status_func() --Which state button is button is
 
-        self.gap = 10 --Horizontal gap between name and switch status
+        self.gap = 20 --Horizontal gap between name and switch status
 
         local w = self.name_font:getWidth(_name)+self.gap+self.status_font:getWidth(self.status)
         local h = math.max(self.name_font:getHeight(_name), self.status_font:getHeight(self.status))
@@ -642,6 +642,13 @@ function Switch_Button:draw()
     love.graphics.setFont(b.status_font)
     local x = b.pos.x + b.name_font:getWidth(self.name) + self.gap
     love.graphics.print(self.status, x, b.pos.y)
+
+    --Draw status box
+    local margin = 6
+    local w = b.status_font:getWidth(self.status) + 2*margin
+    local h = b.status_font:getHeight() + 2*margin
+    love.graphics.setLineWidth(3)
+    love.graphics.rectangle("line", x - margin, b.pos.y - margin, w, h, 5)
 end
 
 --Get the next status from options

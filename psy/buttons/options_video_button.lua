@@ -26,14 +26,14 @@ local function f(options_buttons, current_menu_screen)
 
     --Create fullscreen switch button
     local switch_func = function(status)
-        if status == "DISABLED" then
+        if status == "disabled" then
             local w, h = love.graphics.getWidth(), love.graphics.getHeight()
             love.window.setMode(w, h, {fullscreen = false, resizable = true,
                                 minwidth = 800, minheight = 600})
             ResManager.adjustWindow(w, h)
-        elseif status == "BORDERLESS FULLSCREEN" then
+        elseif status == "borderless fullscreen" then
             love.window.setFullscreen(true, "desktop")
-        elseif status == "WINDOWED FULLSCREEN" then
+        elseif status == "windowed fullscreen" then
             local w, h = ResManager.getRealWidth(), ResManager.getRealHeight()
             love.window.setMode(w, h, {fullscreen = false, resizable = true,
                                 minwidth = 800, minheight = 600})
@@ -47,16 +47,16 @@ local function f(options_buttons, current_menu_screen)
         if not fs then
             if ResManager.getRealWidth() == love.graphics.getWidth() and
                ResManager.getRealHeight() == love.graphics.getHeight() then
-                return "DISABLED"
+                return "disabled"
             else
-                return "WINDOWED FULLSCREEN"
+                return "windowed fullscreen"
             end
         else
-            return "BORDERLESS FULLSCREEN"
+            return "borderless fullscreen"
         end
     end
-    Button.create_switch_gui(230 - WINDOW_WIDTH, 110, "Fullscreen",
-        {"DISABLED","BORDERLESS FULLSCREEN", "WINDOWED FULLSCREEN"},
+    Button.create_switch_gui(400 - WINDOW_WIDTH, 190, "Fullscreen",
+        {"disabled","borderless fullscreen", "windowed fullscreen"},
         switch_func,
         status_func,
         nil, "options_menu_buttons", "fullscreen_button"
