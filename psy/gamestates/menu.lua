@@ -52,7 +52,9 @@ function state:enter()
     CAM.y = WINDOW_HEIGHT/2
     MENU_CAM_POS = {WINDOW_WIDTH/2,WINDOW_HEIGHT/2}
 
-    love.mouse.setGrabbed(false) --Stop mouse capture
+    if MOUSE_CAPTURE == "in-game" then
+        love.mouse.setGrabbed(false) --Stop mouse capture
+    end
 
     _joystick_moved = false
     _joystick_direction = Vector(0,0)

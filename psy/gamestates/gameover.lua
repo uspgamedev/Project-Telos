@@ -68,7 +68,9 @@ function state:enter(_score)
 
     _joystick_moved = false
     _joystick_direction = Vector(0,0)
-    love.mouse.setGrabbed(false) --Stop mouse capture
+    if MOUSE_CAPTURE == "in-game" then
+        love.mouse.setGrabbed(false) --Stop mouse capture
+    end
 
 end
 

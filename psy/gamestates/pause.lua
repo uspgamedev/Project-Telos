@@ -62,7 +62,9 @@ function state:enter()
     joystick_direction = Vector(0,0)
 
     love.mouse.setVisible(true) --Make cursor visible
-    love.mouse.setGrabbed(false) --Stop mouse capture
+    if MOUSE_CAPTURE == "in-game" then
+        love.mouse.setGrabbed(false) --Stop mouse capture
+    end
 
 end
 
@@ -86,7 +88,9 @@ function state:leave()
     end
 
     love.mouse.setVisible(false) --Make cursor invisible
-    love.mouse.setGrabbed(true) --Resume mouse capture
+    if MOUSE_CAPTURE == "in-game" then
+        love.mouse.setGrabbed(true) --Resume mouse capture
+    end
 
 end
 

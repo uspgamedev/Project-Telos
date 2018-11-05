@@ -8,7 +8,8 @@ local _default_savefile_args = {
     used_continue = false, --If player used a continue in the current run
     first_time = true, --Make player play the tutorial the first time
     auto_shoot = false, --If psycho autoshoots when using gamepad
-    fullscreen = "disabled", --What type of fullscreen
+    fullscreen = "disabled", --What type of fullscreen ['disabled','borderless','windowed']
+    mousecapture = "in-game", --How to handle mouse capture ['in-game','never','always']
     highscores = {     --Reset highscores with default values
         {name = "---", score = 0},
         {name = "---", score = 0},
@@ -149,6 +150,7 @@ function fm.save()
         first_time = FIRST_TIME,
         auto_shoot = JOYSTICK_AUTO_SHOOT,
         fullscreen = fs,
+        mousecapture = MOUSE_CAPTURE,
         highscores = {},
         gamepad_mapping = {},
     }

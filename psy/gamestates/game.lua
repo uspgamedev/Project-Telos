@@ -26,7 +26,9 @@ local p --Psycho
 function state:enter(last_gs, go_to_level, go_to_part)
     local x, y, level, t
     love.mouse.setVisible(false) --Make cursor invisible
-    love.mouse.setGrabbed(true) --Resume mouse capture
+    if MOUSE_CAPTURE == "in-game" then
+        love.mouse.setGrabbed(true) --Resume mouse capture
+    end
 
     if go_to_level then
       level = Levels[go_to_level]
@@ -79,8 +81,9 @@ function state:leave()
     Util.clearAllTables("remove")
 
     love.mouse.setVisible(true) --Make cursor visible
-    love.mouse.setGrabbed(false) --Stop mouse capture
-
+    if MOUSE_CAPTURE == "in-game" then
+        love.mouse.setGrabbed(false) --Stop mouse capture
+    end
 
 end
 
@@ -88,7 +91,7 @@ local lag = 0
 local frame = 1/60
 function state:update(dt)
     local m_dt
-    
+
     Util.updateTimers(dt)
 
     Util.updateFPS()

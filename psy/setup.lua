@@ -38,6 +38,8 @@ function setup.config()
 
     PSYCHO_SCORE = 0 --Psycho score
 
+    MOUSE_CAPTURE = args["mousecapture"]
+
     USING_JOYSTICK = false --If player is using the joystick to control the game
     CURRENT_JOYSTICK = nil --Current joystick controlling psycho
     JOYSTICK_AUTO_SHOOT = args["auto_shoot"] --If psycho shoots whenever it is aiming

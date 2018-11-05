@@ -55,13 +55,39 @@ local function f(options_buttons, current_menu_screen)
             return "borderless fullscreen"
         end
     end
-    Button.create_switch_gui(400 - WINDOW_WIDTH, 190, "Fullscreen",
+    Button.create_switch_gui(200 - WINDOW_WIDTH, 190, "Fullscreen",
         {"disabled","borderless fullscreen", "windowed fullscreen"},
         switch_func,
         status_func,
         nil, "options_menu_buttons", "fullscreen_button"
     )
     table.insert(options_buttons, "fullscreen")
+
+    --Create mouse capture switch button
+    local switch_func = function(status)
+        if status == "never" then
+            MOUSE_CAPTURE = "never"
+            love.mouse.setGrabbed(false)
+        elseif status == "always" then
+            MOUSE_CAPTURE = "always"
+            love.mouse.setGrabbed(true)
+        elseif status == "in-game" then
+            MOUSE_CAPTURE = "in-game"
+            love.mouse.setGrabbed(false) --Assumes its not in-game
+        else
+            error("not a valid mouse capture status: "..status)
+        end
+    end
+    local status_func = function()
+        return MOUSE_CAPTURE
+    end
+    Button.create_switch_gui(200 - WINDOW_WIDTH, 290, "Mouse Capture",
+        {"always","never", "in-game"},
+        switch_func,
+        status_func,
+        nil, "options_menu_buttons", "mousecapture_button"
+    )
+    table.insert(options_buttons, "mousecapture")
 
 end
 return f

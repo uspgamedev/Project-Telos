@@ -561,10 +561,6 @@ function util.defaultKeyPressed(key)
       util.toggleFullscreen()
     elseif key == 'f9' then
       util.toggleDebug()
-    elseif key == "tab" then
-      local state = not love.mouse.isGrabbed()   -- the opposite of whatever it currently is
-      love.mouse.setGrabbed(state)
-      print("MOUSE CAPTURE IS", state)
     end
 
 
