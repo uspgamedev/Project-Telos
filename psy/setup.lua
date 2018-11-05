@@ -251,6 +251,7 @@ function setup.config()
         psychoball_shot = love.audio.newSource("assets/sfx/general_sfxs/sfx_psychoball_shot.mp3", "stream"),
         hit_simple = love.audio.newSource("assets/sfx/general_sfxs/sfx_hit_simple_ball.mp3", "stream"),
         hit_double = love.audio.newSource("assets/sfx/general_sfxs/sfx_hit_double_ball.mp3", "stream"),
+        psychoball_dies_respawn = love.audio.newSource("assets/sfx/general_sfxs/sfx_psychoball_dies_respawn.mp3", "stream"),
         psychoball_dies = love.audio.newSource("assets/sfx/general_sfxs/sfx_psychoball_dies.mp3", "stream"),
         generic_button = love.audio.newSource ("assets/sfx/general_sfxs/sfx_generic_button.mp3", "stream"),
         back_button = love.audio.newSource ("assets/sfx/general_sfxs/sfx_back_button.mp3", "stream"),
