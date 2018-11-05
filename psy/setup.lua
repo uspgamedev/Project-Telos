@@ -127,9 +127,22 @@ function setup.config()
     WINM_HANDLES = {}
 
     --WINDOW CONFIG--
-    love.window.setMode(WINDOW_WIDTH, WINDOW_HEIGHT, {resizable = true, minwidth = 800, minheight = 600})
     ResManager.init()
-    ResManager.adjustWindow(WINDOW_WIDTH, WINDOW_HEIGHT)
+    if args["fullscreen"] == "disabled" then
+        love.window.setMode(WINDOW_WIDTH, WINDOW_HEIGHT, {resizable = true, minwidth = 800, minheight = 600})
+        ResManager.adjustWindow(WINDOW_WIDTH, WINDOW_HEIGHT)
+    elseif args["fullscreen"] == "borderless" then
+        love.window.setMode(WINDOW_WIDTH, WINDOW_HEIGHT, {fullscreen = true, resizable = true, minwidth = 800, minheight = 600})
+        ResManager.adjustWindow(WINDOW_WIDTH, WINDOW_HEIGHT)
+    elseif args["fullscreen"] == "windowed" then
+        love.window.setFullscreen(true)
+        local w, h = ResManager.getRealWidth(), ResManager.getRealHeight()
+        love.window.setMode(w, h, {fullscreen = false, resizable = true,
+                            minwidth = 800, minheight = 600})
+        ResManager.adjustWindow(w, h)
+    else
+        error("Not a valid fullscreen mode in savedata: "..args["fullscreen"])
+    end
 
     --IMAGES--
 

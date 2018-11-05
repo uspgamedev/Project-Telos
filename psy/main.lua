@@ -136,6 +136,7 @@ end
 
 --Update status of player using joystick or not
 function love.mousemoved(x, y, dx, dy, ...)
+  if not ResManager.hasAdjusted() then return end
   USING_JOYSTICK = false
   x, y = love.mouse.getPosition() --fixed (ResManager)
   dx, dy = dx * ResManager.scale(), dy * ResManager.scale()

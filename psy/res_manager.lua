@@ -26,8 +26,11 @@ function res.toRealCoords(x, y)
     return tx + x * scale, ty + y * scale
 end
 
-function res.scale() return scale end
+function res.hasAdjusted()
+    return tx
+end
 
+function res.scale() return scale end
 
 function res.adjustWindow(w, h)
     local sx, sy = w / W, h / H
