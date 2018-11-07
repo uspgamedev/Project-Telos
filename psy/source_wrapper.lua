@@ -13,7 +13,7 @@
 -----------------------------------
 -- Constants ----------------------
 -----------------------------------
-local STATIC_BUFFER_SIZE = 16
+local STATIC_BUFFER_SIZE = 40
 local STREAM_BUFFER_SIZE = 4
 
 -----------------------------------
