@@ -78,10 +78,8 @@ ELEMENT = Class{
 
     --Kill this object
     kill = function(self)
-
         if self.death then return end
         self.death = true
-
     end,
 
     --Checks if an circular object o collides with this enemy

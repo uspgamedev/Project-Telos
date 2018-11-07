@@ -1,4 +1,5 @@
 local Button = require "classes.button"
+local CurrentCircle = require "classes.current_circle"
 local Txt = require "classes.text"
 local Util = require "util"
 
@@ -20,6 +21,17 @@ local function f(options_buttons, current_menu_screen)
             txt:kill()
         end
     end
+
+    --Remove previous "current selected option" circle
+    local circle = Util.findId("current_selected_option_circle")
+    if circle then circle:destroy() end
+
+    --Create current selected option circle
+    CurrentCircle.create(730 - WINDOW_WIDTH, 650, 82)
+
+    --Update title
+    Util.findId("options_title").text = "GAMEPAD"
+    Util.findId("options_title_underscore").text = "_________"
 
     --Create controls buttons
     local x, y, gap_y = 230 - WINDOW_WIDTH, 110, 55, 370

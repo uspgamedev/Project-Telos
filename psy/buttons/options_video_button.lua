@@ -1,5 +1,6 @@
 local ResManager = require "res_manager"
 local Button = require "classes.button"
+local CurrentCircle = require "classes.current_circle"
 local Txt = require "classes.text"
 local Util = require "util"
 
@@ -21,6 +22,16 @@ local function f(options_buttons, current_menu_screen)
             txt:kill()
         end
     end
+    --Remove previous "current selected option" circle
+    local circle = Util.findId("current_selected_option_circle")
+    if circle then circle:destroy() end
+
+    --Create current selected option circle
+    CurrentCircle.create(570 - WINDOW_WIDTH, 650, 74)
+
+    --Update title
+    Util.findId("options_title").text = "VIDEO"
+    Util.findId("options_title_underscore").text = "_____"
 
     --Create Video buttons
 
