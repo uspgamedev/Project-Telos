@@ -81,13 +81,25 @@ local function f(options_buttons, current_menu_screen)
     local status_func = function()
         return MOUSE_CAPTURE
     end
-    Button.create_switch_gui(200 - WINDOW_WIDTH, 290, "Mouse Capture",
+    Button.create_switch_gui(200 - WINDOW_WIDTH, 250, "Mouse Capture",
         {"always","never", "in-game"},
         switch_func,
         status_func,
         nil, "options_menu_buttons", "mousecapture_button"
     )
     table.insert(options_buttons, "mousecapture")
+
+    --Create antialiasing toggle button
+    Button.create_toggle_gui(200 - WINDOW_WIDTH, 310, "Anti-Aliasing",
+        function()
+            USE_ANTI_ALIASING = not USE_ANTI_ALIASING
+        end,
+        function()
+            return USE_ANTI_ALIASING
+        end,
+        nil, "options_menu_buttons", "antialiasing_button"
+    )
+    table.insert(options_buttons, "antialiasing")
 
 end
 return f

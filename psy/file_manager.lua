@@ -8,8 +8,9 @@ local _default_savefile_args = {
     used_continue = false, --If player used a continue in the current run
     first_time = true, --Make player play the tutorial the first time
     auto_shoot = false, --If psycho autoshoots when using gamepad
-    fullscreen = "disabled", --What type of fullscreen ['disabled','borderless','windowed']
+    fullscreen = "disabled", --What type of fullscreen to use
     mousecapture = "in-game", --How to handle mouse capture ['in-game','never','always']
+    antialiasing = true, --If should apply antialiasing when drawing circles
     highscores = {     --Reset highscores with default values
         {name = "---", score = 0},
         {name = "---", score = 0},
@@ -28,6 +29,14 @@ continue(x.y): if x.y exists, it tells which level the player stopped playing (l
 used_continue(bool): true if player has used continue in current run. False otherwise
 
 first_time(bool): true if player never played, false otherwise
+
+auto_shoot(bool): true if player autoshoots when usin gamepad, false otherwise
+
+fullscreen(enum): 'borderless', 'windowed' or 'disabled'
+
+mousecapture(enum): 'always', 'never' or 'in-game'
+
+antialiasing(bool): true to apply anti-aliasing to all circles, false will disable
 
 highscore(table): table of tuplets "name" and "score" for correspondent highscore
 
@@ -151,6 +160,7 @@ function fm.save()
         auto_shoot = JOYSTICK_AUTO_SHOOT,
         fullscreen = fs,
         mousecapture = MOUSE_CAPTURE,
+        antialiasing = USE_ANTI_ALIASING,
         highscores = {},
         gamepad_mapping = {},
     }
