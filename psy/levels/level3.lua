@@ -765,11 +765,21 @@ function level_functions.part_3()
         LM.wait(1.5-mod)
     end
     LM.wait(2.5)
+
     --Continue creating formations on the left until all right balls are gone
     F.fromHorizontal{enemy = {SB,SB,GlB}, side = "left", mode = "center" , number = 10, ind_duration = 2.5, ind_side = 40, speed_m = .3, e_radius = 25, game_win = 1}
     F.fromHorizontal{enemy = {SB,GlB,SB}, side = "right", mode = "center" , number = 10, ind_duration = 2.5, ind_side = 40, speed_m = .3, e_radius = 25, game_win = 1}
 
     LM.wait("noenemies")
+
+    LM.wait(1.5)
+    LM.destroyWindow(gm_idx, 1, {0,0,WINDOW_WIDTH,WINDOW_HEIGHT}, 3)
+    LM.wait(4)
+    LM.giveScore(3000, "finished part")
+    LM.wait(2)
+
+    LM.stop()
+    LM.start(level_functions.part_4)
 end
 
 --3-4: Boss
@@ -778,12 +788,12 @@ function level_functions.part_4()
     CONTINUE = 3 --Setup continue variable to later continue from where you started
     LM.level_part("Part 4 - Boss")
 
-    LM.wait(2)
+    LM.wait(1)
     Boss.create()
     LM.wait(20)
     LM.wait("nobosses")
     LM.wait(1)
-    LM.giveScore(4000, "finished level")
+    LM.giveScore(8000, "finished level")
     LM.wait(3)
 
     LM.stop()

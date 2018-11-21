@@ -32,7 +32,6 @@ Snake = Class{
 
         self.positions = {} --Target positions snake will travel to
         for i, pos in ipairs(_positions) do
-            --Transform array into vector
             self.positions[i] = Vector(pos[1], pos[2])
         end
 
