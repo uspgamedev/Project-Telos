@@ -5,7 +5,10 @@ local Util = require "util"
 
 local level_functions = {}
 
---LEVEL 2--
+--LEVEL 3--
+
+--Boss
+local Boss = require "classes.bosses.boss3"
 
 --3-1: Freedom Lost
 function level_functions.part_1()
@@ -572,7 +575,7 @@ function level_functions.part_3()
     local gm_idx = LM.createNewWindow(1, {x1, y1, w1, h1}, {x2, y2, w2, h2}, 4)
 
     LM.wait(7)
-    
+
     F.single{enemy = SB, x = x1+w1/2, y = y1+h1+50, speed_m = .8, ind_side = 50, score_mul = 2, ind_duration = 3.5, game_win = 1, dy = -1}
     F.single{enemy = SB, x = x2+w2/2, y = y2+h2+50, speed_m = .8, ind_side = 50, score_mul = 2, ind_duration = 3.5, dy = -1, game_win = gm_idx}
 
@@ -767,6 +770,26 @@ function level_functions.part_3()
     F.fromHorizontal{enemy = {SB,GlB,SB}, side = "right", mode = "center" , number = 10, ind_duration = 2.5, ind_side = 40, speed_m = .3, e_radius = 25, game_win = 1}
 
     LM.wait("noenemies")
+end
+
+--3-4: Boss
+function level_functions.part_4()
+
+    CONTINUE = 3 --Setup continue variable to later continue from where you started
+    LM.level_part("Part 4 - Boss")
+
+    LM.wait(2)
+    Boss.create()
+    LM.wait(20)
+    LM.wait("nobosses")
+    LM.wait(1)
+    LM.giveScore(4000, "finished level")
+    LM.wait(3)
+
+    LM.stop()
+    --level4.setup()
+    --LM.start(level4.part_1)
+
 end
 
 ---------------------

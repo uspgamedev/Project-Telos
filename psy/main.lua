@@ -26,6 +26,7 @@ Cge = require "classes.enemies.cage"
 --bosses
 require "classes.bosses.boss1"
 require "classes.bosses.boss2"
+require "classes.bosses.boss3"
 
 --levels
 require "levels.tutorial"
