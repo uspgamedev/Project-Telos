@@ -16,12 +16,13 @@ Boss_3 = Class{
     init = function(self)
         ELEMENT.init(self)
 
-        self.pos = Vector(WINDOW_WIDTH/2, WINDOW_HEIGHT/4)
         self.r = 30
+        self.pos = Vector(WINDOW_WIDTH/2, -self.r)
 
         self.dir = Vector(0,1)
-        self.speed = 50 --Speed boss moves
-        self.turn_speed = .1 --Speed boss turns
+        self.speed = 160 --Speed boss moves
+        self.turn_speed = math.pi/4 --Speed boss turns
+        self.turn_to = "left" --Which direction the snake should turn
 
         local segments_size = 10
         local x, y = self.pos.x, self.pos.y
@@ -35,12 +36,12 @@ Boss_3 = Class{
             y = y - self.dir.y*2*self.r
         end
 
-        self.stage = 0 --Which stage this boss is in
+        self.stage = 1 --Which stage this boss is in
     end
 }
 
 function Boss_3:draw()
-    if self.stage == 0 then
+    if self.stage <= 1 then
         --Draw each segment
         Color.set(Color.red())
         for i, seg in ipairs(self.segments) do
@@ -56,7 +57,7 @@ function Boss_3:update(dt)
     behaviours[self.stage](self,dt)
 end
 
-behaviours[0] = function(boss,dt)
+behaviours[1] = function(boss,dt)
     local head_seg = boss.segments[1]
     local psycho = Util.findId("psycho")
 
@@ -64,13 +65,26 @@ behaviours[0] = function(boss,dt)
     if psycho then
         local dir = (psycho.pos - head_seg.pos)
         local angle = boss.dir:angleTo(dir)%(2*math.pi)
-        local push_dir
-        --Psycho is on the right of boss
-        if angle <= math.pi then
-            boss.dir:rotateInplace(boss.turn_speed*-math.pi/2)
-        --Psycho is on the left of boss
+        local angle_limit = math.pi/3
+
+        --Only change direction if further from a limit
+        --to create centipede-like movement
+        if angle >= angle_limit and angle <= 2*math.pi - angle_limit then
+            --Psycho is on the right of boss
+            if angle <= math.pi then
+                boss.turn_to = "right"
+            --Psycho is on the left of boss
+            else
+                boss.turn_to = "left"
+            end
+        end
+
+        if boss.turn_to == "right" then
+            boss.dir:rotateInplace(dt*boss.turn_speed*-math.pi/2)
+        elseif boss.turn_to == "left" then
+            boss.dir:rotateInplace(dt*boss.turn_speed*math.pi/2)
         else
-            boss.dir:rotateInplace(boss.turn_speed*math.pi/2)
+            error("Not a valid direction for boss3 to turn to")
         end
 
     end
@@ -83,7 +97,7 @@ behaviours[0] = function(boss,dt)
         local this_seg = boss.segments[i]
         local next_seg = boss.segments[i-1]
         local dir = (next_seg.pos - this_seg.pos):normalized()
-        this_seg.pos = this_seg.pos + dir*boss.speed*dt
+        this_seg.pos = next_seg.pos - dir*(2*boss.r-2)
     end
 end
 
